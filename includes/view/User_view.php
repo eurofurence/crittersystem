@@ -1008,20 +1008,38 @@ function render_profile_link($text, $user_id = null, $class = '')
 
     if (auth()->can('user.type.internal_staff') or
         auth()->can('admin_user') or
-        auth()->user()->id == $user_id
+        auth()->user()->id == $user_id or
+        is_null($user_id)
     ){
+
         return sprintf(
             '<a class="%s" href="%s">%s</a>',
             $class,
             $profile_link,
             $text
         );
+
     } else {
-        return sprintf(
-            '<a class="%s">%s</a>',
-            $class,
-            $text
-        );
+        if (config('policy')['non_staff_message_shortcut'] and !is_null($user_id)){
+            // true and we have the ID => Send the user to message
+            return sprintf(
+                '<a class="%s" href="%s">%s</a>',
+                $class,
+                url('/messages/' . $user_id),
+                $text
+            );
+
+        } else {
+            // false => policy disabled
+            return sprintf(
+                '<a class="%s">%s</a>',
+                $class,
+                $text
+            );
+        }
+
+
+
 
     }
 }
@@ -1033,8 +1051,8 @@ function render_user_departure_date_hint()
 {
     if (config('enable_planned_arrival') && !auth()->user()->personalData->planned_departure_date) {
         $text = __('Please enter your planned date of departure on your settings page to give us a feeling for teardown capacities.');
-//        return render_profile_link($text, null, 'text-danger');
-        return render_profile_link($text, auth()->user()->id, 'text-danger');
+        return render_profile_link($text, null, 'text-danger');
+//        return render_profile_link($text, auth()->user()->id, 'text-danger');
     }
 
     return null;

@@ -472,7 +472,8 @@ return [
     // Policy features
     'policy'                => [
         // Adds the prefix to the visual text but do not affect the link
-        'telegram_visual_prefix' => '@',
+        'telegram_visual_prefix' => '',
+        'non_staff_message_shortcut' => true,
     ],
 
     // var dump server
