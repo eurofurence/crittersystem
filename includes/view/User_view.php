@@ -96,7 +96,7 @@ function Users_view(
             . user_info_icon($user);
         $u['first_name'] = htmlspecialchars((string) $user->personalData->first_name);
         $u['last_name'] = htmlspecialchars((string) $user->personalData->last_name);
-        $u['dect'] = sprintf('<a href="https://t.me/%s">%1$s</a>', htmlspecialchars((string) $user->contact->dect));
+        $u['dect'] = sprintf('<a href="https://t.me/%s">%s%1$s</a>', str_replace('@','', htmlspecialchars((string) $user->contact->dect)), config('policy')['telegram_visual_prefix']);
         $u['arrived'] = icon_bool($user->state->arrived);
         if (config('enable_voucher')) {
             $u['got_voucher'] = $user->state->got_voucher;
@@ -714,6 +714,7 @@ function User_view(
                         heading(
                             icon('telegram')
                                 . ' <a href="https://t.me/' . htmlspecialchars($user_source->contact->dect) . '">'
+                            . config('policy')['telegram_visual_prefix']
                             . htmlspecialchars($user_source->contact->dect)
 			    . '</a>',
                             4
@@ -1005,12 +1006,24 @@ function render_profile_link($text, $user_id = null, $class = '')
         $profile_link = url('/users', ['action' => 'view', 'user_id' => $user_id]);
     }
 
-    return sprintf(
-        '<a class="%s" href="%s">%s</a>',
-        $class,
-        $profile_link,
-        $text
-    );
+    if (auth()->can('user.type.internal_staff') or
+        auth()->can('admin_user') or
+        auth()->user()->id == $user_id
+    ){
+        return sprintf(
+            '<a class="%s" href="%s">%s</a>',
+            $class,
+            $profile_link,
+            $text
+        );
+    } else {
+        return sprintf(
+            '<a class="%s">%s</a>',
+            $class,
+            $text
+        );
+
+    }
 }
 
 /**
@@ -1020,7 +1033,8 @@ function render_user_departure_date_hint()
 {
     if (config('enable_planned_arrival') && !auth()->user()->personalData->planned_departure_date) {
         $text = __('Please enter your planned date of departure on your settings page to give us a feeling for teardown capacities.');
-        return render_profile_link($text, null, 'text-danger');
+//        return render_profile_link($text, null, 'text-danger');
+        return render_profile_link($text, auth()->user()->id, 'text-danger');
     }
 
     return null;

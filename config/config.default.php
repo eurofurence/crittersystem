@@ -469,6 +469,12 @@ return [
             . 'or need help.',
     ],
 
+    // Policy features
+    'policy'                => [
+        // Adds the prefix to the visual text but do not affect the link
+        'telegram_visual_prefix' => '@',
+    ],
+
     // var dump server
     'var_dump_server'         => [
         'host' => '127.0.0.1',
