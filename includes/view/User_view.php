@@ -972,9 +972,10 @@ function User_Nick_render($user, $plain = false)
     }
 
     return render_profile_link(
-        '<span class="icon-icon_angel"></span> ' . htmlspecialchars($user->displayName) . '</a>',
-        $user->id,
-        ($user->state->arrived ? '' : 'text-muted')
+        text: '<span class="icon-icon_angel"></span> ' . htmlspecialchars($user->displayName) . '</a>',
+        user_id: $user->id,
+        class: ($user->state->arrived ? '' : 'text-muted'),
+        telegram_user: $user->contact->dect
     );
 }
 
@@ -993,13 +994,18 @@ function User_Pronoun_render(User $user): string
     return ' (' . htmlspecialchars($user->personalData->pronoun) . ')';
 }
 
+
 /**
- * @param string $text
- * @param int    $user_id
- * @param string $class
- * @return string
+ * Renders a profile link based on user permissions and policies.
+ *
+ * @param string $text The link text to be displayed.
+ * @param int|null $user_id The user ID for generating the profile link. Defaults to null.
+ * @param string $class CSS class for the link. Defaults to an empty string.
+ * @param string|null $telegram_user The Telegram username for alternate messaging. Defaults to null.
+ *
+ * @return string The generated HTML anchor tag.
  */
-function render_profile_link($text, $user_id = null, $class = '')
+function render_profile_link(string $text, int $user_id = null, string $class = '', string $telegram_user = null): string
 {
     $profile_link = url('/settings/profile');
     if (!is_null($user_id)) {
@@ -1020,14 +1026,29 @@ function render_profile_link($text, $user_id = null, $class = '')
         );
 
     } else {
-        if (config('policy')['non_staff_message_shortcut'] and !is_null($user_id)){
-            // true and we have the ID => Send the user to message
-            return sprintf(
-                '<a class="%s" href="%s">%s</a>',
-                $class,
-                url('/messages/' . $user_id),
-                $text
-            );
+        if (config('policy')['non_staff_message_shortcut']){
+            // true and we have the ID => Now, what to do...
+
+            if (config('policy')['non_staff_message_via_telegram'] and
+                !is_null($telegram_user) and
+                $telegram_user != '-'
+            ) {
+                // Message via Telegram and we have the handler
+                return sprintf(
+                    '<a href="https://t.me/%s">%s%s</a>',
+                    str_replace('@','', htmlspecialchars((string) $telegram_user)),
+                    config('policy')['telegram_visual_prefix'],
+                    $text
+                );
+
+            } else {
+                return sprintf(
+                    '<a class="%s" href="%s">%s</a>',
+                    $class,
+                    url('/messages/' . $user_id),
+                    $text
+                );
+            }
 
         } else {
             // false => policy disabled
@@ -1037,12 +1058,9 @@ function render_profile_link($text, $user_id = null, $class = '')
                 $text
             );
         }
-
-
-
-
     }
 }
+
 
 /**
  * @return string|null
@@ -1051,7 +1069,7 @@ function render_user_departure_date_hint()
 {
     if (config('enable_planned_arrival') && !auth()->user()->personalData->planned_departure_date) {
         $text = __('Please enter your planned date of departure on your settings page to give us a feeling for teardown capacities.');
-        return render_profile_link($text, null, 'text-danger');
+        return render_profile_link(text: $text, user_id: null, class: 'text-danger', telegram_user: null);
 //        return render_profile_link($text, auth()->user()->id, 'text-danger');
     }
 

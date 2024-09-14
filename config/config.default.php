@@ -473,7 +473,10 @@ return [
     'policy'                => [
         // Adds the prefix to the visual text but do not affect the link
         'telegram_visual_prefix' => '',
+        // Non-Staff - profile link redirects to Message system. False > Only shows the name (no link)
         'non_staff_message_shortcut' => true,
+        // Non-Staff - Use Telegram for message. False > uses internal message system
+        'non_staff_message_via_telegram' => true,
     ],
 
     // var dump server
