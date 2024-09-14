@@ -175,7 +175,8 @@ class SettingsController extends BaseController
             return $theme['name'];
         }, config('themes'));
 
-        $currentTheme = $this->auth->user()->settings->theme;
+//        $currentTheme = $this->auth->user()->settings->theme;
+        $currentTheme = config('theme');
 
         return $this->response->withView(
             'pages/settings/theme',

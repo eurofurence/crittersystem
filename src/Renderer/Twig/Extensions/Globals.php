@@ -43,7 +43,7 @@ class Globals extends TwigExtension implements GlobalsInterface
         $userMessages = null;
 
         if ($user) {
-            $themeId = $user->settings->theme;
+//            $themeId = $user->settings->theme;
             $userMessages = $user
                 ->messagesReceived()
                 ->where('read', false)
