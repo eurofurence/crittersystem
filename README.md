@@ -103,3 +103,5 @@ For more information on how to use it call `./bin/migrate help`
 ### Documentation
 
 More documentation can be found at: https://engelsystem.de/doc/
+
+Test of commit
