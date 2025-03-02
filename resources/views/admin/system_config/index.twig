@@ -1,0 +1,35 @@
+{% extends 'layouts/app.twig' %}
+{% import 'macros/base.twig' as m %}
+
+{% block title %}{{ __(title|default(__('config.config'))) }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-3 settings-menu">
+                <table>
+                    <tr><td>ID</td><td>created at</td><td>created by</td><td>json</td></tr>
+                    {% for system_config in system_configs %}
+                        <tr>
+                            <td>
+                                {{ system_config.id }}
+                            </td>
+                            <td>
+                                {{ system_config.created_at }}
+                            </td>
+                            <td>
+                                {{ system_config.created_by }}
+                            </td>
+                            <td>
+                                {{ system_config.json }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

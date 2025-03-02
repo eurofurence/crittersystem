@@ -239,6 +239,16 @@ $route->addGroup(
             }
         );
 
+        // SystemConfig
+        $route->addGroup(
+            '/systemconfig',
+            function (RouteCollector $route): void {
+                $route->get('', 'Admin\\SystemConfigController@index');
+                //$route->get('/{page}', 'Admin\\ConfigController@edit');
+                //$route->post('/{page}', 'Admin\\ConfigController@save');
+            }
+        );
+
         // Questions
         $route->addGroup(
             '/questions',

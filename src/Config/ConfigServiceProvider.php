@@ -7,6 +7,7 @@ namespace Engelsystem\Config;
 use Engelsystem\Application;
 use Engelsystem\Container\ServiceProvider;
 use Engelsystem\Models\EventConfig;
+use Engelsystem\Models\SystemConfig;
 use Exception;
 use Illuminate\Database\QueryException;
 
@@ -25,8 +26,11 @@ class ConfigServiceProvider extends ServiceProvider
         'contact_options',
     ];
 
-    public function __construct(Application $app, protected ?EventConfig $eventConfig = null)
-    {
+    public function __construct(
+        Application $app,
+        protected ?EventConfig $eventConfig = null,
+        protected ?SystemConfig $systemConfig = null
+    ) {
         parent::__construct($app);
     }
 
@@ -65,12 +69,22 @@ class ConfigServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        /** @var Config $config */
+        $config = $this->app->get('config');
+
+        // SystemConfig
+        // TODO: Do this the same way as eventConfig?
+        /** @var SystemConfig $system_config_now */
+        $system_config_now = SystemConfig::query()
+            ->orderBy('id', 'desc')
+            ->first();
+        $config->set($system_config_now->getJson());
+
+        // EventConfig
         if (!$this->eventConfig) {
             return;
         }
 
-        /** @var Config $config */
-        $config = $this->app->get('config');
         try {
             /** @var EventConfig[] $values */
             $values = $this->eventConfig->newQuery()->get(['name', 'value']);
