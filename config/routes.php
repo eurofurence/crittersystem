@@ -86,6 +86,9 @@ $route->addGroup('/shifts', function (RouteCollector $route): void {
     $route->get('/random', 'ShiftsController@random');
 });
 
+// New dashboards (test)
+$route->get('/dashboards', 'DashboardsController@index');
+
 // News
 $route->get('/meetings', 'NewsController@meetings');
 $route->addGroup(
