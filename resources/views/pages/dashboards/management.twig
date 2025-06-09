@@ -1,22 +1,78 @@
 {% extends "layouts/app.twig" %}
 
-{% block title %}{{ __('credits.title') }}{% endblock %}
+{% block title %}{{ __('dashboard.management.title') }}{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <h1>{{ __('credits.title') }}</h1>
-        <div class="row">
-            <div class="col-md-4">
-                <h2>{{ __('credits.source') }}</h2>
-                <p>{{ data | escape  }}</p>
-                <p>{{ __('credits.version', [version])|markdown }}</i></p>
-                <p>
-                    {{ __('credits.credit')|markdown }}
-                </p>
-                <p>
-                    {{ __('credits.contributors')|markdown }}
-                </p>
-            </div>
-        </div>
+<div class="col">
+    <h1>{{ __('dashboard.management.title') }}</h1>
+    <div class="row">
+        <form action="" method="get">
+            <input class="form-control" id="dashboardSearchbox" name="query" placeholder="Filter...">
+        </form>
     </div>
+    <div class="row">
+        <table class="table table-striped table-hover">
+            <colgroup>
+                <col span="3" class="compound-key" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Room</th>
+                    <th>Shift</th>
+                    <th>Hand</th>
+                    <th>Assistant</th>
+                    <th>Man-Bear-Pig</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                <tr>
+                    <th>10:00 - 12:00</th>
+                    <td>Hall H (7-8)</td>
+                    <td>Opening</td>
+                    <td>IOOX</td>
+                    <td>I</td>
+                    <td>II</td>
+                </tr>
+                <tr>
+                    <th>10:00 - 12:00</th>
+                    <td>Hall H (7-8)</td>
+                    <td>Opening</td>
+                    <td>IOOX</td>
+                    <td>I</td>
+                    <td>II</td>
+                </tr>
+            </tbody>
+            <tbody class="table-group-divider">
+                <tr>
+                    <th>11:00 - 12:00</th>
+                    <td>Hall Z</td>
+                    <td>Mystery Shift</td>
+                    <td>IIXXXX</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+            <tbody class="table-group-divider">
+                <tr>
+                    <th>13:00 - 15:00</th>
+                    <td>Hall 3</td>
+                    <td>Talk to a cat</td>
+                    <td>O</td>
+                    <td>O</td>
+                    <td>O</td>
+                </tr>
+                <tr>
+                    <th>13:00 - 15:00</th>
+                    <td>Hall Z</td>
+                    <td>Dance</td>
+                    <td>OO</td>
+                    <td>OOX</td>
+                    <td>O</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
 {% endblock %}
