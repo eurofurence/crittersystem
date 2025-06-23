@@ -3,19 +3,19 @@
 {% block title %}{{ __('dashboard.management.title') }}{% endblock %}
 
 {% block content %}
-<div class="col">
+<div class="row"> <!-- This is wrong, row in row -->
     <h1>{{ __('dashboard.management.title') }}</h1>
     <div class="row">
         <form action="" method="get">
             <input class="form-control" id="dashboardSearchbox" name="query" placeholder="Filter...">
         </form>
     </div>
-    <div class="row">
+    <div class="row table-responsive">
         <table class="table table-striped table-hover">
             <colgroup>
                 <col span="3" class="compound-key" />
             </colgroup>
-            <thead>
+            <thead class="table-light">
                 <tr>
                     <th>Time</th>
                     <th>Room</th>
