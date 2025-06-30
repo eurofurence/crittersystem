@@ -161,7 +161,7 @@ return [
             'navbar_classes' => 'navbar-dark',
         ],
         20 => [
-            'name' => 'Eurofurence 2024 - Cyber punk ',
+            'name' => 'Eurofurence 2024 - Cyberpunk ',
             'type' => 'dark',
             'navbar_classes' => 'navbar-dark',
         ],
