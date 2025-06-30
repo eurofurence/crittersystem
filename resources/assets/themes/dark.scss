@@ -19,9 +19,10 @@ input[type='time']::-webkit-calendar-picker-indicator {
   background-color: $list-group-form-check-input-border-color;
 }
 
-/* Fix for tables being rendered dark on dark with Bootstrap 5.3 */
-.table> :not(caption)>*>* {
-  color: #fff;
-}
+// Disabled due the new theme EF29
+// /* Fix for tables being rendered dark on dark with Bootstrap 5.3 */
+// .table> :not(caption)>*>* {
+//   color: #fff;
+// }
 
-$table-color: #fff !default;
+// $table-color: #fff !default;

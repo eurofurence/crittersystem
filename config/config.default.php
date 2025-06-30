@@ -155,6 +155,11 @@ return [
     // Supported themes
     // To disable a theme in config.php, you can set its value to null
     'themes' => [
+        21 => [
+            'name' => 'Eurofurence 2025 - Space Expedition',
+            'type' => 'dark',
+            'navbar_classes' => 'navbar-dark',
+        ],
         20 => [
             'name' => 'Eurofurence 2024 - Cyberpunk ',
             'type' => 'dark',
@@ -197,6 +202,11 @@ return [
         ],
         12 => [
             'name' => 'Engelsystem 36c3 (2019)',
+            'type' => 'dark',
+            'navbar_classes' => 'navbar-dark bg-black border-dark',
+        ],
+        11 => [
+            'name' => 'Engelsystem high contrast',
             'type' => 'dark',
             'navbar_classes' => 'navbar-dark bg-black border-dark',
         ],
@@ -245,8 +255,8 @@ return [
             'type' => 'light',
             'navbar_classes' => 'navbar-light bg-light',
         ],
-        11 => [
-            'name' => 'Engelsystem high contrast',
+        1 => [
+            'name' => 'Engelsystem dark',
             'type' => 'dark',
             'navbar_classes' => 'navbar-dark bg-black border-dark',
         ],
@@ -254,11 +264,6 @@ return [
             'name' => 'Engelsystem light',
             'type' => 'light',
             'navbar_classes' => 'navbar-light bg-light',
-        ],
-        1 => [
-            'name' => 'Engelsystem dark',
-            'type' => 'dark',
-            'navbar_classes' => 'navbar-dark bg-black border-dark',
         ],
     ],
 
