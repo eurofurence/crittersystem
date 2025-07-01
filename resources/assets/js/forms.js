@@ -241,7 +241,8 @@ ready(() => {
       shouldSort: false,
       shouldSortItems: false,
       classNames: {
-        containerInner: 'choices__inner form-control',
+        containerInner: ['choices__inner', 'form-control'],
+        // containerInner: 'choices__inner form-control', //reverted the change
       },
       fuseOptions: {
         distance: 0,
