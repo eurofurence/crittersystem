@@ -17,8 +17,10 @@ class Legacy implements HandlerInterface
         if ($this->isCli()) {
             return;
         }
-
-        echo 'An <del>un</del>expected error occurred. A team of untrained monkeys has been dispatched to fix it.';
+        // echo 'An <del>un</del>expected error occurred. A team of untrained monkeys has been dispatched to fix it.';
+        // New error 500 template. To see the errors, set in the config `environment = development`
+        $server_error = file_get_contents(__DIR__ . '/../../../resources/views/layouts/500.html');
+        echo $server_error;
     }
 
     public function report(Throwable $e): void

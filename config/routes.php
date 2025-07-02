@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 use FastRoute\RouteCollector;
 
+use Engelsystem\Controllers\AdminV2\ExportController;
+
+
 /** @var RouteCollector $route */
 
 // Pages
@@ -299,6 +302,22 @@ $route->addGroup(
             function (RouteCollector $route): void {
                 $route->get('[/{news_id:\d+}]', 'Admin\\NewsController@edit');
                 $route->post('[/{news_id:\d+}]', 'Admin\\NewsController@save');
+            }
+        );
+    }
+);
+
+// AdminV2
+$route->addGroup(
+    '/adminv2',
+    function (RouteCollector $route): void {
+        // Import/Export
+        $route->addGroup(
+            '/export',
+            function (RouteCollector $route): void {
+                $route->get('', 'AdminV2\\ExportController@showExportPage');
+                $route->get('/download', 'AdminV2\\ExportController@export');
+                $route->post('/import', 'AdminV2\\ExportController@import');
             }
         );
     }

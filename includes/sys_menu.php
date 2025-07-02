@@ -98,6 +98,7 @@ function make_navigation()
         'admin/schedule'     => ['schedule.import', 'schedule.import'],
         'admin/logs'         => ['log.log', 'admin_log'],
         'admin/config'       => ['config.config', 'config.edit'],
+        'adminv2/export'       => ['V2-Export', 'admin_user'],
     ];
 
     if (config('autoarrive')) {

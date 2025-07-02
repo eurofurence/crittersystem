@@ -173,4 +173,72 @@ class Response extends SymfonyResponse implements ResponseInterface
 
         return $this;
     }
+
+    /**
+     * Create a download response.
+     *
+     * @param callable $callback Callback that writes content to php://output
+     * @param string $filename The name of the file to download
+     * @param array $headers Additional headers for the response
+     * @return static
+     */
+    public function download(callable $callback, string $filename, array $headers = []): static
+    {
+        $response = $this
+            ->withHeader('Content-Disposition', 'attachment; filename="' . $filename . '"');
+
+        foreach ($headers as $name => $value) {
+            $response = $response->withHeader($name, $value);
+        }
+
+        ob_start();
+        $callback();
+        $content = ob_get_clean();
+
+        return $response->withContent($content);
+    }
+
+    /**
+     * Redirect to a route with an error message
+     *
+     * @param string $route The route to redirect to
+     * @param string $error The error message
+     * @return Response
+     */
+    public function redirectWithError(string $route, string $error): Response
+    {
+        return response()
+            ->withSession(['error' => $error])
+            ->redirectTo($route);
+    }
+
+
+    /**
+     * Add data to the session. Don't forget to remove the data after using
+     *
+     * @param array $data
+     * @return Response
+     */
+    public function withSession(array $data): Response
+    {
+        foreach ($data as $key => $value) {
+            session()->set($key, $value);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Redirect to a route with a success message
+     *
+     * @param string $route The route to redirect to
+     * @param string $message The success message
+     * @return Response
+     */
+    public function redirectWithMessage(string $route, string $message): Response
+    {
+        return response()
+            ->withSession(['success' => $message])
+            ->redirectTo($route);
+    }
 }
