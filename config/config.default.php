@@ -22,7 +22,7 @@ return [
     // Application name (not the event name)
     'app_name'                => env('APP_NAME', 'Critter System'),
 
-    // Set to development to enable debugging messages
+    // Set to development to enable debugging messages [production, development]
     'environment'             => env('ENVIRONMENT', 'production'),
 
     // Application URL and base path to use instead of the auto-detected one
