@@ -104,7 +104,6 @@ class InternalStaffPermission extends Migration
      * Deletes a group identified by the provided ID.
      *
      * @param int $group The ID of the group to be deleted.
-     * @return void
      */
     protected function deleteGroup(int $group): void
     {
@@ -119,8 +118,6 @@ class InternalStaffPermission extends Migration
      * @param int $id The ID of the group.
      * @param string $name The name of the group.
      * @param array $privileges A list of privileges to be assigned to the group.
-     *
-     * @return void
      */
     protected function insertGroup(int $id, string $name, array $privileges): void
     {
@@ -139,7 +136,6 @@ class InternalStaffPermission extends Migration
      *
      * @param int $privilege The ID of the privilege to remove.
      * @param int $group The ID of the group from which the privilege should be removed.
-     * @return void
      */
     protected function deleteGroupPermission(int $privilege, int $group): void
     {
@@ -153,7 +149,6 @@ class InternalStaffPermission extends Migration
      *
      * @param int $privilege The ID of the privilege to be added.
      * @param int $group The ID of the group to which the privilege is to be added.
-     * @return void
      */
     protected function insertGroupPermission(int $privilege, int $group): void
     {
@@ -169,7 +164,6 @@ class InternalStaffPermission extends Migration
      * @param int $privilege The identifier of the privilege to be moved.
      * @param int $oldGroup The identifier of the group from which the privilege will be removed.
      * @param int $newGroup The identifier of the group to which the privilege will be added.
-     * @return void
      */
     protected function movePermission(int $privilege, int $oldGroup, int $newGroup): void
     {
@@ -183,7 +177,6 @@ class InternalStaffPermission extends Migration
      * @param string $name The name of the permission.
      * @param string $description A description of the permission.
      * @param int $group The ID of the group to associate with the permission.
-     * @return void
      */
     protected function insertPermission(string $name, string $description, int $group): void
     {
@@ -199,7 +192,6 @@ class InternalStaffPermission extends Migration
      * Deletes a permission from the privileges table based on its name.
      *
      * @param string $privilege The name of the permission to delete.
-     * @return void
      */
     protected function deletePermission(string $privilege): void
     {
@@ -214,7 +206,6 @@ class InternalStaffPermission extends Migration
      * @param string $oldName The current name of the permission to be updated.
      * @param string $newName The new name of the permission.
      * @param string $description The new description of the permission.
-     * @return void
      */
     protected function updatePermission(string $oldName, string $newName, string $description): void
     {

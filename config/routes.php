@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 use FastRoute\RouteCollector;
 
-use Engelsystem\Controllers\AdminV2\ExportController;
-
-
 /** @var RouteCollector $route */
 
 // Pages

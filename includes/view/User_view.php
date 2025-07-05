@@ -96,7 +96,7 @@ function Users_view(
             . user_info_icon($user);
         $u['first_name'] = htmlspecialchars((string) $user->personalData->first_name);
         $u['last_name'] = htmlspecialchars((string) $user->personalData->last_name);
-        $u['dect'] = sprintf('<a href="https://t.me/%s">%s%1$s</a>', str_replace('@','', htmlspecialchars((string) $user->contact->dect)), config('policy')['telegram_visual_prefix']);
+        $u['dect'] = sprintf('<a href="https://t.me/%s">%s%1$s</a>', str_replace('@', '', htmlspecialchars((string) $user->contact->dect)), config('policy')['telegram_visual_prefix']);
         $u['arrived'] = icon_bool($user->state->arrived);
         if (config('enable_voucher')) {
             $u['got_voucher'] = $user->state->got_voucher;
@@ -716,7 +716,7 @@ function User_view(
                                 . ' <a href="https://t.me/' . htmlspecialchars($user_source->contact->dect) . '">'
                             . config('policy')['telegram_visual_prefix']
                             . htmlspecialchars($user_source->contact->dect)
-			    . '</a>',
+                            . '</a>',
                             4
                         )
                         : '',
@@ -726,7 +726,7 @@ function User_view(
                                 icon('phone')
                                 . ' <a href="tel:' . htmlspecialchars($user_source->contact->mobile) . '">'
                                 . htmlspecialchars($user_source->contact->mobile)
-				. '</a>',
+                                . '</a>',
                                 4
                             )
                             : ''
@@ -735,7 +735,7 @@ function User_view(
                         heading(
                             '<a href="' . url('/messages/' . $user_source->id) . '">'
                             . icon('envelope')
-			    . '</a>',
+                            . '</a>',
                             4
                         )
                         : '',
@@ -1012,35 +1012,34 @@ function render_profile_link(string $text, int $user_id = null, string $class = 
         $profile_link = url('/users', ['action' => 'view', 'user_id' => $user_id]);
     }
 
-    if (auth()->can('user.type.internal_staff') or
+    if (
+        auth()->can('user.type.internal_staff') or
         auth()->can('admin_user') or
         auth()->user()->id == $user_id or
         is_null($user_id)
-    ){
-
+    ) {
         return sprintf(
             '<a class="%s" href="%s">%s</a>',
             $class,
             $profile_link,
             $text
         );
-
     } else {
-        if (config('policy')['non_staff_message_shortcut']){
+        if (config('policy')['non_staff_message_shortcut']) {
             // true and we have the ID => Now, what to do...
 
-            if (config('policy')['non_staff_message_via_telegram'] and
+            if (
+                config('policy')['non_staff_message_via_telegram'] and
                 !is_null($telegram_user) and
                 $telegram_user != '-'
             ) {
                 // Message via Telegram and we have the handler
                 return sprintf(
                     '<a href="https://t.me/%s">%s%s</a>',
-                    str_replace('@','', htmlspecialchars((string) $telegram_user)),
+                    str_replace('@', '', htmlspecialchars((string) $telegram_user)),
                     config('policy')['telegram_visual_prefix'],
                     $text
                 );
-
             } else {
                 return sprintf(
                     '<a class="%s" href="%s">%s</a>',
@@ -1049,7 +1048,6 @@ function render_profile_link(string $text, int $user_id = null, string $class = 
                     $text
                 );
             }
-
         } else {
             // false => policy disabled
             return sprintf(

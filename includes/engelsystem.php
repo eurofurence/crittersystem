@@ -5,7 +5,8 @@
  */
 
 use Engelsystem\Application;
-use Engelsystem\Http\UrlGeneratorInterface;
+
+//use Engelsystem\Http\UrlGeneratorInterface;
 
 require __DIR__ . '/application.php';
 
@@ -21,7 +22,6 @@ require __DIR__ . '/includes.php';
  */
 /** @var Application $app */
 if ($app->get('config')->get('maintenance')) {
-
     http_response_code(503);
 
     // $url = $app->get(UrlGeneratorInterface::class);
