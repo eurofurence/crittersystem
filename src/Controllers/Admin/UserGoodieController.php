@@ -58,7 +58,7 @@ class UserGoodieController extends BaseController
             [
                 'userdata' => $user,
                 'is_tshirt' => $this->config->get('goodie_type') === GoodieType::Tshirt->value,
-                'previousUrl' => $previousUrl
+                'previousUrl' => $previousUrl,
             ]
         );
     }

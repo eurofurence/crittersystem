@@ -533,9 +533,11 @@ function AngelType_view(
         ),
     ];
     // Tab #2 -> Only if the user deserves :)
-    if ($admin_user_angeltypes ||
-       !$angeltype->hide_on_shift_view ||
-       ($angeltype->hide_on_shift_view && (!is_null($user_angeltype) && $user_angeltype->confirm_user_id))) {
+    if (
+        $admin_user_angeltypes ||
+        !$angeltype->hide_on_shift_view ||
+        ($angeltype->hide_on_shift_view && (!is_null($user_angeltype) && $user_angeltype->confirm_user_id))
+    ) {
         // Yup, you can see this: admin, not to hide or confirmed user
         $pagetabs[__('general.shifts')] = AngelType_view_shifts(
             $angeltype,
@@ -683,7 +685,7 @@ function AngelTypes_render_contact_info(AngelType $angeltype)
         ],
         __('general.dect')  => config('enable_dect')
             ? [
-                sprintf('<a href="https://t.me/%s">%s%1$s</a>', str_replace('@','',htmlspecialchars($angeltype->contact_dect)),config('policy')['telegram_visual_prefix']),
+                sprintf('<a href="https://t.me/%s">%s%1$s</a>', str_replace('@', '', htmlspecialchars($angeltype->contact_dect)), config('policy')['telegram_visual_prefix']),
                 htmlspecialchars($angeltype->contact_dect),
             ]
             : null,

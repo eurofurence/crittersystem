@@ -206,9 +206,10 @@ function user_controller()
         }
     }
 
-    if ($user->id != $user_source->id and
+    if (
+        $user->id != $user_source->id and
         !(auth()->can('user.type.internal_staff') or
-          auth()->can('admin_user'))
+        auth()->can('admin_user'))
     ) {
         //        error(__('Not possible...'));
         throw_redirect(url('/'));

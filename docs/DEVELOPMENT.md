@@ -49,8 +49,8 @@ ln -s ../../bin/pre-commit .git/hooks/pre-commit
 
 > [!TIP]
 > We suggest using Docker for the Development local build.  
-> This repo [ships a docker setup](docker/dev) for a quick development start.  
-> If you use another uid/gid than 1000 on your machine you have to adjust it in [docker/dev/.env](docker/dev/.env).
+> This repo [ships a docker setup](../docker/dev) for a quick development start.  
+> If you use another uid/gid than 1000 on your machine you have to adjust it in [docker/dev/.env](../docker/dev/.env).
 
 Make sure you're in the `docker/dev` subfolder:
 

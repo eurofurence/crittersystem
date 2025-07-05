@@ -48,7 +48,7 @@ function location_view(Location $location, ShiftsFilterRenderer $shiftsFilterRen
         $dect = heading(__('Contact'), 3)
             . description([__('general.dect') => sprintf(
                 '<a href="https://t.me/%s">%s%1$s</a>',
-                str_replace('@','',htmlspecialchars($location->dect)),
+                str_replace('@', '', htmlspecialchars($location->dect)),
                 config('policy')['telegram_visual_prefix']
             )]);
     }

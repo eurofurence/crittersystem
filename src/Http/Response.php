@@ -203,7 +203,6 @@ class Response extends SymfonyResponse implements ResponseInterface
      *
      * @param string $route The route to redirect to
      * @param string $error The error message
-     * @return Response
      */
     public function redirectWithError(string $route, string $error): Response
     {
@@ -216,8 +215,6 @@ class Response extends SymfonyResponse implements ResponseInterface
     /**
      * Add data to the session. Don't forget to remove the data after using
      *
-     * @param array $data
-     * @return Response
      */
     public function withSession(array $data): Response
     {
@@ -233,7 +230,6 @@ class Response extends SymfonyResponse implements ResponseInterface
      *
      * @param string $route The route to redirect to
      * @param string $message The success message
-     * @return Response
      */
     public function redirectWithMessage(string $route, string $message): Response
     {

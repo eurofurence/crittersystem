@@ -7,7 +7,6 @@ namespace Engelsystem\Helpers;
 use Engelsystem\Models\Location;
 use Engelsystem\Models\AngelType;
 use Engelsystem\Models\Shifts\Shift;
-use Engelsystem\Models\Shifts\NeededAngelType;
 use Engelsystem\Models\Shifts\ShiftType;
 use Engelsystem\Models\User\User;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -15,24 +14,13 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class ShiftExportHelper
 {
-    protected Location $location;
-    protected AngelType $angelType;
-    protected Shift $shift;
-    protected ShiftType $shiftType;
-    protected User $user;
-
     public function __construct(
-        Location $location,
-        AngelType $angelType,
-        Shift $shift,
-        ShiftType $shiftType,
-        User $user
+        protected Location $location,
+        protected AngelType $angelType,
+        protected Shift $shift,
+        protected ShiftType $shiftType,
+        protected User $user
     ) {
-        $this->location = $location;
-        $this->angelType = $angelType;
-        $this->shift = $shift;
-        $this->shiftType = $shiftType;
-        $this->user = $user;
     }
 
 
@@ -74,10 +62,8 @@ class ShiftExportHelper
 ////                $users = $shift->users()->get();
 ////                $userNames = $users->pluck('name')->implode(', ');
 ////                $sheet->setCellValue([5, $row], $userNames);
-//
                 $row++;
             }
-
         }
 
 

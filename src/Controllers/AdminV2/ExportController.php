@@ -18,8 +18,8 @@ use Psr\Log\LoggerInterface;
 class ExportController extends BaseController
 {
     public function __construct(
-        private readonly Authenticator     $auth,
-        private readonly LoggerInterface   $log,
+        private readonly Authenticator $auth,
+        private readonly LoggerInterface $log,
         private readonly ShiftExportHelper $exportHelper
     ) {
 //        parent::__construct();
@@ -68,14 +68,14 @@ class ExportController extends BaseController
         $filename = 'shifts-export-' . date('Y-m-d') . '.' . $format;
 
         return response()->download(
-            function () use ($writer) {
+            function () use ($writer): void {
                 $writer->save('php://output');
             },
             $filename,
             [
                 'Content-Type' => $format === 'csv'
                     ? 'text/csv'
-                    : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             ]
         );
     }

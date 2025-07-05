@@ -156,7 +156,7 @@ return [
     // To disable a theme in config.php, you can set its value to null
     'themes' => [
         20 => [
-            'name' => 'Eurofurence 2024 - Cyberpunk ',
+            'name' => 'Eurofurence 2024 - Cyberpunk',
             'type' => 'dark',
             'navbar_classes' => 'navbar-dark',
         ],
@@ -165,7 +165,7 @@ return [
             'type' => 'light',
             'navbar_classes' => 'navbar-light bg-light',
         ],
-        18=> [
+        18 => [
             'name' => 'Eurofurence Dark',
             'type' => 'dark',
             'navbar_classes' => 'navbar-primary navbar-dark bg-black border-dark',
@@ -479,8 +479,8 @@ return [
 
     // A list of credits
     'credits'                 => [
-        'Contribution' => 'Please visit [eurofurence/crittersystem GitHub](https://github.com/eurofurence/crittersystem) if '
-            . 'you want to contribute, have found any [bugs](https://github.com/eurofurence/crittersystem/issues) '
+        'Contribution' => 'Please visit [eurofurence/crittersystem GitHub](https://github.com/eurofurence/crittersystem)'
+            . ' if you want to contribute, have found any [bugs](https://github.com/eurofurence/crittersystem/issues) '
             . 'or need help.',
     ],
 
