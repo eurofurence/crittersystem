@@ -1,22 +1,27 @@
 # Development
 
-Please also read the [CONTRIBUTING.md](CONTRIBUTING.md).
+Please also read the [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 ## Dev requirements
- * Node >= 14 (Development/Building only)
-   * Including npm
- * Yarn (Development/Building only)
- * PHP Composer (Development/Building only)
+
+- Node >= 14 (Development/Building only)
+  - Including npm
+- Yarn (Development/Building only)
+- PHP Composer (Development/Building only)
 
 ## Code style
+
 Please ensure that your pull requests follow the [PSR-12](https://www.php-fig.org/psr/psr-12/) coding style guide.
 You can check that by running
+
 ```bash
 composer run phpcs
 # with docker
 docker exec engelsystem_dev-es_workspace-1 composer run phpcs
 ```
+
 You may auto fix reported issues by running
+
 ```bash
 composer run phpcbf
 # with docker
@@ -24,6 +29,7 @@ docker exec engelsystem_dev-es_workspace-1 composer run phpcbf
 ```
 
 ## Pre-commit hooks
+
 You should set up the pre-commit hook to check the code style and run tests on commit:
 
 Docker (recommended):
@@ -43,17 +49,17 @@ ln -s ../../bin/pre-commit .git/hooks/pre-commit
 
 > [!TIP]
 > We suggest using Docker for the Development local build.  
-> This repo [ships a docker setup](docker/dev) for a quick development start.  
-> If you use another uid/gid than 1000 on your machine you have to adjust it in [docker/dev/.env](docker/dev/.env).
+> This repo [ships a docker setup](../docker/dev) for a quick development start.  
+> If you use another uid/gid than 1000 on your machine you have to adjust it in [docker/dev/.env](../docker/dev/.env).
 
-
-Make sure you're in the `docker/dev` subfolder: 
+Make sure you're in the `docker/dev` subfolder:
 
 ```bash
 cd docker/dev
 ```
 
 Then, run
+
 ```bash
 docker compose up
 ```
@@ -91,19 +97,22 @@ docker compose exec -e THEMES=0,1 es_workspace yarn build:watch
 ```
 
 It might also be useful to have an interactive database interface for which a phpMyAdmin instance can be startet at [http://localhost:8888](http://localhost:8888).
+
 ```bash
 docker compose --profile dev up
 ```
 
 ## Localhost
+
 You can find your local Engelsystem on [http://localhost:5080](http://localhost:5080).
 
 ## Local build without Docker
+
 The following instructions explain how to get, build and run the latest Engelsystem version directly from the git main branch (may be unstable!).
 
-* Clone the main branch: `git clone https://github.com/engelsystem/engelsystem.git`
-* Install [Composer](https://getcomposer.org/download/) and [Yarn](https://yarnpkg.com/en/docs/install) (which requires [Node.js](https://nodejs.org/en/download/package-manager/))
-* Install project dependencies:
+- Clone the main branch: `git clone https://github.com/engelsystem/engelsystem.git`
+- Install [Composer](https://getcomposer.org/download/) and [Yarn](https://yarnpkg.com/en/docs/install) (which requires [Node.js](https://nodejs.org/en/download/package-manager/))
+- Install project dependencies:
   ```bash
   composer install
   yarn
@@ -114,39 +123,44 @@ The following instructions explain how to get, build and run the latest Engelsys
   composer dump-autoload --optimize
   ```
   to install the Engelsystem
-* Build the frontend assets
-  * All
+- Build the frontend assets
+  - All
     ```bash
     yarn build
     ```
-  * Specific themes only by providing the `THEMES` environment variable, e.g.
+  - Specific themes only by providing the `THEMES` environment variable, e.g.
     ```bash
     THEMES=0,1 yarn build
     ```
-* Generate translation files
+- Generate translation files
   ```bash
   find resources/lang/ -type f -name '*.po' -exec sh -c 'msgfmt "${1%.*}.po" -o"${1%.*}.mo"' shell {} \;
   ```
 
 ## Testing
+
 To run only unit tests (tests that should not change the Engelsystem state) use
+
 ```bash
 vendor/bin/phpunit --testsuite Unit
 ```
 
 If a database is configured and the Engelsystem is allowed to mess around with some files, you can run feature tests.
 The tests can potentially delete some database entries, so they should never be run on a production system!
+
 ```bash
 vendor/bin/phpunit --testsuite Feature
 ```
 
 When you want to run unit and feature tests at once:
+
 ```bash
 vendor/bin/phpunit
 ```
 
 To generate code coverage reports it's highly recommended to use [`pcov`](https://github.com/krakjoe/pcov) or
 at least `phpdbg -qrr`(which has problems with switch case statements) as using Xdebug slows down execution.
+
 ```bash
 php -d pcov.enabled=1 -d pcov.directory=. vendor/bin/phpunit --coverage-text
 ```
@@ -155,15 +169,17 @@ For better debug output, adding `-vvv` might be helpful.
 Adding `--coverage-html public/coverage/` exports the coverage reports to the `public/` dir which then can be viewed at [localhost:5080/coverage/index.html](http://localhost:5080/coverage/index.html).
 
 ### Docker
-If using the Docker-based development environment  you can run the following script to retrieve a coverage report.
+
+If using the Docker-based development environment you can run the following script to retrieve a coverage report.
+
 ```sh
 docker compose exec es_workspace composer phpunit:coverage
 ```
 
 A browsable HTML version is available at http://localhost:5080/coverage/index.html .
 
-
 ### Var Dump server
+
 Symfony Var Dump server is configured to allow for easier debugging. It is not meant as a replacement for xdebug but can actually be used together with xdebug.
 The Var Dump Server is especially useful if you want to debug a request without messing up the output e.g. of API calls or the HTML layout.
 
@@ -185,9 +201,9 @@ docker compose exec es_server vendor/bin/var-dump-server
 For more information check out the Var Dump Server documentation: [Symfony VarDumper](https://symfony.com/components/VarDumper)
 
 ## Translation
+
 We use gettext. You may use POEdit to extract new texts from the sourcecode.
 Please config POEdit to extract also the twig template files using the following settings: https://gist.github.com/jlambe/a868d9b63d70902a12254ce47069d0e6
-
 
 ## CI & Build Pipeline
 
@@ -195,6 +211,7 @@ The Engelsystem can be tested and automatically deployed to a testing/staging/pr
 This functionality requires a [GitLab](https://about.gitlab.com/) server with a working docker runner.
 
 To use the deployment features the following secret variables need to be defined (if undefined the step will be skipped):
+
 ```bash
 SSH_PRIVATE_KEY         # The ssh private key
 STAGING_REMOTE          # The staging server, e.g. user@remote.host
@@ -211,17 +228,19 @@ You can run a static code analysis with this command:
 composer phpstan
 ```
 
-**Hint for using Xdebug with *PhpStorm***
+**Hint for using Xdebug with _PhpStorm_**
 
-For some reason *PhpStorm* is unable to detect the server name.
+For some reason _PhpStorm_ is unable to detect the server name.
 But without a server name it's impossible to set up path mappings.
-Because of that the docker setup sets the server name *engelsystem*.
-To get Xdebug working you have to create a server with the name *engelsystem* manually.
+Because of that the docker setup sets the server name _engelsystem_.
+To get Xdebug working you have to create a server with the name _engelsystem_ manually.
 
 ## Troubleshooting
 
 ### Docker version
+
 If unspecific issues appear try using Docker version >= 20.10.14.
 
 ### `service "es_workspace" is not running`
+
 Make sure you're running your docker commands from the `docker/dev` directory, not from `docker`

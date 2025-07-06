@@ -38,6 +38,9 @@ return [
         \Engelsystem\Helpers\DumpServerServiceProvider::class,
         \Engelsystem\Helpers\UuidServiceProvider::class,
         \Engelsystem\Controllers\Api\UsesAuthServiceProvider::class,
+
+        // V2 - Import/Export
+        \Engelsystem\ServiceProvider\ShiftExportServiceProvider::class,
     ],
 
     // Application middleware

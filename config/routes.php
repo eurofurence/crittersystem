@@ -306,3 +306,19 @@ $route->addGroup(
         );
     }
 );
+
+// AdminV2
+$route->addGroup(
+    '/adminv2',
+    function (RouteCollector $route): void {
+        // Import/Export
+        $route->addGroup(
+            '/export',
+            function (RouteCollector $route): void {
+                $route->get('', 'AdminV2\\ExportController@showExportPage');
+                $route->get('/download', 'AdminV2\\ExportController@export');
+                $route->post('/import', 'AdminV2\\ExportController@import');
+            }
+        );
+    }
+);

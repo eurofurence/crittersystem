@@ -8,7 +8,7 @@ return [
     // MySQL-Connection Settings
     'database'                => [
         'host'     => env('MYSQL_HOST', 'localhost'),
-        'database' => env('MYSQL_DATABASE', 'engelsystem'),
+        'database' => env('MYSQL_DATABASE', 'critterdb'),
         'username' => env('MYSQL_USER', 'root'),
         'password' => env('MYSQL_PASSWORD', ''),
     ],
@@ -20,9 +20,9 @@ return [
     'maintenance'             => (bool) env('MAINTENANCE', false),
 
     // Application name (not the event name)
-    'app_name'                => env('APP_NAME', 'Engelsystem'),
+    'app_name'                => env('APP_NAME', 'Critter System'),
 
-    // Set to development to enable debugging messages
+    // Set to development to enable debugging messages [production, development]
     'environment'             => env('ENVIRONMENT', 'production'),
 
     // Application URL and base path to use instead of the auto-detected one
@@ -50,21 +50,21 @@ return [
         'faq.faq' => [env('FAQ_URL', '/faq'), 'faq.view'],
 
         // Contact email address, linked on every page
-        'Contact' => env('CONTACT_EMAIL', 'mailto:ticket@c3heaven.de'),
+        'Contact' => env('CONTACT_EMAIL', 'mailto:critter@eurofurence.org'),
     ],
 
     // Other ways to ask the heaven
     // Multiple contact options / links are possible, analogue to footer_items
     'contact_options' => [
         // E-mail address
-        'general.email' => env('CONTACT_EMAIL', 'mailto:ticket@c3heaven.de'),
+        'general.email' => env('CONTACT_EMAIL', 'mailto:critter@eurofurence.org'),
     ],
 
     // Additional text displayed on the FAQ page, rendered as markdown
     'faq_text'                => env('FAQ_TEXT'),
 
     // Link to documentation/help
-    'documentation_url'       => env('DOCUMENTATION_URL', 'https://engelsystem.de/doc/'),
+    'documentation_url'       => env('DOCUMENTATION_URL', 'https://github.com/eurofurence/crittersystem/'),
 
     // Email config
     'email'                   => [
@@ -156,7 +156,7 @@ return [
     // To disable a theme in config.php, you can set its value to null
     'themes' => [
         20 => [
-            'name' => 'Eurofurence 2024 - Cyberpunk ',
+            'name' => 'Eurofurence 2024 - Cyberpunk',
             'type' => 'dark',
             'navbar_classes' => 'navbar-dark',
         ],
@@ -165,7 +165,7 @@ return [
             'type' => 'light',
             'navbar_classes' => 'navbar-light bg-light',
         ],
-        18=> [
+        18 => [
             'name' => 'Eurofurence Dark',
             'type' => 'dark',
             'navbar_classes' => 'navbar-primary navbar-dark bg-black border-dark',
@@ -479,8 +479,9 @@ return [
 
     // A list of credits
     'credits'                 => [
-        'Contribution' => 'Please visit [engelsystem/engelsystem](https://github.com/engelsystem/engelsystem) if '
-            . 'you want to contribute, have found any [bugs](https://github.com/engelsystem/engelsystem/issues) '
+        'Contribution' => 'Please visit `
+            . `[eurofurence/crittersystem GitHub](https://github.com/eurofurence/crittersystem) '
+            . 'if you want to contribute, have found any [bugs](https://github.com/eurofurence/crittersystem/issues) '
             . 'or need help.',
     ],
 
