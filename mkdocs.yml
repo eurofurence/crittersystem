@@ -1,0 +1,86 @@
+# Requirements:
+#
+# pip install mkdocs
+# pip install wheel
+# pip install pymdown-extensions
+#
+# Local Test: mkdocs serve
+# Build: mkdocs build
+#
+
+# Server configuration
+dev_addr: 127.0.0.1:8888
+
+# Project information
+site_name: Critter System
+site_description: Shift planning system for Eurofurence on-site departments forked from the Engelsystem which powers Chaos events.
+site_author: Eurofurence
+site_url: https://crittersystem.eurofurence.github.io/
+repo_url: https://github.com/eurofurence/crittersystem
+
+# Copyright
+#copyright: GPL-2.0 license
+
+# The directory containing the documentation source markdown files.
+docs_dir: 'docs/src'
+# The directory where the output HTML and other files are created.
+site_dir: 'docs/public'
+# This config defines patterns of files (under docs_dir) to not be picked up into the built site.
+exclude_docs: |
+  /docs/public/
+  ./docs/public/ # it's duplicated to avoid references issues
+
+# This setting controls the directory structure of the generated documentation, and thereby the URL format used for linking to pages.
+use_directory_urls: false #false = allows to run locally
+
+# Theme section
+theme:
+  name: readthedocs
+  highlightjs: true
+  include_homepage_in_sidebar: true
+  prev_next_buttons_location: bottom
+  navigation_depth: 3
+  collapse_navigation: true
+  titles_only: false
+  sticky_navigation: true
+  locale: en
+
+# Extensions
+markdown_extensions:
+  - admonition:
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
+      separator: "_"
+  - footnotes:
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret:
+      smart_insert: True # Use smart logic with insert characters.
+      insert: True       # Enable insert feature.
+      superscript: True  # Enable superscript feature.
+  - pymdownx.critic:
+      mode: "view" # view just parses the markup and displays it in its HTML equivalent rendering. accept strips out the critic markup and replaces them with the suggested changes. reject rejects all the suggestions and strips the critic markup out replacing it with the original.
+  - pymdownx.details:
+#  - pymdownx.emoji:
+#      emoji_index: !!python/name:materialx.emoji.twemoji
+#      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.extra:
+  - pymdownx.inlinehilite:
+  - pymdownx.keys:
+  - pymdownx.magiclink:
+  - pymdownx.mark:
+  - pymdownx.smartsymbols:
+  - pymdownx.superfences:
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tabbed:
+  - pymdownx.progressbar:
+#  - pymdownx.b64:
+#  - pymdownx.arithmatex:
+#  - pymdownx.tilde:
+
+plugins:
+  - search # necessary for search to work
+  - awesome-pages
