@@ -479,8 +479,9 @@ return [
 
     // A list of credits
     'credits'                 => [
-        'Contribution' => 'Please visit [eurofurence/crittersystem GitHub](https://github.com/eurofurence/crittersystem)'
-            . ' if you want to contribute, have found any [bugs](https://github.com/eurofurence/crittersystem/issues) '
+        'Contribution' => 'Please visit `
+            . `[eurofurence/crittersystem GitHub](https://github.com/eurofurence/crittersystem) '
+            . 'if you want to contribute, have found any [bugs](https://github.com/eurofurence/crittersystem/issues) '
             . 'or need help.',
     ],
 
