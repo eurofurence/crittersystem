@@ -6,6 +6,10 @@ on:
       - 'dev'
 #      - 'main'
 
+permissions:
+  id-token: write
+  pages: write
+
 jobs:
   # Single deploy job no building
   deploy:
