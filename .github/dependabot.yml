@@ -7,5 +7,6 @@ version: 2
 updates:
   - package-ecosystem: "composer" # See documentation for possible values
     directory: "/" # Location of package manifests
+    target-branch: "dev" # Focus on DEV branch for updates
     schedule:
       interval: "weekly"
