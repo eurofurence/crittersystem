@@ -7,6 +7,7 @@ namespace Engelsystem\Controllers\Admin;
 use Carbon\Carbon;
 use Engelsystem\Controllers\BaseController;
 use Engelsystem\Controllers\HasUserNotifications;
+use Engelsystem\Controllers\NotificationType;
 use Engelsystem\Helpers\Authenticator;
 use Engelsystem\Http\Redirector;
 use Engelsystem\Http\Request;
@@ -66,10 +67,20 @@ class QuestionsController extends BaseController
     public function edit(Request $request): Response
     {
         $questionId = (int) $request->getAttribute('question_id');
+        $question = $this->question->find($questionId);
 
-        $questions = $this->question->find($questionId);
+        if (!$question->hasEditor()) {
+            if ($question->editor->id !== $this->auth->user()->id) {
+                $this->addNotification("This question is currently being edited by someone else", NotificationType::ERROR);
+                return $this->redirect->to('/admin/questions');
+            }
+        } else {
+            $question->editor()->associate($this->auth->user());
+            $question->editing_started_at = Carbon::now();
+            $question->save();
+        }
 
-        return $this->showEdit($questions);
+        return $this->showEdit($question);
     }
 
     public function save(Request $request): Response
@@ -100,6 +111,8 @@ class QuestionsController extends BaseController
         $question->answer = $data['answer'];
         $question->answered_at = Carbon::now();
         $question->answerer()->associate($this->auth->user());
+        $question->editing_started_at = null;
+        $question->editor()->dissociate();
 
         if (!is_null($data['preview'])) {
             return $this->showEdit($question);
