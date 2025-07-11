@@ -3,6 +3,7 @@
 # pip install mkdocs
 # pip install wheel
 # pip install pymdown-extensions
+# pip install mike
 #
 # Local Test: mkdocs serve
 # Build: mkdocs build
@@ -19,7 +20,8 @@ site_url: https://crittersystem.eurofurence.github.io/
 repo_url: https://github.com/eurofurence/crittersystem
 
 # Copyright
-#copyright: GPL-2.0 license
+copyright: >
+  GPL-2.0 license - <a href="#__consent">Change cookie settings</a>
 
 # The directory containing the documentation source markdown files.
 docs_dir: 'docs/src'
@@ -34,53 +36,128 @@ exclude_docs: |
 use_directory_urls: false #false = allows to run locally
 
 # Theme section
-theme:
-  name: readthedocs
-  highlightjs: true
-  include_homepage_in_sidebar: true
-  prev_next_buttons_location: bottom
-  navigation_depth: 3
-  collapse_navigation: true
-  titles_only: false
-  sticky_navigation: true
-  locale: en
+# DEFAULT THEME
+#theme:
+#  name: readthedocs
+#  highlightjs: true
+#  include_homepage_in_sidebar: true
+#  prev_next_buttons_location: bottom
+#  navigation_depth: 3
+#  collapse_navigation: true
+#  titles_only: false
+#  sticky_navigation: true
+#  locale: en
 
-# Extensions
-markdown_extensions:
-  - admonition:
-  - codehilite:
-      guess_lang: false
-  - toc:
-      permalink: true
-      separator: "_"
-  - footnotes:
-  - pymdownx.betterem:
-      smart_enable: all
-  - pymdownx.caret:
-      smart_insert: True # Use smart logic with insert characters.
-      insert: True       # Enable insert feature.
-      superscript: True  # Enable superscript feature.
-  - pymdownx.critic:
-      mode: "view" # view just parses the markup and displays it in its HTML equivalent rendering. accept strips out the critic markup and replaces them with the suggested changes. reject rejects all the suggestions and strips the critic markup out replacing it with the original.
-  - pymdownx.details:
-#  - pymdownx.emoji:
-#      emoji_index: !!python/name:materialx.emoji.twemoji
-#      emoji_generator: !!python/name:materialx.emoji.to_svg
-  - pymdownx.extra:
-  - pymdownx.inlinehilite:
-  - pymdownx.keys:
-  - pymdownx.magiclink:
-  - pymdownx.mark:
-  - pymdownx.smartsymbols:
-  - pymdownx.superfences:
-  - pymdownx.tasklist:
-      custom_checkbox: true
-  - pymdownx.tabbed:
-  - pymdownx.progressbar:
-#  - pymdownx.b64:
-#  - pymdownx.arithmatex:
-#  - pymdownx.tilde:
+theme:
+  name: material
+  highlightjs: true
+  language: en
+  palette:
+    # scheme: slate # default / slate
+    # primary: deep purple   # teal / indigo
+    # accent: lime    # indigo
+
+    # Palette toggle for automatic mode
+    - media: '(prefers-color-scheme)'
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+
+    # Palette toggle for light mode
+    - media: '(prefers-color-scheme: light)'
+      scheme: default
+      primary: indigo # teal / indigo
+      accent: pink # indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: '(prefers-color-scheme: dark)'
+      scheme: slate
+      primary: indigo # teal / indigo
+      accent: lime # indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.footer
+    - navigation.path
+    # - toc.integrate
+    - navigation.top
+
+  plugins:
+    - group
+    - info
+    - mike:
+      # These fields are all optional; the defaults are as below...
+      alias_type: symlink # symlink / redirect / copy
+      redirect_template: null
+      deploy_prefix: ''
+      canonical_version: null
+      version_selector: true
+      css_dir: css
+      javascript_dir: js
+
+extra:
+  version:
+    provider: mike
+    default: dev
+
+  consent:
+    title: Cookie consent
+    description: >-
+      We use cookies to recognize your repeated visits and preferences, as well
+      as to measure the effectiveness of our documentation and whether users
+      find what they're searching for. With your consent, you're helping us to
+      make our documentation better.
+    actions:
+      - manage
+      - accept
+      - reject
 
 plugins:
   - search # necessary for search to work
   - awesome-pages
+  - privacy
+
+
+# Extensions
+# markdown_extensions:
+#   - admonition:
+#   - codehilite:
+#       guess_lang: false
+#   - toc:
+#       permalink: true
+#       separator: "_"
+#   - footnotes:
+#   - pymdownx.betterem:
+#       smart_enable: all
+#   - pymdownx.caret:
+#       smart_insert: True # Use smart logic with insert characters.
+#       insert: True       # Enable insert feature.
+#       superscript: True  # Enable superscript feature.
+#   - pymdownx.critic:
+#       mode: "view" # view just parses the markup and displays it in its HTML equivalent rendering. accept strips out the critic markup and replaces them with the suggested changes. reject rejects all the suggestions and strips the critic markup out replacing it with the original.
+#   - pymdownx.details:
+#   # - pymdownx.emoji:
+#   #     emoji_index: !!python/name:material.extensions.emoji.twemoji
+#   #     emoji_generator: !!python/name:material.extensions.emoji.twemoji
+#   - pymdownx.extra:
+#   - pymdownx.inlinehilite:
+#   - pymdownx.keys:
+#   - pymdownx.magiclink:
+#   - pymdownx.mark:
+#   - pymdownx.smartsymbols:
+#   - pymdownx.superfences:
+#   - pymdownx.tasklist:
+#       custom_checkbox: true
+#   - pymdownx.tabbed:
+#   - pymdownx.progressbar:
+# #  - pymdownx.b64:
+# #  - pymdownx.arithmatex:
+# #  - pymdownx.tilde:
+
