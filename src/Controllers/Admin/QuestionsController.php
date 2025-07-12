@@ -58,7 +58,7 @@ class QuestionsController extends BaseController
     {
         $now = Carbon::now();
         return $questions->map(function ($q) use ($now) {
-            if ($q->editor_id && $q->editing_started_at->addMinutes(30) > $now) {
+            if ($q->editor_id && $q->editing_started_at->addMinutes(30) < $now) {
                 $q->editor()->disassociate();
                 $q->editing_started_at = null;
                 $q->save();
@@ -88,7 +88,7 @@ class QuestionsController extends BaseController
         $questionId = (int) $request->getAttribute('question_id');
         $question = $this->question->find($questionId);
 
-        if (!$question->hasEditor()) {
+        if (!$question->editor()) {
             if ($question->editor->id !== $this->auth->user()->id) {
                 $this->addNotification('This question is currently being edited by someone else', NotificationType::ERROR);
                 return $this->redirect->to('/admin/questions');
