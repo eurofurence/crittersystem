@@ -42,10 +42,29 @@ class QuestionsController extends BaseController
             ->get()
             ->load(['user.state', 'answerer.state']);
 
+        /*
+         * Leon: To my knowledge we do not have a cronjob,
+         * so we run this every time an admin lists all questions.
+         */
+        $questions = $this->unlockStaleLocks($questions);
+
         return $this->response->withView(
             'pages/questions/index.twig',
             ['questions' => $questions, 'is_admin' => true]
         );
+    }
+
+    public function unlockStaleLocks($questions)
+    {
+        $now = Carbon::now();
+        return $questions->map(function ($q) use ($now) {
+            if ($q->editor_id && $q->editing_started_at->addMinutes(30) > $now) {
+                $q->editor()->disassociate();
+                $q->editing_started_at = null;
+                $q->save();
+            }
+            return $q;
+        });
     }
 
     public function delete(Request $request): Response
@@ -71,7 +90,7 @@ class QuestionsController extends BaseController
 
         if (!$question->hasEditor()) {
             if ($question->editor->id !== $this->auth->user()->id) {
-                $this->addNotification("This question is currently being edited by someone else", NotificationType::ERROR);
+                $this->addNotification('This question is currently being edited by someone else', NotificationType::ERROR);
                 return $this->redirect->to('/admin/questions');
             }
         } else {
