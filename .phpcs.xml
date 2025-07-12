@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <ruleset>
-    <description>Engelsystem PHP coding standard</description>
+    <description>Critter System PHP coding standard</description>
 
     <file>config</file>
     <file>db</file>
