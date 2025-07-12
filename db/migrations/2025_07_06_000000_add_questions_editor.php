@@ -13,7 +13,7 @@ class AddQuestionsEditor extends Migration {
 
     public function up(): void {
         $this->schema->table('questions', function (Blueprint $table) {
-            $table->dateTime('editing_started_at')->default('1970-01-01 00:00:00')->nullable();
+            $table->dateTime('editing_started_at')->default(null)->nullable();
             $this->references($table, 'users', 'editor_id')->nullable();
         });
     }
