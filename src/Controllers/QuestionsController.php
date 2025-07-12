@@ -88,6 +88,8 @@ class QuestionsController extends BaseController
         $question = new Question();
         $question->user()->associate($this->auth->user());
         $question->text = $data['text'];
+        $question->editor_id = null;
+        $question->editing_started_at = null;
         $question->save();
 
         $this->log->info(
