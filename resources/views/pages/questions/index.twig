@@ -80,7 +80,15 @@
                                             </div>
 
                                             {% if can('question.edit') %}
-                                                {{ m.user(question.user, {'pronoun': true}) }}
+                                                <div class="me-3">
+                                                    {{ m.user(question.user, {'pronoun': true}) }}
+                                                </div>
+                                            {% endif %}
+
+                                            {% if question.editor %}
+                                                <div class="me-3">
+                                                    {{ m.icon('pencil') }} {{ question.editor.displayName }}
+                                                </div>
                                             {% endif %}
 
                                             <div class="d-flex ms-auto">
