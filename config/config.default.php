@@ -150,11 +150,16 @@ return [
     ],
 
     // Default theme, 1 = theme1.scss etc.
-    'theme'                   => env('THEME', 20),
+    'theme'                   => env('THEME', 21),
 
     // Supported themes
     // To disable a theme in config.php, you can set its value to null
     'themes' => [
+        21 => [
+            'name' => 'Eurofurence 2025',
+            'type' => 'dark',
+            'navbar_classes' => 'navbar-dark',
+        ],
         20 => [
             'name' => 'Eurofurence 2024 - Cyberpunk',
             'type' => 'dark',

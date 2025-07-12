@@ -256,7 +256,7 @@ function Shift_view(
     $content[] = Shift_view_header($shift, $location);
     $content[] = div('row', [
         div('col-sm-6', [
-            '<h2>' . __('Needed angels') . '</h2>',
+            '<h2>' . __('Needed critters') . '</h2>',
             '<div class="list-group">' . $needed_angels . '</div>',
         ]),
         div('col-sm-6', [
