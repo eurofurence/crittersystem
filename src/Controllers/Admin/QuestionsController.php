@@ -88,9 +88,9 @@ class QuestionsController extends BaseController
         $questionId = (int) $request->getAttribute('question_id');
         $question = $this->question->find($questionId);
 
-        if ($question->editor()) {
+        if ($question->editor) {
             if ($question->editor->id !== $this->auth->user()->id) {
-                $this->addNotification('This question is currently being edited by someone else', NotificationType::ERROR);
+                $this->addNotification('This question is currently being edited by someone else.', NotificationType::ERROR);
                 return $this->redirect->to('/admin/questions');
             }
         } else {
