@@ -744,6 +744,10 @@ msgstr "Edit location"
 msgid "location.delete.title"
 msgstr "Delete location \"%s\""
 
+msgid "location.delete.double_confirm"
+msgstr "Location has %d shifts still assigned to it. "
+"Are you sure you want to delete it?"
+
 msgid "shifttype.shifttypes"
 msgstr "Shift types"
 
