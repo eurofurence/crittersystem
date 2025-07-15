@@ -277,6 +277,8 @@ Renders a button.
                                     Must be a Bootstrap icon class without prefix, such as "info" or "check".
 @param {string} [opt.confirm_title] - Optional value for the confirmation title.
 @param {string} [opt.confirm_text] - Optional value for the confirmation text.
+@param {string} [opt.double_confirm_text] - Optional value for the double confirmation text.
+                                            THis will transform the confirmation to double confirmation
 @param {dictionary} [opt.attr] - Optional value for additional attributes like data fields.
 #}
 {% macro button(label, opt) %}
@@ -291,6 +293,7 @@ Renders a button.
         {%- if opt.value is defined or opt.name is defined %} value="{{ opt.value|default('1') }}"{% endif -%}
         {%- if opt.confirm_title is defined %} data-confirm_submit_title="{{ opt.confirm_title }}"{% endif -%}
         {%- if opt.confirm_text is defined %} data-confirm_submit_text="{{ opt.confirm_text }}"{% endif -%}
+        {%- if opt.double_confirm_text is defined %} data-double_confirm_submit_text="{{ opt.double_confirm_text }}"{% endif -%}
         {%- if opt.confirm_button_text is defined %}
             data-confirm_button_text="{{ icon_left ~ ' ' ~ opt.confirm_button_text ~ ' ' ~ icon_right }}"
         {%- endif -%}

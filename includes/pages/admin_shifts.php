@@ -588,7 +588,7 @@ function admin_shifts()
                         ),
                     ]),
                     div('col-md-6 col-xl-7', [
-                        form_info(__('Needed angels')),
+                        form_info(__('Needed critters')),
                         form_radio(
                             'angelmode',
                             __('Copy needed critters from shift type settings'),
