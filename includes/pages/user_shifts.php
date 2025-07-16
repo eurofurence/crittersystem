@@ -258,15 +258,22 @@ function view_user_shifts()
     foreach ($userAngelTypes as $type) {
         $ownAngelTypes[] = $type->angel_type_id;
     }
-
+    $location_ids = $locations->pluck('id')->toArray();
+    $type_ids = array_column($types, 'id');
     if (!$session->has('shifts-filter')) {
-        $location_ids = $locations->pluck('id')->toArray();
-        $shiftsFilter = new ShiftsFilter(auth()->can('user_shifts_admin'), $location_ids, $ownAngelTypes);
+        $shiftsFilter = new ShiftsFilter(
+            auth()->can('user_shifts_admin'),
+            $location_ids,
+            $type_ids,
+            $ownAngelTypes
+        );
         $session->set('shifts-filter', $shiftsFilter->sessionExport());
     }
 
     $shiftsFilter = new ShiftsFilter();
     $shiftsFilter->sessionImport($session->get('shifts-filter'));
+    $shiftsFilter->updateLocations($location_ids);
+    $shiftsFilter->updateTypes($type_ids, $ownAngelTypes);
     update_ShiftsFilter($shiftsFilter, auth()->can('user_shifts_admin'), $days);
     $session->set('shifts-filter', $shiftsFilter->sessionExport());
 
