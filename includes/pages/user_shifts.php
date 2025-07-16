@@ -319,7 +319,8 @@ function view_user_shifts()
                     $locations,
                     $shiftsFilter->getLocations(),
                     'locations',
-                    icon('pin-map-fill') . __('Locations')
+                    icon('pin-map-fill') . __('Locations'),
+                    askForAttention: $shiftCalendarRenderer->hasShiftsToDisplay() == false
                 ),
                 'start_select'  => html_select_key(
                     'start_day',
@@ -343,7 +344,8 @@ function view_user_shifts()
                     . ' <small><span class="bi bi-info-circle-fill text-info" data-bs-toggle="tooltip" title="'
                     . __('The tasks shown here are influenced by the critter types you joined already!')
                     . '"></span></small>',
-                    $ownAngelTypes
+                    $ownAngelTypes,
+                    askForAttention: $shiftCalendarRenderer->hasShiftsToDisplay() == false
                 ),
                 'filled_select' => make_select(
                     $filled,
@@ -404,11 +406,15 @@ function ical_hint()
  * @param int[]  $ownSelect
  * @return string
  */
-function make_select($items, $selected, $name, $title = null, $ownSelect = [])
+function make_select($items, $selected, $name, $title = null, $ownSelect = [], $askForAttention = false)
 {
     $html = '';
+    $extraClass = '';
+    if ($askForAttention) {
+        $extraClass = 'attention-ring';
+    }
     if (isset($title)) {
-        $html .= '<h4>' . $title . '</h4>' . "\n";
+        $html .= '<h4 class="' . $extraClass . '">' . $title . '</h4>' . "\n";
     }
 
     $buttons = [
