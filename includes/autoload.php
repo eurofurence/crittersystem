@@ -6,6 +6,7 @@ if (!is_readable(__DIR__ . '/../vendor/autoload.php')) {
     exit(1);
 }
 
+require __DIR__ . '/includes.php';
 // Include composer autoloader
 // phpcs:disable SlevomatCodingStandard.Variables.UnusedVariable.UnusedVariable
 $loader = require __DIR__ . '/../vendor/autoload.php';
