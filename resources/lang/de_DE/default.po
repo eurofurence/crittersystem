@@ -448,6 +448,9 @@ msgstr ""
 msgid "Marked critters."
 msgstr "Critter wurden markiert."
 
+msgid "general.actions"
+msgstr "Aktionen"
+
 msgid "general.back"
 msgstr "Zurück"
 
@@ -1391,6 +1394,9 @@ msgstr "Minuten nach Talk ende hinzufügen"
 
 msgid "schedule.for_locations"
 msgstr "Für Orte"
+
+msgid "schedule.import.request_error"
+msgstr "Konnte Programm nicht laden."
 
 msgid "schedule.import.locations.add"
 msgstr "Neue Orte"
