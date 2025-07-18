@@ -47,9 +47,9 @@ function public_dashboard_view($stats, $free_shifts, $highlighted_news)
     }
 
     $stats =  [
-        stats(__('Angels needed in the next 3 hrs'), $stats['needed-3-hours']),
-        stats(__('Angels needed for nightshifts'), $stats['needed-night']),
-        stats(__('Angels currently working'), $stats['angels-working'], 'default'),
+        stats(__('Critters needed in the next 3 hrs'), $stats['needed-3-hours']),
+        stats(__('Critters needed for nightshifts'), $stats['needed-night']),
+        stats(__('Critters currently working'), $stats['angels-working'], 'default'),
         stats(__('Hours to be worked'), $stats['hours-to-work'], 'default'),
     ];
 
