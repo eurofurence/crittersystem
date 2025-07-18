@@ -304,6 +304,9 @@ msgid_plural "There are unconfirmed critters in %d critter types. Critter types 
 msgstr[0] "Es gibt nicht freigeschaltete Critter in %d Crittertypen! Crittertyp der bestätigt werden muss:"
 msgstr[1] "Es gibt nicht freigeschaltete Critter in %d Crittertypen! Crittertypen die bestätigt werden müssen:"
 
+msgid "Crittertype doesn\'t exist."
+msgstr "Der Crittertyp existiert nicht."
+
 msgid "You are not allowed to delete all users for this critter type."
 msgstr "Du darfst nicht alle Benutzer von diesem Crittertyp entfernen."
 
@@ -630,6 +633,9 @@ msgstr "Bitte benutze Markdown für die Beschreibung."
 
 msgid "Needed critters:"
 msgstr "Benötigte Critter:"
+
+msgid "Needed critters"
+msgstr "Benötigte Critter"
 
 msgid "Create shifts"
 msgstr "Schichten erstellen"

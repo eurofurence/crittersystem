@@ -59,10 +59,10 @@ function admin_arrive()
                 $user_source->state->save();
 
                 engelsystem_log('User set has arrived: ' . User_Nick_render($user_source, true));
-                success(__('Angel has been marked as arrived.'));
+                success(__('Critter has been marked as arrived.'));
                 throw_redirect(user_link($user_source->id));
             } else {
-                $msg = error(__('Angel not found.'), true);
+                $msg = error(__('Critter not found.'), true);
             }
         }
     }

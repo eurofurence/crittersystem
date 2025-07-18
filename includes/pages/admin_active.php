@@ -14,7 +14,7 @@ use Engelsystem\Config\GoodieType;
  */
 function admin_active_title()
 {
-    return __('Active angels');
+    return __('Active critters');
 }
 
 /**

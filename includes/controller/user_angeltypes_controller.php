@@ -65,7 +65,7 @@ function user_angeltypes_delete_all_controller(): array
     $request = request();
 
     if (!$request->has('angeltype_id')) {
-        error(__('Angeltype doesn\'t exist.'));
+        error(__('Crittertype doesn\'t exist.'));
         throw_redirect(url('/angeltypes'));
     }
 
@@ -102,7 +102,7 @@ function user_angeltypes_confirm_all_controller(): array
     $request = request();
 
     if (!$request->has('angeltype_id')) {
-        error(__('Angeltype doesn\'t exist.'));
+        error(__('Crittertype doesn\'t exist.'));
         throw_redirect(url('/angeltypes'));
     }
 
