@@ -13,6 +13,9 @@
         <testsuite name="Unit">
             <directory>tests/Unit</directory>
         </testsuite>
+        <testsuite name="includes">
+            <directory>tests/Unit/includes</directory>
+        </testsuite>
     </testsuites>
     <coverage>
         <include>
