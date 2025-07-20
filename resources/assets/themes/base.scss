@@ -438,6 +438,7 @@ input[type='text']:invalid {
   color: map.get($theme-colors, 'danger');
 }
 
+<<<<<<< HEAD
 /* For shift dashboard tables */
 .dashboard-table a.bi-square-fill {
   text-decoration: none !important;
@@ -450,3 +451,26 @@ input[type='text']:invalid {
 .dashboard-table tr:has(td.critter-warn-critical) {
   background-color: map.get($theme-colors, 'danger');
 }
+=======
+.attention-ring::before {
+    display: block;
+    content: "";
+    pointer-events: none;
+    border-radius: 50%;
+    border: 10px solid red;
+    opacity: 0;
+    position: absolute;
+    animation: attention 1s cubic-bezier(0,0,.2,1) 2;
+    animation-delay: 1s;
+}
+@keyframes attention {
+  0%  {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(5); /* multiple of the initial size */
+    opacity: 0;
+  }
+}
+>>>>>>> 2b586e79439947467b3bbb237d91e3f5f5a3f00f
