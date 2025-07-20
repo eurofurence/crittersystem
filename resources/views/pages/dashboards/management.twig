@@ -15,77 +15,58 @@
     </div>
 </div>
 <div class="row">
-    <div class="col table-responsive">
-        <table class="table table-striped table-hover">
-            <colgroup>
-                <col span="3" class="dash-compound-key" />
-            </colgroup>
-            <thead class="table-light">
-                <tr>
-                    <th>Time</th>
-                    <th>Room</th>
-                    <th>Shift</th>
-                    <th>Hand</th>
-                    <th>Assistant</th>
-                    <th>Man-Bear-Pig</th>
-                </tr>
-            </thead>
-            <tbody class="table-group-divider">
-                <tr>
-                    <th>10:00 - 12:00</th>
-                    <td>Hall H (7-8)</td>
-                    <td>Opening</td>
-                    <td>IOOX</td>
-                    <td>I</td>
-                    <td>II</td>
-                </tr>
-                <tr>
-                    <th>10:00 - 12:00</th>
-                    <td>Hall H (7-8)</td>
-                    <td>Opening</td>
-                    <td>IOOX</td>
-                    <td>I</td>
-                    <td>II</td>
-                </tr>
-            </tbody>
-            <tbody class="table-group-divider">
-                <tr>
-                    <th>11:00 - 12:00</th>
-                    <td>Hall Z</td>
-                    <td>Mystery Shift</td>
-                    <td>IIXXXX</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </tbody>
-            <tbody class="table-group-divider">
-                <tr>
-                    <th>13:00 - 15:00</th>
-                    <td>Hall 3</td>
-                    <td>Talk to a cat</td>
-                    <td>O</td>
-                    <td>O</td>
-                    <td>O</td>
-                </tr>
-                <tr>
-                    <th>13:00 - 15:00</th>
-                    <td>Hall Z</td>
-                    <td>Dance</td>
-                    <td>OO</td>
-                    <td>OOX</td>
-                    <td>O</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    {% block dashboard_shifts_management %}
+        <div class="col table-responsive">
+            <table class="table table-striped table-hover">
+                <colgroup>
+                    <col span="3" class="dash-compound-key" />
+                </colgroup>
+                <thead class="table-light">
+                    <tr>
+                        <th>Time</th>
+                        <th>Room</th>
+                        <th>Shift</th>
+                        {% for type in critter_types %}
+                            <th>{{ type | e }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                {% block dashboard_shifts_management_body %}
+                    {% set previous_start = -1 %}
+                    {% for shift in shifts %}
+                        {% for idx, shift_entry in shift %}
+                            {% set new_start_time = (previous_start is not same as(shift_entry.shifts_start)) %}
+                            {% if new_start_time %}
+                                <tbody class="table-group-divider">
+                            {% endif %}
+                            {% if idx is same as(0) %}
+                                <tr>
+                                    <th>{{ shift_entry.shifts_start | date('H:i') }} - {{ shift_entry.shifts_end | date('H:i') }}</th>
+                                    <td>{{ shift_entry.locations_name | e }}</td>
+                                    <td>{{ shift_entry.shifts_title | e }}</td>
+                            {% endif %}
+                                <td>{{ shift_entry.needed_angel_types_count | e }}</td>
+                            {% if idx is same as(0) %}
+                                </tr>
+                            {% endif %}
+                            {% if new_start_time %}
+                                </tbody>
+                            {% endif %}
+                            {% set previous_start = shift_entry.shifts_start %}
+                        {% endfor %}
+                    {% endfor %}
+                {% endblock %}
+            </table>
+        </div>
+    {% endblock %}
 </div>
 
 <div class="row">
-    <h2>Shitty debug area don't look please</h2>
-    <h3>Shift Types</h3>
+    <h2>Awful debug area don't look please</h2>
+    <h3>Critter Types</h3>
     <pre>
-        {%- for shiftType in shiftTypes  -%}
-            {{ shiftType }}
+        {%- for type in critter_types -%}
+            {{ type }}
         {%~ endfor ~%}
     </pre>
     <h3>Shifts</h3>

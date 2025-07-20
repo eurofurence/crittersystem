@@ -6,21 +6,11 @@ namespace Engelsystem\Controllers;
 
 use Engelsystem\Config\Config;
 use Engelsystem\Helpers\Authenticator;
-use Engelsystem\Http\Exceptions\HttpForbidden;
 use Engelsystem\Http\Response;
 use Engelsystem\Models\AngelType;
 use Engelsystem\Models\Shifts\Shift;
 use Engelsystem\Models\Shifts\ShiftType;
-use Engelsystem\Models\Location;
 use Engelsystem\Models\User\User;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Query\Builder as QueryBuilder;
-use Illuminate\Support\Collection as SupportCollection;
 
 class DashboardsController extends BaseController
 {
@@ -43,7 +33,7 @@ class DashboardsController extends BaseController
     // Renders the management dashboard, a condensed time table of all shifts & roles
     public function showManagementDashboard(): Response
     {
-
+        // Get all data we want to display, one row per shift and critter (type)
         $query = $this->shift
             ->join('shift_types', 'shifts.shift_type_id', '=', 'shift_types.id')
             ->join('needed_angel_types', 'shifts.id', '=', 'needed_angel_types.shift_id')
@@ -74,13 +64,25 @@ class DashboardsController extends BaseController
                 'users.id AS users_id',
                 'users.name AS users_name'
             )
+            ->orderBy('shifts_start', 'asc')
+            ->orderBy('shifts_id', 'asc')
             ->get();
+
+        // Put all rows with same shifts_if into separate arrays with a critter (type) array
+        $shifts = $query->chunkWhile(fn ($value, $key, $last) => $value->shifts_id === $last->last()->shifts_id)
+            ->map->values()->all();
+
+        // Create a list of critter types for the table header
+        // TODO: Reverse mapping name -> int to use for indexing in template
+        $critter_types = $query->map(
+            fn($row): string => $row->angel_types_name
+        )->unique()->values()->sort()->all();
 
         return $this->response->withView(
             'pages/dashboards/management.twig',
             [
-                'shiftTypes' => $this->shiftType->all(),
-                'shifts' => $query,
+                'critter_types' => $critter_types,
+                'shifts' => $shifts,
             ]
         );
     }
