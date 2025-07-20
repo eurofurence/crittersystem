@@ -438,7 +438,6 @@ input[type='text']:invalid {
   color: map.get($theme-colors, 'danger');
 }
 
-<<<<<<< HEAD
 /* For shift dashboard tables */
 .dashboard-table a.bi-square-fill {
   text-decoration: none !important;
@@ -451,7 +450,7 @@ input[type='text']:invalid {
 .dashboard-table tr:has(td.critter-warn-critical) {
   background-color: map.get($theme-colors, 'danger');
 }
-=======
+
 .attention-ring::before {
     display: block;
     content: "";
@@ -473,4 +472,3 @@ input[type='text']:invalid {
     opacity: 0;
   }
 }
->>>>>>> 2b586e79439947467b3bbb237d91e3f5f5a3f00f
