@@ -41,7 +41,10 @@ class AuthController extends BaseController
     {
         // TODO: Remove this section or improve with better handling...
         if ($this->config->get('login_dev_warning')) {
-            $this->addNotification('Warning: Development instance. Features may be added, removed or changed without notice.', NotificationType::WARNING);
+            $this->addNotification(
+                'Warning: Development instance. Features may be added, removed or changed without notice.',
+                NotificationType::WARNING
+            );
         }
         return $this->response->withView('pages/login');
     }
