@@ -920,7 +920,7 @@ msgid "design.title"
 msgstr "Design"
 
 msgid "login.welcome"
-msgstr "Welcome to the %s!"
+msgstr "Welcome to %s!"
 
 msgid "event.buildup.start"
 msgstr "Buildup starts"
