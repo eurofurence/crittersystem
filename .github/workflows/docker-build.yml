@@ -52,12 +52,12 @@ jobs:
       - name: Yarn - Run install
         uses: borales/actions-yarn@v4
         with:
-          cmd: install # will run `yarn install` command
+          cmd: install # Runs `yarn install`
 
       - name: Yarn - Build production bundle
         uses: borales/actions-yarn@v4
         with:
-          cmd: build:prod # will run `yarn build:prod` command
+          cmd: build # Runs `yarn build`
 
       - name: Yarn - Check
         uses: borales/actions-yarn@v4
