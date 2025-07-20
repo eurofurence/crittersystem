@@ -56,6 +56,7 @@ class DashboardsController extends BaseController
                 'shift_types.name AS shift_types_name',
                 'shift_types.description AS shift_types_description',
                 'needed_angel_types.count AS needed_angel_types_count',
+                'angel_types.id AS angel_types_id',
                 'angel_types.name AS angel_types_name',
                 'angel_types.description AS angel_types_description',
                 'locations.id AS locations_id',
@@ -66,17 +67,43 @@ class DashboardsController extends BaseController
             )
             ->orderBy('shifts_start', 'asc')
             ->orderBy('shifts_id', 'asc')
+            ->orderBy('angel_types.id', 'asc')
             ->get();
 
-        // Put all rows with same shifts_if into separate arrays with a critter (type) array
-        $shifts = $query->chunkWhile(fn ($value, $key, $last) => $value->shifts_id === $last->last()->shifts_id)
-            ->map->values()->all();
+        // Take chunked data and render it down to one row per shifts_id
+        $shifts_arr = [];
+        $prev_shift_id = -1;
+        // ['shifts_type_id' => ['wanted' => int, 'users' => [['users_id' => 'user_name'], ...]]]
+        $current_shift_info = [];
+        foreach ($query->all() as $shift_data) {
+            if ($prev_shift_id !== $shift_data->shifts_id) {
+                // Add new container for shift data from DB and critter_types array
+                $shifts_arr[$shift_data->shifts_id] = ['shift' => $shift_data, 'critter_types' => []];
+                $current_shift_info = [];
+            }
+            // Ensure shift type id key is in $current_shift_info
+            if (!array_key_exists($shift_data->shifts_type_id, $current_shift_info)) {
+                $current_shift_info[$shift_data->angel_types_id] = [
+                    'wanted' => $shift_data->needed_angel_types_count,
+                    'have' => 0,
+                    'users' => [],
+                ];
+                $shifts_arr[$shift_data->shifts_id]['critter_types'] = $current_shift_info;
+            }
+            // Add user to apropriate shift type array
+            if ($shift_data->users_id !== null) {
+                $current_shift_info[$shift_data->angel_types_id]['users'][$shift_data->users_id] = $shift_data->users_name;
+                $current_shift_info[$shift_data->angel_types_id]['have']++;
+                $shifts_arr[$shift_data->shifts_id]['critter_types'] = $current_shift_info;
+            }
+            $prev_shift_id = $shift_data->shifts_id;
+        }
+        $shifts = collect($shifts_arr);
 
-        // Create a list of critter types for the table header
-        // TODO: Reverse mapping name -> int to use for indexing in template
-        $critter_types = $query->map(
-            fn($row): string => $row->angel_types_name
-        )->unique()->values()->sort()->all();
+        // Create a list of critter types for the table header, mapped to their DB ids
+        $critter_types = $query->mapWithKeys(
+            fn($row, int $key): array => [$row->angel_types_id => $row->angel_types_name]
+        )->sort()->unique()->flip()->all();
 
         return $this->response->withView(
             'pages/dashboards/management.twig',

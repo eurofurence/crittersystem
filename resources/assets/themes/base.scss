@@ -437,3 +437,16 @@ input[type='number'] {
 input[type='text']:invalid {
   color: map.get($theme-colors, 'danger');
 }
+
+/* For shift dashboard tables */
+.dashboard-table a.bi-square-fill {
+  text-decoration: none !important;
+}
+
+.dashboard-table tr:has(td.critter-warn-bad) {
+  background-color: map.get($theme-colors, 'warning');
+}
+
+.dashboard-table tr:has(td.critter-warn-critical) {
+  background-color: map.get($theme-colors, 'danger');
+}
