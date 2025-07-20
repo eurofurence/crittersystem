@@ -7,6 +7,8 @@ namespace Engelsystem\Models\User;
 use Carbon\Carbon;
 use Engelsystem\Models\AngelType;
 use Engelsystem\Models\BaseModel;
+use Engelsystem\Models\Department;
+use Engelsystem\Models\DepartmentApplicationLog;
 use Engelsystem\Models\Group;
 use Engelsystem\Models\Message;
 use Engelsystem\Models\News;
@@ -291,5 +293,41 @@ class User extends BaseModel
         }
 
         return $this->name;
+    }
+
+    public function departments(): BelongsToMany
+    {
+        return $this->belongsToMany(Department::class, 'department_users')
+            ->withPivot('status')
+            ->withTimestamps();
+    }
+
+    public function responsibleForDepartments(): BelongsToMany
+    {
+        return $this->belongsToMany(Department::class, 'department_responsibles')
+            ->withTimestamps();
+    }
+
+    public function departmentApplications(): HasMany
+    {
+        return $this->hasMany(DepartmentApplicationLog::class);
+    }
+
+    public function canManageDepartment(Department $department): bool
+    {
+//        return $this->hasPrivilege('admin')
+//            || $this->groups->contains('name', 'Shift Coordinator')
+//            || $this->responsibleForDepartments->contains($department);
+
+        $admin_flag = (bool) $this->privileges()
+            ->where(function ($query) {
+                $query->where('name', 'admin');
+            })->exists();
+
+        // We need to check if the user is part of the administrative department group
+
+        return $admin_flag
+            || $this->groups->contains('name', 'Shift Coordinator')
+            || $this->responsibleForDepartments->contains($department);
     }
 }

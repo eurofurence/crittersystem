@@ -62,6 +62,7 @@ function make_navigation()
         'user_shifts'    => __('general.shifts'),
         'angeltypes'     => __('angeltypes.angeltypes'),
         'questions'      => [__('Ask the Info Desk'), 'question.add'],
+        'departments'    => __('departments.title.plural'),
     ];
 
     foreach ($pages as $menu_page => $options) {
@@ -138,9 +139,11 @@ function menu_is_allowed(string $page, $options)
 
     if (isset($options[1])) {
         $permissions = $options[1];
+        return auth()->can($permissions);
+    } else {
+        // If the permission is not set, allow the creation
+        return true;
     }
-
-    return auth()->can($permissions);
 }
 
 /**

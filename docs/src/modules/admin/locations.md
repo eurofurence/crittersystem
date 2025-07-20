@@ -1,0 +1,1 @@
+Locations to manage

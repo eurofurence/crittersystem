@@ -1050,3 +1050,9 @@ msgstr "The system is not available for general public"
 
 msgid "auth.login.admin_only"
 msgstr "Login restricted to admins only"
+
+msgid "departments.title"
+msgstr "Department"
+
+msgid "departments.title.plural"
+msgstr "Departments"

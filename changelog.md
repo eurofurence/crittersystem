@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased] V 2.0 - 2025-07-12
+## [Unreleased] V 2.0 - 2025-07-14
 
 ### Added
 
@@ -34,8 +34,16 @@
   - `redirectWithError()` for redirects with error messages
   - `redirectWithMessage()` for redirects with general messages
 
+### Dependencies
+
+- Added new package `phpoffice/phpspreadsheet` ^4.4
+- Updated composer dependencies (content-hash changed)
+- Added `composer/pcre` 3.3.2
+- Added `maennchen/zipstream-php` 3.1.2
+
 ### Changed
 
+- Ticket #94 - Double warning implemented when deleting location with shifts assigned - by @Kazunekit
 - Refactored terminology from "angels/engels" to "critters" throughout the application
 - Updated PHP coding standard description
 - Updated MkDocs configuration for website and documentation
@@ -49,10 +57,15 @@
   - Cleaned up blank lines and indentation
   - Formatted string concatenation and HTML attributes consistently
   - Removed redundant property assignments in constructor
-- Updated error handling with new 500 error template
-- Renamed maintenance template from to `maintenance.html` > `maintenance2.html`
-- Added new friendly page `maintenance.html`
+- Renamed maintenance template:
+  - Moved from `maintenance.html` to `maintenance2.html`
+  - New Friendly `maintenance.html` page
 - Updated configuration documentation with environment options clarification
+- Enhanced HTTP Response class:
+  - Added new `download()` method for file downloads
+- Updated error handling:
+  - Replaced legacy error message with new 500 error template
+  - Error template now loads from resources/views/layouts/500.html
 
 ### Fixed
 

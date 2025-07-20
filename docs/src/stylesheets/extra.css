@@ -1,0 +1,24 @@
+.md-header__inner.md-grid {
+    /* max-width: initial; */
+    max-width: 98%;
+}
+
+.md-tabs .md-grid {
+    /* max-width: initial; */
+    max-width: 98%;
+}
+
+.md-main__inner.md-grid {
+    /* max-width: initial; */
+    max-width: 98%;
+}
+
+.md-footer__inner.md-grid {
+    /* max-width: initial; */
+    max-width: 98%;
+}
+
+.md-footer-meta__inner.md-grid {
+    /* max-width: initial; */
+    max-width: 98%;
+}

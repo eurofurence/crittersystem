@@ -1,0 +1,6 @@
+---
+hide:
+    - footer
+---
+
+Development guide
