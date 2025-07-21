@@ -439,8 +439,26 @@ input[type='text']:invalid {
 }
 
 /* For shift dashboard tables */
-.dashboard-table a.bi-square-fill {
+.dashboard-table a {
   text-decoration: none !important;
+}
+.dashboard-table a:hover {
+  text-decoration: underline !important;
+}
+
+.dashboard-table thead a {
+  color: inherit !important;
+}
+
+.dashboard-table tbody:not(:last-child):after {
+  content: '';
+  display: block;
+  height: 0.5em;
+}
+
+.dashboard-table tbody td a span {
+  margin-right: 0.3em;
+  color: inherit;
 }
 
 .dashboard-table tbody td.critter-warn-good,

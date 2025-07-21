@@ -1,18 +1,14 @@
 {% extends "layouts/app.twig" %}
 {% import 'macros/base.twig' as m %}
 
-{% macro critter_icon(color, shift_id, user_id, user_name) %}
-    <a class="bi bi-square-fill text-{{ color }}
-    {% if user_id %} class-critter-id-{{ user_id }}{% endif %}"
-    href="
-    {% if user_id %}
-        {{ url('/users', {'action': 'view', 'user_id': user_id}) }}
-    {% else %}
-        {{ url('/shifts', {'action': 'view', 'shift_id': shift_id}) }}
-    {% endif %}"
-    {% if user_id and user_name %} title="{{ user_name }}"{% endif %}>
-    </a>
-{% endmacro %}
+{%- macro critter_icon(color, shift_id, user_id, user_name) -%}
+    <a class="text-{{- color -}}
+    {%- if user_id %} class-critter-id-{{ user_id }}{%- endif -%}" href="{%- if user_id -%}
+        {{- url('/users', {'action': 'view', 'user_id': user_id}) -}}
+    {%- else -%}
+        {{- url('/shifts', {'action': 'view', 'shift_id': shift_id}) -}}
+    {%- endif -%}" title="{{ user_name | default('+') | e }}"><span class="bi bi-square-fill"></span></a>
+{%- endmacro -%}
 
 {% macro critter_warn_level_class(wanted=0, have=0) %}
     {%- if wanted == have -%}
@@ -49,11 +45,13 @@
                 <thead class="table-light">
                     <tr>
                         <th>Time</th>
-                        <th>Room</th>
+                        <th>Location</th>
                         <th>Shift</th>
-                        {% for tname, tid in critter_types %}
-                            <th data-critter-type-id="{{ tid | e }}">{{ tname | e }}</th>
-                        {% endfor %}
+                        {%- for tname, tid in critter_types ~%}
+                            <th data-critter-type-id="{{ tid | e }}">
+                                <a href="{{- url('/angeltypes', {'action': 'view', 'angeltype_id': tid}) -}}">{{ tname | e }}</a>
+                            </th>
+                        {%- endfor ~%}
                     </tr>
                 </thead>
                 {% block dashboard_shifts_management_body %}
@@ -64,12 +62,12 @@
                             {%- if not loop.first -%}
                                 </tbody>
                             {%- endif -%}
-                            <tbody class="table-group-divider">
+                            <tbody>
                         {%- endif -%}
                             <tr>
                                 <th>{{ shift.shift.shifts_start | date('H:i') }} - {{ shift.shift.shifts_end | date('H:i') }}</th>
-                                <td>{{ shift.shift.locations_name | e }}</td>
-                                <td>{{ shift.shift.shifts_title | e }}</td>
+                                <td><a href="{{ url('/locations', {'action': 'view', 'location_id': shift.shift.locations_id}) }}">{{ shift.shift.locations_name | e }}</a></td>
+                                <td><a href="{{ url('/shifts', {'action': 'view', 'shift_id': shift.shift.shifts_id}) }}">{{ shift.shift.shifts_title | e }}</a></td>
                                 {%- for tname, tid in critter_types -%}
                                     {%- if shift.critter_types[tid] is defined -%}
                                         <td class="{{ _self.critter_warn_level_class(shift.critter_types[tid].have, shift.critter_types[tid].wanted) }}">
@@ -82,7 +80,7 @@
                                             {%- endif -%}
                                         {%- endfor -%}
                                         </td>
-                                    {%- else -%}
+                                    {%- else ~%}
                                         <td></td>
                                     {%- endif -%}
                                 {%- endfor -%}
