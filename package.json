@@ -1,6 +1,6 @@
 {
   "name": "crittersystem",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "main": "index.js",
   "repository": "https://github.com/eurofurence/crittersystem.git",
   "author": "https://github.com/eurofurence/crittersystem/contributors",
@@ -19,10 +19,12 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.11.6",
+    "ajv": "6.12.6",
     "bootstrap": "^5.3.6",
     "bootstrap-icons": "^1.13.1",
     "choices.js": "^11.1.0",
-    "core-js": "^3.42.0"
+    "core-js": "^3.42.0",
+    "schema-utils": "^4.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",

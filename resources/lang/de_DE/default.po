@@ -287,9 +287,6 @@ msgstr "Start:"
 msgid "End:"
 msgstr "Ende:"
 
-msgid "Needed critters"
-msgstr "Benötigte Critter"
-
 msgid "Shift deleted."
 msgstr "Schicht gelöscht."
 
@@ -304,7 +301,7 @@ msgid_plural "There are unconfirmed critters in %d critter types. Critter types 
 msgstr[0] "Es gibt nicht freigeschaltete Critter in %d Crittertypen! Crittertyp der bestätigt werden muss:"
 msgstr[1] "Es gibt nicht freigeschaltete Critter in %d Crittertypen! Crittertypen die bestätigt werden müssen:"
 
-msgid "Crittertype doesn\'t exist."
+msgid "Crittertype doesn't exist."
 msgstr "Der Crittertyp existiert nicht."
 
 msgid "You are not allowed to delete all users for this critter type."
@@ -969,9 +966,6 @@ msgstr "Schicht ist voll"
 
 msgid "Shift is running/ended or you have not arrived"
 msgstr "Schicht läuft/vorbei oder du bist noch nicht angekommen"
-
-msgid "Add more critters"
-msgstr "Mehr Critter hinzufügen"
 
 msgid "%d helper needed"
 msgid_plural "%d helpers needed"
