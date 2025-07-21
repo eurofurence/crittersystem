@@ -64,7 +64,7 @@
                             {%- endif -%}
                             <tbody>
                         {%- endif -%}
-                            <tr>
+                            <tr data-start-time="{{ shift.shift.shifts_start | date('U') }}" data-end-time="{{ shift.shift.shifts_end | date('U') }}">
                                 <th>{{ shift.shift.shifts_start | date('H:i') }} - {{ shift.shift.shifts_end | date('H:i') }}</th>
                                 <td><a href="{{ url('/locations', {'action': 'view', 'location_id': shift.shift.locations_id}) }}">{{ shift.shift.locations_name | e }}</a></td>
                                 <td><a href="{{ url('/shifts', {'action': 'view', 'shift_id': shift.shift.shifts_id}) }}">{{ shift.shift.shifts_title | e }}</a></td>
