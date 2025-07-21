@@ -443,12 +443,18 @@ input[type='text']:invalid {
   text-decoration: none !important;
 }
 
-.dashboard-table tr:has(td.critter-warn-bad) {
-  background-color: map.get($theme-colors, 'warning');
+.dashboard-table tbody td.critter-warn-good,
+.dashboard-table tbody td.critter-warn-bad,
+.dashboard-table tbody td.critter-warn-critical {
+  border-bottom: 3px solid map.get($theme-colors, 'success');
 }
 
-.dashboard-table tr:has(td.critter-warn-critical) {
-  background-color: map.get($theme-colors, 'danger');
+.dashboard-table tbody td.critter-warn-bad {
+  border-bottom-color: map.get($theme-colors, 'warning');
+}
+
+.dashboard-table tbody td.critter-warn-critical {
+  border-bottom-color: map.get($theme-colors, 'danger');
 }
 
 .attention-ring::before {
