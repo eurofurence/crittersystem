@@ -20,6 +20,38 @@ class Migrate
 
     protected string $table = 'migrations';
 
+    protected string $fileMigrationFlagOk = 'migration.ok';
+    protected string $fileMigrationFlagFail = 'migration.fail';
+    protected string $fileMigrationFlagRunning = 'migration.running';
+    protected string $fileMigrationFlagBasePath = '';
+
+    private function removeFile(string $file): void
+    {
+        if ($this->fileMigrationFlagBasePath !== '') {
+            if (file_exists(filename: $this->fileMigrationFlagBasePath . $file)) {
+                unlink(filename: $this->fileMigrationFlagBasePath . $file);
+            }
+        }
+    }
+
+    private function createFile(string $file): void
+    {
+        if ($this->fileMigrationFlagBasePath !== '') {
+            if (!file_exists(filename:$this->fileMigrationFlagBasePath . $file)) {
+                fopen(filename:$this->fileMigrationFlagBasePath . $file, mode: 'w');
+            }
+        }
+    }
+
+    private function removeAllMigrationFlagFiles(): void
+    {
+        if ($this->fileMigrationFlagBasePath !== '') {
+            $this->removeFile(file: $this->fileMigrationFlagOk);
+            $this->removeFile(file: $this->fileMigrationFlagFail);
+            $this->removeFile(file: $this->fileMigrationFlagRunning);
+        }
+    }
+
     /**
      * Migrate constructor
      */
@@ -31,13 +63,21 @@ class Migrate
 
     /**
      * Run a migration
+     * @throws Throwable
      */
     public function run(
         string $path,
         Direction $direction = Direction::UP,
         bool $oneStep = false,
-        bool $forceMigration = false
+        bool $forceMigration = false,
+        string $migrationFlagPath = ''
     ): void {
+
+        // Set the migration flag path
+        $this->fileMigrationFlagBasePath = $migrationFlagPath;
+        // Clean the migration flags
+        $this->removeAllMigrationFlagFiles();
+
         $this->initMigration();
 
         $this->lockTable($forceMigration);
@@ -49,6 +89,9 @@ class Migrate
         if ($direction === Direction::DOWN) {
             $migrations = $migrations->reverse();
         }
+
+        // Create running migration flag
+        $this->createFile(file: $this->fileMigrationFlagRunning);
 
         try {
             foreach ($migrations as $migration) {
@@ -77,10 +120,33 @@ class Migrate
         } catch (Throwable $e) {
             $this->unlockTable();
 
-            throw $e;
+            // Clean the migration flags
+            $this->removeAllMigrationFlagFiles();
+            // Create fail flag
+            $this->createFile(file: $this->fileMigrationFlagFail);
+
+            printf(PHP_EOL);
+            printf(str_repeat('*', 100) . PHP_EOL);
+            printf('!! ERROR !!' . PHP_EOL);
+            printf(str_repeat('*', 100) . PHP_EOL . PHP_EOL);
+            dump($e);
+            printf(PHP_EOL . str_repeat('*', 100) . PHP_EOL . PHP_EOL);
+
+            throw new Exception(message:'Migration failed', code: $e->getCode(), previous: $e);
+//            throw $e;
         }
 
         $this->unlockTable();
+
+        // Clean the migration flags
+        $this->removeAllMigrationFlagFiles();
+        // Create fail flag
+        $this->createFile(file: $this->fileMigrationFlagOk);
+
+        // Inform the user
+        printf(PHP_EOL . str_repeat('*', 100) . PHP_EOL);
+        printf('Migration finished' . PHP_EOL);
+        printf(str_repeat('*', 100) . PHP_EOL . PHP_EOL);
     }
 
     /**
@@ -183,11 +249,23 @@ class Migrate
                 ->first();
 
             if ($lock && !$forceMigration) {
-                throw new Exception('Unable to acquire migration table lock');
+                // Clean the migration flags
+                $this->removeAllMigrationFlagFiles();
+                // Create fail flag
+                $this->createFile(file: $this->fileMigrationFlagFail);
+
+                printf(PHP_EOL);
+                printf(str_repeat('*', 100) . PHP_EOL);
+                printf('!! ERROR !!' . PHP_EOL);
+                printf(str_repeat('*', 100) . PHP_EOL . PHP_EOL);
+                printf('Table LOCK detected - You can force the lock bypass with --force' . PHP_EOL);
+                printf(PHP_EOL . str_repeat('*', 100) . PHP_EOL . PHP_EOL);
+
+                throw new Exception(message:'Unable to acquire migration table lock', code: 0, previous: null);
             }
 
             $this->getTableQuery()
-                ->insert(['migration' => 'lock']);
+                 ->insert(['migration' => 'lock']);
         });
     }
 
