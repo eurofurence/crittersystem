@@ -51,3 +51,5 @@ if (in_array('force', $argv) || in_array('--force', $argv) || in_array('-f', $ar
 }
 
 $migration->run($baseDir, $direction, $oneStep, $force);
+
+echo("You got the the end of the line!\n");

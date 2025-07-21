@@ -503,7 +503,6 @@ return [
     // Login DEV Warning Message
     'login_dev_warning'     => env('DEV_WARNING_MESSAGE', false),
 
-
     // var dump server
     'var_dump_server'         => [
         'host' => '127.0.0.1',
