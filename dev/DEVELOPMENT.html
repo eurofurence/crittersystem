@@ -15,10 +15,6 @@
         <link rel="canonical" href="https://crittersystem.eurofurence.github.io/dev/DEVELOPMENT.html">
       
       
-        <link rel="prev" href="index.html">
-      
-      
-        <link rel="next" href="DOCKER.html">
       
       
       <link rel="icon" href="assets/images/favicon.png">
@@ -241,28 +237,7 @@
   
     
   
-  Welcome
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-    
-  
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="DEVELOPMENT.html" class="md-tabs__link">
-        
-  
-  
-    
-  
-  Development
+  Home
 
       </a>
     </li>
@@ -274,36 +249,18 @@
   
   
   
-    <li class="md-tabs__item">
-      <a href="DOCKER.html" class="md-tabs__link">
-        
-  
-  
     
-  
-  DOCKER
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="examples.html" class="md-tabs__link">
-        
-  
-  
     
+      <li class="md-tabs__item">
+        <a href="manuals/index.html" class="md-tabs__link">
+          
   
-  Examples
+  
+  Manual
 
-      </a>
-    </li>
+        </a>
+      </li>
+    
   
 
       
@@ -370,7 +327,7 @@
   
   
   <span class="md-ellipsis">
-    Welcome
+    Home
     
   </span>
   
@@ -384,226 +341,56 @@
       
   
   
+  
+  
     
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
+    
+    
+    
       
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
       
         
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
           
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
   
   
   <span class="md-ellipsis">
-    Development
+    Manual
     
   </span>
   
 
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="DEVELOPMENT.html" class="md-nav__link md-nav__link--active">
+            <span class="md-nav__icon md-icon"></span>
+          </label>
         
-  
-  
-  <span class="md-ellipsis">
-    Development
-    
-  </span>
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#dev-requirements" class="md-nav__link">
-    <span class="md-ellipsis">
-      Dev requirements
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#code-style" class="md-nav__link">
-    <span class="md-ellipsis">
-      Code style
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pre-commit-hooks" class="md-nav__link">
-    <span class="md-ellipsis">
-      Pre-commit hooks
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#docker" class="md-nav__link">
-    <span class="md-ellipsis">
-      Docker
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#localhost" class="md-nav__link">
-    <span class="md-ellipsis">
-      Localhost
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#local-build-without-docker" class="md-nav__link">
-    <span class="md-ellipsis">
-      Local build without Docker
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#testing" class="md-nav__link">
-    <span class="md-ellipsis">
-      Testing
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Testing">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#docker_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      Docker
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#var-dump-server" class="md-nav__link">
-    <span class="md-ellipsis">
-      Var Dump server
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#translation" class="md-nav__link">
-    <span class="md-ellipsis">
-      Translation
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#ci-build-pipeline" class="md-nav__link">
-    <span class="md-ellipsis">
-      CI &amp; Build Pipeline
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#static-code-analysis" class="md-nav__link">
-    <span class="md-ellipsis">
-      Static code analysis
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#troubleshooting" class="md-nav__link">
-    <span class="md-ellipsis">
-      Troubleshooting
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Troubleshooting">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#docker-version" class="md-nav__link">
-    <span class="md-ellipsis">
-      Docker version
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#service-es_workspace-is-not-running" class="md-nav__link">
-    <span class="md-ellipsis">
-      service "es_workspace" is not running
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
-
-    
-      
-      
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Manual
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
   
   
   
   
     <li class="md-nav__item">
-      <a href="DOCKER.html" class="md-nav__link">
+      <a href="manuals/index.html" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    DOCKER
+    Overview
     
   </span>
   
@@ -612,25 +399,851 @@
     </li>
   
 
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
     
       
       
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Deploy
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Deploy
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
   
   
   
   
     <li class="md-nav__item">
-      <a href="examples.html" class="md-nav__link">
+      <a href="manuals/deploy/docker.html" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    Examples
+    Docker
     
   </span>
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="manuals/deploy/webserver.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Web Server
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Development
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Development
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="manuals/development/docs/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Docs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Modules
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            Modules
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/news/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    News
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/meetings/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Meetings
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/shifts/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Shifts
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/critter_types/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Critter Types
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/ask_info_desk/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ask the Info Desk
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/locations/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Locations
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4_7" id="__nav_2_4_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Admin
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_4_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4_7">
+            <span class="md-nav__icon md-icon"></span>
+            Admin
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/admin/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/admin/critters_arrive.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Arrive Critters
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/admin/critters_active.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Active Critters
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/admin/critters_all.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    All Critters
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/admin/critters_free.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Free Critters
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/admin/answer_questions.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Answer Questions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/admin/shift_types.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Shift Types
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/admin/shifts_create.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Create Shifts
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/admin/locations.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Locations
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/admin/group_rights.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Group Rights
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/admin/import_schedule.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Import Schedule
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/admin/logs.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Logs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/admin/config.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Config
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/admin/v2_export.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    V2-Export
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/next_shift/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Next Shift
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/messages/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Messages
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/information/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Information
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/language/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Language
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="modules/account/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Account
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -648,7 +1261,9 @@
                   <div class="md-sidebar__inner">
                     
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="Sections">
   
   
   
@@ -657,12 +1272,12 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Table of contents
+      Sections
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#dev-requirements" class="md-nav__link">
+  <a href="#dev_requirements" class="md-nav__link">
     <span class="md-ellipsis">
       Dev requirements
     </span>
@@ -671,7 +1286,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#code-style" class="md-nav__link">
+  <a href="#code_style" class="md-nav__link">
     <span class="md-ellipsis">
       Code style
     </span>
@@ -680,7 +1295,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pre-commit-hooks" class="md-nav__link">
+  <a href="#pre-commit_hooks" class="md-nav__link">
     <span class="md-ellipsis">
       Pre-commit hooks
     </span>
@@ -707,7 +1322,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#local-build-without-docker" class="md-nav__link">
+  <a href="#local_build_without_docker" class="md-nav__link">
     <span class="md-ellipsis">
       Local build without Docker
     </span>
@@ -735,7 +1350,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#var-dump-server" class="md-nav__link">
+  <a href="#var_dump_server" class="md-nav__link">
     <span class="md-ellipsis">
       Var Dump server
     </span>
@@ -758,7 +1373,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ci-build-pipeline" class="md-nav__link">
+  <a href="#ci_build_pipeline" class="md-nav__link">
     <span class="md-ellipsis">
       CI &amp; Build Pipeline
     </span>
@@ -767,7 +1382,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#static-code-analysis" class="md-nav__link">
+  <a href="#static_code_analysis" class="md-nav__link">
     <span class="md-ellipsis">
       Static code analysis
     </span>
@@ -786,7 +1401,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#docker-version" class="md-nav__link">
+  <a href="#docker_version" class="md-nav__link">
     <span class="md-ellipsis">
       Docker version
     </span>
@@ -795,7 +1410,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#service-es_workspace-is-not-running" class="md-nav__link">
+  <a href="#service_es_workspace_is_not_running" class="md-nav__link">
     <span class="md-ellipsis">
       service "es_workspace" is not running
     </span>
@@ -827,37 +1442,37 @@
   
 
 
-<h1 id="development">Development</h1>
+<h1 id="development">Development<a class="headerlink" href="#development" title="Permanent link">&para;</a></h1>
 <p>Please also read the <a href="../CONTRIBUTING.md">CONTRIBUTING.md</a>.</p>
-<h2 id="dev-requirements">Dev requirements</h2>
+<h2 id="dev_requirements">Dev requirements<a class="headerlink" href="#dev_requirements" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Node &gt;= 14 (Development/Building only)</li>
 <li>Including npm</li>
 <li>Yarn (Development/Building only)</li>
 <li>PHP Composer (Development/Building only)</li>
 </ul>
-<h2 id="code-style">Code style</h2>
+<h2 id="code_style">Code style<a class="headerlink" href="#code_style" title="Permanent link">&para;</a></h2>
 <p>Please ensure that your pull requests follow the <a href="https://www.php-fig.org/psr/psr-12/">PSR-12</a> coding style guide.
 You can check that by running</p>
-<pre><code class="language-bash">composer run phpcs
-# with docker
-docker exec engelsystem_dev-es_workspace-1 composer run phpcs
-</code></pre>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>composer<span class="w"> </span>run<span class="w"> </span>phpcs
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># with docker</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>engelsystem_dev-es_workspace-1<span class="w"> </span>composer<span class="w"> </span>run<span class="w"> </span>phpcs
+</span></code></pre></div>
 <p>You may auto fix reported issues by running</p>
-<pre><code class="language-bash">composer run phpcbf
-# with docker
-docker exec engelsystem_dev-es_workspace-1 composer run phpcbf
-</code></pre>
-<h2 id="pre-commit-hooks">Pre-commit hooks</h2>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>composer<span class="w"> </span>run<span class="w"> </span>phpcbf
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># with docker</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>engelsystem_dev-es_workspace-1<span class="w"> </span>composer<span class="w"> </span>run<span class="w"> </span>phpcbf
+</span></code></pre></div>
+<h2 id="pre-commit_hooks">Pre-commit hooks<a class="headerlink" href="#pre-commit_hooks" title="Permanent link">&para;</a></h2>
 <p>You should set up the pre-commit hook to check the code style and run tests on commit:</p>
 <p>Docker (recommended):</p>
-<pre><code class="language-sh">echo &quot;docker exec engelsystem_dev-es_workspace-1 bin/pre-commit&quot; &gt; .git/hooks/pre-commit
-chmod u+x .git/hooks/pre-commit
-</code></pre>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;docker exec engelsystem_dev-es_workspace-1 bin/pre-commit&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>.git/hooks/pre-commit
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>chmod<span class="w"> </span>u+x<span class="w"> </span>.git/hooks/pre-commit
+</span></code></pre></div>
 <p>Host machine:</p>
-<pre><code class="language-sh">ln -s ../../bin/pre-commit .git/hooks/pre-commit
-</code></pre>
-<h2 id="docker">Docker</h2>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>ln<span class="w"> </span>-s<span class="w"> </span>../../bin/pre-commit<span class="w"> </span>.git/hooks/pre-commit
+</span></code></pre></div>
+<h2 id="docker">Docker<a class="headerlink" href="#docker" title="Permanent link">&para;</a></h2>
 <blockquote>
 <p>[!TIP]
 We suggest using Docker for the Development local build.<br />
@@ -865,90 +1480,90 @@ This repo <a href="../docker/dev">ships a docker setup</a> for a quick developme
 If you use another uid/gid than 1000 on your machine you have to adjust it in <a href="../docker/dev/.env">docker/dev/.env</a>.</p>
 </blockquote>
 <p>Make sure you're in the <code>docker/dev</code> subfolder:</p>
-<pre><code class="language-bash">cd docker/dev
-</code></pre>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">cd</span><span class="w"> </span>docker/dev
+</span></code></pre></div>
 <p>Then, run</p>
-<pre><code class="language-bash">docker compose up
-</code></pre>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>up
+</span></code></pre></div>
 <p>Run these commands once initially and then as required after changes</p>
-<pre><code class="language-bash"># Install composer dependencies
-docker compose exec es_workspace composer i
-
-# Install node packages
-docker compose exec es_workspace yarn install
-
-# Run a full front-end build
-docker compose exec es_workspace yarn build
-
-# Or run a front-end build for specific themes only, e.g.
-docker compose exec -e THEMES=0,1 es_workspace yarn build
-
-# Update the translation files
-docker compose exec es_workspace find /var/www/resources/lang -type f -name '*.po' -exec sh -c 'msgfmt &quot;${1%.*}.po&quot; -o&quot;${1%.*}.mo&quot;' shell {} \;
-
-# Run the migrations
-docker compose exec es_workspace bin/migrate
-</code></pre>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Install composer dependencies</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>es_workspace<span class="w"> </span>composer<span class="w"> </span>i
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># Install node packages</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>es_workspace<span class="w"> </span>yarn<span class="w"> </span>install
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="c1"># Run a full front-end build</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>es_workspace<span class="w"> </span>yarn<span class="w"> </span>build
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="c1"># Or run a front-end build for specific themes only, e.g.</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">THEMES</span><span class="o">=</span><span class="m">0</span>,1<span class="w"> </span>es_workspace<span class="w"> </span>yarn<span class="w"> </span>build
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="c1"># Update the translation files</span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>es_workspace<span class="w"> </span>find<span class="w"> </span>/var/www/resources/lang<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s1">&#39;*.po&#39;</span><span class="w"> </span>-exec<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;msgfmt &quot;${1%.*}.po&quot; -o&quot;${1%.*}.mo&quot;&#39;</span><span class="w"> </span>shell<span class="w"> </span><span class="o">{}</span><span class="w"> </span><span class="se">\;</span>
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="c1"># Run the migrations</span>
+</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>es_workspace<span class="w"> </span>bin/migrate
+</span></code></pre></div>
 <p>While developing you may use the watch mode to rebuild the system on changes</p>
-<pre><code class="language-bash"># Run a front-end build and update on change
-docker compose exec es_workspace yarn build:watch
-
-# Or run a front-end build and update on change for specific themes only, e.g.
-docker compose exec -e THEMES=0,1 es_workspace yarn build:watch
-</code></pre>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Run a front-end build and update on change</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>es_workspace<span class="w"> </span>yarn<span class="w"> </span>build:watch
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Or run a front-end build and update on change for specific themes only, e.g.</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">THEMES</span><span class="o">=</span><span class="m">0</span>,1<span class="w"> </span>es_workspace<span class="w"> </span>yarn<span class="w"> </span>build:watch
+</span></code></pre></div>
 <p>It might also be useful to have an interactive database interface for which a phpMyAdmin instance can be startet at <a href="http://localhost:8888">http://localhost:8888</a>.</p>
-<pre><code class="language-bash">docker compose --profile dev up
-</code></pre>
-<h2 id="localhost">Localhost</h2>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>docker<span class="w"> </span>compose<span class="w"> </span>--profile<span class="w"> </span>dev<span class="w"> </span>up
+</span></code></pre></div>
+<h2 id="localhost">Localhost<a class="headerlink" href="#localhost" title="Permanent link">&para;</a></h2>
 <p>You can find your local Engelsystem on <a href="http://localhost:5080">http://localhost:5080</a>.</p>
-<h2 id="local-build-without-docker">Local build without Docker</h2>
+<h2 id="local_build_without_docker">Local build without Docker<a class="headerlink" href="#local_build_without_docker" title="Permanent link">&para;</a></h2>
 <p>The following instructions explain how to get, build and run the latest Engelsystem version directly from the git main branch (may be unstable!).</p>
 <ul>
 <li>Clone the main branch: <code>git clone https://github.com/engelsystem/engelsystem.git</code></li>
 <li>Install <a href="https://getcomposer.org/download/">Composer</a> and <a href="https://yarnpkg.com/en/docs/install">Yarn</a> (which requires <a href="https://nodejs.org/en/download/package-manager/">Node.js</a>)</li>
 <li>Install project dependencies:
-  <code>bash
-  composer install
-  yarn</code>
+  <div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>composer<span class="w"> </span>install
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>yarn
+</span></code></pre></div>
   On production systems it is recommended to use
-  <code>bash
-  composer install --no-dev
-  composer dump-autoload --optimize</code>
+  <div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>composer<span class="w"> </span>install<span class="w"> </span>--no-dev
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>composer<span class="w"> </span>dump-autoload<span class="w"> </span>--optimize
+</span></code></pre></div>
   to install the Engelsystem</li>
 <li>Build the frontend assets</li>
 <li>All
-    <code>bash
-    yarn build</code></li>
+    <div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>yarn<span class="w"> </span>build
+</span></code></pre></div></li>
 <li>Specific themes only by providing the <code>THEMES</code> environment variable, e.g.
-    <code>bash
-    THEMES=0,1 yarn build</code></li>
+    <div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nv">THEMES</span><span class="o">=</span><span class="m">0</span>,1<span class="w"> </span>yarn<span class="w"> </span>build
+</span></code></pre></div></li>
 <li>Generate translation files
-  <code>bash
-  find resources/lang/ -type f -name '*.po' -exec sh -c 'msgfmt "${1%.*}.po" -o"${1%.*}.mo"' shell {} \;</code></li>
+  <div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>find<span class="w"> </span>resources/lang/<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s1">&#39;*.po&#39;</span><span class="w"> </span>-exec<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;msgfmt &quot;${1%.*}.po&quot; -o&quot;${1%.*}.mo&quot;&#39;</span><span class="w"> </span>shell<span class="w"> </span><span class="o">{}</span><span class="w"> </span><span class="se">\;</span>
+</span></code></pre></div></li>
 </ul>
-<h2 id="testing">Testing</h2>
+<h2 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h2>
 <p>To run only unit tests (tests that should not change the Engelsystem state) use</p>
-<pre><code class="language-bash">vendor/bin/phpunit --testsuite Unit
-</code></pre>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>vendor/bin/phpunit<span class="w"> </span>--testsuite<span class="w"> </span>Unit
+</span></code></pre></div>
 <p>If a database is configured and the Engelsystem is allowed to mess around with some files, you can run feature tests.
 The tests can potentially delete some database entries, so they should never be run on a production system!</p>
-<pre><code class="language-bash">vendor/bin/phpunit --testsuite Feature
-</code></pre>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>vendor/bin/phpunit<span class="w"> </span>--testsuite<span class="w"> </span>Feature
+</span></code></pre></div>
 <p>When you want to run unit and feature tests at once:</p>
-<pre><code class="language-bash">vendor/bin/phpunit
-</code></pre>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>vendor/bin/phpunit
+</span></code></pre></div>
 <p>To generate code coverage reports it's highly recommended to use <a href="https://github.com/krakjoe/pcov"><code>pcov</code></a> or
 at least <code>phpdbg -qrr</code>(which has problems with switch case statements) as using Xdebug slows down execution.</p>
-<pre><code class="language-bash">php -d pcov.enabled=1 -d pcov.directory=. vendor/bin/phpunit --coverage-text
-</code></pre>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>php<span class="w"> </span>-d<span class="w"> </span>pcov.enabled<span class="o">=</span><span class="m">1</span><span class="w"> </span>-d<span class="w"> </span>pcov.directory<span class="o">=</span>.<span class="w"> </span>vendor/bin/phpunit<span class="w"> </span>--coverage-text
+</span></code></pre></div>
 <p>For better debug output, adding <code>-vvv</code> might be helpful.
 Adding <code>--coverage-html public/coverage/</code> exports the coverage reports to the <code>public/</code> dir which then can be viewed at <a href="http://localhost:5080/coverage/index.html">localhost:5080/coverage/index.html</a>.</p>
-<h3 id="docker_1">Docker</h3>
+<h3 id="docker_1">Docker<a class="headerlink" href="#docker_1" title="Permanent link">&para;</a></h3>
 <p>If using the Docker-based development environment you can run the following script to retrieve a coverage report.</p>
-<pre><code class="language-sh">docker compose exec es_workspace composer phpunit:coverage
-</code></pre>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>es_workspace<span class="w"> </span>composer<span class="w"> </span>phpunit:coverage
+</span></code></pre></div>
 <p>A browsable HTML version is available at http://localhost:5080/coverage/index.html .</p>
-<h3 id="var-dump-server">Var Dump server</h3>
+<h3 id="var_dump_server">Var Dump server<a class="headerlink" href="#var_dump_server" title="Permanent link">&para;</a></h3>
 <p>Symfony Var Dump server is configured to allow for easier debugging. It is not meant as a replacement for xdebug but can actually be used together with xdebug.
 The Var Dump Server is especially useful if you want to debug a request without messing up the output e.g. of API calls or the HTML layout.</p>
 <p>To use simply call the method <code>dump</code> and pass the arguments in exactly the same way you would when using <code>var_dump</code>.</p>
@@ -956,37 +1571,37 @@ The Var Dump Server is especially useful if you want to debug a request without 
 This does however require that you start the var-dump-server otherwise the output will be printed in your browser</p>
 <p>You can also <code>dump</code> and <code>die</code> if you wish to not let your code continue any further by calling the <code>dd</code> method</p>
 <p>To view the output of <code>dump</code> call the following commands:</p>
-<pre><code class="language-bash">vendor/bin/var-dump-server
-# or for running in docker
-docker compose exec es_server vendor/bin/var-dump-server
-</code></pre>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>vendor/bin/var-dump-server
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="c1"># or for running in docker</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>es_server<span class="w"> </span>vendor/bin/var-dump-server
+</span></code></pre></div>
 <p>For more information check out the Var Dump Server documentation: <a href="https://symfony.com/components/VarDumper">Symfony VarDumper</a></p>
-<h2 id="translation">Translation</h2>
+<h2 id="translation">Translation<a class="headerlink" href="#translation" title="Permanent link">&para;</a></h2>
 <p>We use gettext. You may use POEdit to extract new texts from the sourcecode.
 Please config POEdit to extract also the twig template files using the following settings: https://gist.github.com/jlambe/a868d9b63d70902a12254ce47069d0e6</p>
-<h2 id="ci-build-pipeline">CI &amp; Build Pipeline</h2>
+<h2 id="ci_build_pipeline">CI &amp; Build Pipeline<a class="headerlink" href="#ci_build_pipeline" title="Permanent link">&para;</a></h2>
 <p>The Engelsystem can be tested and automatically deployed to a testing/staging/production environment.
 This functionality requires a <a href="https://about.gitlab.com/">GitLab</a> server with a working docker runner.</p>
 <p>To use the deployment features the following secret variables need to be defined (if undefined the step will be skipped):</p>
-<pre><code class="language-bash">SSH_PRIVATE_KEY         # The ssh private key
-STAGING_REMOTE          # The staging server, e.g. user@remote.host
-STAGING_REMOTE_PATH     # The path on the remote server, e.g. /var/www/engelsystem
-PRODUCTION_REMOTE       # Same as STAGING_REMOTE but for the production environment
-PRODUCTION_REMOTE_PATH  # Same as STAGING_REMOTE_PATH but for the production environment
-</code></pre>
-<h2 id="static-code-analysis">Static code analysis</h2>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>SSH_PRIVATE_KEY<span class="w">         </span><span class="c1"># The ssh private key</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>STAGING_REMOTE<span class="w">          </span><span class="c1"># The staging server, e.g. user@remote.host</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>STAGING_REMOTE_PATH<span class="w">     </span><span class="c1"># The path on the remote server, e.g. /var/www/engelsystem</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>PRODUCTION_REMOTE<span class="w">       </span><span class="c1"># Same as STAGING_REMOTE but for the production environment</span>
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>PRODUCTION_REMOTE_PATH<span class="w">  </span><span class="c1"># Same as STAGING_REMOTE_PATH but for the production environment</span>
+</span></code></pre></div>
+<h2 id="static_code_analysis">Static code analysis<a class="headerlink" href="#static_code_analysis" title="Permanent link">&para;</a></h2>
 <p>You can run a static code analysis with this command:</p>
-<pre><code class="language-bash">composer phpstan
-</code></pre>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>composer<span class="w"> </span>phpstan
+</span></code></pre></div>
 <p><strong>Hint for using Xdebug with <em>PhpStorm</em></strong></p>
 <p>For some reason <em>PhpStorm</em> is unable to detect the server name.
 But without a server name it's impossible to set up path mappings.
 Because of that the docker setup sets the server name <em>engelsystem</em>.
 To get Xdebug working you have to create a server with the name <em>engelsystem</em> manually.</p>
-<h2 id="troubleshooting">Troubleshooting</h2>
-<h3 id="docker-version">Docker version</h3>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="docker_version">Docker version<a class="headerlink" href="#docker_version" title="Permanent link">&para;</a></h3>
 <p>If unspecific issues appear try using Docker version &gt;= 20.10.14.</p>
-<h3 id="service-es_workspace-is-not-running"><code>service "es_workspace" is not running</code></h3>
+<h3 id="service_es_workspace_is_not_running"><code>service "es_workspace" is not running</code><a class="headerlink" href="#service_es_workspace_is_not_running" title="Permanent link">&para;</a></h3>
 <p>Make sure you're running your docker commands from the <code>docker/dev</code> directory, not from <code>docker</code></p>
 
 
@@ -1005,6 +1620,8 @@ To get Xdebug working you have to create a server with the name <em>engelsystem<
             </div>
           
           
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
         
@@ -1018,44 +1635,6 @@ To get Xdebug working you have to create a server with the name <em>engelsystem<
       
         <footer class="md-footer">
   
-    
-      
-      <nav class="md-footer__inner md-grid" aria-label="Footer" >
-        
-          
-          <a href="index.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: Welcome">
-            <div class="md-footer__button md-icon">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
-            </div>
-            <div class="md-footer__title">
-              <span class="md-footer__direction">
-                Previous
-              </span>
-              <div class="md-ellipsis">
-                Welcome
-              </div>
-            </div>
-          </a>
-        
-        
-          
-          <a href="DOCKER.html" class="md-footer__link md-footer__link--next" aria-label="Next: DOCKER">
-            <div class="md-footer__title">
-              <span class="md-footer__direction">
-                Next
-              </span>
-              <div class="md-ellipsis">
-                DOCKER
-              </div>
-            </div>
-            <div class="md-footer__button md-icon">
-              
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
-            </div>
-          </a>
-        
-      </nav>
     
   
   <div class="md-footer-meta md-typeset">
@@ -1151,7 +1730,7 @@ To get Xdebug working you have to create a server with the name <em>engelsystem<
     
     
       
-      <script id="__config" type="application/json">{"base": ".", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.footer", "navigation.path", "navigation.top"], "search": "assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "dev", "provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"base": ".", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.footer", "navigation.path", "navigation.top", "content.code.copy", "content.code.select", "content.tabs.link"], "search": "assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": "dev", "provider": "mike"}}</script>
     
     
       <script src="assets/javascripts/bundle.56ea9cef.min.js"></script>
