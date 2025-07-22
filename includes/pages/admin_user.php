@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
  */
 function admin_user_title()
 {
-    return __('All Angels');
+    return __('All Critters');
 }
 
 /**

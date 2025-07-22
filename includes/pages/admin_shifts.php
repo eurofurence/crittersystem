@@ -406,7 +406,7 @@ function admin_shifts()
                     table([
                         'timeslot'      => __('Time and location'),
                         'title'         => __('Type and title'),
-                        'needed_angels' => __('Needed angels'),
+                        'needed_angels' => __('Needed critters'),
                     ], $shifts_table),
                     form_submit('submit', icon('save') . __('form.save')),
                 ]),

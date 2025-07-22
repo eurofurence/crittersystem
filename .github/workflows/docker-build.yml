@@ -1,11 +1,12 @@
-name: Docker Build and Push
+name: Docker Verify, Build and Publish
 
 on:
   push:
     branches:
-      - '!main'
-      - '!master'
-      - '**'
+      - 'main'
+      - 'dev'
+#      - '!master'
+#      - '**'
     tags:
       - 'v*.*.*'
   pull_request:
@@ -24,6 +25,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install gettext
+        run: |
+          sudo apt update
+          sudo apt -y install gettext
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -36,6 +42,28 @@ jobs:
 
       - name: Run PHP Code Sniffer
         run: composer run phpcs
+
+      - name: Running PHPStan
+        run: composer run phpstan
+
+      - name: Check language files
+        run: find resources/lang -type f -name '*.po' -exec sh -c 'msgfmt "${1%.*}.po" -o"${1%.*}.mo" && echo "Compiling ${1%.*}.po > ${1%.*}.mo"' shell {} \;
+
+      - name: Yarn - Run install
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install # Runs `yarn install`
+
+      - name: Yarn - Build production bundle
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: build # Runs `yarn build`
+
+      - name: Yarn - Check
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: check # Runs `yarn check`
+
 
   build:
     needs: verify
