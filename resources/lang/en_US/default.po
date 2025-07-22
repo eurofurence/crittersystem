@@ -955,6 +955,9 @@ msgstr "Read about the jobs you can do to help us."
 msgid "login.cookies"
 msgstr "Please note: You have to activate cookies!"
 
+msgid "login.use_username_password"
+msgstr "Login with username/password"
+
 msgid "general.angel"
 msgstr "Critter"
 
