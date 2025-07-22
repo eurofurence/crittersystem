@@ -1,3 +1,7 @@
+---
+title: Docker Deploy
+---
+
 ## Docker
 
 ### Image
@@ -149,5 +153,3 @@ networks:
 | 'add_headers'               | 'ADD_HEADERS'               | true                                             |
 
 ---
-
-## Manual Install

@@ -11,7 +11,7 @@
 # How to use/compile:
 # Use Mike to create the branch gh-pages (make sure you have the branch locally)
 # Deploy: mike deploy [version]
-# Default dentifier: dev
+# Default identifier: dev
 
 # Server configuration
 dev_addr: 127.0.0.1:8888
@@ -79,6 +79,9 @@ theme:
     - navigation.path
     # - toc.integrate
     - navigation.top
+    - content.code.copy
+    - content.code.select
+    - content.tabs.link
 
   plugins:
     - group
@@ -112,6 +115,17 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: false
   - pymdownx.keys
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+
 
 extra_css:
   - stylesheets/extra.css
@@ -143,9 +157,17 @@ plugins:
 ##################################################
 nav:
   - Home: index.md
-  - Manuals:
+
+  - Manual:
     - manuals/index.md
-    - Installation: manuals/install/install.md
+
+    - Deploy:
+      - Docker: manuals/deploy/docker.md
+      - Web Server: manuals/deploy/webserver.md
+
+    - Development:
+      - Docs: manuals/development/docs/index.md
+
     - Modules:
       - News: modules/news/index.md
       - Meetings: modules/meetings/index.md
@@ -173,8 +195,3 @@ nav:
       - Information: modules/information/index.md
       - Language: modules/language/index.md
       - Account: modules/account/index.md
-    - Guides:
-      - Shift Managers: manuals/shift_manager_doc/index.md
-      - Critters: manuals/critter_doc/index.md
-  - Development:
-    - development/index.md
