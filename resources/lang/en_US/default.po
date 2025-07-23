@@ -620,6 +620,9 @@ msgstr "Edit T-shirt"
 msgid "user.edit.goodie"
 msgstr "Edit goodie"
 
+msgid "form.shirt"
+msgstr "T-Shirt"
+
 msgid "user.shirt_size"
 msgstr "T-shirt size"
 
@@ -743,6 +746,10 @@ msgstr "Edit location"
 
 msgid "location.delete.title"
 msgstr "Delete location \"%s\""
+
+msgid "location.delete.double_confirm"
+msgstr "Location has %d shifts still assigned to it. "
+"Are you sure you want to delete it?"
 
 msgid "shifttype.shifttypes"
 msgstr "Shift types"
@@ -913,7 +920,7 @@ msgid "design.title"
 msgstr "Design"
 
 msgid "login.welcome"
-msgstr "Welcome to the %s!"
+msgstr "Welcome to %s!"
 
 msgid "event.buildup.start"
 msgstr "Buildup starts"
@@ -1056,3 +1063,9 @@ msgstr "Department"
 
 msgid "departments.title.plural"
 msgstr "Departments"
+
+msgid "validation.title.required"
+msgstr "Title is required"
+
+msgid "validation.text.required"
+msgstr "Text is required"

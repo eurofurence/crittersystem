@@ -287,9 +287,6 @@ msgstr "Start:"
 msgid "End:"
 msgstr "Ende:"
 
-msgid "Needed critters"
-msgstr "Benötigte Critter"
-
 msgid "Shift deleted."
 msgstr "Schicht gelöscht."
 
@@ -303,6 +300,9 @@ msgid "There are unconfirmed critters in %d critter type. Critter type that need
 msgid_plural "There are unconfirmed critters in %d critter types. Critter types that need approvals:"
 msgstr[0] "Es gibt nicht freigeschaltete Critter in %d Crittertypen! Crittertyp der bestätigt werden muss:"
 msgstr[1] "Es gibt nicht freigeschaltete Critter in %d Crittertypen! Crittertypen die bestätigt werden müssen:"
+
+msgid "Crittertype doesn't exist."
+msgstr "Der Crittertyp existiert nicht."
 
 msgid "You are not allowed to delete all users for this critter type."
 msgstr "Du darfst nicht alle Benutzer von diesem Crittertyp entfernen."
@@ -448,6 +448,9 @@ msgstr ""
 msgid "Marked critters."
 msgstr "Critter wurden markiert."
 
+msgid "general.actions"
+msgstr "Aktionen"
+
 msgid "general.back"
 msgstr "Zurück"
 
@@ -526,10 +529,13 @@ msgstr "Ausgegebene T-Shirts"
 msgid "Arrive critters"
 msgstr "Ankommende Critter"
 
-msgid "Reset done. Angel has not arrived."
+msgid "Critters"
+msgstr "Critter"
+
+msgid "Reset done. Critter has not arrived."
 msgstr "Zurückgesetzt. Critter ist noch nicht angekommen."
 
-msgid "Angel has been marked as arrived."
+msgid "Critter has been marked as arrived."
 msgstr "Critter wurde als angekommen markiert."
 
 msgid "Reset"
@@ -624,6 +630,9 @@ msgstr "Bitte benutze Markdown für die Beschreibung."
 
 msgid "Needed critters:"
 msgstr "Benötigte Critter:"
+
+msgid "Needed critters"
+msgstr "Benötigte Critter"
 
 msgid "Create shifts"
 msgstr "Schichten erstellen"
@@ -922,13 +931,13 @@ msgstr "Alle ablehnen"
 msgid "Membership"
 msgstr "Mitgliedschaft"
 
-msgid "Angels needed in the next 3 hrs"
+msgid "Critters needed in the next 3 hrs"
 msgstr "Benötigte Critter in den nächsten 3 Stunden"
 
-msgid "Angels needed for nightshifts"
+msgid "Critters needed for nightshifts"
 msgstr "Benötigte Critter für Nachtschichten"
 
-msgid "Angels currently working"
+msgid "Critters currently working"
 msgstr "Aktuell arbeitende Critter"
 
 msgid "Hours to be worked"
@@ -957,9 +966,6 @@ msgstr "Schicht ist voll"
 
 msgid "Shift is running/ended or you have not arrived"
 msgstr "Schicht läuft/vorbei oder du bist noch nicht angekommen"
-
-msgid "Add more critters"
-msgstr "Mehr Critter hinzufügen"
 
 msgid "%d helper needed"
 msgid_plural "%d helpers needed"
@@ -1017,7 +1023,7 @@ msgstr "Schwänzer Kommentar (Nur für Supporter und die Schicht-Koordination):"
 msgid "Edit shift entry"
 msgstr "Schichteintrag bearbeiten"
 
-msgid "Angel:"
+msgid "Critter:"
 msgstr "Critter:"
 
 msgid "Date, Duration:"
@@ -1391,6 +1397,9 @@ msgstr "Minuten nach Talk ende hinzufügen"
 
 msgid "schedule.for_locations"
 msgstr "Für Orte"
+
+msgid "schedule.import.request_error"
+msgstr "Konnte Programm nicht laden."
 
 msgid "schedule.import.locations.add"
 msgstr "Neue Orte"
@@ -1930,6 +1939,10 @@ msgstr "Ort bearbeiten"
 msgid "location.delete.title"
 msgstr "Ort \"%s\" löschen"
 
+msgid "location.delete.double_confirm"
+msgstr "Der Ort hat noch %d zugewiesene Schichten. "
+"Bist du sicher, dass du den Ort löschen willst?"
+
 msgid "shifttype.shifttypes"
 msgstr "Schichttypen"
 
@@ -2081,3 +2094,12 @@ msgstr "Konfiguration"
 
 msgid "config.edit.success"
 msgstr "Konfiguration erfolgreich angepasst"
+
+msgid "Add more critters"
+msgstr "Weitere Critter hinzufügen"
+
+msgid "validation.title.required"
+msgstr "Title is required"
+
+msgid "validation.text.required"
+msgstr "Text is required"

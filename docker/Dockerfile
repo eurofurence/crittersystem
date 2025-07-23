@@ -42,8 +42,8 @@ RUN find /app/storage/ -type f -not -name VERSION -exec rm {} \;
 # Build the PHP/Nginx container
 FROM php:8.2-fpm-alpine AS production
 WORKDIR /var/www
-RUN apk add --no-cache icu-dev nginx && \
-    docker-php-ext-install intl pdo_mysql && \
+RUN apk add --no-cache icu-dev nginx libzip-dev libpng-dev && \
+    docker-php-ext-install intl pdo_mysql gd zip && \
     sed -i 's/9000/127.0.0.1:9000/' /usr/local/etc/php-fpm.d/zz-docker.conf
 
 # Copy files to the right places

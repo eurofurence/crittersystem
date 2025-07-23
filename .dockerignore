@@ -7,6 +7,12 @@ docker/
 # Configuration
 config/config.php
 
+# Migration Status files
+config/migration.ok
+config/migration.fail
+config/migration.running
+config/migration.log
+
 # Files
 .dockerignore
 *.git*

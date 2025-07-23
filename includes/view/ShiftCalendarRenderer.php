@@ -352,4 +352,9 @@ class ShiftCalendarRenderer
             badge(__('Shift is running/ended or you have not arrived'), 'secondary'),
         ]);
     }
+
+    public function hasShiftsToDisplay(): bool
+    {
+        return count($this->lanes) > 0;
+    }
 }
