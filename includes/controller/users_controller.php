@@ -257,17 +257,19 @@ function user_controller()
         ->with(['user', 'creator'])
         ->get();
 
-    $is_ifsg_supporter = (bool) AngelType::whereRequiresIfsgCertificate(true)
-        ->leftJoin('user_angel_type', 'user_angel_type.angel_type_id', 'angel_types.id')
-        ->where('user_angel_type.user_id', $user->id)
-        ->where('user_angel_type.supporter', true)
-        ->count();
+//    $is_ifsg_supporter = (bool) AngelType::whereRequiresIfsgCertificate(true)
+//        ->leftJoin('user_angel_type', 'user_angel_type.angel_type_id', 'angel_types.id')
+//        ->where('user_angel_type.user_id', $user->id)
+//        ->where('user_angel_type.supporter', true)
+//        ->count();
+    $is_ifsg_supporter = false;
 
-    $is_drive_supporter = (bool) AngelType::whereRequiresDriverLicense(true)
-        ->leftJoin('user_angel_type', 'user_angel_type.angel_type_id', 'angel_types.id')
-        ->where('user_angel_type.user_id', $user->id)
-        ->where('user_angel_type.supporter', true)
-        ->count();
+//    $is_drive_supporter = (bool) AngelType::whereRequiresDriverLicense(true)
+//        ->leftJoin('user_angel_type', 'user_angel_type.angel_type_id', 'angel_types.id')
+//        ->where('user_angel_type.user_id', $user->id)
+//        ->where('user_angel_type.supporter', true)
+//        ->count();
+    $is_drive_supporter = false;
 
     return [
         htmlspecialchars($user_source->displayName),
