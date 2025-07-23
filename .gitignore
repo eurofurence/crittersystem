@@ -14,6 +14,12 @@ Thumbs.db
 _vimrc_local.vim
 .sass-cache
 
+# Migration Status files
+config/migration.ok
+config/migration.fail
+config/migration.running
+config/migration.log
+
 # Visual Studio files
 /.vs
 
