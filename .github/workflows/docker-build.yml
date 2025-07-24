@@ -9,6 +9,9 @@ on:
 #      - '**'
     tags:
       - 'v*.*.*'
+      - 'dev-*'
+      - 'alpha-*'
+      - 'pre-release-*'
   pull_request:
     branches:
       - 'main'
