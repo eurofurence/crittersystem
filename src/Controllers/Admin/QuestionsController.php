@@ -90,7 +90,7 @@ class QuestionsController extends BaseController
 
         if ($question->editor) {
             if ($question->editor->id !== $this->auth->user()->id) {
-                $this->addNotification('This question is currently being edited by someone else.', NotificationType::ERROR);
+                $this->addNotification('question.edit.locked', NotificationType::ERROR);
                 return $this->redirect->to('/admin/questions');
             }
         } else {
@@ -147,6 +147,22 @@ class QuestionsController extends BaseController
         $this->addNotification('question.edit.success');
 
         return $this->redirect->to('/admin/questions');
+    }
+
+    public function unlock(Request $request): Response
+    {
+        $questionId = (int) $request->getAttribute('question_id');
+        $question = $this->question->find($questionId);
+
+        if ($question->editor->id !== $this->auth->user()->id) {
+            return new Response('', 423);
+        }
+
+        $question->editing_started_at = null;
+        $question->editor()->dissociate();
+        $question->save();
+
+        return new Response('', 200);
     }
 
     protected function showEdit(?Question $question): Response
