@@ -460,6 +460,12 @@ input[type='text']:invalid {
   color: inherit !important;
 }
 
+@include media-breakpoint-down(md) {
+  .dashboard-table thead th {
+    writing-mode: vertical-lr;
+  }
+}
+
 .dashboard-table tbody:not(:last-child):after {
   content: '';
   display: block;
@@ -484,6 +490,7 @@ input[type='text']:invalid {
 .dashboard-table tbody td.critter-warn-critical {
   border-bottom-color: map.get($theme-colors, 'danger');
 }
+
 
 .attention-ring::before {
     display: block;
