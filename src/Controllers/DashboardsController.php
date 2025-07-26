@@ -30,8 +30,8 @@ class DashboardsController extends BaseController
     ) {
     }
 
-    // Renders the management dashboard, a condensed time table of all shifts & roles
-    public function showManagementDashboard(): Response
+    // Renders the shift overview, a condensed time table of all shifts & roles
+    public function showShiftOverviewDashboard(): Response
     {
         // Get all data we want to display, one row per shift and critter (type)
         $query = $this->shift
@@ -106,7 +106,7 @@ class DashboardsController extends BaseController
         )->sort()->unique()->flip()->all();
 
         return $this->response->withView(
-            'pages/dashboards/management.twig',
+            'pages/dashboards/shift_overview.twig',
             [
                 'critter_types' => $critter_types,
                 'shifts' => $shifts,
@@ -116,6 +116,6 @@ class DashboardsController extends BaseController
 
     public function index(): Response
     {
-        return $this->showManagementDashboard();
+        return $this->showShiftOverviewDashboard();
     }
 }

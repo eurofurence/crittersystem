@@ -2,7 +2,6 @@ import { ready } from './ready';
 
 function highlight_current_shifts(dtables_trs) {
   var date_now = Math.round(Date.now() / 1000);
-  console.log(date_now);
   dtables_trs.forEach(function(element) {
     if (element.dataset.startTime < date_now && element.dataset.endTime >= date_now ) {
       element.classList.add("highlight");

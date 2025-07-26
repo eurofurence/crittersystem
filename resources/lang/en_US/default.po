@@ -1057,3 +1057,6 @@ msgstr "Title is required"
 
 msgid "validation.text.required"
 msgstr "Text is required"
+
+msgid "dashboard.shift_overview.title"
+msgstr "Shift overview"
