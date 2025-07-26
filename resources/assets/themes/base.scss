@@ -452,6 +452,10 @@ input[type='text']:invalid {
   box-shadow: 0 0 0.5em map.get($theme-colors, 'warning');
 }
 
+.dashboard-table tbody tr.highlight {
+  background: content-box linear-gradient(90deg, rgba(180, 20, 20, .4), transparent);
+}
+
 .dashboard-table thead th a {
   color: inherit !important;
 }
