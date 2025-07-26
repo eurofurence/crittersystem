@@ -20,6 +20,16 @@ config/migration.fail
 config/migration.running
 config/migration.log
 
+# NO SYNC Files/Folders
+_NOSYNC
+.NOSYNC
+*_NOSYNC
+*.NOSYNC
+_NOSYNC/
+.NOSYNC/
+*_NOSYNC/
+*.NOSYNC/
+
 # Visual Studio files
 /.vs
 

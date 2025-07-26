@@ -20,7 +20,7 @@
   "dependencies": {
     "@popperjs/core": "^2.11.6",
     "ajv": "6.12.6",
-    "bootstrap": "^5.3.6",
+    "bootstrap": "5.2.3",
     "bootstrap-icons": "^1.13.1",
     "choices.js": "^11.1.0",
     "core-js": "^3.42.0",
