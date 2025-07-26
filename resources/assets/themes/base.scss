@@ -446,6 +446,12 @@ input[type='text']:invalid {
   text-decoration: underline !important;
 }
 
+.dashboard-table a span.bi:hover,
+.dashboard-table a span.secondary-highlight,{
+  outline: 1px solid map.get($theme-colors, 'warning');
+  box-shadow: 0 0 0.5em map.get($theme-colors, 'warning');
+}
+
 .dashboard-table thead th a {
   color: inherit !important;
 }

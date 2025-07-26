@@ -426,3 +426,8 @@ h5 {
 .card .btn {
   text-decoration: none;
 }
+
+.tooltip.show {
+  --bs-tooltip-color: var(--bs-body-bg);
+  --bs-tooltip-bg: var(--bs-body-color);
+}

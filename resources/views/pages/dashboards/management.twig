@@ -2,12 +2,13 @@
 {% import 'macros/base.twig' as m %}
 
 {%- macro critter_icon(color, shift_id, user_id, user_name) -%}
-    <a class="text-{{- color -}}
-    {%- if user_id %} class-critter-id-{{ user_id }}{%- endif -%}" href="{%- if user_id -%}
+    <a data-bs-toggle="tooltip" class="text-{{- color -}}"
+    data-critter-id="{%- if user_id %}{{ user_id }}{%- endif -%}"
+    href="{%- if user_id -%}
         {{- url('/users', {'action': 'view', 'user_id': user_id}) -}}
     {%- else -%}
         {{- url('/shifts', {'action': 'view', 'shift_id': shift_id}) -}}
-    {%- endif -%}" title="{{ user_name | default('+') | e }}"><span class="bi bi-square-fill"></span></a>
+    {%- endif -%}" title="{{ user_name | default('View shift') | e }}"><span class="bi bi-square-fill"></span></a>
 {%- endmacro -%}
 
 {% macro critter_warn_level_class(wanted=0, have=0) %}
