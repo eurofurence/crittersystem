@@ -446,8 +446,8 @@ input[type='text']:invalid {
   text-decoration: underline !important;
 }
 
-.dashboard-table a span.bi:hover,
-.dashboard-table a span.secondary-highlight,{
+.dashboard-table a[data-critter-id]:not([data-critter-id=""]) span.bi:hover,
+.dashboard-table a.secondary-highlight span,{
   outline: 1px solid map.get($theme-colors, 'warning');
   box-shadow: 0 0 0.5em map.get($theme-colors, 'warning');
 }
