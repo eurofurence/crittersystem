@@ -1051,3 +1051,9 @@ msgstr "Configuration updated successfully"
 
 msgid "Add more critters"
 msgstr "Add more critter"
+
+msgid "validation.title.required"
+msgstr "Title is required"
+
+msgid "validation.text.required"
+msgstr "Text is required"
