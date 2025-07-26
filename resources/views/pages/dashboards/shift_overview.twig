@@ -56,10 +56,10 @@
                     </tr>
                 </thead>
                 {% block dashboard_shift_overview_body %}
-                    {% set previous_start = -1 %}
+                    {% set previous_range = "0_0" %}
                     {% for shift in shifts %}
-                        {%- set new_start_time = (previous_start is not same as(shift.shift.shifts_start)) -%}
-                        {%- if new_start_time -%}
+                        {%- set new_range = (previous_range is not same as(shift.shift.shifts_start ~ '_' ~ shift.shift.shifts_end)) -%}
+                        {%- if new_range -%}
                             {%- if not loop.first -%}
                                 </tbody>
                             {%- endif -%}
@@ -86,7 +86,7 @@
                                     {%- endif -%}
                                 {%- endfor -%}
                             </tr>
-                        {%- set previous_start = shift.shift.shifts_start -%}
+                        {%- set previous_range = shift.shift.shifts_start ~ '_' ~ shift.shift.shifts_end -%}
                         {%- if loop.last -%}
                             </tbody>
                         {%- endif -%}

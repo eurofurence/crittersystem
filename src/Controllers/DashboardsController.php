@@ -66,7 +66,8 @@ class DashboardsController extends BaseController
                 'users.name AS users_name'
             )
             ->orderBy('shifts_start', 'asc')
-            ->orderBy('shifts_id', 'asc')
+            ->orderBy('shifts_end', 'asc')
+            ->orderBy('shifts_title', 'asc')
             ->orderBy('angel_types.id', 'asc')
             ->get();
 
