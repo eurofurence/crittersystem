@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Engelsystem\Controllers;
 
+use DateInterval;
+use DateTime;
 use Engelsystem\Config\Config;
 use Engelsystem\Helpers\Authenticator;
 use Engelsystem\Http\Response;
+use Engelsystem\Http\Request;
 use Engelsystem\Models\AngelType;
 use Engelsystem\Models\Shifts\Shift;
 use Engelsystem\Models\Shifts\ShiftType;
@@ -21,6 +24,7 @@ class DashboardsController extends BaseController
 
     public function __construct(
         private readonly Authenticator $auth,
+        private readonly Request $request,
         protected Response $response,
         protected Config $config,
         protected AngelType $angelType,
@@ -33,6 +37,9 @@ class DashboardsController extends BaseController
     // Renders the shift overview, a condensed time table of all shifts & roles
     public function showShiftOverviewDashboard(): Response
     {
+        $date_requested = DateTime::createFromFormat('Y-m-d', $this->request->input('start', date('Y-m-d')));
+        $date_end = (clone $date_requested)->add(new DateInterval('P10D')); // + 10 days from start
+
         // Get all data we want to display, one row per shift and critter (type)
         $query = $this->shift
             ->join('shift_types', 'shifts.shift_type_id', '=', 'shift_types.id')
@@ -65,6 +72,8 @@ class DashboardsController extends BaseController
                 'users.id AS users_id',
                 'users.name AS users_name'
             )
+            ->whereDate('shifts.start', '>=', $date_requested)
+            ->whereDate('shifts.end', '<', $date_end)
             ->orderBy('shifts_start', 'asc')
             ->orderBy('shifts_end', 'asc')
             ->orderBy('shifts_title', 'asc')
@@ -111,6 +120,7 @@ class DashboardsController extends BaseController
             [
                 'critter_types' => $critter_types,
                 'shifts' => $shifts,
+                'date_requested' => $date_requested->format('Y-m-d'),
             ]
         );
     }

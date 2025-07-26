@@ -1,5 +1,6 @@
 import { ready } from './ready';
 
+// Highlight all shift rows that are currently happening
 function highlight_current_shifts(dtables_trs) {
   var date_now = Math.round(Date.now() / 1000);
   //var date_now = Math.round(1756677601345 / 1000);
@@ -41,7 +42,7 @@ ready(() => {
     });
   });
 
-  // Highlight all shifts happening now every minute
+  // Highlight all shift rows that are currently happening every minute
   highlight_current_shifts(dtables_trs);
   setInterval(highlight_current_shifts, 60000, dtables_trs);
 });
