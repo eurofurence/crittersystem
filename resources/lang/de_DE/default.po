@@ -2103,3 +2103,6 @@ msgstr "Title is required"
 
 msgid "validation.text.required"
 msgstr "Text is required"
+
+msgid "question.edit.locked"
+msgstr "Diese Frage wird schon von einem anderen Benutzer bearbeitet."
