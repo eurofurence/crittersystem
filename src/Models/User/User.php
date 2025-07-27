@@ -209,6 +209,13 @@ class User extends BaseModel
         return $this->hasMany(OAuth::class);
     }
 
+    public function oauthActive(): HasMany
+    {
+        return $this->hasMany(OAuth::class)
+            ->where('expires_at', '>', Carbon::now())
+            ->orderBy('expires_at', 'desc');
+    }
+
     public function shiftEntries(): HasMany
     {
         return $this->hasMany(ShiftEntry::class);

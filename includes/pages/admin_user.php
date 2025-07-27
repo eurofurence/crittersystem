@@ -163,6 +163,26 @@ function admin_user()
         $html .= '</form>';
 
         $html .= '<hr>';
+        if (config('display_badge_number')) {
+            $html .= '<form action="'
+                . url('/admin-user', ['action' => 'change_bn', 'id' => $user_id])
+                . '" method="post">';
+            $html .= form_csrf();
+            $html .= '<table>' ;
+            $html .= __('form.badge_number.admin');
+            $html .= '  <tr><td>' . __('settings.profile.badge_number')
+                . ' <span class="bi bi-info-circle-fill text-info" data-bs-toggle="tooltip" title="'
+                . __('badge_number.reset_info') . '"></span>'
+                . '</td><td>'
+                . '<input size="40" type="number" name="badge_number" value="' . htmlspecialchars((string) $user_source->personalData->badge_number) . '" class="form-control" maxlength="64">'
+                . '</td></tr>';
+            $html .= '</table>';
+            $html .= '<button type="submit" class="btn btn-primary">'
+                . icon('save') . __('form.save') . '</button>' . "\n";
+            $html .= '</form>';
+            $html .= '<hr>';
+        }
+
 
         $html .= __('Here you can reset the password of this critter:');
 
@@ -376,6 +396,21 @@ function admin_user()
                         __('The entries must match and must not be empty!'),
                         true
                     );
+                }
+                break;
+            case 'change_bn':
+                if ($request->postData('badge_number') != '') {
+                    $user_source = User::find($user_id);
+                    $user_source->personalData->badge_number = intval($request->postData('badge_number'));
+                    $user_source->personalData->save();
+                    engelsystem_log('Updating badge_number for ' . User_Nick_render($user_source, true) . ' -> ' . $user_source->personalData->badge_number);
+                    $html .= success(__('form.badge_number.success'), true);
+                } else {
+                    $user_source = User::find($user_id);
+                    $user_source->personalData->badge_number = null;
+                    $user_source->personalData->save();
+                    engelsystem_log('Resetting badge_number for ' . User_Nick_render($user_source, true));
+                    $html .= success(__('form.badge_number.success'), true);
                 }
                 break;
         }

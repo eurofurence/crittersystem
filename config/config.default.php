@@ -145,6 +145,8 @@ return [
                 '/Lorem' => 4, // 4 being the ID of the team (angeltype)
                 '/Foo Mod' => ['id' => 5, 'supporter' => true], // 5 being the ID of the team (angeltype)
             ],
+            // Registration API to fetch reg num for user
+            'badge_number_api' => '[provided by registration service]',
         ],
         */
     ],
@@ -344,6 +346,9 @@ return [
     // Show a users first name and last name instead of username
     'display_full_name'  => env('DISPLAY_FULL_NAME', false)
         && env('ENABLE_FULL_NAME', false),
+
+     // show users registration number retrieved from the registration service
+    'display_badge_number'   => env('DISPLAY_BADGE_NUMBER', false),
 
     // Enable displaying the pronoun fields
     'enable_pronoun'          => (bool) env('ENABLE_PRONOUN', true),
