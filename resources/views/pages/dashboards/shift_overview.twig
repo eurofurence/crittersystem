@@ -29,9 +29,17 @@
 <h1>{{ __('dashboard.shift_overview.title') }}</h1>
 <form class="row gy-5" action="" method="get">
     <div class="col-2">
-        {{- f.input('start', 'Start date', {
+        {{- f.input('start', __('shifts.start'), {
             'type': 'date',
-            'value': date_requested ?? "now" | date("Y-m-d")
+            'value': (date_requested ?? "now") | date("Y-m-d")
+        }) -}}
+    </div>
+    <div class="col-2">
+        {{- f.switch('reload', __('dashboard.auto_update'), {
+            'checked': (reload ?? 0)
+        }) -}}
+        {{- f.switch('remove_old', __('dashboard.remove_past'), {
+            'checked': (remove_old ?? 0)
         }) -}}
     </div>
     <div class="col-1">

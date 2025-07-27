@@ -121,6 +121,8 @@ class DashboardsController extends BaseController
                 'critter_types' => $critter_types,
                 'shifts' => $shifts,
                 'date_requested' => $date_requested->format('Y-m-d'),
+                'reload' => $this->request->input('reload'),
+                'remove_old' => $this->request->input('remove_old'),
             ]
         );
     }

@@ -2106,3 +2106,9 @@ msgstr "Text is required"
 
 msgid "dashboard.shift_overview.title"
 msgstr "Schichtübersicht"
+
+msgid "dashboard.auto_update"
+msgstr "Auto-Update"
+
+msgid "dashboard.remove_past"
+msgstr "Vergangene entfernen"
