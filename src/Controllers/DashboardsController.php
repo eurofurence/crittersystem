@@ -122,7 +122,7 @@ class DashboardsController extends BaseController
                 'shifts' => $shifts,
                 'date_requested' => $date_requested->format('Y-m-d'),
                 'reload' => $this->request->input('reload'),
-                'remove_old' => $this->request->input('remove_old'),
+                'hide_past' => $this->request->input('hide_past'),
             ]
         );
     }

@@ -1064,5 +1064,5 @@ msgstr "Shift overview"
 msgid "dashboard.auto_update"
 msgstr "Auto update"
 
-msgid "dashboard.remove_past"
-msgstr "Remove past"
+msgid "dashboard.hide_past"
+msgstr "Hide past"

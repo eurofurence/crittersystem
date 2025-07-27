@@ -2110,5 +2110,5 @@ msgstr "Schichtübersicht"
 msgid "dashboard.auto_update"
 msgstr "Auto-Update"
 
-msgid "dashboard.remove_past"
-msgstr "Vergangene entfernen"
+msgid "dashboard.hide_past"
+msgstr "Vergangene verbergen"

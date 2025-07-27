@@ -1,11 +1,21 @@
 import { ready } from './ready';
 
-// Highlight all shift rows that are currently happening
-function highlight_current_shifts(dtables_trs) {
+function update_shifts_display(dtables_trs, on_timer) {
   var date_now = Math.round(Date.now() / 1000);
-  //var date_now = Math.round(1756677601345 / 1000);
+  var date_now = 1756742500;
+  var hide_old = document.getElementById('hide_past').checked;
+
+  if (!on_timer && false) {
+    console.log("There should be auto-reload code here");
+  }
+
+  // Highlight all shift rows that are currently happening
+  // Remove past rows if option is set
   dtables_trs.forEach(function(element) {
-    if (element.dataset.startTime < date_now && element.dataset.endTime >= date_now ) {
+    if (hide_old && element.dataset.endTime < date_now) {
+      element.parentElement.hidden = true;
+    }
+    if (element.dataset.startTime < date_now && element.dataset.endTime >= date_now) {
       element.classList.add("highlight");
     } else {
       element.classList.remove("highlight");
@@ -42,7 +52,6 @@ ready(() => {
     });
   });
 
-  // Highlight all shift rows that are currently happening every minute
-  highlight_current_shifts(dtables_trs);
-  setInterval(highlight_current_shifts, 60000, dtables_trs);
+  update_shifts_display(dtables_trs, false);
+  setInterval(update_shifts_display, 60000, dtables_trs, true);
 });

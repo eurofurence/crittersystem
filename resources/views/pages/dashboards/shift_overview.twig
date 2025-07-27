@@ -38,8 +38,8 @@
         {{- f.switch('reload', __('dashboard.auto_update'), {
             'checked': (reload ?? 0)
         }) -}}
-        {{- f.switch('remove_old', __('dashboard.remove_past'), {
-            'checked': (remove_old ?? 0)
+        {{- f.switch('hide_past', __('dashboard.hide_past'), {
+            'checked': (hide_past ?? 0)
         }) -}}
     </div>
     <div class="col-1">
