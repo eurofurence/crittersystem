@@ -34,9 +34,11 @@
             'value': date_requested ?? "now" | date("Y-m-d")
         }) -}}
     </div>
-    <div class="col-2">
-        {{- f.submit('Go', {
-        }) -}}
+    <div class="col-1">
+        <div class="mb-3">
+            <label for="start" class="form-label">&nbsp;</label>
+            <button class="btn btn-primary form-control" type="submit">Go</button>
+        </div>
     </div>
 </form>
 <div class="row">
