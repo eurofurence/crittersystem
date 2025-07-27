@@ -452,6 +452,10 @@ input[type='text']:invalid {
   box-shadow: 0 0 0.5em map.get($theme-colors, 'warning');
 }
 
+.dashboard-table .date_divider {
+  background: var(--bs-table-bg);
+}
+
 .dashboard-table tbody tr.highlight {
   background: content-box linear-gradient(90deg, rgba(180, 20, 20, .4), transparent);
 }

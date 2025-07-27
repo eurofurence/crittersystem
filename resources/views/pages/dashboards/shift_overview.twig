@@ -60,13 +60,18 @@
                 </thead>
                 {% block dashboard_shift_overview_body %}
                     {% set previous_range = "0_0" %}
+                    {% set previous_date = "0" %}
                     {% for shift in shifts %}
-                        {%- set new_range = (previous_range is not same as(shift.shift.shifts_start ~ '_' ~ shift.shift.shifts_end)) -%}
+                        {%- set new_range = (previous_range is not same as (shift.shift.shifts_start ~ '_' ~ shift.shift.shifts_end)) -%}
+                        {%- set new_date = (previous_date is not same as (shift.shift.shifts_start | date('Y-m-d'))) -%}
                         {%- if new_range -%}
                             {%- if not loop.first -%}
                                 </tbody>
                             {%- endif -%}
                             <tbody>
+                            {%- if new_date -%}
+                                <tr class="date_divider"><th colspan="999">{{- shift.shift.shifts_start | date('Y-m-d') -}}</th></tr>
+                            {%- endif -%}
                         {%- endif -%}
                             <tr data-start-time="{{ shift.shift.shifts_start | date('U') }}" data-end-time="{{ shift.shift.shifts_end | date('U') }}">
                                 <th>{{ shift.shift.shifts_start | date('H:i') }} - {{ shift.shift.shifts_end | date('H:i') }}</th>
@@ -90,6 +95,7 @@
                                 {%- endfor -%}
                             </tr>
                         {%- set previous_range = shift.shift.shifts_start ~ '_' ~ shift.shift.shifts_end -%}
+                        {%- set previous_date = (shift.shift.shifts_start | date('Y-m-d')) -%}
                         {%- if loop.last -%}
                             </tbody>
                         {%- endif -%}
