@@ -629,14 +629,14 @@ function User_view(
     }
 
     $needs_drivers_license = false;
-    foreach ($user_angeltypes as $angeltype) {
-        $needs_drivers_license = $needs_drivers_license || $angeltype->requires_driver_license;
-    }
+    // foreach ($user_angeltypes as $angeltype) {
+    //     $needs_drivers_license = $needs_drivers_license || $angeltype->requires_driver_license;
+    // }
 
     $needs_ifsg_certificate = false;
-    foreach ($user_angeltypes as $angeltype) {
-        $needs_ifsg_certificate = $needs_ifsg_certificate || $angeltype->requires_ifsg_certificate;
-    }
+    // foreach ($user_angeltypes as $angeltype) {
+    //     $needs_ifsg_certificate = $needs_ifsg_certificate || $angeltype->requires_ifsg_certificate;
+    // }
 
     $self_worklog = config('enable_self_worklog') || !$its_me;
 

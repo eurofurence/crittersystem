@@ -125,7 +125,11 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.tabbed:
       alternate_style: true
-
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
 
 extra_css:
   - stylesheets/extra.css
@@ -195,3 +199,7 @@ nav:
       - Information: modules/information/index.md
       - Language: modules/language/index.md
       - Account: modules/account/index.md
+
+  - Workflow:
+    - workflows/workflow_login.md
+
