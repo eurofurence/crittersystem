@@ -37,18 +37,18 @@
     <div class="col-1">
         <div class="mb-3">
             <label for="start" class="form-label">&nbsp;</label>
-            <button class="btn btn-primary form-control" type="submit">Go</button>
+            <button class="btn btn-primary form-control" type="submit">{{- __('form.submit') -}}</button>
         </div>
     </div>
 </form>
 <div class="row">
     {% block dashboard_shift_overview %}
-        <div class="col table-responsive">
+        <div class="col" style="padding: 0;">
             <table class="table table-hover dashboard-table">
                 <colgroup>
                     <col span="3" class="dash-compound-key" />
                 </colgroup>
-                <thead class="table-light">
+                <thead class="table-light sticky-top" style="z-index: 1031;">
                     <tr>
                         <th>Time</th>
                         <th>Location</th>

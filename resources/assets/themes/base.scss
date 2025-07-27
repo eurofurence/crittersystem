@@ -453,7 +453,7 @@ input[type='text']:invalid {
 }
 
 .dashboard-table .date_divider {
-  background: var(--bs-table-bg);
+  background: rgba(255, 255, 255, .2);
 }
 
 .dashboard-table tbody tr.highlight {
@@ -464,7 +464,7 @@ input[type='text']:invalid {
   color: inherit !important;
 }
 
-@include media-breakpoint-down(md) {
+@include media-breakpoint-down(lg) {
   .dashboard-table thead th {
     writing-mode: vertical-lr;
   }
