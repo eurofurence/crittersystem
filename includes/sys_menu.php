@@ -129,7 +129,7 @@ function make_navigation()
 /**
  * If permission is not set, it will be visible
  * Removed the feature the use the page name as permission setting
- * 
+ *
  * @param string|string[] $permissions
  *
  * @return bool

@@ -112,7 +112,6 @@ class AuthController extends BaseController
     /**
      * Logs the user out by invalidating the current session and redirects to the home page.
      *
-     * @return Response
      */
     public function logout(): Response
     {
@@ -162,12 +161,13 @@ class AuthController extends BaseController
      *
      * @param mixed $user The user object whose access privileges are being checked.
      *
-     * @return bool Returns true if the user has staff access, such as internal staff or admin privileges; otherwise, false.
+     * @return bool Returns true if the user has staff access, such as internal staff or admin privileges;
+     * otherwise, false.
      */
     protected function hasStaffAccess(User $user): bool
     {
         return $user->privileges()
-            ->where(function ($query) {
+            ->where(function ($query): void {
                 $query->where('name', 'user.type.internal_staff')
                     ->orWhere('name', 'admin');
             })
@@ -187,6 +187,4 @@ class AuthController extends BaseController
             ->where('name', 'admin')
             ->exists();
     }
-
-
 }

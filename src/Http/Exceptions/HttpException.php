@@ -9,13 +9,6 @@ use Throwable;
 
 class HttpException extends RuntimeException
 {
-    /**
-     * @param int $statusCode
-     * @param string $message
-     * @param array $headers
-     * @param int $code
-     * @param Throwable|null $previous
-     */
     public function __construct(
         protected int $statusCode,
         string $message = '',

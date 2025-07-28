@@ -9,8 +9,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Schema\Builder as SchemaBuilder;
 
-class RemoveLegacyLicense extends Migration {
-
+class RemoveLegacyLicense extends Migration
+{
     protected Connection $db;
 
     public function __construct(SchemaBuilder $schema)
@@ -54,4 +54,4 @@ class RemoveLegacyLicense extends Migration {
             $table->boolean('requires_ifsg_certificate')->default(false);
         });
     }
-};
+}

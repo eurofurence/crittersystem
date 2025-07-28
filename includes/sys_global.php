@@ -1,7 +1,5 @@
 <?php
 
-
-
 /**
  * Removes Zalgo text characters and other combining diacritical marks from a string.
  *
@@ -10,7 +8,8 @@
  *
  * @see https://dev.to/limonsafayet/check-if-a-string-contains-zalgo-text-10lg Reference implementation
  */
-function cleanZalgoText(string $text): string {
+function cleanZalgoText(string $text): string
+{
     // Refence code from: https://dev.to/limonsafayet/check-if-a-string-contains-zalgo-text-10lg
     // Normalize to NFC form if needed (requires intl extension)
     if (class_exists('Normalizer')) {
@@ -34,7 +33,8 @@ function cleanZalgoText(string $text): string {
  * @param bool $agressive Optional. Determines if aggressive cleaning should be applied. Default is false.
  * @return string The cleaned text.
  */
-function globalCleanText(string $text, bool $agressive = false): string {
+function globalCleanText(string $text, bool $agressive = false): string
+{
     $text = cleanZalgoText($text);
     $text = strip_tags($text);
     $text = html_entity_decode($text, ENT_QUOTES, 'UTF-8');

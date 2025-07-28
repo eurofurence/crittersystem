@@ -1,7 +1,6 @@
 <?php
 
 use Engelsystem\Models\AngelType;
-use Engelsystem\Models\User\License;
 use Engelsystem\Models\User\User;
 use Engelsystem\Models\UserAngelType;
 use Engelsystem\ShiftCalendarRenderer;
@@ -40,23 +39,15 @@ function AngelType_render_membership(AngelType $user_angeltype)
 {
     //TODO: ADD the correct keys for the text and update language file
     if (!empty($user_angeltype->user_angel_type_id)) {
-
         if ($user_angeltype->restricted) {
-
             if (empty($user_angeltype->confirm_user_id)) {
-
                 return icon('mortarboard-fill') . __('Unconfirmed');
-
             } elseif ($user_angeltype->supporter) {
-
                 return icon_bool(true) . __('Supporter');
-
             }
 
             return icon_bool(true) . __('Member');
-
         } elseif ($user_angeltype->supporter) {
-
             return icon_bool(true) . __('Supporter');
         }
 
@@ -599,13 +590,13 @@ function AngelType_view_info(
     $admin_angeltypes,
     $supporter
 ) {
-    $required_info_show = !auth()->user()
-            ->userAngelTypes()
-            ->where('angel_types.id', $angeltype->id)
-            ->count()
-        && !$admin_angeltypes
-        && !$admin_user_angeltypes
-        && !$supporter;
+    // $required_info_show = !auth()->user()
+    //         ->userAngelTypes()
+    //         ->where('angel_types.id', $angeltype->id)
+    //         ->count()
+    //     && !$admin_angeltypes
+    //     && !$admin_user_angeltypes
+    //     && !$supporter;
     $info = [];
     if ($angeltype->hasContactInfo()) {
         $info[] = AngelTypes_render_contact_info($angeltype);

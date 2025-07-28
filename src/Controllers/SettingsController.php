@@ -11,7 +11,6 @@ use Engelsystem\Http\Response;
 use Engelsystem\Http\Redirector;
 use Engelsystem\Http\Request;
 use Engelsystem\Helpers\Authenticator;
-use Engelsystem\Models\AngelType;
 use Engelsystem\Models\User\User;
 use Psr\Log\LoggerInterface;
 
@@ -66,7 +65,7 @@ class SettingsController extends BaseController
         $data = $this->validate($request, $this->getSaveProfileRules($user));
         $goodie = GoodieType::from(config('goodie_type'));
         $goodie_enabled = $goodie !== GoodieType::None;
-        $goodie_tshirt = $goodie === GoodieType::Tshirt;
+        // $goodie_tshirt = $goodie === GoodieType::Tshirt;
 
         if (config('enable_pronoun')) {
             $user->personalData->pronoun = $data['pronoun'];
@@ -401,7 +400,7 @@ class SettingsController extends BaseController
 
         $menu[url('/settings/profile')] = 'settings.profile';
 
-        if (empty(config('oauth'))){
+        if (empty(config('oauth'))) {
             $menu[url('/settings/password')] = ['title' => 'settings.password', 'icon' => 'key-fill'];
         }
 

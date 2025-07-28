@@ -29,33 +29,33 @@ class UserSettingsController extends BaseController
         protected Response $response
     ) {
     }
-
-    public function certificate(Request $request): Response
-    {
-        if (!config('ifsg_enabled') && !config('driving_license_enabled')) {
-            throw new HttpNotFound();
-        }
-
-        if (
-            !(
-                $this->auth->canAny(['user.ifsg.edit', 'user.drive.edit'])
-                || $this->isDriverLicenseSupporter()
-                || $this->isIfsgSupporter()
-            )
-        ) {
-            throw new HttpForbidden();
-        }
-
-        $user = $this->getUser($request);
-
-        return $this->view(
-            $user,
-            'pages/settings/certificates-admin',
-            [
-                'certificates' => $user->license,
-            ]
-        );
-    }
+//TODO: REMOVE
+//    public function certificate(Request $request): Response
+//    {
+//        if (!config('ifsg_enabled') && !config('driving_license_enabled')) {
+//            throw new HttpNotFound();
+//        }
+//
+//        if (
+//            !(
+//                $this->auth->canAny(['user.ifsg.edit', 'user.drive.edit'])
+////                || $this->isDriverLicenseSupporter()
+////                || $this->isIfsgSupporter()
+//            )
+//        ) {
+//            throw new HttpForbidden();
+//        }
+//
+//        $user = $this->getUser($request);
+//
+//        return $this->view(
+//            $user,
+//            'pages/settings/certificates-admin',
+//            [
+//                'certificates' => $user->license,
+//            ]
+//        );
+//    }
 
     public function saveIfsgCertificate(Request $request): Response
     {
@@ -63,7 +63,7 @@ class UserSettingsController extends BaseController
             throw new HttpNotFound();
         }
 
-        $this->checkPermission('user.ifsg.edit', $this->isIfsgSupporter());
+//        $this->checkPermission('user.ifsg.edit', $this->isIfsgSupporter());
         $user = $this->getUser($request);
 
         $data = $this->validate($request, [
@@ -96,53 +96,53 @@ class UserSettingsController extends BaseController
         return $this->redirect->to('/users/' . $user->id . '/certificates');
     }
 
-    public function saveDrivingLicense(Request $request): Response
-    {
-        if (!config('driving_license_enabled')) {
-            throw new HttpNotFound();
-        }
-
-        $this->checkPermission('user.drive.edit', $this->isDriverLicenseSupporter());
-        $user = $this->getUser($request);
-
-        $data = $this->validate($request, [
-            'drive_car' => 'optional|checked',
-            'drive_3_5t' => 'optional|checked',
-            'drive_7_5t' => 'optional|checked',
-            'drive_12t' => 'optional|checked',
-            'drive_forklift' => 'optional|checked',
-            'drive_confirmed' => 'optional|checked',
-        ]);
-
-        $user->license->drive_car = (bool) $data['drive_car'];
-        $user->license->drive_3_5t = (bool) $data['drive_3_5t'];
-        $user->license->drive_7_5t = (bool) $data['drive_7_5t'];
-        $user->license->drive_12t = (bool) $data['drive_12t'];
-        $user->license->drive_forklift = (bool) $data['drive_forklift'];
-        $user->license->drive_confirmed = $data['drive_confirmed'] && (
-            $user->license->drive_car
-            || $user->license->drive_3_5t
-            || $user->license->drive_7_5t
-            || $user->license->drive_12t
-            || $user->license->drive_forklift
-        );
-
-        $user->license->save();
-        $this->addNotification('settings.certificates.success');
-
-        $this->log->info('Certificate "{certificate}" of user {user} ({id}) is {confirmation}.', [
-            'certificate' => ($user->license->drive_car ? 'car' : '')
-                . ($user->license->drive_3_5t ? ', 3.5t' : '')
-                . ($user->license->drive_7_5t ? ', 7.5t' : '')
-                . ($user->license->drive_12t ? ', 12t' : '')
-                . ($user->license->drive_forklift ? ', forklift' : ''),
-            'user' => $user->name,
-            'id' => $user->id,
-            'confirmation' => $user->license->drive_confirmed ? 'confirmed' : 'unconfirmed',
-        ]);
-
-        return $this->redirect->to('/users/' . $user->id . '/certificates');
-    }
+//    public function saveDrivingLicense(Request $request): Response
+//    {
+//        if (!config('driving_license_enabled')) {
+//            throw new HttpNotFound();
+//        }
+//
+//        $this->checkPermission('user.drive.edit', $this->isDriverLicenseSupporter());
+//        $user = $this->getUser($request);
+//
+//        $data = $this->validate($request, [
+//            'drive_car' => 'optional|checked',
+//            'drive_3_5t' => 'optional|checked',
+//            'drive_7_5t' => 'optional|checked',
+//            'drive_12t' => 'optional|checked',
+//            'drive_forklift' => 'optional|checked',
+//            'drive_confirmed' => 'optional|checked',
+//        ]);
+//
+//        $user->license->drive_car = (bool) $data['drive_car'];
+//        $user->license->drive_3_5t = (bool) $data['drive_3_5t'];
+//        $user->license->drive_7_5t = (bool) $data['drive_7_5t'];
+//        $user->license->drive_12t = (bool) $data['drive_12t'];
+//        $user->license->drive_forklift = (bool) $data['drive_forklift'];
+//        $user->license->drive_confirmed = $data['drive_confirmed'] && (
+//            $user->license->drive_car
+//            || $user->license->drive_3_5t
+//            || $user->license->drive_7_5t
+//            || $user->license->drive_12t
+//            || $user->license->drive_forklift
+//        );
+//
+//        $user->license->save();
+//        $this->addNotification('settings.certificates.success');
+//
+//        $this->log->info('Certificate "{certificate}" of user {user} ({id}) is {confirmation}.', [
+//            'certificate' => ($user->license->drive_car ? 'car' : '')
+//                . ($user->license->drive_3_5t ? ', 3.5t' : '')
+//                . ($user->license->drive_7_5t ? ', 7.5t' : '')
+//                . ($user->license->drive_12t ? ', 12t' : '')
+//                . ($user->license->drive_forklift ? ', forklift' : ''),
+//            'user' => $user->name,
+//            'id' => $user->id,
+//            'confirmation' => $user->license->drive_confirmed ? 'confirmed' : 'unconfirmed',
+//        ]);
+//
+//        return $this->redirect->to('/users/' . $user->id . '/certificates');
+//    }
 
     public function settingsMenu(User $user): array
     {
@@ -151,18 +151,18 @@ class UserSettingsController extends BaseController
                 'title' => 'general.back', 'icon' => 'chevron-left',
             ],
         ];
-
-        if (config('ifsg_enabled') || config('driving_license_enabled')) {
-            $menu[url('/users/' . $user->id . '/certificates')] = [
-                'title' => 'settings.certificates',
-                'icon' => 'card-checklist',
-                'permission' => (
-                    $this->auth->canAny(['user.ifsg.edit', 'user.drive.edit'])
-                    || $this->isIfsgSupporter()
-                    || $this->isDriverLicenseSupporter()
-                ) ? null : '_',
-            ];
-        }
+// TODO: REMOVE
+//        if (config('ifsg_enabled') || config('driving_license_enabled')) {
+//            $menu[url('/users/' . $user->id . '/certificates')] = [
+//                'title' => 'settings.certificates',
+//                'icon' => 'card-checklist',
+//                'permission' => (
+//                    $this->auth->canAny(['user.ifsg.edit', 'user.drive.edit'])
+//                    || $this->isIfsgSupporter()
+//                    || $this->isDriverLicenseSupporter()
+//                ) ? null : '_',
+//            ];
+//        }
 
         return $menu;
     }
@@ -192,21 +192,22 @@ class UserSettingsController extends BaseController
         return User::findOrFail($userId);
     }
 
-    public function isIfsgSupporter(): bool
-    {
-        return (bool) AngelType::whereRequiresIfsgCertificate(true)
-            ->leftJoin('user_angel_type', 'user_angel_type.angel_type_id', 'angel_types.id')
-            ->where('user_angel_type.user_id', $this->auth->user()?->id)
-            ->where('user_angel_type.supporter', true)
-            ->count();
-    }
+    //TODO: Remove
+//    public function isIfsgSupporter(): bool
+//    {
+//        return (bool) AngelType::whereRequiresIfsgCertificate(true)
+//            ->leftJoin('user_angel_type', 'user_angel_type.angel_type_id', 'angel_types.id')
+//            ->where('user_angel_type.user_id', $this->auth->user()?->id)
+//            ->where('user_angel_type.supporter', true)
+//            ->count();
+//    }
 
-    public function isDriverLicenseSupporter(): bool
-    {
-        return (bool) AngelType::whereRequiresDriverLicense(true)
-            ->leftJoin('user_angel_type', 'user_angel_type.angel_type_id', 'angel_types.id')
-            ->where('user_angel_type.user_id', $this->auth->user()?->id)
-            ->where('user_angel_type.supporter', true)
-            ->count();
-    }
+//    public function isDriverLicenseSupporter(): bool
+//    {
+//        return (bool) AngelType::whereRequiresDriverLicense(true)
+//            ->leftJoin('user_angel_type', 'user_angel_type.angel_type_id', 'angel_types.id')
+//            ->where('user_angel_type.user_id', $this->auth->user()?->id)
+//            ->where('user_angel_type.supporter', true)
+//            ->count();
+//    }
 }

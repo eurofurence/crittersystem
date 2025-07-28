@@ -65,6 +65,7 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property-read Collection|Message[]          $messages
  * @property-read Collection|Shift[]            $shiftsCreated
  * @property-read Collection|Shift[]            $shiftsUpdated
+ * @property-read Collection                    $responsibleForDepartments
  *
  * @method static QueryBuilder|User[] whereId($value)
  * @method static QueryBuilder|User[] whereName($value)
@@ -320,7 +321,7 @@ class User extends BaseModel
 //            || $this->responsibleForDepartments->contains($department);
 
         $admin_flag = (bool) $this->privileges()
-            ->where(function ($query) {
+            ->where(function ($query): void {
                 $query->where('name', 'admin');
             })->exists();
 

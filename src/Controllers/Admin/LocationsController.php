@@ -90,7 +90,7 @@ class LocationsController extends BaseController
             throw new ValidationException((new Validator())->addErrors(['name' => ['validation.name.exists']]));
         }
 
-        $location->name = globalCleanText(text: $data['name'],agressive: true);
+        $location->name = globalCleanText(text: $data['name'], agressive: true);
         $location->description = globalCleanText($data['description']);
         $location->dect = array_key_exists('dect', $data) && !empty($data['dect']) ? ltrim($data['dect'], '@') : null;
         $location->map_url = $data['map_url'];

@@ -6,6 +6,7 @@ namespace Engelsystem\Test\Unit\Controllers;
 
 use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
 use Engelsystem\Config\Config;
+use Engelsystem\Models\EventConfig;
 use Engelsystem\Controllers\AuthController;
 use Engelsystem\Controllers\NotificationType;
 use Engelsystem\Helpers\Authenticator;
@@ -40,14 +41,15 @@ class AuthControllerTest extends ControllerTest
         /** @var Redirector|MockObject $redirect */
         /** @var Config $config */
         /** @var Authenticator|MockObject $auth */
-        list(, $session, $redirect, $config, $auth) = $this->getMocks();
+        /** @var EventConfig $eventConfig */
+        list(, $session, $redirect, $config, $auth, $eventConfig) = $this->getMocks();
 
         $response->expects($this->once())
             ->method('withView')
             ->with('pages/login')
             ->willReturn($response);
 
-        $controller = new AuthController($response, $session, $redirect, $config, $auth);
+        $controller = new AuthController($response, $session, $redirect, $config, $auth, $eventConfig);
         $controller->login();
     }
 
@@ -131,7 +133,8 @@ class AuthControllerTest extends ControllerTest
         /** @var Redirector|MockObject $redirect */
         /** @var Config $config */
         /** @var Authenticator|MockObject $auth */
-        list(, , $redirect, $config, $auth) = $this->getMocks();
+        /** @var EventConfig $eventConfig */
+        list(, , $redirect, $config, $auth, $eventConfig) = $this->getMocks();
         $session = new Session(new MockArraySessionStorage());
         $session->set('foo', 'bar');
         $user = $this->createUser();
@@ -141,7 +144,7 @@ class AuthControllerTest extends ControllerTest
             ->withConsecutive(['news'], ['/test'])
             ->willReturn($response);
 
-        $controller = new AuthController($response, $session, $redirect, $config, $auth);
+        $controller = new AuthController($response, $session, $redirect, $config, $auth, $eventConfig);
         $controller->loginUser($user);
 
         $this->assertFalse($session->has('foo'));
@@ -163,7 +166,8 @@ class AuthControllerTest extends ControllerTest
         /** @var Redirector|MockObject $redirect */
         /** @var Config $config */
         /** @var Authenticator|MockObject $auth */
-        list($response, $session, $redirect, $config, $auth) = $this->getMocks();
+        /** @var EventConfig $eventConfig */
+        list($response, $session, $redirect, $config, $auth, $eventConfig) = $this->getMocks();
 
         $session->expects($this->once())
             ->method('invalidate');
@@ -173,7 +177,7 @@ class AuthControllerTest extends ControllerTest
             ->with('/')
             ->willReturn($response);
 
-        $controller = new AuthController($response, $session, $redirect, $config, $auth);
+        $controller = new AuthController($response, $session, $redirect, $config, $auth, $eventConfig);
         $return = $controller->logout();
 
         $this->assertEquals($response, $return);

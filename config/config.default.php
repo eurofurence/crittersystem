@@ -512,9 +512,9 @@ return [
 
     // Number of shifts to freeload until a user is locked from shift signup.
     'max_freeloadable_shifts' => env('MAX_FREELOADABLE_SHIFTS', 2),
-    // ################################################################# 
+    // #################################################################
 
-    // ################################################################# 
+    // #################################################################
     // Group: Advanced - Header / Session / Proxy
     // #################################################################
 
@@ -556,7 +556,7 @@ return [
     // #################################################################
     // Policy features
     // #################################################################
-    
+
     // TODO: Add External variables for easy config
     'policy'                => [
         // Adds the prefix to the visual text but do not affect the link

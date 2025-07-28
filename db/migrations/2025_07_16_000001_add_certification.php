@@ -9,8 +9,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Schema\Builder as SchemaBuilder;
 
-class AddCertification extends Migration {
-
+class AddCertification extends Migration
+{
     protected Connection $db;
 
     public function __construct(SchemaBuilder $schema)
@@ -70,4 +70,4 @@ class AddCertification extends Migration {
         $this->schema->dropIfExists('certifications_user');
         $this->schema->dropIfExists('certifications');
     }
-};
+}
