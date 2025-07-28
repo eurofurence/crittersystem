@@ -6,12 +6,12 @@ namespace Engelsystem\Test\Unit\Controllers\Admin;
 
 use Engelsystem\Controllers\Admin\UserSettingsController;
 use Engelsystem\Helpers\Authenticator;
-use Engelsystem\Http\Exceptions\HttpForbidden;
+//use Engelsystem\Http\Exceptions\HttpForbidden;
 use Engelsystem\Http\Exceptions\HttpNotFound;
 use Engelsystem\Http\Response;
 use Engelsystem\Http\UrlGenerator;
 use Engelsystem\Http\Validation\Validator;
-use Engelsystem\Models\AngelType;
+//use Engelsystem\Models\AngelType;
 use Engelsystem\Models\User\License;
 use Engelsystem\Models\User\User;
 use Engelsystem\Test\Unit\Controllers\ControllerTest;

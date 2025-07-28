@@ -13,7 +13,7 @@ use Engelsystem\Http\Response;
 use Engelsystem\Http\Redirector;
 use Engelsystem\Http\Request;
 use Engelsystem\Helpers\Authenticator;
-use Engelsystem\Models\AngelType;
+//use Engelsystem\Models\AngelType;
 use Engelsystem\Models\User\User;
 use Psr\Log\LoggerInterface;
 
