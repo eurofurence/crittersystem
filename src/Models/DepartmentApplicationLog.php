@@ -13,7 +13,7 @@ class DepartmentApplicationLog extends BaseModel
 {
     use HasUuids;
 
-    protected $fillable = [
+    protected $fillable = [ // phpcs:ignore
         'department_id',
         'user_id',
         'processed_by',
@@ -34,5 +34,4 @@ class DepartmentApplicationLog extends BaseModel
     {
         return $this->belongsTo(User::class, 'processed_by');
     }
-
 }

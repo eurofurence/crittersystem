@@ -323,7 +323,7 @@ $route->addGroup(
 // Departments
 $route->addGroup(
     '/departments',
-    function ($router) {
+    function ($router): void {
         // Department routes
         $router->get('', 'DepartmentController@index');
         $router->get('/create', 'DepartmentController@create');
@@ -337,4 +337,5 @@ $route->addGroup(
         $router->post('/{uuid}/apply', 'DepartmentApplicationController@apply');
         $router->post('/{uuid}/approve/{userId}', 'DepartmentApplicationController@approve');
         $router->post('/{uuid}/deny/{userId}', 'DepartmentApplicationController@deny');
-});
+    }
+);

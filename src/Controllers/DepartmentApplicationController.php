@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Engelsystem\Controllers;
 
 use Engelsystem\Models\BaseModel;
-use Engelsystem\Http\Exceptions\ValidationException;
 use Engelsystem\Http\Request;
 use Engelsystem\Http\Response;
 use Engelsystem\Models\Department;
@@ -14,7 +13,6 @@ use Psr\Log\LoggerInterface;
 
 class DepartmentApplicationController extends BaseModel
 {
-
     public function __construct(
         protected LoggerInterface $log,
         protected Response $response,

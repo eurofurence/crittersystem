@@ -62,7 +62,7 @@ function make_navigation()
         'user_shifts'    => [__('general.shifts'), 'user_shifts'],
         'angeltypes'     => [__('angeltypes.angeltypes'), 'angeltypes'],
         'questions'      => [__('Ask the Info Desk'), 'question.add'],
-        'departments'    => __('departments.title.plural'),
+        'departments'    => [__('departments.title.plural'), 'dept.view'],
     ];
 
     foreach ($pages as $menu_page => $options) {
@@ -129,7 +129,7 @@ function make_navigation()
 /**
  * If permission is not set, it will be visible
  * Removed the feature the use the page name as permission setting
- * 
+ *
  * @param string|string[] $permissions
  *
  * @return bool

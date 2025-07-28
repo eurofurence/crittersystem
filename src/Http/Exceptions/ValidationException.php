@@ -10,12 +10,6 @@ use Throwable;
 
 class ValidationException extends RuntimeException
 {
-    /**
-     * @param Validator $validator
-     * @param string $message
-     * @param int $code
-     * @param Throwable|null $previous
-     */
     public function __construct(
         protected Validator $validator,
         string $message = '',

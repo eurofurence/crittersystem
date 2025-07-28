@@ -1,7 +1,6 @@
 <?php
 
 use Engelsystem\Database\Db;
-use Engelsystem\Models\AngelType;
 use Engelsystem\Models\Shifts\ShiftEntry;
 use Engelsystem\Models\User\State;
 use Engelsystem\Models\User\User;

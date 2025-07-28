@@ -8,8 +8,8 @@ use Engelsystem\Database\Migration\Migration;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Schema\Builder as SchemaBuilder;
 
-class AddAccessModeToEventConfig extends Migration {
-
+class AddAccessModeToEventConfig extends Migration
+{
     protected Connection $db;
 
     public function __construct(SchemaBuilder $schema)
@@ -24,8 +24,8 @@ class AddAccessModeToEventConfig extends Migration {
         $this->db->table('event_config')->insert([
             'name' => 'access_mode',
             'value' => json_encode('public'),
-            'created_at' => date("Y-m-d H:i:s"),
-            'updated_at' => date("Y-m-d H:i:s"),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
         ]);
     }
 
@@ -35,4 +35,4 @@ class AddAccessModeToEventConfig extends Migration {
             ->where('name', 'access_mode')
             ->delete();
     }
-};
+}

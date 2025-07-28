@@ -5,19 +5,14 @@ declare(strict_types=1);
 namespace Engelsystem\Controllers;
 
 use Engelsystem\Controllers\BaseController;
-
-use Engelsystem\Http\Exceptions\ValidationException;
 use Engelsystem\Http\Request;
 use Engelsystem\Http\Response;
 use Engelsystem\Models\Department;
 use Engelsystem\Models\User\User;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Collection;
 use Psr\Log\LoggerInterface;
 
 class DepartmentController extends BaseController
 {
-
     public function __construct(
         protected LoggerInterface $log,
         protected Response $response,
@@ -76,7 +71,7 @@ class DepartmentController extends BaseController
     {
         if (!$this->canCreateDepartment(auth()->user())) {
 //            throw new HttpForbidden();
-            dd("not allowed - DepartmentController.php:74");
+            dd('not allowed - DepartmentController.php:74');
         }
 
         return $this->response->withView('pages/departments/create.twig');
@@ -86,7 +81,7 @@ class DepartmentController extends BaseController
     {
         if (!$this->canCreateDepartment(auth()->user())) {
 //            throw new HttpForbidden();
-            dd("not allowed - DepartmentController.php:84");
+            dd('not allowed - DepartmentController.php:84');
         }
 
         $data = $this->validate($this->request, [
@@ -119,7 +114,7 @@ class DepartmentController extends BaseController
 
         if (!auth()->user()->canManageDepartment($department)) {
 //            throw new HttpForbidden();
-            dd("not allowed - DepartmentController.php:110");
+            dd('not allowed - DepartmentController.php:110');
         }
 
         return $this->response->withView('pages/departments/edit.twig', [
@@ -134,7 +129,7 @@ class DepartmentController extends BaseController
 
         if (!auth()->user()->canManageDepartment($department)) {
 //            throw new HttpForbidden();
-            dd("not allowed - DepartmentController.php:124");
+            dd('not allowed - DepartmentController.php:124');
         }
 
         $data = $this->validate($this->request, [
@@ -160,7 +155,7 @@ class DepartmentController extends BaseController
 
         if (!auth()->user()->canManageDepartment($department)) {
 //            throw new HttpForbidden();
-            dd("not allowed - DepartmentController.php:149");
+            dd('not allowed - DepartmentController.php:149');
         }
 
         $name = $department->name;
@@ -179,5 +174,4 @@ class DepartmentController extends BaseController
         return $user->groups->contains('name', 'Shift Coordinator')
             || $user->privileges()->where('name', 'admin')->exists();
     }
-
 }

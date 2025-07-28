@@ -8,12 +8,6 @@ use Throwable;
 
 class HttpNotFound extends HttpException
 {
-    /**
-     * @param string $message
-     * @param array $headers
-     * @param int $code
-     * @param Throwable|null $previous
-     */
     public function __construct(
         string $message = '',
         array $headers = [],

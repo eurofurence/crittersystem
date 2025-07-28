@@ -9,8 +9,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Schema\Builder as SchemaBuilder;
 
-class AddDepartmentSupport extends Migration {
-
+class AddDepartmentSupport extends Migration
+{
     protected Connection $db;
 
     public function __construct(SchemaBuilder $schema)
@@ -125,6 +125,5 @@ class AddDepartmentSupport extends Migration {
         $this->schema->dropIfExists('department_users');
         $this->schema->dropIfExists('department_responsibles');
         $this->schema->dropIfExists('departments');
-
     }
-};
+}

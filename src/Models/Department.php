@@ -9,19 +9,18 @@ use Engelsystem\Models\BaseModel;
 use Engelsystem\Models\Shifts\Shift;
 use Engelsystem\Models\User\User;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @property string $id              ID of the department
- * @property string $uuid            UUID of the department
- * @property string $name            Name of the department
- * @property string $description     Description of the department
- * @property bool   $staff_only      Whether the department is staff-only
- * @property Carbon|null $created_at Creation timestamp
- * @property Carbon|null $updated_at Last update timestamp
+ * @property string $id               ID of the department
+ * @property string $uuid             UUID of the department
+ * @property string $name             Name of the department
+ * @property string $description      Description of the department
+ * @property bool   $staff_only       Whether the department is staff-only
+ * @property Carbon|null $created_at  Creation timestamp
+ * @property Carbon|null $updated_at  Last update timestamp
  *
  * @property-read Collection|User[] $users              Users belonging to the department
  * @property-read Collection|User[] $responsibles       Users responsible for the department
@@ -39,29 +38,28 @@ class Department extends BaseModel
     use HasUuids;
 
 //    protected $primaryKey = 'id';
-    protected $keyType = 'integer';
-    public $incrementing = true;
-    public $timestamps = true;
-    
+    protected $keyType = 'integer'; // phpcs:ignore
+    public $incrementing = true; // phpcs:ignore
+    public $timestamps = true; // phpcs:ignore
+
 //    public string $uuidColumn = 'uuid';
 
     /**
      * Get the columns that should receive a unique identifier.
      *
-     * @return array
      */
     public function uniqueIds(): array
     {
         return ['uuid'];
     }
 
-    protected $fillable = [
+    protected $fillable = [ // phpcs:ignore
         'name',
         'description',
         'staff_only',
     ];
 
-    protected $casts = [
+    protected $casts = [ // phpcs:ignore
         'staff_only' => 'boolean',
     ];
 
@@ -119,7 +117,7 @@ class Department extends BaseModel
     public function staffUsers(): BelongsToMany
     {
         return $this->approvedUsers()
-            ->whereHas('groups', function ($query) {
+            ->whereHas('groups', function ($query): void {
                 $query->where('name', 'Staff - Internal');
             });
     }
@@ -127,7 +125,7 @@ class Department extends BaseModel
     public function otherUsers(): BelongsToMany
     {
         return $this->approvedUsers()
-            ->whereDoesntHave('groups', function ($query) {
+            ->whereDoesntHave('groups', function ($query): void {
                 $query->where('name', 'Staff - Internal');
             });
     }
