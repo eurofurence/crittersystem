@@ -291,6 +291,8 @@ return [
                 '/Lorem' => 4, // 4 being the ID of the team (angeltype)
                 '/Foo Mod' => ['id' => 5, 'supporter' => true], // 5 being the ID of the team (angeltype)
             ],
+            // Registration API to fetch reg num for user
+            'badge_number_api' => '[provided by registration service]',
         ],
         */
     ],

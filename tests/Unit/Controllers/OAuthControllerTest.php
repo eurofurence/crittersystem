@@ -9,6 +9,7 @@ use Engelsystem\Controllers\AuthController;
 use Engelsystem\Controllers\OAuthController;
 use Engelsystem\Events\EventDispatcher;
 use Engelsystem\Helpers\Authenticator;
+use Engelsystem\Helpers\OAuthHelper;
 use Engelsystem\Http\Exceptions\HttpNotFound;
 use Engelsystem\Http\Redirector;
 use Engelsystem\Http\Request;
@@ -18,6 +19,7 @@ use Engelsystem\Models\OAuth;
 use Engelsystem\Models\User\User;
 use Engelsystem\Test\Unit\HasDatabase;
 use Engelsystem\Test\Unit\TestCase;
+use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\GenericProvider;
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
@@ -47,6 +49,8 @@ class OAuthControllerTest extends TestCase
 
     protected OAuth $oauth;
 
+    protected OAuthHelper|MockObject $oauthHelper;
+
     protected Redirector|MockObject $redirect;
 
     protected Session $session;
@@ -70,6 +74,8 @@ class OAuthControllerTest extends TestCase
             'scope'         => ['foo', 'bar'],
         ],
     ];
+
+    protected AbstractProvider $provider;
 
     /**
      * @covers \Engelsystem\Controllers\OAuthController::__construct
@@ -193,7 +199,8 @@ class OAuthControllerTest extends TestCase
                 return new Response();
             });
 
-        $this->setExpects($this->url, 'to', ['oauth/testprovider'], 'http://localhost/oauth/testprovider');
+        $this->setExpects($this->oauthHelper, 'isValidProvider', ['testprovider'], true);
+        $this->setExpects($this->oauthHelper, 'getProvider', ['testprovider'], $this->provider);
 
         $request = new Request();
         $request = $request
@@ -555,6 +562,7 @@ class OAuthControllerTest extends TestCase
     {
         $controller = $this->getMock(['index']);
         $this->setExpects($controller, 'index', null, new Response());
+        $this->setExpects($this->oauthHelper, 'isValidProvider', ['testprovider'], true, 1);
 
         $request = (new Request())
             ->withAttribute('provider', 'testprovider');
@@ -562,9 +570,21 @@ class OAuthControllerTest extends TestCase
         $controller->connect($request);
 
         $this->assertEquals('testprovider', $this->session->get('oauth2_connect_provider'));
+    }
+
+    /**
+     * @covers \Engelsystem\Controllers\OAuthController::connect
+     * @covers \Engelsystem\Controllers\OAuthController::requireProvider
+     * @covers \Engelsystem\Controllers\OAuthController::isValidProvider
+     */
+    public function testConnectNotExist(): void
+    {
+        $controller = $this->getMock(['index']);
 
         // Provider not found
-        $request = $request->withAttribute('provider', 'notExistingProvider');
+        $request = (new Request())
+            ->withAttribute('provider', 'notExistingProvider');
+        $this->setExpects($this->oauthHelper, 'isValidProvider', ['notExistingProvider'], false, 1);
         $this->expectException(HttpNotFound::class);
 
         $controller->connect($request);
@@ -603,6 +623,7 @@ class OAuthControllerTest extends TestCase
                 $this->config,
                 $this->log,
                 $this->oauth,
+                $this->oauthHelper,
                 $this->redirect,
                 $this->session,
                 $this->url,
@@ -627,6 +648,7 @@ class OAuthControllerTest extends TestCase
         $this->config = new Config(['oauth' => $this->oauthConfig]);
         $this->log = new TestLogger();
         $this->oauth = new OAuth();
+        $this->oauthHelper = $this->createMock(OAuthHelper::class);
         $this->redirect = $this->createMock(Redirector::class);
         $this->session = new Session(new MockArraySessionStorage());
         $this->url = $this->createMock(UrlGenerator::class);
@@ -646,5 +668,17 @@ class OAuthControllerTest extends TestCase
             ->user()
             ->associate($this->otherAuthenticatedUser)
             ->save();
+
+        $this->provider = new GenericProvider(
+            [
+                'clientId'                => $this->oauthConfig['testprovider']['client_id'],
+                'clientSecret'            => $this->oauthConfig['testprovider']['client_secret'],
+                'redirectUri'             => $this->url->to('oauth/testprovider'),
+                'urlAuthorize'            => $this->oauthConfig['testprovider']['url_auth'],
+                'urlAccessToken'          => $this->oauthConfig['testprovider']['url_token'],
+                'urlResourceOwnerDetails' => $this->oauthConfig['testprovider']['url_info'],
+                'responseResourceOwnerId' => $this->oauthConfig['testprovider']['id'],
+            ]
+        );
     }
 }

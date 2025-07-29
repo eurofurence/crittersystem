@@ -48,6 +48,7 @@ $route->addGroup(
         $route->get('/oauth', 'SettingsController@oauth');
         $route->get('/sessions', 'SettingsController@sessions');
         $route->post('/sessions', 'SettingsController@sessionsDelete');
+        $route->get('/badge-number', 'SettingsController@updateBadgeNumber');
     }
 );
 

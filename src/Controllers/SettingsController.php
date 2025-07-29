@@ -6,6 +6,7 @@ namespace Engelsystem\Controllers;
 
 use Engelsystem\Config\Config;
 use Engelsystem\Config\GoodieType;
+use Engelsystem\Helpers\OAuthHelper;
 use Engelsystem\Http\Exceptions\HttpNotFound;
 use Engelsystem\Http\Response;
 use Engelsystem\Http\Redirector;
@@ -30,6 +31,7 @@ class SettingsController extends BaseController
         protected Authenticator $auth,
         protected Config $config,
         protected LoggerInterface $log,
+        protected OAuthHelper $oauthHelper,
         protected Redirector $redirect,
         protected Response $response
     ) {
@@ -126,6 +128,32 @@ class SettingsController extends BaseController
         $this->addNotification('settings.success');
 
         return $this->redirect->to('/settings/profile');
+    }
+
+    public function updateBadgeNumber(): Response
+    {
+        if (false == $this->config->get('display_badge_number')) {
+            return $this->redirect->to(path: '/settings/profile');
+        }
+
+        $user = $this->auth->user();
+        if ($user->personalData->badge_number != null) {
+            return $this->redirect->to(path: '/settings/profile');
+        }
+
+        $oauth = $user->oauthActive()->first();
+        if (!$oauth || !$this->oauthHelper->isValidProvider($oauth->provider)) {
+            // No oauth provided, require re-login, then it should fetch Badge via OAuthController
+            return $this->redirect->to(path: '/logout');
+        }
+
+        if ($this->oauthHelper->updateBadgeNumber($user)) {
+            $this->addNotification('notification.badge_number.updated');
+        } else {
+            $this->addNotification('notification.badge_number.error', NotificationType::ERROR);
+        }
+
+        return $this->redirect->to(path: '/settings/profile');
     }
 
     public function password(): Response

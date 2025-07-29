@@ -9,10 +9,12 @@ use Engelsystem\Config\Config;
 use Engelsystem\Config\GoodieType;
 use Engelsystem\Controllers\NotificationType;
 use Engelsystem\Controllers\SettingsController;
+use Engelsystem\Helpers\OAuthHelper;
 use Engelsystem\Http\Exceptions\HttpNotFound;
 use Engelsystem\Http\Redirector;
 use Engelsystem\Http\Response;
 use Engelsystem\Models\AngelType;
+use Engelsystem\Models\OAuth;
 use Engelsystem\Models\Session as SessionModel;
 use Engelsystem\Models\User\License;
 use Engelsystem\Models\User\Settings;
@@ -33,6 +35,8 @@ class SettingsControllerTest extends ControllerTest
     protected Authenticator|MockObject $auth;
 
     protected User $user;
+
+    protected OAuthHelper|MockObject $oauthHelper;
 
     protected SettingsController $controller;
 
@@ -238,6 +242,133 @@ class SettingsControllerTest extends ControllerTest
         $this->config->set('goodie_type', GoodieType::None->value);
         $this->controller->saveProfile($this->request);
         $this->assertEquals('', $this->user->personalData->shirt_size);
+    }
+
+    /**
+     * @covers \Engelsystem\Controllers\SettingsController::updateBadgeNumber
+     */
+    public function testUpdateBadgeNumber(): void
+    {
+        (new OAuth([
+                'provider' => 'testprovider',
+                'identifier' => 'provider-user-identifier',
+                'expires_at' => Carbon::now()->addHour(),
+            ]))
+            ->user()
+            ->associate($this->user)
+            ->save();
+        $this->setExpects($this->auth, 'user', null, $this->user, $this->atLeastOnce());
+        $this->setExpects($this->oauthHelper, 'isValidProvider', ['testprovider'], true);
+        $this->setExpects($this->oauthHelper, 'updateBadgeNumber', [$this->user], true);
+
+        $this->controller = $this->app->make(SettingsController::class);
+        $this->config->set('display_badge_number', true);
+        $this->controller->updateBadgeNumber();
+
+        /** @var Session $session */
+        $session = $this->app->get('session');
+        $messages = $session->get('messages.' . NotificationType::MESSAGE->value);
+        $this->assertNotEmpty($messages[0]);
+    }
+
+    /**
+     * @covers \Engelsystem\Controllers\SettingsController::updateBadgeNumber
+     */
+    public function testUpdateBadgeNumberFailed(): void
+    {
+        (new OAuth([
+                'provider' => 'testprovider',
+                'identifier' => 'provider-user-identifier',
+                'expires_at' => Carbon::now()->addHour(),
+            ]))
+            ->user()
+            ->associate($this->user)
+            ->save();
+        $this->setExpects($this->auth, 'user', null, $this->user, $this->atLeastOnce());
+        $this->setExpects($this->oauthHelper, 'isValidProvider', ['testprovider'], true);
+        $this->setExpects($this->oauthHelper, 'updateBadgeNumber', [$this->user], false);
+
+        $this->controller = $this->app->make(SettingsController::class);
+        $this->config->set('display_badge_number', true);
+        $this->controller->updateBadgeNumber();
+
+        /** @var Session $session */
+        $session = $this->app->get('session');
+        $messages = $session->get('messages.' . NotificationType::ERROR->value);
+        $this->assertNotEmpty($messages[0]);
+    }
+
+    /**
+     * @covers \Engelsystem\Controllers\SettingsController::updateBadgeNumber
+     */
+    public function testUpdateBadgeNumberDisabled(): void
+    {
+        $this->controller = $this->app->make(SettingsController::class);
+        $this->config->set('display_badge_number', false);
+        $this->setExpects(
+            $this->response,
+            'redirectTo',
+            ['http://localhost/settings/profile'],
+            $this->response,
+            $this->once()
+        );
+
+        $this->controller->updateBadgeNumber();
+    }
+
+    /**
+     * @covers \Engelsystem\Controllers\SettingsController::updateBadgeNumber
+     */
+    public function testUpdateBadgeNumberBadProvider(): void
+    {
+        (new OAuth([
+                'provider' => 'testprovider',
+                'identifier' => 'provider-user-identifier',
+                'expires_at' => Carbon::now()->addHour(),
+            ]))
+            ->user()
+            ->associate($this->user)
+            ->save();
+        $this->setExpects($this->auth, 'user', null, $this->user, $this->atLeastOnce());
+        $this->setExpects($this->oauthHelper, 'isValidProvider', ['testprovider'], false);
+        $this->controller = $this->app->make(SettingsController::class);
+        $this->config->set('display_badge_number', true);
+        $this->setExpects(
+            $this->response,
+            'redirectTo',
+            ['http://localhost/logout'],
+            $this->response,
+            $this->once()
+        );
+
+        $this->controller->updateBadgeNumber();
+    }
+
+    /**
+     * @covers \Engelsystem\Controllers\SettingsController::updateBadgeNumber
+     */
+    public function testUpdateBadgeNumberExpiredOAuth(): void
+    {
+        (new OAuth([
+                'provider' => 'testprovider',
+                'identifier' => 'provider-user-identifier',
+                'expires_at' => Carbon::now()->subHour(),
+            ]))
+            ->user()
+            ->associate($this->user)
+            ->save();
+        $this->setExpects($this->auth, 'user', null, $this->user, $this->atLeastOnce());
+        $this->controller = $this->app->make(SettingsController::class);
+        $this->config->set('display_badge_number', true);
+        $this->setExpects(
+            $this->response,
+            'redirectTo',
+            ['http://localhost/logout'],
+            $this->response,
+            $this->once()
+        );
+
+        $this->controller->updateBadgeNumber();
     }
 
     /**
@@ -1119,6 +1250,9 @@ class SettingsControllerTest extends ControllerTest
 
         $this->auth = $this->createMock(Authenticator::class);
         $this->app->instance(Authenticator::class, $this->auth);
+
+        $this->oauthHelper = $this->createMock(OAuthHelper::class);
+        $this->app->instance(OAuthHelper::class, $this->oauthHelper);
 
         $this->user = User::factory()
             ->has(Settings::factory([

@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Engelsystem\Config\Config;
 use Engelsystem\Models\EventConfig;
 use Engelsystem\Helpers\Authenticator;
+use Engelsystem\Helpers\OAuthHelper;
 use Engelsystem\Http\Redirector;
 use Engelsystem\Http\Request;
 use Engelsystem\Http\Response;
@@ -30,6 +31,7 @@ class AuthController extends BaseController
         protected Redirector $redirect,
         protected Config $config,
         protected Authenticator $auth,
+        protected OAuthHelper $oauthHelper
         protected EventConfig $eventConfig
     ) {
     }
@@ -102,6 +104,10 @@ class AuthController extends BaseController
         $this->session->invalidate();
         $this->session->set('user_id', $user->id);
         $this->session->set('locale', $user->settings->language);
+
+        if ($user->personalData->badge_number == null) {
+            $this->oauthHelper->updateBadgeNumber($user);
+        }
 
         $user->last_login_at = new Carbon();
         $user->save(['touch' => false]);

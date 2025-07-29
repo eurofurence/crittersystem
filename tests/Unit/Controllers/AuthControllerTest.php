@@ -10,6 +10,7 @@ use Engelsystem\Models\EventConfig;
 use Engelsystem\Controllers\AuthController;
 use Engelsystem\Controllers\NotificationType;
 use Engelsystem\Helpers\Authenticator;
+use Engelsystem\Helpers\OAuthHelper;
 use Engelsystem\Http\Exceptions\ValidationException;
 use Engelsystem\Http\Redirector;
 use Engelsystem\Http\Request;
@@ -41,15 +42,15 @@ class AuthControllerTest extends ControllerTest
         /** @var Redirector|MockObject $redirect */
         /** @var Config $config */
         /** @var Authenticator|MockObject $auth */
-        /** @var EventConfig $eventConfig */
-        list(, $session, $redirect, $config, $auth, $eventConfig) = $this->getMocks();
+        /** @var OAuthHelper|MockObject $oauthHelper */
+        list(, $session, $redirect, $config, $auth, $oauthHelper) = $this->getMocks();
 
         $response->expects($this->once())
             ->method('withView')
             ->with('pages/login')
             ->willReturn($response);
 
-        $controller = new AuthController($response, $session, $redirect, $config, $auth, $eventConfig);
+        $controller = new AuthController($response, $session, $redirect, $config, $auth, $oauthHelper);
         $controller->login();
     }
 
@@ -66,7 +67,8 @@ class AuthControllerTest extends ControllerTest
         /** @var Redirector|MockObject $redirect */
         /** @var Config $config */
         /** @var Authenticator|MockObject $auth */
-        list(, , $redirect, $config, $auth) = $this->getMocks();
+        /** @var OAuthHelper|MockObject $oauthHelper */
+        list(, , $redirect, $config, $auth, $oauthHelper) = $this->getMocks();
         $this->session = new Session(new MockArraySessionStorage());
         $this->app->instance('session', $this->session);
         /** @var Validator|MockObject $validator */
@@ -87,7 +89,7 @@ class AuthControllerTest extends ControllerTest
 
         /** @var AuthController|MockObject $controller */
         $controller = $this->getMockBuilder(AuthController::class)
-            ->setConstructorArgs([$response, $this->session, $redirect, $config, $auth])
+            ->setConstructorArgs([$response, $this->session, $redirect, $config, $auth, $oauthHelper])
             ->onlyMethods(['loginUser'])
             ->getMock();
         $controller->setValidator($validator);
@@ -133,18 +135,20 @@ class AuthControllerTest extends ControllerTest
         /** @var Redirector|MockObject $redirect */
         /** @var Config $config */
         /** @var Authenticator|MockObject $auth */
-        /** @var EventConfig $eventConfig */
-        list(, , $redirect, $config, $auth, $eventConfig) = $this->getMocks();
+
+        /** @var OAuthHelper|MockObject $oauthHelper */
+        list(, , $redirect, $config, $auth, $oauthHelper) = $this->getMocks();
         $session = new Session(new MockArraySessionStorage());
         $session->set('foo', 'bar');
         $user = $this->createUser();
 
-        $redirect->expects($this->exactly(2))
+        $redirect->expects($this->exactly(4))
             ->method('to')
             ->withConsecutive(['news'], ['/test'])
             ->willReturn($response);
 
-        $controller = new AuthController($response, $session, $redirect, $config, $auth, $eventConfig);
+        $controller = new AuthController($response, $session, $redirect, $config, $auth, $oauthHelper);
+
         $controller->loginUser($user);
 
         $this->assertFalse($session->has('foo'));
@@ -153,6 +157,18 @@ class AuthControllerTest extends ControllerTest
 
         // Redirect to previous page
         $session->set('previous_page', '/test');
+        $controller->loginUser($user);
+
+        // Expect no call to update badge number when it's set
+        $user->personalData->badge_number = 123;
+        $controller->loginUser($user);
+
+        // Update badge number
+        $user->personalData->badge_number = null;
+        $oauthHelper->expects($this->once())
+            ->method('updateBadgeNumber')
+            ->with($user)
+            ->willReturn(true);
         $controller->loginUser($user);
     }
 
@@ -166,8 +182,9 @@ class AuthControllerTest extends ControllerTest
         /** @var Redirector|MockObject $redirect */
         /** @var Config $config */
         /** @var Authenticator|MockObject $auth */
-        /** @var EventConfig $eventConfig */
-        list($response, $session, $redirect, $config, $auth, $eventConfig) = $this->getMocks();
+        /** @var OAuthHelper|MockObject $oauthHelper */
+        list($response, $session, $redirect, $config, $auth, $oauthHelper) = $this->getMocks();
+
 
         $session->expects($this->once())
             ->method('invalidate');
@@ -177,7 +194,8 @@ class AuthControllerTest extends ControllerTest
             ->with('/')
             ->willReturn($response);
 
-        $controller = new AuthController($response, $session, $redirect, $config, $auth, $eventConfig);
+        $controller = new AuthController($response, $session, $redirect, $config, $auth, $oauthHelper);
+
         $return = $controller->logout();
 
         $this->assertEquals($response, $return);
@@ -201,8 +219,10 @@ class AuthControllerTest extends ControllerTest
         /** @var Authenticator|MockObject $auth */
         $auth = $this->createMock(Authenticator::class);
 
+        $oauthHelper = $this->createMock(OAuthHelper::class);
+
         $this->app->instance('session', $session);
 
-        return [$response, $session, $redirect, $config, $auth];
+        return [$response, $session, $redirect, $config, $auth, $oauthHelper];
     }
 }
