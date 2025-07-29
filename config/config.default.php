@@ -12,25 +12,25 @@ return [
     // Group: Main Application
     // #################################################################
     // Application name (not the event name)
-    'app_name'                => env('APP_NAME', 'Critter System'), //NEW ENV NAME: APP_NAME
+    'app_name'                => env('APP_NAME', 'Critter System'), //NEW ENV NAME: CRITTER_APP_NAME
 
     // Set to development to enable debugging messages [production, development]
-    'environment'             => env('ENVIRONMENT', 'production'), //NEW ENV NAME: APP_ENV
+    'environment'             => env('ENVIRONMENT', 'production'), //NEW ENV NAME: CRITTER_APP_ENV
 
     // Application URL and base path to use instead of the auto-detected
-    'url'                     => env('APP_URL'), //NEW ENV NAME: APP_URL
+    'url'                     => env('APP_URL'), //NEW ENV NAME: CRITTER_APP_URL
 
     // Enable maintenance mode (show a static page to all users)
-    'maintenance'             => (bool) env('MAINTENANCE', false), //NEW ENV NAME: APP_MODE
+    'maintenance'             => (bool) env('MAINTENANCE', false), //NEW ENV NAME: CRITTER_APP_MODE
 
     // For accessing /metrics (and /stats)
-    'api_key'                 => env('API_KEY', ''), //NEW ENV NAME: APP_METRICS_API_KEY
+    'api_key'                 => env('API_KEY', ''), //NEW ENV NAME: CRITTER_APP_METRICS_API_KEY
 
     // Login DEV Warning Message
-    'login_dev_warning'     => env('DEV_WARNING_MESSAGE', false), //NEW ENV NAME: APP_DEMO_ENABLED
+    'login_dev_warning'     => env('DEV_WARNING_MESSAGE', false), //NEW ENV NAME: CRITTER_DEMO_ENABLE
 
     // Initial admin password, configured on first migration
-    'setup_admin_password'    => env('SETUP_ADMIN_PASSWORD'), //NEW ENV NAME: APP_ADMIN_PASSWORD_INITIAL
+    'setup_admin_password'    => env('SETUP_ADMIN_PASSWORD'), //NEW ENV NAME: CRITTER_ADMIN_PASSWORD_INITIAL
 
     // Redirect to this site after logging in or when clicking the page name
     // Must be one of news, meetings, user_shifts, angeltypes, questions
@@ -106,7 +106,7 @@ return [
 
     // TODO: REMOVE
     // Enable Driving License
-    'driving_license_enabled' => (bool) env('DRIVING_LICENSE_ENABLED', true),
+    'driving_license_enabled' => (bool) env('DRIVING_LICENSE_ENABLED', false),
 
     // Header links
     // Available link placeholders: %lang%
@@ -199,7 +199,7 @@ return [
 
     // Whether to show the current day of the event (-2, -1, 0, 1, 2…) in footer and on the dashboard.
     // The event start date has to be set for it to appear.
-    'enable_day_of_event' => (bool) env('ENABLE_DAY_OF_EVENT', false),
+    'enable_day_of_event' => (bool) env('ENABLE_DAY_OF_EVENT', true),
 
     // If true there will be a day 0 (-1, 0, 1…). If false there won't (-1, 1…)
     'event_has_day0' => (bool) env('EVENT_HAS_DAY0', true),
@@ -420,7 +420,7 @@ return [
     // Shift settings / Policies
     // #################################################################
     // Only arrived users can sign up for shifts
-    'signup_requires_arrival' => (bool) env('SIGNUP_REQUIRES_ARRIVAL', false),
+    'signup_requires_arrival' => (bool) env('SIGNUP_REQUIRES_ARRIVAL', true),
 
     // Only allow shift signup this number of hours in advance
     // Setting this to 0 disables the feature
