@@ -1,7 +1,6 @@
 <?php
 
 use Engelsystem\Models\AngelType;
-use Engelsystem\Models\User\License;
 use Engelsystem\Models\User\User;
 use Engelsystem\Models\UserAngelType;
 use Engelsystem\ShiftCalendarRenderer;
@@ -38,6 +37,7 @@ function AngelType_name_render(AngelType $angeltype, $plain = false)
  */
 function AngelType_render_membership(AngelType $user_angeltype)
 {
+    //TODO: ADD the correct keys for the text and update language file
     if (!empty($user_angeltype->user_angel_type_id)) {
         if ($user_angeltype->restricted) {
             if (empty($user_angeltype->confirm_user_id)) {
@@ -45,13 +45,16 @@ function AngelType_render_membership(AngelType $user_angeltype)
             } elseif ($user_angeltype->supporter) {
                 return icon_bool(true) . __('Supporter');
             }
+
             return icon_bool(true) . __('Member');
         } elseif ($user_angeltype->supporter) {
             return icon_bool(true) . __('Supporter');
         }
+
         return icon_bool(true) . __('Member');
     }
-    return icon_bool(false);
+
+    return icon_bool(false) . 'Non Member';
 }
 
 /**
@@ -83,34 +86,34 @@ function AngelType_delete_view(AngelType $angeltype)
  */
 function AngelType_edit_view(AngelType $angeltype, bool $supporter_mode)
 {
-    $requires_ifsg = '';
-    $requires_driving_license = '';
-    if (config('ifsg_enabled')) {
-        $requires_ifsg = $supporter_mode ?
-            form_info(
-                __('angeltype.ifsg.required'),
-                $angeltype->requires_ifsg_certificate
-                    ? __('Yes')
-                    : __('No')
-            ) : form_checkbox(
-                'requires_ifsg_certificate',
-                __('angeltype.ifsg.required'),
-                $angeltype->requires_ifsg_certificate
-            );
-    }
-    if (config('driving_license_enabled')) {
-        $requires_driving_license = $supporter_mode ?
-            form_info(
-                __('Requires driver license'),
-                $angeltype->requires_driver_license
-                    ? __('Yes')
-                    : __('No')
-            ) : form_checkbox(
-                'requires_driver_license',
-                __('Requires driver license'),
-                $angeltype->requires_driver_license
-            );
-    }
+    // $requires_ifsg = '';
+    // $requires_driving_license = '';
+    // if (config('ifsg_enabled')) {
+    //     $requires_ifsg = $supporter_mode ?
+    //         form_info(
+    //             __('angeltype.ifsg.required'),
+    //             $angeltype->requires_ifsg_certificate
+    //                 ? __('Yes')
+    //                 : __('No')
+    //         ) : form_checkbox(
+    //             'requires_ifsg_certificate',
+    //             __('angeltype.ifsg.required'),
+    //             $angeltype->requires_ifsg_certificate
+    //         );
+    // }
+    // if (config('driving_license_enabled')) {
+    //     $requires_driving_license = $supporter_mode ?
+    //         form_info(
+    //             __('Requires driver license'),
+    //             $angeltype->requires_driver_license
+    //                 ? __('Yes')
+    //                 : __('No')
+    //         ) : form_checkbox(
+    //             'requires_driver_license',
+    //             __('Requires driver license'),
+    //             $angeltype->requires_driver_license
+    //         );
+    // }
 
     $link = button($angeltype->id
         ? url('/angeltypes', ['action' => 'view', 'angeltype_id' => $angeltype->id])
@@ -150,8 +153,8 @@ function AngelType_edit_view(AngelType $angeltype, bool $supporter_mode)
                         __('angeltypes.shift.self_signup.info') . '"></span>',
                         $angeltype->shift_self_signup
                     ),
-                $requires_driving_license,
-                $requires_ifsg,
+                // $requires_driving_license,
+                // $requires_ifsg,
                 $supporter_mode
                     ? form_info(__('Show on dashboard'), $angeltype->show_on_dashboard ? __('Yes') : __('No'))
                     : form_checkbox('show_on_dashboard', __('Show on dashboard'), $angeltype->show_on_dashboard),
@@ -190,7 +193,6 @@ function AngelType_edit_view(AngelType $angeltype, bool $supporter_mode)
  * @param UserAngelType|null $user_angeltype
  * @param bool               $admin_angeltypes
  * @param bool               $supporter
- * @param License            $user_license
  * @param User|null          $user
  * @return string
  */
@@ -199,29 +201,28 @@ function AngelType_view_buttons(
     ?UserAngelType $user_angeltype,
     $admin_angeltypes,
     $supporter,
-    $user_license,
     $user
 ) {
-    if (
-        config('driving_license_enabled')
-        && $angeltype->requires_driver_license
-        && $user_angeltype
-    ) {
-        $buttons[] = button(
-            url('/settings/certificates'),
-            icon('person-vcard') . __('My driving license')
-        );
-    }
-    if (
-        config('ifsg_enabled')
-        && $angeltype->requires_ifsg_certificate
-        && $user_angeltype
-    ) {
-        $buttons[] = button(
-            url('/settings/certificates'),
-            icon('card-checklist') . __('angeltype.ifsg.own')
-        );
-    }
+    // if (
+    //     config('driving_license_enabled')
+    //     && $angeltype->requires_driver_license
+    //     && $user_angeltype
+    // ) {
+    //     $buttons[] = button(
+    //         url('/settings/certificates'),
+    //         icon('person-vcard') . __('My driving license')
+    //     );
+    // }
+    // if (
+    //     config('ifsg_enabled')
+    //     && $angeltype->requires_ifsg_certificate
+    //     && $user_angeltype
+    // ) {
+    //     $buttons[] = button(
+    //         url('/settings/certificates'),
+    //         icon('card-checklist') . __('angeltype.ifsg.own')
+    //     );
+    // }
 
     if (is_null($user_angeltype)) {
         $buttons[] = button(
@@ -232,17 +233,17 @@ function AngelType_view_buttons(
             ($admin_angeltypes ? 'Join' : ''),
         );
     } else {
-        if (config('driving_license_enabled') && $angeltype->requires_driver_license && !$user_license->wantsToDrive()) {
-            error(__('This critter type requires a driver license. Please enter your driver license information!'));
-        }
+        // if (config('driving_license_enabled') && $angeltype->requires_driver_license && !$user_license->wantsToDrive()) {
+        //     error(__('This critter type requires a driver license. Please enter your driver license information!'));
+        // }
 
-        if (
-            config('ifsg_enabled') && $angeltype->requires_ifsg_certificate && !(
-            $user->license->ifsg_certificate_light || $user->license->ifsg_certificate
-            )
-        ) {
-            error(__('angeltype.ifsg.required.info'));
-        }
+        // if (
+        //     config('ifsg_enabled') && $angeltype->requires_ifsg_certificate && !(
+        //     $user->license->ifsg_certificate_light || $user->license->ifsg_certificate
+        //     )
+        // ) {
+        //     error(__('angeltype.ifsg.required.info'));
+        // }
 
         if ($angeltype->restricted && !$user_angeltype->confirm_user_id) {
             error(sprintf(
@@ -308,46 +309,47 @@ function AngelType_view_members(AngelType $angeltype, $members, $admin_user_ange
             $member['dect'] =
                 sprintf('<a href="https://t.me/%s">%s%1$s</a>', str_replace('@', '', htmlspecialchars((string) $member->contact->dect)), config('policy')['telegram_visual_prefix']);
         }
-        if (config('driving_license_enabled') && $angeltype->requires_driver_license) {
-            $drive_confirmed = $member->license->drive_confirmed;
-            $member['wants_to_drive'] = certificateIcon($drive_confirmed, $member->license->wantsToDrive());
-            $member['has_car'] = icon_bool($member->license->has_car);
-            $member['has_license_car'] = certificateIcon($drive_confirmed, $member->license->drive_car);
-            $member['has_license_3_5t_transporter'] = certificateIcon($drive_confirmed, $member->license->drive_3_5t);
-            $member['has_license_7_5t_truck'] = certificateIcon($drive_confirmed, $member->license->drive_7_5t);
-            $member['has_license_12t_truck'] = certificateIcon($drive_confirmed, $member->license->drive_12t);
-            $member['has_license_forklift'] = certificateIcon($drive_confirmed, $member->license->drive_forklift);
-        }
-        if (config('ifsg_enabled') && $angeltype->requires_ifsg_certificate) {
-            $ifsg_confirmed = $member->license->ifsg_confirmed;
-            $member['ifsg_certificate'] = certificateIcon($ifsg_confirmed, $member->license->ifsg_certificate);
-            if (config('ifsg_light_enabled')) {
-                $member['ifsg_certificate_light'] = certificateIcon($ifsg_confirmed, $member->license->ifsg_certificate_light);
-            }
-        }
+        // if (config('driving_license_enabled') && $angeltype->requires_driver_license) {
+        //     $drive_confirmed = $member->license->drive_confirmed;
+        //     $member['wants_to_drive'] = certificateIcon($drive_confirmed, $member->license->wantsToDrive());
+        //     $member['has_car'] = icon_bool($member->license->has_car);
+        //     $member['has_license_car'] = certificateIcon($drive_confirmed, $member->license->drive_car);
+        //     $member['has_license_3_5t_transporter'] = certificateIcon($drive_confirmed, $member->license->drive_3_5t);
+        //     $member['has_license_7_5t_truck'] = certificateIcon($drive_confirmed, $member->license->drive_7_5t);
+        //     $member['has_license_12t_truck'] = certificateIcon($drive_confirmed, $member->license->drive_12t);
+        //     $member['has_license_forklift'] = certificateIcon($drive_confirmed, $member->license->drive_forklift);
+        // }
+        // if (config('ifsg_enabled') && $angeltype->requires_ifsg_certificate) {
+        //     $ifsg_confirmed = $member->license->ifsg_confirmed;
+        //     $member['ifsg_certificate'] = certificateIcon($ifsg_confirmed, $member->license->ifsg_certificate);
+        //     if (config('ifsg_light_enabled')) {
+        //         $member['ifsg_certificate_light'] = certificateIcon($ifsg_confirmed, $member->license->ifsg_certificate_light);
+        //     }
+        // }
 
         $edit_certificates = '';
-        if (
-            (
-                config('driving_license_enabled')
-                && $angeltype->requires_driver_license
-                && ($admin_user_angeltypes || auth()->can('user.drive.edit'))
-            )
-            || (
-                config('ifsg_enabled')
-                && $angeltype->requires_ifsg_certificate
-                && ($admin_user_angeltypes || auth()->can('user.ifsg.edit'))
-            )
-        ) {
-            $edit_certificates =
-                button(
-                    url('/users/' . $member->id . '/certificates'),
-                    icon('card-checklist'),
-                    'btn-sm',
-                    '',
-                    __('Edit certificates'),
-                );
-        }
+        // if (
+        //     (
+        //         config('driving_license_enabled')
+        //         && $angeltype->requires_driver_license
+        //         && ($admin_user_angeltypes || auth()->can('user.drive.edit'))
+        //     )
+        //     || (
+        //         config('ifsg_enabled')
+        //         && $angeltype->requires_ifsg_certificate
+        //         && ($admin_user_angeltypes || auth()->can('user.ifsg.edit'))
+        //     )
+        // ) {
+        //     $edit_certificates =
+        //         button(
+        //             url('/users/' . $member->id . '/certificates'),
+        //             icon('card-checklist'),
+        //             'btn-sm',
+        //             '',
+        //             __('Edit certificates'),
+        //         );
+        // }
+
         if ($angeltype->restricted && empty($member->pivot->confirm_user_id)) {
             $member['actions'] = table_buttons([
                 $edit_certificates,
@@ -453,30 +455,30 @@ function AngelType_view_table_headers(AngelType $angeltype, $supporter, $admin_a
         $headers['dect'] = __('general.dect');
     }
 
-    if (
-        config('driving_license_enabled') && $angeltype->requires_driver_license
-        && ($supporter || $admin_angeltypes || auth()->can('user.drive.edit'))
-    ) {
-        $headers = array_merge($headers, [
-            'wants_to_drive'               => __('Driver'),
-            'has_car'                      => __('Has car'),
-            'has_license_car'              => __('settings.certificates.drive_car'),
-            'has_license_3_5t_transporter' => __('settings.certificates.drive_3_5t'),
-            'has_license_7_5t_truck'       => __('settings.certificates.drive_7_5t'),
-            'has_license_12t_truck'        => __('settings.certificates.drive_12t'),
-            'has_license_forklift'         => __('settings.certificates.drive_forklift'),
-        ]);
-    }
+    // if (
+    //     config('driving_license_enabled') && $angeltype->requires_driver_license
+    //     && ($supporter || $admin_angeltypes || auth()->can('user.drive.edit'))
+    // ) {
+    //     $headers = array_merge($headers, [
+    //         'wants_to_drive'               => __('Driver'),
+    //         'has_car'                      => __('Has car'),
+    //         'has_license_car'              => __('settings.certificates.drive_car'),
+    //         'has_license_3_5t_transporter' => __('settings.certificates.drive_3_5t'),
+    //         'has_license_7_5t_truck'       => __('settings.certificates.drive_7_5t'),
+    //         'has_license_12t_truck'        => __('settings.certificates.drive_12t'),
+    //         'has_license_forklift'         => __('settings.certificates.drive_forklift'),
+    //     ]);
+    // }
 
-    if (
-        config('ifsg_enabled') && $angeltype->requires_ifsg_certificate
-        && ($supporter || $admin_angeltypes || auth()->can('user.ifsg.edit'))
-    ) {
-        if (config('ifsg_light_enabled')) {
-            $headers['ifsg_certificate_light'] = __('ifsg.certificate_light');
-        }
-        $headers['ifsg_certificate'] = __('ifsg.certificate');
-    }
+    // if (
+    //     config('ifsg_enabled') && $angeltype->requires_ifsg_certificate
+    //     && ($supporter || $admin_angeltypes || auth()->can('user.ifsg.edit'))
+    // ) {
+    //     if (config('ifsg_light_enabled')) {
+    //         $headers['ifsg_certificate_light'] = __('ifsg.certificate_light');
+    //     }
+    //     $headers['ifsg_certificate'] = __('ifsg.certificate');
+    // }
 
     $headers['actions'] = '';
 
@@ -492,7 +494,6 @@ function AngelType_view_table_headers(AngelType $angeltype, $supporter, $admin_a
  * @param bool                  $admin_user_angeltypes
  * @param bool                  $admin_angeltypes
  * @param bool                  $supporter
- * @param License               $user_license
  * @param User                  $user
  * @param ShiftsFilterRenderer  $shiftsFilterRenderer
  * @param ShiftCalendarRenderer $shiftCalendarRenderer
@@ -506,7 +507,6 @@ function AngelType_view(
     $admin_user_angeltypes,
     $admin_angeltypes,
     $supporter,
-    $user_license,
     $user,
     ShiftsFilterRenderer $shiftsFilterRenderer,
     ShiftCalendarRenderer $shiftCalendarRenderer,
@@ -549,7 +549,8 @@ function AngelType_view(
     return page_with_title(
         $back . ' ' . sprintf(__('Team %s'), htmlspecialchars($angeltype->name)) . ' ' . $add,
         [
-            AngelType_view_buttons($angeltype, $user_angeltype, $admin_angeltypes, $supporter, $user_license, $user),
+            // AngelType_view_buttons($angeltype, $user_angeltype, $admin_angeltypes, $supporter, $user_license, $user),
+            AngelType_view_buttons($angeltype, $user_angeltype, $admin_angeltypes, $supporter, $user),
             msg(),
             tabs($pagetabs, $tab),
         ],
@@ -589,13 +590,13 @@ function AngelType_view_info(
     $admin_angeltypes,
     $supporter
 ) {
-    $required_info_show = !auth()->user()
-            ->userAngelTypes()
-            ->where('angel_types.id', $angeltype->id)
-            ->count()
-        && !$admin_angeltypes
-        && !$admin_user_angeltypes
-        && !$supporter;
+    // $required_info_show = !auth()->user()
+    //         ->userAngelTypes()
+    //         ->where('angel_types.id', $angeltype->id)
+    //         ->count()
+    //     && !$admin_angeltypes
+    //     && !$admin_user_angeltypes
+    //     && !$supporter;
     $info = [];
     if ($angeltype->hasContactInfo()) {
         $info[] = AngelTypes_render_contact_info($angeltype);
@@ -606,12 +607,12 @@ function AngelType_view_info(
     if ($angeltype->description != '') {
         $info[] = $parsedown->parse(htmlspecialchars($angeltype->description));
     }
-    if ($angeltype->requires_ifsg_certificate && $required_info_show) {
-        $info[] = info(__('angeltype.ifsg.required.info.preview'), true);
-    }
-    if ($angeltype->requires_driver_license && $required_info_show) {
-        $info[] = info(__('angeltype.driving_license.required.info.preview'), true);
-    }
+    // if ($angeltype->requires_ifsg_certificate && $required_info_show) {
+    //     $info[] = info(__('angeltype.ifsg.required.info.preview'), true);
+    // }
+    // if ($angeltype->requires_driver_license && $required_info_show) {
+    //     $info[] = info(__('angeltype.driving_license.required.info.preview'), true);
+    // }
 
     list($supporters, $members_confirmed, $members_unconfirmed) = AngelType_view_members(
         $angeltype,

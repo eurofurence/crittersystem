@@ -57,15 +57,16 @@ function make_navigation()
     $page = current_page();
     $menu = [];
     $pages = [
-        'news'           => __('news.title'),
+        'news'           => [__('news.title'), 'news'],
         'meetings'       => [__('news.title.meetings'), 'user_meetings'],
-        'user_shifts'    => __('general.shifts'),
-        'angeltypes'     => __('angeltypes.angeltypes'),
+        'user_shifts'    => [__('general.shifts'), 'user_shifts'],
+        'angeltypes'     => [__('angeltypes.angeltypes'), 'angeltypes'],
         'questions'      => [__('Ask the Info Desk'), 'question.add'],
+        'departments'    => [__('departments.title.plural'), 'dept.view'],
     ];
 
     foreach ($pages as $menu_page => $options) {
-        if (!menu_is_allowed($menu_page, $options)) {
+        if (!menu_is_allowed(permissions: $options)) {
             continue;
         }
 
@@ -87,18 +88,18 @@ function make_navigation()
         // path              => [name, permission],
 
         'admin_arrive'       => [admin_arrive_title(), 'users.arrive.list'],
-        'admin_active'       => 'Active Critters',
+        'admin_active'       => ['Active Critters', 'admin_active'],
         'users'              => ['All Critters', 'admin_user'],
-        'admin_free'         => 'Free Critters',
+        'admin_free'         => ['Free Critters','admin_free'],
         'admin/questions'    => ['Answer questions', 'question.edit'],
         'admin/shifttypes'   => ['shifttype.shifttypes', 'shifttypes.view'],
-        'admin_shifts'       => 'Create shifts',
+        'admin_shifts'       => ['Create shifts', 'admin_shifts'],
         'admin/locations'    => ['location.locations', 'admin_locations'],
-        'admin_groups'       => 'Grouprights',
+        'admin_groups'       => ['Grouprights', 'admin_groups'],
         'admin/schedule'     => ['schedule.import', 'schedule.import'],
         'admin/logs'         => ['log.log', 'admin_log'],
         'admin/config'       => ['config.config', 'config.edit'],
-        'adminv2/export'       => ['V2-Export', 'admin_user'],
+        'adminv2/export'     => ['V2-Export', 'admin_user'],
     ];
 
     if (config('autoarrive')) {
@@ -106,7 +107,7 @@ function make_navigation()
     }
 
     foreach ($admin_pages as $menu_page => $options) {
-        if (!menu_is_allowed($menu_page, $options)) {
+        if (!menu_is_allowed(permissions: $options)) {
             continue;
         }
 
@@ -126,21 +127,23 @@ function make_navigation()
 }
 
 /**
- * @param string          $page
- * @param string|string[] $options
+ * If permission is not set, it will be visible
+ * Removed the feature the use the page name as permission setting
+ *
+ * @param string|string[] $permissions
  *
  * @return bool
  */
-function menu_is_allowed(string $page, $options)
+function menu_is_allowed($permissions)
 {
-    $options = (array) $options;
-    $permissions = $page;
+    $permissions = (array) $permissions;
 
-    if (isset($options[1])) {
-        $permissions = $options[1];
+    if (isset($permissions[1])) {
+        return auth()->can(abilities: $permissions[1]);
+    } else {
+        // If the permission is not set, allow the creation
+        return true;
     }
-
-    return auth()->can($permissions);
 }
 
 /**

@@ -6,6 +6,7 @@ namespace Engelsystem\Test\Unit\Controllers;
 
 use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
 use Engelsystem\Config\Config;
+use Engelsystem\Models\EventConfig;
 use Engelsystem\Controllers\AuthController;
 use Engelsystem\Controllers\NotificationType;
 use Engelsystem\Helpers\Authenticator;
@@ -134,6 +135,7 @@ class AuthControllerTest extends ControllerTest
         /** @var Redirector|MockObject $redirect */
         /** @var Config $config */
         /** @var Authenticator|MockObject $auth */
+
         /** @var OAuthHelper|MockObject $oauthHelper */
         list(, , $redirect, $config, $auth, $oauthHelper) = $this->getMocks();
         $session = new Session(new MockArraySessionStorage());
@@ -146,6 +148,7 @@ class AuthControllerTest extends ControllerTest
             ->willReturn($response);
 
         $controller = new AuthController($response, $session, $redirect, $config, $auth, $oauthHelper);
+
         $controller->loginUser($user);
 
         $this->assertFalse($session->has('foo'));
@@ -182,6 +185,7 @@ class AuthControllerTest extends ControllerTest
         /** @var OAuthHelper|MockObject $oauthHelper */
         list($response, $session, $redirect, $config, $auth, $oauthHelper) = $this->getMocks();
 
+
         $session->expects($this->once())
             ->method('invalidate');
 
@@ -191,6 +195,7 @@ class AuthControllerTest extends ControllerTest
             ->willReturn($response);
 
         $controller = new AuthController($response, $session, $redirect, $config, $auth, $oauthHelper);
+
         $return = $controller->logout();
 
         $this->assertEquals($response, $return);

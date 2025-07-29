@@ -84,8 +84,8 @@ class NewsController extends BaseController
         if (!$news->user) {
             $news->user()->associate($this->auth->user());
         }
-        $news->title = $data['title'];
-        $news->text = $data['text'];
+        $news->title = globalCleanText(text: $data['title'], agressive: true);
+        $news->text = globalCleanText(text: $data['text']);
         $news->is_meeting = !is_null($data['is_meeting']);
         $news->is_pinned = !is_null($data['is_pinned']);
         $notify = !is_null($data['send_notification']);

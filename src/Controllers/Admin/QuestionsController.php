@@ -96,8 +96,8 @@ class QuestionsController extends BaseController
             return $this->redirect->to('/admin/questions');
         }
 
-        $question->text = $data['text'];
-        $question->answer = $data['answer'];
+        $question->text = globalCleanText($data['text']);
+        $question->answer = globalCleanText($data['answer']);
         $question->answered_at = Carbon::now();
         $question->answerer()->associate($this->auth->user());
 
