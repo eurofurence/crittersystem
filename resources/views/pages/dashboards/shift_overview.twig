@@ -15,7 +15,7 @@
 {% macro critter_warn_level_class(wanted=0, have=0) %}
     {%- if wanted == have -%}
         critter-warn-good
-    {%- elseif (wanted / have) >= 0.8 -%}
+    {%- elseif (wanted / have) >= 0.66 -%}
         critter-warn-bad
     {%- else -%}
         critter-warn-critical

@@ -83,16 +83,17 @@ class DashboardsController extends BaseController
         // Take chunked data and render it down to one row per shifts_id
         $shifts_arr = [];
         $prev_shift_id = -1;
-        // ['shifts_type_id' => ['wanted' => int, 'users' => [['users_id' => 'user_name'], ...]]]
-        $current_shift_info = [];
         foreach ($query->all() as $shift_data) {
             if ($prev_shift_id !== $shift_data->shifts_id) {
                 // Add new container for shift data from DB and critter_types array
                 $shifts_arr[$shift_data->shifts_id] = ['shift' => $shift_data, 'critter_types' => []];
+                // Format: ['shifts_type_id' => ['wanted' => int, 'users' => [['users_id' => 'user_name'], ...]]]
                 $current_shift_info = [];
+            } else {
+                $current_shift_info = $shifts_arr[$shift_data->shifts_id]['critter_types'];
             }
             // Ensure shift type id key is in $current_shift_info
-            if (!array_key_exists($shift_data->shifts_type_id, $current_shift_info)) {
+            if (!array_key_exists($shift_data->angel_types_id, $current_shift_info)) {
                 $current_shift_info[$shift_data->angel_types_id] = [
                     'wanted' => $shift_data->needed_angel_types_count,
                     'have' => 0,
