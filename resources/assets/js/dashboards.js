@@ -8,15 +8,13 @@ function get_time() {
   return(Math.round(Date.now() / 1000));
 }
 
-function update_shifts_highlight_hidden(dtables_trs, date_now, hide_old) {
-  // Highlight all shift rows that are currently happening
-  // Remove past rows if option is set
+// Highlight all shift rows that are currently happening
+// Remove past rows if option is set
+function update_shifts_highlight_hidden(date_now, hide_old) {
+  const dtables_trs = document.querySelectorAll('table.dashboard-table > tbody > tr');
   dtables_trs.forEach(function(element) {
-    if (hide_old && element.dataset.endTime < date_now) {
-      element.parentElement.hidden = true;
-    } else {
-      element.parentElement.hidden = false;
-    }
+    element.parentElement.hidden = (hide_old && element.dataset.endTime < date_now);
+
     if (element.dataset.startTime < date_now && element.dataset.endTime >= date_now) {
       element.classList.add("highlight");
     } else {
@@ -25,15 +23,33 @@ function update_shifts_highlight_hidden(dtables_trs, date_now, hide_old) {
   });
 }
 
-function update_shifts_display(dtables_trs, on_timer) {
-  var date_now = get_time();
-  var hide_old = document.getElementById('hide_past').checked;
+// Pull a whole new table from the web server and whack it in place
+function update_shifts_data(date_now, hide_old) {
+  const search_string = new URLSearchParams(document.location.search);
+  search_string.set('rand', Math.floor(Math.random() * 99999999));
+  const request = new Request(document.location.origin + document.location.pathname + '?' + search_string.toString());
+  fetch(request)
+    .then(response => response.text())
+    .then(text => {
+      const parser = new DOMParser();
+      const rdoc = parser.parseFromString(text, "text/html");
+      document.querySelector('table.dashboard-table')
+        .replaceWith(rdoc.querySelector('table.dashboard-table'));
+    })
+    .then(x => update_shifts_highlight_hidden(date_now, hide_old));
+}
 
-  if (!on_timer && false) {
-    console.log("There should be auto-reload code here");
+function update_shifts_display(on_timer) {
+  const date_now = get_time();
+  const hide_old = document.getElementById('hide_past').checked;
+  const reload = document.getElementById('reload').checked;
+
+  if (!on_timer || !reload) {
+    update_shifts_highlight_hidden(date_now, hide_old);
   }
-
-  update_shifts_highlight_hidden(dtables_trs, date_now, hide_old);
+  if (on_timer && reload) {
+    update_shifts_data(date_now, hide_old);
+  }
 }
 
 ready(() => {
@@ -66,11 +82,19 @@ ready(() => {
   });
 
   // Handlers for checkboxes
-  document.querySelector('input[name="hide_past"]').addEventListener('change', (event) => {
-    update_shifts_highlight_hidden(dtables_trs, get_time(), event.target.checked)
+  document.getElementById('hide_past').addEventListener('change', (event) => {
+    update_shifts_highlight_hidden(get_time(), event.target.checked);
+    // TODO: Update search string in URL
   });
-  //document.querySelector('input[name="reload"]');
+  document.getElementById('reload').addEventListener('change', (event) => {
+    if (event.target.checked) {
+      update_shifts_data();
+    }
+  });
 
-  update_shifts_display(dtables_trs, false);
-  setInterval(update_shifts_display, 60000, dtables_trs, true);
+  update_shifts_display(false);
+
+  const searchParams = new URLSearchParams(window.location.search);
+  const update_interval = searchParams.has('fake_time') ? 5000 : 60000;
+  setInterval(update_shifts_display, update_interval, true);
 });
