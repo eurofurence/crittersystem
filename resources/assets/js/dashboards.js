@@ -3,7 +3,11 @@ import { ready } from './ready';
 function get_time() {
   const searchParams = new URLSearchParams(window.location.search);
   if (searchParams.has('fake_time')) {
-    return(parseInt(searchParams.get('fake_time')));
+    const start = parseInt(document
+      .querySelector('table.dashboard-table > tbody > tr[data-start-time]')
+      .dataset.startTime
+    )
+    return(start + parseInt(searchParams.get('fake_time')));
   }
   return(Math.round(Date.now() / 1000));
 }
