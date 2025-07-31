@@ -1,19 +1,21 @@
 import { ready } from './ready';
 
-function update_shifts_display(dtables_trs, on_timer) {
-  var date_now = Math.round(Date.now() / 1000);
-  //var date_now = 1756742500;
-  var hide_old = document.getElementById('hide_past').checked;
-
-  if (!on_timer && false) {
-    console.log("There should be auto-reload code here");
+function get_time() {
+  const searchParams = new URLSearchParams(window.location.search);
+  if (searchParams.has('fake_time')) {
+    return(parseInt(searchParams.get('fake_time')));
   }
+  return(Math.round(Date.now() / 1000));
+}
 
+function update_shifts_highlight_hidden(dtables_trs, date_now, hide_old) {
   // Highlight all shift rows that are currently happening
   // Remove past rows if option is set
   dtables_trs.forEach(function(element) {
     if (hide_old && element.dataset.endTime < date_now) {
       element.parentElement.hidden = true;
+    } else {
+      element.parentElement.hidden = false;
     }
     if (element.dataset.startTime < date_now && element.dataset.endTime >= date_now) {
       element.classList.add("highlight");
@@ -21,6 +23,17 @@ function update_shifts_display(dtables_trs, on_timer) {
       element.classList.remove("highlight");
     }
   });
+}
+
+function update_shifts_display(dtables_trs, on_timer) {
+  var date_now = get_time();
+  var hide_old = document.getElementById('hide_past').checked;
+
+  if (!on_timer && false) {
+    console.log("There should be auto-reload code here");
+  }
+
+  update_shifts_highlight_hidden(dtables_trs, date_now, hide_old);
 }
 
 ready(() => {
@@ -52,7 +65,11 @@ ready(() => {
     });
   });
 
-  // TODO: Add handler for auto update, hide past
+  // Handlers for checkboxes
+  document.querySelector('input[name="hide_past"]').addEventListener('change', (event) => {
+    update_shifts_highlight_hidden(dtables_trs, get_time(), event.target.checked)
+  });
+  //document.querySelector('input[name="reload"]');
 
   update_shifts_display(dtables_trs, false);
   setInterval(update_shifts_display, 60000, dtables_trs, true);
