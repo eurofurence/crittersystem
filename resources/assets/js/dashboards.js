@@ -40,7 +40,10 @@ function update_shifts_data(date_now, hide_old) {
       document.querySelector('table.dashboard-table')
         .replaceWith(rdoc.querySelector('table.dashboard-table'));
     })
-    .then(x => update_shifts_highlight_hidden(date_now, hide_old));
+    .then(x => {
+      update_shifts_highlight_hidden(date_now, hide_old);
+      attach_dtable_listeners(true);
+    });
 }
 
 function update_shifts_display(on_timer) {
@@ -56,12 +59,8 @@ function update_shifts_display(on_timer) {
   }
 }
 
-ready(() => {
-
+function attach_dtable_listeners(do_tooltips) {
   var dtables = document.querySelectorAll('table.dashboard-table');
-  if (dtables.length === 0) return;
-
-  var dtables_trs = document.querySelectorAll('table.dashboard-table > tbody > tr');
 
   // Highlight all squares indicating the same user on hover
   dtables.forEach(function(element) {
@@ -83,7 +82,23 @@ ready(() => {
             element.classList.remove("secondary-highlight");
           });
     });
+    if (do_tooltips) {
+      // Remove current tooltips
+      document.querySelectorAll('div.bs-tooltip-auto').forEach((element) => element.remove());
+      // https://getbootstrap.com/docs/5.1/components/tooltips/#example-enable-tooltips-everywhere
+      var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+      var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+      })
+    }
   });
+}
+
+ready(() => {
+
+  if (document.querySelector('table.dashboard-table').length === 0) return;
+
+  attach_dtable_listeners(false);
 
   // Handlers for checkboxes
   document.getElementById('hide_past').addEventListener('change', (event) => {
