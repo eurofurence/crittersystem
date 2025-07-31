@@ -38,64 +38,77 @@
                         {% if session_get('show_welcome', false) %}
                             {{ m.alert(config('welcome_msg') | md, null, true) }}
                         {% endif %}
-
-                        <form action="" enctype="multipart/form-data" method="post">
-                            {{ csrf() }}
-                            <div class="mb-3{% if login_hidden %} d-none{% endif %}">
-                                <div class="input-group input-group-lg">
-                                    <span class="input-group-text {{ m.type_text_class() }}">
-                                        {{ m.angel }}
-                                    </span>
-                                    <input
-                                        class="form-control"
-                                        id="form_nick"
-                                        type="text"
-                                        name="login"
-                                        value=""
-                                        placeholder="{{ __('general.nick') }}"
-                                        autofocus>
+                        {%  if config('oauth') is not empty %}
+                            <div class="row">
+                                <div class="mb-3 btn-group">
+                                    {% for name,config in config('oauth') %}
+                                        <a href="{{ url('/oauth/' ~ name) }}" class="btn btn-primary btn-lg{% if config.hidden|default(false) %} d-none{% endif %}">
+                                            {{ __(
+                                                'oauth.login-using-provider',
+                                                [__(config.name|default(name|capitalize))]
+                                            ) }}
+                                        </a>
+                                    {% endfor %}
                                 </div>
                             </div>
-
-                            <div class="mb-3{% if login_hidden %} d-none{% endif %}">
-                                <div class="input-group input-group-lg">
-                                    <span class="input-group-text {{ m.type_text_class() }}">
-                                        <i class="bi bi-key"></i>
-                                    </span>
-                                    <input
-                                        class="form-control" id="form_password" type="password"
-                                        name="password" value="" placeholder="{{ __('settings.password') }}" autocomplete="current-password"
-                                    >
-                                </div>
-                            </div>
-
-                            <div class="mb-3 text-center{% if login_hidden %} d-none{% endif %}">
-                                <button class="btn btn-primary btn-lg btn-block" type="submit" name="submit">
-                                    {{ __('general.login') }}
-                                </button>
-                            </div>
-
-                            {%  if config('oauth') is not empty %}
-                                <div class="row">
-                                    <div class="mb-3 btn-group">
-                                        {% for name,config in config('oauth') %}
-                                            <a href="{{ url('/oauth/' ~ name) }}" class="btn btn-primary btn-lg{% if config.hidden|default(false) %} d-none{% endif %}">
-                                                {{ __(
-                                                    'oauth.login-using-provider',
-                                                    [__(config.name|default(name|capitalize))]
-                                                ) }}
-                                            </a>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            {% endif %}
-
-                            <div class="text-center{% if login_hidden %} d-none{% endif %}">
-                                <a href="{{ url('/password/reset') }}" class="">
-                                    {{ __('login.password.reset') }}
+                        {% endif %}
+                        <div class="row">
+                            <div class="col-md-12 text-center{% if login_hidden %} d-none{% endif %}">
+                                <a class="text-muted text-tiny" data-bs-toggle="collapse" href="#user_password_login_form" role="button" aria-expanded="false" aria-controls="user_password_login_form">
+                                    {{ __('login.use_username_password') }}
                                 </a>
                             </div>
-                        </form>
+                        </div>
+                    </div>
+                    <div class="collapse" id="user_password_login_form">
+                        <div class="card-body{% if login_hidden %} d-none{% endif %}">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form action="" enctype="multipart/form-data" method="post">
+                                        {{ csrf() }}
+                                        <div class="mb-3">
+                                            <div class="input-group input-group-lg">
+                                                <span class="input-group-text {{ m.type_text_class() }}">
+                                                    {{ m.angel }}
+                                                </span>
+                                                <input
+                                                    class="form-control"
+                                                    id="form_nick"
+                                                    type="text"
+                                                    name="login"
+                                                    value=""
+                                                    placeholder="{{ __('general.nick') }}"
+                                                    autofocus>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <div class="input-group input-group-lg">
+                                                <span class="input-group-text {{ m.type_text_class() }}">
+                                                    <i class="bi bi-key"></i>
+                                                </span>
+                                                <input
+                                                    class="form-control" id="form_password" type="password"
+                                                    name="password" value="" placeholder="{{ __('settings.password') }}" autocomplete="current-password"
+                                                >
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3 text-center">
+                                            <button class="btn btn-primary btn-lg btn-block" type="submit" name="submit">
+                                                {{ __('general.login') }}
+                                            </button>
+                                        </div>
+
+                                        <div class="text-center">
+                                            <a href="{{ url('/password/reset') }}" class="">
+                                                {{ __('login.password.reset') }}
+                                            </a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

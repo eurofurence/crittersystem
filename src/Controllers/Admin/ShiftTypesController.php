@@ -107,8 +107,8 @@ class ShiftTypesController extends BaseController
             throw new ValidationException((new Validator())->addErrors(['name' => ['validation.name.exists']]));
         }
 
-        $shiftType->name = $data['name'];
-        $shiftType->description = $data['description'] ?? '';
+        $shiftType->name = globalCleanText($data['name']);
+        $shiftType->description = globalCleanText($data['description'] ?? '');
 
         $shiftType->save();
         $shiftType->neededAngelTypes()->delete();

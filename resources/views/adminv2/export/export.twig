@@ -36,6 +36,7 @@
                     </div>
                     <div class="card-body">
                         <form method="post" action="{{ url('/adminv2/export/import') }}" enctype="multipart/form-data">
+                            {{ csrf() }}
                             <div class="mb-3">
                                 <label for="file" class="form-label">{{ __('File') }}</label>
                                 <input type="file" class="form-control" id="file" name="file" accept=".xlsx,.csv" required>

@@ -218,11 +218,17 @@ function admin_active()
     foreach ($users as $usr) {
         if (count($tokens) > 0) {
             $match = false;
-            foreach ($tokens as $t) {
-                $t = trim($t);
-                if (!empty($t) && stristr($usr->name, $t)) {
-                    $match = true;
-                    break;
+            foreach ($tokens as $token) {
+                $token = trim($token);
+                if (!empty($token)) {
+                    if (stristr($usr->name, $token)) {
+                        $match = true;
+                        break;
+                    }
+                    if (ctype_digit($token) && $usr->personalData->badge_number == intval($token)) {
+                        $match = true;
+                        break;
+                    }
                 }
             }
             if (!$match) {
@@ -249,6 +255,7 @@ function admin_active()
         $userData = [];
         $userData['no'] = count($matched_users) + 1;
         $userData['nick'] = User_Nick_render($usr) . User_Pronoun_render($usr) . user_info_icon($usr);
+        $userData['badge_number'] = $usr->personalData->badge_number;
         if ($goodie_tshirt) {
             $userData['shirt_size'] = (isset($tshirt_sizes[$shirtSize]) ? $tshirt_sizes[$shirtSize] : '');
         }
@@ -374,6 +381,7 @@ function admin_active()
                 [
                     'no'           => __('No.'),
                     'nick'         => __('general.name'),
+                    'badge_number'      => __('general.badge_number'),
                 ],
                 ($goodie_tshirt ? ['shirt_size'   => __('Size')] : []),
                 [

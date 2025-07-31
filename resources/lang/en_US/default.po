@@ -292,10 +292,10 @@ msgid "settings.profile.entry_required"
 msgstr "Entry required"
 
 msgid "general.nick"
-msgstr "Nick"
+msgstr "Nickname"
 
 msgid "settings.profile.nick.already-taken"
-msgstr "The nick is already taken."
+msgstr "The nickname is already taken."
 
 msgid "settings.profile.pronoun"
 msgstr "Pronoun"
@@ -344,11 +344,11 @@ msgstr "Allow Info Desk critters to contact me by e-mail."
 
 msgid "settings.profile.email_goodie"
 msgstr "To possibly receive vouchers for the next similar event, I consent "
-"that my nick, e-mail address and worked hours will be stored until then."
+"that my nickname, e-mail address and worked hours will be stored until then."
 
 msgid "settings.profile.email_tshirt"
 msgstr "To possibly receive vouchers for the next similar event, I consent "
-"that my nick, e-mail address, worked hours and T-shirt size will be stored until then."
+"that my nickname, e-mail address, worked hours and T-shirt size will be stored until then."
 
 msgid "settings.profile.privacy"
 msgstr "To withdraw your approval, send an e-mail to <a href=\"mailto:%s\">%1$s</a>."
@@ -955,6 +955,9 @@ msgstr "Read about the jobs you can do to help us."
 msgid "login.cookies"
 msgstr "Please note: You have to activate cookies!"
 
+msgid "login.use_username_password"
+msgstr "Login with username/password"
+
 msgid "general.angel"
 msgstr "Critter"
 
@@ -1051,6 +1054,18 @@ msgstr "Configuration updated successfully"
 
 msgid "Add more critters"
 msgstr "Add more critter"
+
+msgid "auth.login.staff_only"
+msgstr "The system is not available for general public"
+
+msgid "auth.login.admin_only"
+msgstr "Login restricted to admins only"
+
+msgid "departments.title"
+msgstr "Department"
+
+msgid "departments.title.plural"
+msgstr "Departments"
 
 msgid "validation.title.required"
 msgstr "Title is required"

@@ -48,6 +48,7 @@ $route->addGroup(
         $route->get('/oauth', 'SettingsController@oauth');
         $route->get('/sessions', 'SettingsController@sessions');
         $route->post('/sessions', 'SettingsController@sessionsDelete');
+        $route->get('/badge-number', 'SettingsController@updateBadgeNumber');
     }
 );
 
@@ -320,5 +321,25 @@ $route->addGroup(
                 $route->post('/import', 'AdminV2\\ExportController@import');
             }
         );
+    }
+);
+
+// Departments
+$route->addGroup(
+    '/departments',
+    function ($router): void {
+        // Department routes
+        $router->get('', 'DepartmentController@index');
+        $router->get('/create', 'DepartmentController@create');
+        $router->get('/{uuid}', 'DepartmentController@show');
+        $router->get('/{uuid}/edit', 'DepartmentController@edit');
+        $router->post('', 'DepartmentController@store');
+        $router->post('/{uuid}/delete', 'DepartmentController@destroy');
+        $router->post('/{uuid}/update', 'DepartmentController@update');
+
+        // Department application routes
+        $router->post('/{uuid}/apply', 'DepartmentApplicationController@apply');
+        $router->post('/{uuid}/approve/{userId}', 'DepartmentApplicationController@approve');
+        $router->post('/{uuid}/deny/{userId}', 'DepartmentApplicationController@deny');
     }
 );

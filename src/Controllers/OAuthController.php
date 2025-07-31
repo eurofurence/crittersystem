@@ -7,6 +7,7 @@ namespace Engelsystem\Controllers;
 use Carbon\Carbon;
 use Engelsystem\Config\Config;
 use Engelsystem\Helpers\Authenticator;
+use Engelsystem\Helpers\OAuthHelper;
 use Engelsystem\Http\Exceptions\HttpNotFound;
 use Engelsystem\Http\Redirector;
 use Engelsystem\Http\Request;
@@ -17,7 +18,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
-use League\OAuth2\Client\Provider\GenericProvider;
 use League\OAuth2\Client\Provider\ResourceOwnerInterface as ResourceOwner;
 use League\OAuth2\Client\Token\AccessTokenInterface;
 use Psr\Log\LoggerInterface;
@@ -33,6 +33,7 @@ class OAuthController extends BaseController
         protected Config $config,
         protected LoggerInterface $log,
         protected OAuth $oauth,
+        protected OAuthHelper $oauthHelper,
         protected Redirector $redirect,
         protected Session $session,
         protected UrlGenerator $url
@@ -206,19 +207,8 @@ class OAuthController extends BaseController
     protected function getProvider(string $name): AbstractProvider
     {
         $this->requireProvider($name);
-        $config = $this->config->get('oauth')[$name];
 
-        return new GenericProvider(
-            [
-                'clientId'                => $config['client_id'],
-                'clientSecret'            => $config['client_secret'],
-                'redirectUri'             => $this->url->to('oauth/' . $name),
-                'urlAuthorize'            => $config['url_auth'],
-                'urlAccessToken'          => $config['url_token'],
-                'urlResourceOwnerDetails' => $config['url_info'],
-                'responseResourceOwnerId' => $config['id'],
-            ]
-        );
+        return $this->oauthHelper->getProvider($name);
     }
 
     protected function getId(string $providerName, ResourceOwner $resourceOwner): mixed
@@ -234,16 +224,9 @@ class OAuthController extends BaseController
 
     protected function requireProvider(string $provider): void
     {
-        if (!$this->isValidProvider($provider)) {
+        if (!$this->oauthHelper->isValidProvider($provider)) {
             throw new HttpNotFound('oauth.provider-not-found');
         }
-    }
-
-    protected function isValidProvider(string $name): bool
-    {
-        $config = $this->config->get('oauth');
-
-        return isset($config[$name]);
     }
 
     protected function handleArrive(

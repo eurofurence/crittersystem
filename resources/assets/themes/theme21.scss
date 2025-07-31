@@ -324,10 +324,14 @@ table.table.table-striped.data {
   color: white !important;
 }
 
-.btn.btn-warning:not(.btn-danger),
-.btn.btn-success:not(.btn-danger) {
-  background-color: unset;
+.btn.btn-warning:not(.btn-danger){
+  color: black;
+  background-color: #dd0;
 }
+
+// .btn.btn-success:not(.btn-danger) {
+//   background-color: unset;
+// }
 
 .alert {
   backdrop-filter: blur(32px);

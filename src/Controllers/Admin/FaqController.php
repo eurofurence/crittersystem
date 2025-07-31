@@ -57,8 +57,8 @@ class FaqController extends BaseController
             'preview'  => 'optional|checked',
         ]);
 
-        $faq->question = $data['question'];
-        $faq->text = $data['text'];
+        $faq->question = globalCleanText(text: $data['question']);
+        $faq->text = globalCleanText(text: $data['text']);
 
         if (!is_null($data['preview'])) {
             return $this->showEdit($faq);

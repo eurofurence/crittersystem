@@ -10,6 +10,7 @@ $includeFiles = [
     __DIR__ . '/../includes/sys_menu.php',
     __DIR__ . '/../includes/sys_page.php',
     __DIR__ . '/../includes/sys_template.php',
+    __DIR__ . '/../includes/sys_global.php',
 
     __DIR__ . '/../includes/model/NeededAngelTypes_model.php',
     __DIR__ . '/../includes/model/ShiftEntry_model.php',

@@ -27,6 +27,7 @@ class PersonalDataFactory extends Factory
             'shirt_size' => $this->faker->optional(.9)->shirtSize(),
             'planned_arrival_date' => $arrival ? Carbon::instance($arrival) : null,
             'planned_departure_date' => $departure ? Carbon::instance($departure) : null,
+            'badge_number' => $this->faker->optional()->randomNumber(4),
         ];
     }
 }
