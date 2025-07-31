@@ -64,12 +64,21 @@ class TranslationStringExtractor
     private function extractFromTwig(string $content, string $filePath): void
     {
         // Match {{ '__'('string') }} or {% trans %}string{% endtrans %}
-        preg_match_all('/\{\{\s*\'__\'\s*\(\s*([\'"])(.*?)\1\s*\)\s*\}\}|\{\%\s*trans\s*\%\}(.*?)\{\%\s*endtrans\s*\%\}/', $content, $matches);
+        // preg_match_all('/\{\{\s*\'__\'\s*\(\s*([\'"])(.*?)\1\s*\)\s*\}\}|\{\%\s*trans\s*\%\}(.*?)\{\%\s*endtrans\s*\%\}/', $content, $matches);
+
+        // Match '__'('string') or __('string') or {{ '__'('string') }} or {% trans %}string{% endtrans %}
+        preg_match_all('/\'?__\'?\(\s*([\'"])(.*?)\1\s*\)|\{\{\s*\'__\'\s*\(\s*([\'"])(.*?)\1\s*\)\s*\}\}|\{\%\s*trans\s*\%\}(.*?)\{\%\s*endtrans\s*\%\}/', $content, $matches);
 
         if (!empty($matches[2])) {
             foreach ($matches[2] as $match) {
                 if (!empty($match)) {
-                    $this->addTranslation($match, $filePath);
+                    // $this->addTranslation($match, $filePath);
+                    $need_cut = strpos($match, "', [");
+                    if ($need_cut) {
+                        $this->addTranslation(substr($match, 0, $need_cut), $filePath);
+                    } else {
+                        $this->addTranslation($match, $filePath);
+                    }
                 }
             }
         }
@@ -77,7 +86,13 @@ class TranslationStringExtractor
         if (!empty($matches[3])) {
             foreach ($matches[3] as $match) {
                 if (!empty($match)) {
-                    $this->addTranslation(trim($match), $filePath);
+                    // $this->addTranslation(trim($match), $filePath);
+                    $need_cut = strpos($match, "', [");
+                    if ($need_cut) {
+                        $this->addTranslation(substr($match, 0, $need_cut), $filePath);
+                    } else {
+                        $this->addTranslation($match, $filePath);
+                    }
                 }
             }
         }
@@ -121,7 +136,7 @@ $searchDirectory = $argv[1] ?? getcwd();
 $outputFile = $argv[2] ?? 'translations.pot';
 
 echo "\n" . str_repeat('-', 80) . "\n";
-echo "Translation Extractor script\n";
+echo "         Translation Extractor script\n";
 echo str_repeat('-', 80) . "\n\n";
 echo sprintf("Extracting translations from %s\n", $searchDirectory);
 echo "Please wait...\n";
