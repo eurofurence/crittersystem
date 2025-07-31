@@ -14,12 +14,6 @@ Thumbs.db
 _vimrc_local.vim
 .sass-cache
 
-# Migration Status files
-config/migration.ok
-config/migration.fail
-config/migration.running
-config/migration.log
-
 # NO SYNC Files/Folders
 _NOSYNC
 .NOSYNC
@@ -44,6 +38,12 @@ _NOSYNC/
 /docker/dev/deployment.env
 
 # Project files
+# Migration Status files
+/config/migration.ok
+/config/migration.fail
+/config/migration.running
+/config/migration.log
+/config/idp_*_groups.yaml
 /config/config.php
 /config/lang/
 /public/*.xml
@@ -52,6 +52,7 @@ _NOSYNC/
 /coverage
 /unittests.xml
 /resources/lang/*/*.mo
+/bin/latest/
 
 # Composer files
 /vendor/

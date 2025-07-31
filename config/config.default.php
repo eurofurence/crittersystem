@@ -189,6 +189,9 @@ return [
     // Whether the mobile number will be shown to other users
     'enable_mobile_show'      => (bool) env('ENABLE_MOBILE_SHOW', false),
 
+    // show users registration number retrieved from the registration service
+    'display_badge_number'   => env('DISPLAY_BADGE_NUMBER', false),
+
     // TODO: REMOVE
     // Instruction in accordance with § 43 Para. 1 of the German Infection Protection Act (IfSG)
     'ifsg_enabled'           => (bool) env('IFSG_ENABLED', false),

@@ -5,23 +5,23 @@
 //== Colors
 @import 'dark';
 
-$gray-darker: #0E2317;
+$gray-darker: #0e2317;
 $gray-dark: lighten($gray-darker, 15%);
 $gray: lighten($gray-dark, 15%);
 $gray-light: lighten($gray, 15%);
 $gray-lighter: lighten($gray-light, 15%);
 $black: #000;
 
-$brand-primary: #06CC41;
+$brand-primary: #06cc41;
 $primary: $brand-primary;
 $secondary: #325937;
-$brand-success: #07FA02;
+$brand-success: #07fa02;
 $success: $brand-success;
 $brand-info: #028333;
 $info: $brand-info;
-$brand-warning: #E7D100;
+$brand-warning: #e7d100;
 $warning: $brand-warning;
-$brand-danger: #E72700;
+$brand-danger: #e72700;
 $danger: $brand-danger;
 
 //== Scaffolding
@@ -139,9 +139,9 @@ code {
 
 body {
   background: #001b19;
-  
+
   &::after {
-    content: "";
+    content: '';
     background: url('theme18/bg.png') no-repeat top left;
     background-size: contain;
     background-position-y: 30px;
@@ -151,7 +151,7 @@ body {
     bottom: 0;
     right: 0;
     position: fixed;
-    z-index: -1;   
+    z-index: -1;
   }
 }
 
@@ -172,5 +172,5 @@ body {
 
 // Custom
 .bi-telegram {
-	color: #24A1DE;
+  color: #24a1de;
 }

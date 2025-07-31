@@ -31,7 +31,7 @@ class AuthController extends BaseController
         protected Redirector $redirect,
         protected Config $config,
         protected Authenticator $auth,
-        protected OAuthHelper $oauthHelper
+        protected OAuthHelper $oauthHelper,
         protected EventConfig $eventConfig
     ) {
     }

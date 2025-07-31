@@ -1,0 +1,1952 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: bin/extract_translations.php
+msgid "string"
+msgstr ""
+
+#: includes/controller/angeltypes_controller.php
+#: includes/pages/user_shifts.php
+#: includes/sys_menu.php
+#: includes/view/AngelTypes_view.php
+#: includes/view/User_view.php
+msgid "angeltypes.angeltypes"
+msgstr ""
+
+#: includes/controller/angeltypes_controller.php
+msgid "Critter type %s deleted."
+msgstr ""
+
+#: includes/controller/angeltypes_controller.php
+#: includes/view/AngelTypes_view.php
+msgid "Delete critter type %s"
+msgstr ""
+
+#: includes/controller/angeltypes_controller.php
+msgid "Please check the name. Maybe it already exists."
+msgstr ""
+
+#: includes/controller/angeltypes_controller.php
+msgid "Critter type saved."
+msgstr ""
+
+#: includes/controller/angeltypes_controller.php
+#: includes/view/AngelTypes_view.php
+msgid "Edit %s"
+msgstr ""
+
+#: includes/controller/angeltypes_controller.php
+#: includes/view/AngelTypes_view.php
+msgid "Team %s"
+msgstr ""
+
+#: includes/controller/angeltypes_controller.php
+#: includes/view/User_view.php
+msgid "View"
+msgstr ""
+
+#: includes/controller/angeltypes_controller.php
+#: includes/pages/admin_active.php
+#: includes/pages/admin_free.php
+#: includes/pages/admin_groups.php
+#: includes/view/AngelTypes_view.php
+#: includes/view/Locations_view.php
+#: includes/view/ShiftCalendarShiftRenderer.php
+#: includes/view/Shifts_view.php
+#: includes/view/User_view.php
+msgid "form.edit"
+msgstr ""
+
+#: includes/controller/angeltypes_controller.php
+#: includes/pages/admin_user.php
+#: includes/view/AngelTypes_view.php
+#: includes/view/ShiftCalendarShiftRenderer.php
+#: includes/view/Shifts_view.php
+#: includes/view/User_view.php
+msgid "form.delete"
+msgstr ""
+
+#: includes/controller/angeltypes_controller.php
+#: includes/view/AngelTypes_view.php
+msgid "Leave"
+msgstr ""
+
+#: includes/controller/angeltypes_controller.php
+#: includes/view/AngelTypes_view.php
+msgid "Join"
+msgstr ""
+
+#: includes/controller/public_dashboard_controller.php
+#: includes/pages/user_shifts.php
+msgid "Public Dashboard"
+msgstr ""
+
+#: includes/controller/shifts_controller.php
+msgid "This shift was imported from a schedule so some changes will be overwritten with the next import."
+msgstr ""
+
+#: includes/controller/shifts_controller.php
+#: includes/pages/admin_shifts.php
+msgid "Please select a location."
+msgstr ""
+
+#: includes/controller/shifts_controller.php
+#: includes/pages/admin_shifts.php
+msgid "Please select a shift type."
+msgstr ""
+
+#: includes/controller/shifts_controller.php
+msgid "Please enter a valid starting time for the shifts."
+msgstr ""
+
+#: includes/controller/shifts_controller.php
+msgid "Please enter a valid ending time for the shifts."
+msgstr ""
+
+#: includes/controller/shifts_controller.php
+msgid "The ending time has to be after the starting time."
+msgstr ""
+
+#: includes/controller/shifts_controller.php
+msgid "Please check your input for needed critters of type %s."
+msgstr ""
+
+#: includes/controller/shifts_controller.php
+msgid "Shift updated."
+msgstr ""
+
+#: includes/controller/shifts_controller.php
+#: includes/pages/admin_active.php
+#: includes/pages/admin_shifts.php
+#: includes/pages/admin_user.php
+#: includes/view/AngelTypes_view.php
+#: includes/view/Locations_view.php
+#: includes/view/ShiftEntry_view.php
+#: includes/view/Shifts_view.php
+#: includes/view/UserAngelTypes_view.php
+#: includes/view/User_view.php
+msgid "general.back"
+msgstr ""
+
+#: includes/controller/shifts_controller.php
+msgid "This page is much more comfortable with javascript."
+msgstr ""
+
+#: includes/controller/shifts_controller.php
+#: includes/pages/admin_shifts.php
+msgid "Shift type"
+msgstr ""
+
+#: includes/controller/shifts_controller.php
+#: includes/pages/admin_shifts.php
+#: includes/view/Shifts_view.php
+msgid "title.title"
+msgstr ""
+
+#: includes/controller/shifts_controller.php
+#: includes/view/ShiftEntry_view.php
+msgid "Location:"
+msgstr ""
+
+#: includes/controller/shifts_controller.php
+msgid "Start:"
+msgstr ""
+
+#: includes/controller/shifts_controller.php
+msgid "End:"
+msgstr ""
+
+#: includes/controller/shifts_controller.php
+#: includes/pages/admin_shifts.php
+msgid "Additional description"
+msgstr ""
+
+#: includes/controller/shifts_controller.php
+#: includes/pages/admin_shifts.php
+msgid "This description is for single shifts, otherwise please use the description in shift type."
+msgstr ""
+
+#: includes/controller/shifts_controller.php
+#: includes/pages/admin_shifts.php
+#: includes/view/Shifts_view.php
+msgid "Needed critters"
+msgstr ""
+
+#: includes/controller/shifts_controller.php
+#: includes/pages/admin_groups.php
+#: includes/pages/admin_shifts.php
+#: includes/pages/admin_user.php
+#: includes/view/AngelTypes_view.php
+#: includes/view/ShiftEntry_view.php
+#: includes/view/UserAngelTypes_view.php
+#: includes/view/User_view.php
+msgid "form.save"
+msgstr ""
+
+#: includes/controller/shifts_controller.php
+msgid "Shift deleted."
+msgstr ""
+
+#: includes/controller/shifts_controller.php
+msgid "Shift could not be found."
+msgstr ""
+
+#: includes/controller/shift_entries_controller.php
+msgid "%s has been subscribed to the shift."
+msgstr ""
+
+#: includes/controller/shift_entries_controller.php
+msgid "%s (not \"%s\")"
+msgstr ""
+
+#: includes/controller/shift_entries_controller.php
+msgid "User is not in critter type."
+msgstr ""
+
+#: includes/controller/shift_entries_controller.php
+msgid "You need be accepted member of the critter type."
+msgstr ""
+
+#: includes/controller/shift_entries_controller.php
+#: includes/view/Shifts_view.php
+msgid "This shift collides with one of your shifts."
+msgstr ""
+
+#: includes/controller/shift_entries_controller.php
+msgid "This shift is already occupied."
+msgstr ""
+
+#: includes/controller/shift_entries_controller.php
+msgid "This shift ended already."
+msgstr ""
+
+#: includes/controller/shift_entries_controller.php
+msgid "You are not marked as arrived."
+msgstr ""
+
+#: includes/controller/shift_entries_controller.php
+msgid "You are not allowed to sign up yet."
+msgstr ""
+
+#: includes/controller/shift_entries_controller.php
+#: includes/view/Shifts_view.php
+msgid "You are signed up for this shift."
+msgstr ""
+
+#: includes/controller/shift_entries_controller.php
+msgid "You are subscribed. Thank you!"
+msgstr ""
+
+#: includes/controller/shift_entries_controller.php
+msgid "You are not allowed to remove this shift entry. If necessary, ask a staff member or the Info Desk to do so."
+msgstr ""
+
+#: includes/controller/shift_entries_controller.php
+msgid "Shift entry removed."
+msgstr ""
+
+#: includes/controller/users_controller.php
+msgid "You cannot delete yourself."
+msgstr ""
+
+#: includes/controller/users_controller.php
+msgid "auth.password.error"
+msgstr ""
+
+#: includes/controller/users_controller.php
+msgid "User deleted."
+msgstr ""
+
+#: includes/controller/users_controller.php
+#: includes/view/User_view.php
+msgid "Delete %s"
+msgstr ""
+
+#: includes/controller/users_controller.php
+msgid "Please enter a valid number of vouchers."
+msgstr ""
+
+#: includes/controller/users_controller.php
+msgid "Saved the number of vouchers."
+msgstr ""
+
+#: includes/controller/users_controller.php
+#: includes/view/User_view.php
+msgid "%s\\'s vouchers"
+msgstr ""
+
+#: includes/controller/users_controller.php
+msgid "User not found."
+msgstr ""
+
+#: includes/controller/users_controller.php
+msgid "Not possible..."
+msgstr ""
+
+#: includes/controller/users_controller.php
+msgid "Enough"
+msgstr ""
+
+#: includes/controller/users_controller.php
+#: includes/view/User_view.php
+msgid "All users"
+msgstr ""
+
+#: includes/controller/users_controller.php
+msgid "User doesn\\'t exist."
+msgstr ""
+
+#: includes/controller/users_controller.php
+msgid "angeltype.driving_license.required.info.here"
+msgstr ""
+
+#: includes/controller/users_controller.php
+msgid "driving_license.info"
+msgstr ""
+
+#: includes/controller/users_controller.php
+msgid "angeltype.ifsg.required.info.here"
+msgstr ""
+
+#: includes/controller/users_controller.php
+msgid "ifsg.info"
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+msgid "Crittertype doesn\\'t exist."
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+msgid "You are not allowed to delete all users for this critter type."
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+msgid "Denied all users for critter type %s."
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+#: includes/view/UserAngelTypes_view.php
+msgid "Deny all users"
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+msgid "You are not allowed to confirm all users for this critter type."
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+msgid "Confirmed all users for critter type %s."
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+#: includes/view/UserAngelTypes_view.php
+msgid "Confirm all users"
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+msgid "You are not allowed to confirm this users critter type."
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+msgid "%s confirmed for critter type %s."
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+#: includes/view/UserAngelTypes_view.php
+msgid "Confirm critter type for user"
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+msgid "You are not allowed to delete this users critter type."
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+msgid "You successfully left \"%2$s\"."
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+msgid "User \"%s\" removed from \"%s\"."
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+#: includes/view/UserAngelTypes_view.php
+msgid "Leave critter type"
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+msgid "No supporter update given."
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+msgid "Added supporter rights for %s to %s."
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+msgid "Removed supporter rights for %s from %s."
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+#: includes/view/AngelTypes_view.php
+#: includes/view/UserAngelTypes_view.php
+msgid "Add supporter rights"
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+#: includes/view/AngelTypes_view.php
+#: includes/view/UserAngelTypes_view.php
+msgid "Remove supporter rights"
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+#: includes/view/AngelTypes_view.php
+msgid "Member"
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+#: includes/view/AngelTypes_view.php
+msgid "Supporter"
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+#: includes/view/AngelTypes_view.php
+msgid "Unconfirmed"
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+msgid "%s (%s)"
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+msgid "User %s added to %s."
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+#: includes/view/UserAngelTypes_view.php
+msgid "Add user to critter type"
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+msgid "You are already a %s."
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+msgid "You joined %s."
+msgstr ""
+
+#: includes/controller/user_angeltypes_controller.php
+#: includes/view/UserAngelTypes_view.php
+msgid "Become a %s"
+msgstr ""
+
+#: includes/helper/email_helper.php
+msgid "User %s could not be notified by e-mail due to an error."
+msgstr ""
+
+#: includes/helper/legacy_helper.php
+#: includes/pages/admin_arrive.php
+#: includes/view/User_view.php
+#: src/Controllers/DesignController.php
+#: src/Helpers/BarChart.php
+msgid "general.date"
+msgstr ""
+
+#: includes/mailer/shifts_mailer.php
+msgid "You have been assigned to a Shift:"
+msgstr ""
+
+#: includes/mailer/shifts_mailer.php
+#: includes/pages/admin_user.php
+#: includes/pages/user_myshifts.php
+#: includes/view/ShiftCalendarShiftRenderer.php
+#: includes/view/ShiftEntry_view.php
+#: includes/view/Shifts_view.php
+#: includes/view/User_view.php
+#: src/Events/Listener/Shifts.php
+msgid "general.datetime"
+msgstr ""
+
+#: includes/mailer/shifts_mailer.php
+#: includes/pages/admin_shifts.php
+#: includes/view/ShiftCalendarRenderer.php
+#: includes/view/ShiftCalendarShiftRenderer.php
+#: includes/view/Shifts_view.php
+#: includes/view/User_view.php
+msgid "H:i"
+msgstr ""
+
+#: includes/mailer/shifts_mailer.php
+msgid "Assigned to Shift"
+msgstr ""
+
+#: includes/mailer/shifts_mailer.php
+msgid "You have been removed from a Shift:"
+msgstr ""
+
+#: includes/mailer/shifts_mailer.php
+msgid "Removed from Shift"
+msgstr ""
+
+#: includes/mailer/users_mailer.php
+msgid "Your account has been deleted."
+msgstr ""
+
+#: includes/mailer/users_mailer.php
+msgid "Your %s account has been deleted. If you have any questions regarding your account deletion, please contact the Info Desk."
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "Active critters"
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "At least %s critter are forced to be active. The number has to be greater."
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "Please enter a number of critters to be marked as active."
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "Marked critters."
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "Apply"
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "Critter has been marked as active."
+msgstr ""
+
+#: includes/pages/admin_active.php
+#: includes/pages/admin_arrive.php
+msgid "Critter not found."
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "Critter has been marked as not active."
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "Critter has got a T-shirt."
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "Critter has got a goodie."
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "Critter has got no T-shirt."
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "Critter has got no goodie."
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "Set active"
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "Remove active"
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "Got T-shirt"
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "Got goodie"
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "Remove T-shirt"
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "Remove goodie"
+msgstr ""
+
+#: includes/pages/admin_active.php
+#: includes/pages/admin_arrive.php
+#: includes/view/AngelTypes_view.php
+#: includes/view/User_view.php
+msgid "Sum"
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "Search critter:"
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "Show all shifts"
+msgstr ""
+
+#: includes/pages/admin_active.php
+#: includes/pages/admin_arrive.php
+#: includes/pages/admin_free.php
+msgid "form.search"
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "How many critters should be active?"
+msgstr ""
+
+#: includes/pages/admin_active.php
+#: includes/pages/admin_shifts.php
+msgid "form.preview"
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "No."
+msgstr ""
+
+#: includes/pages/admin_active.php
+#: includes/pages/admin_arrive.php
+#: includes/pages/admin_free.php
+#: includes/pages/admin_groups.php
+#: includes/view/AngelTypes_view.php
+msgid "general.name"
+msgstr ""
+
+#: includes/pages/admin_active.php
+#: includes/pages/admin_arrive.php
+#: includes/pages/admin_free.php
+msgid "general.badge_number"
+msgstr ""
+
+#: includes/pages/admin_active.php
+#: includes/view/User_view.php
+msgid "Size"
+msgstr ""
+
+#: includes/pages/admin_active.php
+#: includes/pages/user_shifts.php
+#: includes/sys_menu.php
+#: includes/view/AngelTypes_view.php
+#: includes/view/Locations_view.php
+#: includes/view/User_view.php
+msgid "general.shifts"
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "Length"
+msgstr ""
+
+#: includes/pages/admin_active.php
+#: includes/view/ShiftEntry_view.php
+#: includes/view/User_view.php
+msgid "T-shirt score"
+msgstr ""
+
+#: includes/pages/admin_active.php
+#: includes/view/ShiftEntry_view.php
+#: includes/view/User_view.php
+msgid "Goodie score"
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "Active"
+msgstr ""
+
+#: includes/pages/admin_active.php
+#: includes/view/User_view.php
+msgid "Forced"
+msgstr ""
+
+#: includes/pages/admin_active.php
+#: includes/pages/admin_user.php
+#: includes/view/Shifts_view.php
+#: includes/view/User_view.php
+msgid "T-shirt"
+msgstr ""
+
+#: includes/pages/admin_active.php
+#: includes/pages/admin_user.php
+#: includes/view/User_view.php
+msgid "Goodie"
+msgstr ""
+
+#: includes/pages/admin_active.php
+#: includes/pages/admin_arrive.php
+#: includes/view/User_view.php
+msgid "general.actions"
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "T-shirt statistic"
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "Goodie statistic"
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "Given T-shirts"
+msgstr ""
+
+#: includes/pages/admin_active.php
+msgid "Given goodies"
+msgstr ""
+
+#: includes/pages/admin_arrive.php
+msgid "Arrive critters"
+msgstr ""
+
+#: includes/pages/admin_arrive.php
+msgid "Critters"
+msgstr ""
+
+#: includes/pages/admin_arrive.php
+msgid "Reset done. Critter has not arrived."
+msgstr ""
+
+#: includes/pages/admin_arrive.php
+msgid "Critter has been marked as arrived."
+msgstr ""
+
+#: includes/pages/admin_arrive.php
+msgid "Reset"
+msgstr ""
+
+#: includes/pages/admin_arrive.php
+#: includes/view/User_view.php
+msgid "user.arrive"
+msgstr ""
+
+#: includes/pages/admin_arrive.php
+#: includes/view/User_view.php
+msgid "Planned arrival"
+msgstr ""
+
+#: includes/pages/admin_arrive.php
+#: includes/view/User_view.php
+msgid "Arrived"
+msgstr ""
+
+#: includes/pages/admin_arrive.php
+msgid "Arrival date"
+msgstr ""
+
+#: includes/pages/admin_arrive.php
+#: includes/view/User_view.php
+msgid "Planned departure"
+msgstr ""
+
+#: includes/pages/admin_arrive.php
+msgid "Planned arrival statistics"
+msgstr ""
+
+#: includes/pages/admin_arrive.php
+#: includes/pages/admin_user.php
+#: includes/view/User_view.php
+msgid "user.arrived"
+msgstr ""
+
+#: includes/pages/admin_arrive.php
+#: src/Helpers/BarChart.php
+msgid "arrived sum"
+msgstr ""
+
+#: includes/pages/admin_arrive.php
+msgid "title.date"
+msgstr ""
+
+#: includes/pages/admin_arrive.php
+msgid "general.count"
+msgstr ""
+
+#: includes/pages/admin_arrive.php
+msgid "Arrival statistics"
+msgstr ""
+
+#: includes/pages/admin_arrive.php
+msgid "Planned departure statistics"
+msgstr ""
+
+#: includes/pages/admin_free.php
+msgid "Free Critters"
+msgstr ""
+
+#: includes/pages/admin_free.php
+#: includes/pages/user_shifts.php
+#: includes/view/PublicDashboard_view.php
+#: includes/view/ShiftsFilterRenderer.php
+msgid "All"
+msgstr ""
+
+#: includes/pages/admin_free.php
+#: includes/view/ShiftEntry_view.php
+#: includes/view/UserAngelTypes_view.php
+msgid "Critter type"
+msgstr ""
+
+#: includes/pages/admin_free.php
+msgid "shift.next"
+msgstr ""
+
+#: includes/pages/admin_free.php
+msgid "Last shift"
+msgstr ""
+
+#: includes/pages/admin_free.php
+#: includes/pages/admin_user.php
+#: includes/view/AngelTypes_view.php
+#: includes/view/Locations_view.php
+#: includes/view/User_view.php
+msgid "general.dect"
+msgstr ""
+
+#: includes/pages/admin_free.php
+#: includes/pages/admin_user.php
+#: includes/view/AngelTypes_view.php
+msgid "general.email"
+msgstr ""
+
+#: includes/pages/admin_groups.php
+msgid "Grouprights"
+msgstr ""
+
+#: includes/pages/admin_groups.php
+msgid "Privileges"
+msgstr ""
+
+#: includes/pages/admin_groups.php
+msgid "Edit group"
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "Create shifts"
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "Please select a start time."
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "Please select an end time."
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "The shifts end has to be after its start."
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "Please enter a shift duration in minutes."
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "Please validate the change hour %s. It should be between 00:00 and 24:00."
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "Please split the shift-change hours by colons."
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "Please select a mode."
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "Please check the needed critters for team %s."
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "Please select a mode for needed critters."
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "There are 0 critters needed. Please enter the amounts of needed critters."
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "Please select needed critters."
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "Number of shifts: %s"
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "Time and location"
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "Type and title"
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "Shifts created."
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "Reset to previous state"
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "admin_shifts.no_locations"
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "admin_shifts.no_shifttypes"
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "admin_shifts.no_angeltypes"
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+#: includes/view/Shifts_view.php
+#: includes/view/User_view.php
+msgid "Location"
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+#: includes/view/Shifts_view.php
+msgid "shifts.start"
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+#: includes/view/Shifts_view.php
+msgid "shifts.end"
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "Mode"
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "Create one shift"
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "Create multiple shifts"
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "Length (in minutes)"
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "Create multiple shifts with variable length"
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "Shift change hours"
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "Create a shift over midnight."
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "Copy needed critters from shift type settings"
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "Copy needed critters from location settings"
+msgstr ""
+
+#: includes/pages/admin_shifts.php
+msgid "The following critters are needed"
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "All Critters"
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "This user does not exist."
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "Here you can change the user entry. Under the item \\'Arrived\\' the critter is marked as present, a yes at Active means that the critter was active."
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "If the critter is active, it can claim a T-shirt. If T-shirt is set to \\'Yes\\"
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "If the critter is active, it can claim a goodie. If goodie is set to \\'Yes\\"
+msgstr ""
+
+#: includes/pages/admin_user.php
+#: includes/view/AngelTypes_view.php
+#: includes/view/User_view.php
+msgid "general.nick"
+msgstr ""
+
+#: includes/pages/admin_user.php
+#: includes/view/User_view.php
+msgid "Last login"
+msgstr ""
+
+#: includes/pages/admin_user.php
+#: includes/view/User_view.php
+msgid "settings.profile.firstname"
+msgstr ""
+
+#: includes/pages/admin_user.php
+#: includes/view/User_view.php
+msgid "settings.profile.lastname"
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "settings.profile.mobile"
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "user.shirt_size"
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "form.select_placeholder"
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "user.info"
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "user.info.hint"
+msgstr ""
+
+#: includes/pages/admin_user.php
+#: includes/view/AngelTypes_view.php
+#: includes/view/UserAngelTypes_view.php
+msgid "Yes"
+msgstr ""
+
+#: includes/pages/admin_user.php
+#: includes/view/AngelTypes_view.php
+msgid "No"
+msgstr ""
+
+#: includes/pages/admin_user.php
+#: includes/view/User_view.php
+msgid "user.active"
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "Force active"
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "form.badge_number.admin"
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "settings.profile.badge_number"
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "badge_number.reset_info"
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "Here you can reset the password of this critter:"
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "settings.password"
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "password.minimal_length"
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "password.reset.confirm"
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "Here you can define the user groups of the critter:"
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "User groups saved."
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "You cannot edit critters with more rights."
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "You cannot edit your own rights."
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "settings.profile.email.already-taken"
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "settings.profile.nick.already-taken"
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "Changes were saved."
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "Password reset done."
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "The entries must match and must not be empty!"
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "form.badge_number.success"
+msgstr ""
+
+#: includes/pages/admin_user.php
+msgid "Edit user"
+msgstr ""
+
+#: includes/pages/user_myshifts.php
+#: includes/view/Shifts_view.php
+msgid "profile.my-shifts"
+msgstr ""
+
+#: includes/pages/user_myshifts.php
+msgid "Please enter a freeload comment!"
+msgstr ""
+
+#: includes/pages/user_myshifts.php
+msgid "Shift saved."
+msgstr ""
+
+#: includes/pages/user_shifts.php
+msgid "The administration has not configured any locations yet."
+msgstr ""
+
+#: includes/pages/user_shifts.php
+msgid "The administration has not configured any shifts yet."
+msgstr ""
+
+#: includes/pages/user_shifts.php
+msgid "The administration has not configured any critter types yet - or you are not subscribed to any critter type."
+msgstr ""
+
+#: includes/pages/user_shifts.php
+msgid "occupied"
+msgstr ""
+
+#: includes/pages/user_shifts.php
+#: includes/view/User_view.php
+msgid "free"
+msgstr ""
+
+#: includes/pages/user_shifts.php
+#: includes/sys_menu.php
+msgid "Locations"
+msgstr ""
+
+#: includes/pages/user_shifts.php
+msgid "The tasks shown here are influenced by the critter types you joined already!"
+msgstr ""
+
+#: includes/pages/user_shifts.php
+msgid "Occupancy"
+msgstr ""
+
+#: includes/pages/user_shifts.php
+msgid "Filter"
+msgstr ""
+
+#: includes/pages/user_shifts.php
+msgid "shifts.filter.toggle"
+msgstr ""
+
+#: includes/pages/user_shifts.php
+msgid "Yesterday"
+msgstr ""
+
+#: includes/pages/user_shifts.php
+msgid "Today"
+msgstr ""
+
+#: includes/pages/user_shifts.php
+msgid "Tomorrow"
+msgstr ""
+
+#: includes/pages/user_shifts.php
+msgid "last 8h"
+msgstr ""
+
+#: includes/pages/user_shifts.php
+msgid "last 4h"
+msgstr ""
+
+#: includes/pages/user_shifts.php
+msgid "next 4h"
+msgstr ""
+
+#: includes/pages/user_shifts.php
+msgid "next 8h"
+msgstr ""
+
+#: includes/pages/user_shifts.php
+msgid "shifts.random"
+msgstr ""
+
+#: includes/pages/user_shifts.php
+msgid "iCal export and API"
+msgstr ""
+
+#: includes/pages/user_shifts.php
+msgid "Export your own shifts formatted as <a href=\"%s\" target=\"_blank\">iCal</a> or <a href=\"%s\" target=\"_blank\">JSON</a> (please keep the link secret, otherwise you have to reset the api key <a href=\"%s\">in your settings</a>)."
+msgstr ""
+
+#: includes/pages/user_shifts.php
+msgid "None"
+msgstr ""
+
+#: includes/pages/user_shifts.php
+msgid "Own"
+msgstr ""
+
+#: includes/sys_menu.php
+msgid "news.title"
+msgstr ""
+
+#: includes/sys_menu.php
+msgid "news.title.meetings"
+msgstr ""
+
+#: includes/sys_menu.php
+msgid "Ask the Info Desk"
+msgstr ""
+
+#: includes/sys_menu.php
+msgid "departments.title.plural"
+msgstr ""
+
+#: includes/sys_menu.php
+msgid "Admin"
+msgstr ""
+
+#: includes/sys_menu.php
+msgid "Manage locations"
+msgstr ""
+
+#: includes/sys_menu.php
+msgid "There are unanswered questions!"
+msgstr ""
+
+#: includes/sys_template.php
+msgid "No data found."
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "Do you want to delete critter type %s?"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+#: includes/view/ShiftEntry_view.php
+#: includes/view/UserAngelTypes_view.php
+msgid "form.cancel"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "angeltype.ifsg.required"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "Requires driver license"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "Create critter type"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "angeltypes.restricted"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "angeltypes.restricted.info"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "shift.self_signup"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "angeltypes.shift.self_signup.info"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "Show on dashboard"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "Hide at Registration"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "angeltypes.hide_on_shift_view"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "angeltypes.hide_on_shift_view.info"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+#: includes/view/Locations_view.php
+#: includes/view/Shifts_view.php
+msgid "general.description"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "Please use markdown for the description."
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+#: includes/view/Locations_view.php
+msgid "Contact"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "Primary contact person/desk for user questions."
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "My driving license"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "angeltype.ifsg.own"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "This critter type requires a driver license. Please enter your driver license information!"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "angeltype.ifsg.required.info"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "You are unconfirmed for this critter type. Please go to the introduction for %s to get confirmed."
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "Edit certificates"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "Confirm"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "Deny"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "Remove"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "Driver"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "Has car"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "settings.certificates.drive_car"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "settings.certificates.drive_3_5t"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "settings.certificates.drive_7_5t"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "settings.certificates.drive_12t"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "settings.certificates.drive_forklift"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "ifsg.certificate_light"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "ifsg.certificate"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+#: includes/view/UserAngelTypes_view.php
+msgid "general.add"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "Info"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "angeltype.ifsg.required.info.preview"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "angeltype.driving_license.required.info.preview"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "Supporters"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "Members"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "Confirm all"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "Deny all"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "angeltypes.about"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "shift.self_signup.allowed"
+msgstr ""
+
+#: includes/view/AngelTypes_view.php
+msgid "Membership"
+msgstr ""
+
+#: includes/view/Locations_view.php
+msgid "location.required_angels"
+msgstr ""
+
+#: includes/view/Locations_view.php
+msgid "location.map_url"
+msgstr ""
+
+#: includes/view/PublicDashboard_view.php
+msgid "Needed critters:"
+msgstr ""
+
+#: includes/view/PublicDashboard_view.php
+msgid "Critters needed in the next 3 hrs"
+msgstr ""
+
+#: includes/view/PublicDashboard_view.php
+msgid "Critters needed for nightshifts"
+msgstr ""
+
+#: includes/view/PublicDashboard_view.php
+msgid "Critters currently working"
+msgstr ""
+
+#: includes/view/PublicDashboard_view.php
+msgid "Hours to be worked"
+msgstr ""
+
+#: includes/view/PublicDashboard_view.php
+msgid "dashboard.day"
+msgstr ""
+
+#: includes/view/PublicDashboard_view.php
+msgid "Fullscreen"
+msgstr ""
+
+#: includes/view/PublicDashboard_view.php
+msgid "Filtered"
+msgstr ""
+
+#: includes/view/ShiftCalendarRenderer.php
+msgid "No shifts found."
+msgstr ""
+
+#: includes/view/ShiftCalendarRenderer.php
+msgid "m-d"
+msgstr ""
+
+#: includes/view/ShiftCalendarRenderer.php
+msgid "log.time"
+msgstr ""
+
+#: includes/view/ShiftCalendarRenderer.php
+msgid "Your shift"
+msgstr ""
+
+#: includes/view/ShiftCalendarRenderer.php
+msgid "Help needed"
+msgstr ""
+
+#: includes/view/ShiftCalendarRenderer.php
+msgid "Other critter type needed / collides with my shifts"
+msgstr ""
+
+#: includes/view/ShiftCalendarRenderer.php
+msgid "Shift is full"
+msgstr ""
+
+#: includes/view/ShiftCalendarRenderer.php
+msgid "Shift is running/ended or you have not arrived"
+msgstr ""
+
+#: includes/view/ShiftCalendarShiftRenderer.php
+msgid "Add more critters"
+msgstr ""
+
+#: includes/view/ShiftCalendarShiftRenderer.php
+#: includes/view/Shifts_view.php
+msgid "Sign up"
+msgstr ""
+
+#: includes/view/ShiftCalendarShiftRenderer.php
+msgid "ended"
+msgstr ""
+
+#: includes/view/ShiftCalendarShiftRenderer.php
+msgid "please arrive for signup"
+msgstr ""
+
+#: includes/view/ShiftCalendarShiftRenderer.php
+msgid "not yet"
+msgstr ""
+
+#: includes/view/ShiftCalendarShiftRenderer.php
+#: includes/view/Shifts_view.php
+msgid "Become %s"
+msgstr ""
+
+#: includes/view/ShiftCalendarShiftRenderer.php
+#: includes/view/Shifts_view.php
+msgid "Do you want to delete the shift \"%s\" from %s to %s?"
+msgstr ""
+
+#: includes/view/ShiftEntry_view.php
+msgid "Do you want to sign off %s from shift %s from %s to %s as %s?"
+msgstr ""
+
+#: includes/view/ShiftEntry_view.php
+#: includes/view/User_view.php
+msgid "Sign off"
+msgstr ""
+
+#: includes/view/ShiftEntry_view.php
+msgid "Do you want to sign off from your shift %s from %s to %s as %s?"
+msgstr ""
+
+#: includes/view/ShiftEntry_view.php
+msgid "Shift sign off"
+msgstr ""
+
+#: includes/view/ShiftEntry_view.php
+msgid "Do you want to sign up the following user for this shift?"
+msgstr ""
+
+#: includes/view/ShiftEntry_view.php
+#: includes/view/UserAngelTypes_view.php
+msgid "general.user"
+msgstr ""
+
+#: includes/view/ShiftEntry_view.php
+msgid "Do you want to sign up the following user for this shift as %s?"
+msgstr ""
+
+#: includes/view/ShiftEntry_view.php
+msgid "Do you want to sign up for this shift as %s?"
+msgstr ""
+
+#: includes/view/ShiftEntry_view.php
+msgid "Comment (for your eyes only):"
+msgstr ""
+
+#: includes/view/ShiftEntry_view.php
+msgid "Shift signup"
+msgstr ""
+
+#: includes/view/ShiftEntry_view.php
+msgid "freeload.freeloaded.info"
+msgstr ""
+
+#: includes/view/ShiftEntry_view.php
+msgid "freeload.freeloaded.info.goodie"
+msgstr ""
+
+#: includes/view/ShiftEntry_view.php
+#: includes/view/User_view.php
+msgid "Freeloaded"
+msgstr ""
+
+#: includes/view/ShiftEntry_view.php
+msgid "Freeload comment (Only for shift coordination and supporters):"
+msgstr ""
+
+#: includes/view/ShiftEntry_view.php
+msgid "Edit shift entry"
+msgstr ""
+
+#: includes/view/ShiftEntry_view.php
+msgid "Critter:"
+msgstr ""
+
+#: includes/view/ShiftEntry_view.php
+msgid "Date, Duration:"
+msgstr ""
+
+#: includes/view/ShiftEntry_view.php
+msgid "Title:"
+msgstr ""
+
+#: includes/view/ShiftEntry_view.php
+msgid "Type:"
+msgstr ""
+
+#: includes/view/ShiftsFilterRenderer.php
+msgid "Dashboard"
+msgstr ""
+
+#: includes/view/Shifts_view.php
+msgid "created at %s by %s"
+msgstr ""
+
+#: includes/view/Shifts_view.php
+msgid "edited at %s by %s"
+msgstr ""
+
+#: includes/view/Shifts_view.php
+msgid "History ID: %s"
+msgstr ""
+
+#: includes/view/Shifts_view.php
+msgid "shift.angeltype_source.shift_type"
+msgstr ""
+
+#: includes/view/Shifts_view.php
+msgid "shift.angeltype_source.location"
+msgstr ""
+
+#: includes/view/Shifts_view.php
+msgid "Shift"
+msgstr ""
+
+#: includes/view/Shifts_view.php
+msgid "shift.angeltype_source"
+msgstr ""
+
+#: includes/view/Shifts_view.php
+msgid "shift.sign_out.hint"
+msgstr ""
+
+#: includes/view/Shifts_view.php
+msgid "This shift is in the far future and becomes available for signup at %s."
+msgstr ""
+
+#: includes/view/Shifts_view.php
+#: includes/view/User_view.php
+msgid "Night shifts between %d and %d am are multiplied by %d for the %s score."
+msgstr ""
+
+#: includes/view/Shifts_view.php
+#: includes/view/User_view.php
+msgid "goodie"
+msgstr ""
+
+#: includes/view/UserAngelTypes_view.php
+msgid "Do you really want to add supporter rights for %s to %s?"
+msgstr ""
+
+#: includes/view/UserAngelTypes_view.php
+msgid "Do you really want to remove supporter rights for %s from %s?"
+msgstr ""
+
+#: includes/view/UserAngelTypes_view.php
+msgid "Do you really want to deny all users for %s?"
+msgstr ""
+
+#: includes/view/UserAngelTypes_view.php
+msgid "Do you really want to confirm all users for %s?"
+msgstr ""
+
+#: includes/view/UserAngelTypes_view.php
+msgid "Do you really want to confirm %s for %s?"
+msgstr ""
+
+#: includes/view/UserAngelTypes_view.php
+msgid "Do you really want to leave \"%2$s\"?"
+msgstr ""
+
+#: includes/view/UserAngelTypes_view.php
+msgid "Do you really want to remove \"%s\" from \"%s\"?"
+msgstr ""
+
+#: includes/view/UserAngelTypes_view.php
+msgid "Confirm user"
+msgstr ""
+
+#: includes/view/UserAngelTypes_view.php
+msgid "Do you really want to add %s to %s?"
+msgstr ""
+
+#: includes/view/UserAngelTypes_view.php
+msgid "Do you want to become a %2$s?"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Do you really want to delete the user including all his shifts and every other piece of his data?"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Your password"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Critter can receive another %d vouchers and is FA."
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Critter can receive another %d vouchers."
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Number of vouchers given out"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "general.profile.badge_number"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Voucher"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Freeloads"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "T-Shirt"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Next shift %c"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Shift started %c"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Shift ends %c"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Shift ended %c"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "freeload.info"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "freeload.info.goodie"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Sum:"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Work log entry"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Added by %s at %s"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Day & Time"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Duration"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Name & Workmates"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "worklog.comment"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "You have done enough."
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "%s has done enough."
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Vouchers"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "settings.certificates"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "worklog.add"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "settings.settings"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "iCal Export"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "JSON Export"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "API Settings"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Go to the <a href=\"%s\">shifts table</a> to sign yourself up for some shifts."
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "State"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Not arrived"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Freeloader"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Arrived at %s"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "user.force_active"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Not arrived (Planned: %s)"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Got %s of %s vouchers"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Got no vouchers"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "out of %s"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Password reset in progress"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Rights"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "OAuth"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "Please enter your planned date of departure on your settings page to give us a feeling for teardown capacities."
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "freeload.freeloader.info"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "user_info.not_arrived_hint"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "You are not marked as arrived. Please go to the Info Desk and tell them that you arrived already."
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "tshirt.required.hint"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "dect.required.hint"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "pronoun.required.hint"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "firstname.required.hint"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "lastname.required.hint"
+msgstr ""
+
+#: includes/view/User_view.php
+msgid "mobile.required.hint"
+msgstr ""
+
+#: src/Controllers/AdminV2/ExportController.php
+msgid "Import/Export Data"
+msgstr ""
+
+#: src/Controllers/AdminV2/ExportController.php
+msgid "No file uploaded"
+msgstr ""
+
+#: src/Controllers/AdminV2/ExportController.php
+msgid "Import completed: %d new locations, %d new shift types, %d new shifts, %d updated shifts"
+msgstr ""
+
+#: src/Controllers/AdminV2/ExportController.php
+msgid "Import completed successfully"
+msgstr ""
+
+#: src/Controllers/AdminV2/ExportController.php
+msgid "Import failed: "
+msgstr ""
+
+#: src/Events/Listener/Shifts.php
+msgid "%s (%s as %s) in %s, %s - %s"
+msgstr ""
+
+#: src/Helpers/BarChart.php
+msgid "arrived"
+msgstr ""
+
+#: tests/Unit/HelpersTest.php
+msgid "Lorem %s Ipsum"
+msgstr ""
+

@@ -20,7 +20,7 @@ $secondary: #231f20;
 $success: #3fff21;
 $info: #3dbddf;
 $warning: #f6b345;
-$danger: #B21E2A;
+$danger: #b21e2a;
 
 $text-muted: $gray-light;
 
@@ -160,8 +160,7 @@ $pagination-disabled-border-color: $gray-dark;
   font-family: $headings-font-family;
 }
 
-.navbar-brand
-.icon-icon_angel {
+.navbar-brand .icon-icon_angel {
   background-color: $info !important;
 }
 
@@ -220,10 +219,10 @@ body {
 }
 
 hr {
-	opacity: 0.5;
+  opacity: 0.5;
 }
 
 // Custom
 .bi-telegram {
-	color: #24A1DE;
+  color: #24a1de;
 }
