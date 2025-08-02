@@ -16,10 +16,10 @@
 | Administrative |              config.edit | Edit the application configuration                     |  🟢   | 🔴  |     🔴     |   🔴    |    🟢     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
 | Administrative |                 logs.all | View all logs                                          |  🟢   | 🔴  |     🟢     |   🔴    |    🔴     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
 | Administrative |          schedule.import | Import locations and shifts from schedule.xml          |  🟢   | 🔴  |     🟢     |   🔴    |    🔴     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
-|   Locations    |          admin_locations | Manage locations                                       |  🟢   | 🔴  |     🟢     |   🔴    |    🔴     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
-|   Locations    |           view_locations | User can view locations                                |  🟢   | 🔴  |     🔴     |   🟢    |    🔴     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
-|    Meetings    |            user_meetings | Lists meetings (news)                                  |  🟢   | 🔴  |     🔴     |   🟢    |    🔴     |       🟢       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
-|    Messages    |            user_messages | Writing and reading messages from user to user         |  🟢   | 🔴  |     🔴     |   🟢    |    🔴     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
+|    Location    |          admin_locations | Manage locations                                       |  🟢   | 🔴  |     🟢     |   🔴    |    🔴     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
+|    Location    |           view_locations | User can view locations                                |  🟢   | 🔴  |     🔴     |   🟢    |    🔴     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
+|    Meeting     |            user_meetings | Lists meetings (news)                                  |  🟢   | 🔴  |     🔴     |   🟢    |    🔴     |       🟢       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
+|    Message     |            user_messages | Writing and reading messages from user to user         |  🟢   | 🔴  |     🔴     |   🟢    |    🔴     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
 |    Critter     |             admin_active | Mark angels as active and if they got a goodie.        |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
 |    Critter     |        admin_angel_types | Engel Typen administrieren                             |  🟢   | 🔴  |     🟢     |   🔴    |    🔴     |       🔴       |  🔴   |        🟢         |        🔴        |       🔴        |       🔴        |
 |    Critter     |             admin_arrive | Mark angels when they arrive.                          |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🟢       |  🔴   |        🟢         |        🔴        |       🔴        |       🔴        |
@@ -28,43 +28,43 @@
 |    Critter     |    admin_user_angeltypes | Confirm restricted angel types                         |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🔴       |  🔴   |        🟢         |        🔴        |       🔴        |       🔴        |
 |    Critter     |               angeltypes | View angeltypes                                        |  🟢   | 🔴  |     🔴     |   🟢    |    🔴     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🟢        |
 |    Critter     |          user_angeltypes | Join angeltypes.                                       |  🟢   | 🔴  |     🔴     |   🟢    |    🔴     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
-|   Questions    |             question.add | Ask questions                                          |  🟢   | 🔴  |     🟢     |   🟢    |    🔴     |       🟢       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
-|   Questions    |            question.edit | Answer questions                                       |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🟢       |  🔴   |        🟢         |        🔴        |       🔴        |       🔴        |
-| Certifications |          user.drive.edit | Edit Driving License                                   |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🔴       |  🔴   |        🟢         |        🔴        |       🔴        |       🔴        |
-| Certifications |           user.ifsg.edit | Edit IfSG Certificate                                  |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🔴       |  🔴   |        🟢         |        🔴        |       🔴        |       🔴        |
+|    Question    |             question.add | Ask questions                                          |  🟢   | 🔴  |     🟢     |   🟢    |    🔴     |       🟢       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
+|    Question    |            question.edit | Answer questions                                       |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🟢       |  🔴   |        🟢         |        🔴        |       🔴        |       🔴        |
+| Certification  |          user.drive.edit | Edit Driving License                                   |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🔴       |  🔴   |        🟢         |        🔴        |       🔴        |       🔴        |
+| Certification  |           user.ifsg.edit | Edit IfSG Certificate                                  |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🔴       |  🔴   |        🟢         |        🔴        |       🔴        |       🔴        |
 |      FAQ       |                 faq.edit | Edit FAQ entries                                       |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🟢       |  🔴   |        🟢         |        🔴        |       🔴        |       🔴        |
 |      FAQ       |                 faq.view | View FAQ entries                                       |  🟢   | 🔴  |     🔴     |   🟢    |    🔴     |       🟢       |  🟢   |        🔴         |        🔴        |       🔴        |       🔴        |
 |      News      |               admin_news | Administrate the news section                          |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🟢       |  🔴   |        🟢         |        🔴        |       🔴        |       🔴        |
 |      News      |                     news | Anzeigen der News-Seite                                |  🟢   | 🔴  |     🔴     |   🟢    |    🔴     |       🟢       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
 |      News      |            news_comments | User can comment news                                  |  🟢   | 🔴  |     🔴     |   🟢    |    🔴     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
 |      News      |           news.highlight | Highlight News                                         |  🟢   | 🔴  |     🟢     |   🔴    |    🔴     |       🟢       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
-|     Shifts     |             admin_shifts | Create shifts                                          |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🔴       |  🔴   |        🟢         |        🔴        |       🔴        |       🟢        |
-|     Shifts     |       admin_user_worklog | Manage user work log entries.                          |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🟢       |  🔴   |        🟢         |        🔴        |       🔴        |       🔴        |
-|     Shifts     |       shifts_json_export | Export shifts in JSON format                           |  🟢   | 🔴  |     🔴     |   🟢    |    🔴     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
-|     Shifts     |          shifttypes.edit | Edit shift types                                       |  🟢   | 🔴  |     🟢     |   🔴    |    🔴     |       🔴       |  🔴   |        🟢         |        🔴        |       🔴        |       🔴        |
-|     Shifts     |          shifttypes.view | View shift types                                       |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🔴       |  🔴   |        🟢         |        🔴        |       🔴        |       🔴        |
-|     Shifts     |            user_myshifts | Allow angels to view their own shifts and cancel them. |  🟢   | 🔴  |     🔴     |   🟢    |    🔴     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
-|     Shifts     |              user_shifts | Signup for shifts                                      |  🟢   | 🔴  |     🔴     |   🟢    |    🔴     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
-|     Shifts     |        user_shifts_admin | Signup other angels for shifts.                        |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🟢       |  🔴   |        🟢         |        🔴        |       🔴        |       🟢        |
-|     Users      |            user_settings | User profile settings                                  |  🟢   | 🔴  |     🔴     |   🟢    |    🔴     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
-|     Users      |           user.info.edit | Edit User Info                                         |  🟢   | 🔴  |     🟢     |   🔴    |    🔴     |       🟢       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
-|     Users      |           user.info.show | Show User Info                                         |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🔴       |  🔴   |        🟢         |        🔴        |       🔴        |       🔴        |
-|     Users      |           user.nick.edit | Edit user nick                                         |  🟢   | 🔴  |     🟢     |   🔴    |    🔴     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
-|     Users      |             user.fa.edit | Edit User Force Active State                           |  🟢   | 🔴  |     🟢     |   🔴    |    🔴     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
-|     Users      |        users.arrive.list | View arrive angels list                                |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🟢       |  🔴   |        🟢         |        🔴        |       🟢        |       🟢        |
+|     Shift      |             admin_shifts | Create shifts                                          |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🔴       |  🔴   |        🟢         |        🔴        |       🔴        |       🟢        |
+|     Shift      |       admin_user_worklog | Manage user work log entries.                          |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🟢       |  🔴   |        🟢         |        🔴        |       🔴        |       🔴        |
+|     Shift      |       shifts_json_export | Export shifts in JSON format                           |  🟢   | 🔴  |     🔴     |   🟢    |    🔴     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
+|     Shift      |          shifttypes.edit | Edit shift types                                       |  🟢   | 🔴  |     🟢     |   🔴    |    🔴     |       🔴       |  🔴   |        🟢         |        🔴        |       🔴        |       🔴        |
+|     Shift      |          shifttypes.view | View shift types                                       |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🔴       |  🔴   |        🟢         |        🔴        |       🔴        |       🔴        |
+|     Shift      |            user_myshifts | Allow angels to view their own shifts and cancel them. |  🟢   | 🔴  |     🔴     |   🟢    |    🔴     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
+|     Shift      |              user_shifts | Signup for shifts                                      |  🟢   | 🔴  |     🔴     |   🟢    |    🔴     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
+|     Shift      |        user_shifts_admin | Signup other angels for shifts.                        |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🟢       |  🔴   |        🟢         |        🔴        |       🔴        |       🟢        |
+|      User      |            user_settings | User profile settings                                  |  🟢   | 🔴  |     🔴     |   🟢    |    🔴     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
+|      User      |           user.info.edit | Edit User Info                                         |  🟢   | 🔴  |     🟢     |   🔴    |    🔴     |       🟢       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
+|      User      |           user.info.show | Show User Info                                         |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🔴       |  🔴   |        🟢         |        🔴        |       🔴        |       🔴        |
+|      User      |           user.nick.edit | Edit user nick                                         |  🟢   | 🔴  |     🟢     |   🔴    |    🔴     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
+|      User      |             user.fa.edit | Edit User Force Active State                           |  🟢   | 🔴  |     🟢     |   🔴    |    🔴     |       🔴       |  🔴   |        🔴         |        🔴        |       🔴        |       🔴        |
+|      User      |        users.arrive.list | View arrive angels list                                |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🟢       |  🔴   |        🟢         |        🔴        |       🟢        |       🟢        |
 |     Staff      | user.type.internal_staff | Flag the user as Internal Staff                        |  🟢   | 🔴  |     🟢     |   🔴    |    🟢     |       🔴       |  🔴   |        🟢         |        🟢        |       🔴        |       🔴        |
-|    Goodies     |             voucher.edit | Edit vouchers                                          |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🟢       |  🔴   |        🟢         |        🔴        |       🟢        |       🔴        |
-|    Goodies     |         user.goodie.edit | Edit user goodies                                      |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🟢       |  🔴   |        🟢         |        🔴        |       🔴        |       🔴        |
+|     Goodie     |             voucher.edit | Edit vouchers                                          |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🟢       |  🔴   |        🟢         |        🔴        |       🟢        |       🔴        |
+|     Goodie     |         user.goodie.edit | Edit user goodies                                      |  🟢   | 🔴  |     🔴     |   🔴    |    🔴     |       🟢       |  🔴   |        🟢         |        🔴        |       🔴        |       🔴        |
 
 ## Departments
 
-|  Category   | Permission  | Description                                    |
-| :---------: | :---------: | ---------------------------------------------- |
-| Departments | dept.admin  | No restrictions                                |
-| Departments |  dept.add   | Add new Departments + allow view, edit, delete |
-| Departments |  dept.view  | View Departments                               |
-| Departments |  dept.edit  | Edit Departments                               |
-| Departments | dept.delete | Delete Departments - Dangerous permission      |
+|  Category  | Permission  | Description                                    |
+| :--------: | :---------: | ---------------------------------------------- |
+| Department | dept.admin  | No restrictions                                |
+| Department |  dept.add   | Add new Departments + allow view, edit, delete |
+| Department |  dept.view  | View Departments                               |
+| Department |  dept.edit  | Edit Departments                               |
+| Department | dept.delete | Delete Departments - Dangerous permission      |
 
 ## EF 28 - Permissions
 

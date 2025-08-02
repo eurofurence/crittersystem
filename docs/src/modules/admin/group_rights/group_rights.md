@@ -1,1 +1,16 @@
-Group Rights
+Administrative
+Certification
+Critter
+Department
+FAQ
+Global
+Goodie
+Location
+Meeting
+Message
+News
+Question
+Shift
+Staff
+User
+Others
