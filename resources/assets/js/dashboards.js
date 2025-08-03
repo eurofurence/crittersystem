@@ -1,5 +1,6 @@
 import { ready } from './ready';
 
+// Get current time or fake time
 function get_time() {
   const searchParams = new URLSearchParams(window.location.search);
   if (searchParams.has('fake_time')) {
@@ -10,6 +11,23 @@ function get_time() {
     return(start + parseInt(searchParams.get('fake_time')));
   }
   return(Math.round(Date.now() / 1000));
+}
+
+// Get string representation of current search string with one
+// modification applied
+function get_mod_search_string(key, value) {
+  const search_string = new URLSearchParams(document.location.search);
+  search_string.set(key, value);
+  return search_string.toString();
+}
+
+// Change the current URI's search params to given search_string
+function update_search_params(search_string) {
+  window.history.replaceState(
+    '',
+    '',
+    document.location.origin + document.location.pathname + '?' + search_string
+  );
 }
 
 // Highlight all shift rows that are currently happening
@@ -29,9 +47,8 @@ function update_shifts_highlight_hidden(date_now, hide_old) {
 
 // Pull a whole new table from the web server and whack it in place
 function update_shifts_data(date_now, hide_old) {
-  const search_string = new URLSearchParams(document.location.search);
-  search_string.set('rand', Math.floor(Math.random() * 99999999));
-  const request = new Request(document.location.origin + document.location.pathname + '?' + search_string.toString());
+  const search_string = get_mod_search_string('rand', Math.floor(Math.random() * 99999999));
+  const request = new Request(document.location.origin + document.location.pathname + '?' + search_string);
   fetch(request)
     .then(response => response.text())
     .then(text => {
@@ -102,10 +119,11 @@ ready(() => {
 
   // Handlers for checkboxes
   document.getElementById('hide_past').addEventListener('change', (event) => {
+    update_search_params(get_mod_search_string('hide_past', event.target.checked ? 1 : 0));
     update_shifts_highlight_hidden(get_time(), event.target.checked);
-    // TODO: Update search string in URL
   });
   document.getElementById('reload').addEventListener('change', (event) => {
+    update_search_params(get_mod_search_string('reload', event.target.checked ? 1 : 0));
     if (event.target.checked) {
       update_shifts_data();
     }
