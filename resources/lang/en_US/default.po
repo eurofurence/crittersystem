@@ -1081,3 +1081,27 @@ msgstr "Auto update"
 
 msgid "dashboard.hide_past"
 msgstr "Hide past"
+
+msgid "general.badge_number"
+msgstr "Badge Number"
+
+msgid "form.badge_number.admin"
+msgstr "Event Badge Number"
+
+msgid "settings.profile.badge_number"
+msgstr "Badge Number"
+
+msgid "badge_number.reset_info"
+msgstr "You can manually set/update the badge number"
+
+msgid "form.badge_number.success"
+msgstr "Badge information retrieved"
+
+msgid "general.profile.badge_number"
+msgstr "Badge Nr."
+
+msgid "settings.profile.badge_number_info"
+msgstr "Use the button to automatically retrieve your Badge ID"
+
+msgid "settings.profile.badge_number_update"
+msgstr "Update"
