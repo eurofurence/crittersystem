@@ -394,7 +394,8 @@ code {
 }
 
 // Specials ===================================================================
-body {
+body,
+#fullscreen-wrapper:fullscreen {
   background: #000 url('theme21/background.jpg') no-repeat center center fixed;
   background-size: cover;
 }

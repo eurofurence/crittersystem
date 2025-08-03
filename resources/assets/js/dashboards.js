@@ -129,6 +129,13 @@ ready(() => {
     }
   });
 
+  // Fullscreen button
+  document.getElementById('dashboard-fullscreen').addEventListener('click', (event) => {
+    if (document.fullscreenEnabled) {
+      document.getElementById('fullscreen-wrapper').requestFullscreen({navigationUI: "hide"});
+    }
+  });
+
   update_shifts_display(false);
 
   const searchParams = new URLSearchParams(window.location.search);

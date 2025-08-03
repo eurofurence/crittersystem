@@ -44,14 +44,15 @@
     </div>
     <div class="col-1">
         <div class="mb-3">
-            <label for="start" class="form-label">&nbsp;</label>
+            <button id="dashboard-fullscreen" class="btn btn-secondary bi bi-fullscreen" type="button"> Fullscreen</button>
+            <!--<label for="start" class="form-label">&nbsp;</label>-->
             <button class="btn btn-primary form-control" type="submit">{{- __('form.submit') -}}</button>
         </div>
     </div>
 </form>
 <div class="row">
     {% block dashboard_shift_overview %}
-        <div class="col" style="padding: 0;">
+        <div id="fullscreen-wrapper" class="col" style="padding: 0;">
             <table class="table table-hover dashboard-table">
                 <colgroup>
                     <col span="3" class="dash-compound-key" />
