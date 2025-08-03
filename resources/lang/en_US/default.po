@@ -1105,3 +1105,6 @@ msgstr "Use the button to automatically retrieve your Badge ID"
 
 msgid "settings.profile.badge_number_update"
 msgstr "Update"
+
+msgid "Fullscreen"
+msgstr "Fullscreen"
