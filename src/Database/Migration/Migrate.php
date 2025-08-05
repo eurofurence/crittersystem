@@ -129,7 +129,8 @@ class Migrate
             printf(str_repeat('*', 100) . PHP_EOL);
             printf('!! ERROR !!' . PHP_EOL);
             printf(str_repeat('*', 100) . PHP_EOL . PHP_EOL);
-            dump($e);
+            // dump($e);
+            print_r($e);
             printf(PHP_EOL . str_repeat('*', 100) . PHP_EOL . PHP_EOL);
 
             throw new Exception(message:'Migration failed', code: $e->getCode(), previous: $e);
