@@ -54,7 +54,11 @@ class QuestionsController extends BaseController
         );
     }
 
-    public function unlockStaleLocks($questions)
+    /**
+    * @param Collection|Question[]
+    * @return Collection|Question[]
+    */
+    public function unlockStaleLocks(array $questions): array
     {
         $now = Carbon::now();
         return $questions->map(function ($q) use ($now) {
