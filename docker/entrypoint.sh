@@ -49,7 +49,7 @@ MIGRATION_OK="config/migration.ok"
 # Check if the file exists
 if [ ! -f "$MIGRATION_OK" ]; then
     echo "Migration needed!! Running migration..."
-    bin/migrate
+    bin/migrate --force
 fi
 
 nginx -g 'daemon off;'&
