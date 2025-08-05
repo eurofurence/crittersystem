@@ -122,8 +122,8 @@ function angeltype_edit_controller()
             $angeltype->hide_register = $request->has('hide_register');
             $angeltype->hide_on_shift_view = $request->has('hide_on_shift_view');
 
-            $angeltype->requires_driver_license = $request->has('requires_driver_license');
-            $angeltype->requires_ifsg_certificate = $request->has('requires_ifsg_certificate');
+            // $angeltype->requires_driver_license = $request->has('requires_driver_license');
+            // $angeltype->requires_ifsg_certificate = $request->has('requires_ifsg_certificate');
         }
 
         $angeltype->description = strip_request_item_nl('description', $angeltype->description);
@@ -139,12 +139,12 @@ function angeltype_edit_controller()
             engelsystem_log(
                 'Saved angel type: ' . $angeltype->name . ($angeltype->restricted ? ', restricted' : '')
                 . ($angeltype->shift_self_signup ? ', shift_self_signup' : '')
-                . (config('driving_license_enabled')
-                    ? (($angeltype->requires_driver_license ? ', requires driver license' : '') . ', ')
-                    : '')
-                . (config('ifsg_enabled')
-                    ? (($angeltype->requires_ifsg_certificate ? ', requires ifsg certificate' : '') . ', ')
-                    : '')
+                // . (config('driving_license_enabled')
+                //     ? (($angeltype->requires_driver_license ? ', requires driver license' : '') . ', ')
+                //     : '')
+                // . (config('ifsg_enabled')
+                //     ? (($angeltype->requires_ifsg_certificate ? ', requires ifsg certificate' : '') . ', ')
+                //     : '')
                 . $angeltype->contact_name . ', '
                 . $angeltype->contact_dect . ', '
                 . $angeltype->contact_email . ', '
@@ -208,7 +208,7 @@ function angeltype_controller()
             auth()->can('admin_user_angeltypes') || $isSupporter,
             auth()->can('admin_angel_types'),
             $isSupporter,
-            $user->license,
+            // $user->license,
             $user,
             $shiftsFilterRenderer,
             $shiftCalendarRenderer,
@@ -320,7 +320,7 @@ function angeltypes_list_controller()
                     ['action' => 'delete', 'user_angeltype_id' => $angeltype->user_angel_type_id]
                 ),
                 icon('box-arrow-right') . ($admin_angeltypes ? '' : __('Leave')),
-                'btn-sm',
+                'btn-sm btn-warning',
                 '',
                 ($admin_angeltypes ? __('Leave') : '')
             );

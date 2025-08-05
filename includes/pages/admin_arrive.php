@@ -104,6 +104,7 @@ function admin_arrive()
         $usr->name = User_Nick_render($usr)
             . User_Pronoun_render($usr)
             . user_info_icon($usr);
+        $usr['badge_number'] = $usr->personalData->badge_number;
         $plannedDepartureDate = $usr->personalData->planned_departure_date;
         $arrivalDate = $usr->state->arrival_date;
         $plannedArrivalDate = $usr->personalData->planned_arrival_date;
@@ -211,6 +212,7 @@ function admin_arrive()
         ], url('/admin-arrive')),
         table(array_merge(
             ['name' => __('general.name'),],
+            ['badge_number' => __('general.badge_number') ],
             ($admin_arrive ? ['rendered_planned_arrival_date' => __('Planned arrival')] : []),
             ['arrived' => __('Arrived')],
             ($admin_arrive ? [

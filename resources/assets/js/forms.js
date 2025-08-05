@@ -301,8 +301,7 @@ ready(() => {
         return;
       }
       event.preventDefault();
-      const modalFooterHtml =
-        `
+      const modalFooterHtml = `
           <div class="modal-footer">
             <button type="button" class="${element.className}"
               autofocus
@@ -310,9 +309,8 @@ ready(() => {
                 ${element.dataset.confirm_button_text ?? element.innerHTML}
             </button>
           </div>
-        `
-      const doubleConfirmButtonHtml =
-        `
+        `;
+      const doubleConfirmButtonHtml = `
           <div class="modal-footer collapse show double-confirm-modal">
             <button type="button" type="button" class="${element.className}"
               data-bs-toggle="collapse" data-bs-target=".double-confirm-modal"
@@ -326,7 +324,7 @@ ready(() => {
             </div>
             ${modalFooterHtml}
           </div>
-          `
+          `;
       document.getElementById('confirmation-modal')?.remove();
       document.body.insertAdjacentHTML(
         'beforeend',

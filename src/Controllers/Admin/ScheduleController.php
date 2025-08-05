@@ -103,7 +103,7 @@ class ScheduleController extends BaseController
         ] + $locationsValidation);
         ShiftType::findOrFail($data['shift_type']);
 
-        $schedule->name = $data['name'];
+        $schedule->name = globalCleanText($data['name']);
         $schedule->url = $data['url'];
         $schedule->shift_type = $data['shift_type'];
         $schedule->needed_from_shift_type = (bool) $data['needed_from_shift_type'];

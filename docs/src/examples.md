@@ -1,3 +1,17 @@
+---
+title: Examples
+# hide:
+#   - navigation # Left side of the screen
+#   - toc # Right side of the screen
+#   - path # Path that shows on the top of the page
+#   - footer # Footer with next/previous
+
+# search:
+#   boost: 2 # Boost factor for the search
+#   exclude: true # If is to be excluded from the search
+---
+
+
 ## Examples page
 
 Here are some examples and templates. Check the source file for more information.

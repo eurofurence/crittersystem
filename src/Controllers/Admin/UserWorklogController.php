@@ -80,7 +80,7 @@ class UserWorklogController extends BaseController
         }
         $worklog->worked_at = $data['work_date'];
         $worklog->hours = $data['work_hours'];
-        $worklog->comment = $data['comment'];
+        $worklog->comment = globalCleanText($data['comment']);
         $worklog->save();
 
         $this->log->info(

@@ -15,6 +15,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property string|null $shirt_size
  * @property Carbon|null $planned_arrival_date
  * @property Carbon|null $planned_departure_date
+ * @property int|null $badge_number
  *
  * @method static QueryBuilder|PersonalData[] whereFirstName($value)
  * @method static QueryBuilder|PersonalData[] whereLastName($value)
@@ -38,6 +39,7 @@ class PersonalData extends HasUserModel
         'shirt_size'             => null,
         'planned_arrival_date'   => null,
         'planned_departure_date' => null,
+        'badge_number'           => null,
     ];
 
     /** @var array<string, string> */
@@ -45,6 +47,7 @@ class PersonalData extends HasUserModel
         'user_id'                => 'integer',
         'planned_arrival_date'   => 'datetime',
         'planned_departure_date' => 'datetime',
+        'badge_number'           => 'integer',
     ];
 
     /**
@@ -60,5 +63,6 @@ class PersonalData extends HasUserModel
         'shirt_size',
         'planned_arrival_date',
         'planned_departure_date',
+        'badge_number',
     ];
 }

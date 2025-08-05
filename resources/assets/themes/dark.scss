@@ -20,7 +20,7 @@ input[type='time']::-webkit-calendar-picker-indicator {
 }
 
 /* Fix for tables being rendered dark on dark with Bootstrap 5.3 */
-.table> :not(caption)>*>* {
+.table > :not(caption) > * > * {
   color: #fff;
 }
 

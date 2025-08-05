@@ -96,6 +96,7 @@ function Users_view(
             . user_info_icon($user);
         $u['first_name'] = htmlspecialchars((string) $user->personalData->first_name);
         $u['last_name'] = htmlspecialchars((string) $user->personalData->last_name);
+        $u['badge_number'] = $user->personalData->badge_number;
         $u['dect'] = sprintf('<a href="https://t.me/%s">%s%1$s</a>', str_replace('@', '', htmlspecialchars((string) $user->contact->dect)), config('policy')['telegram_visual_prefix']);
         $u['arrived'] = icon_bool($user->state->arrived);
         if (config('enable_voucher')) {
@@ -148,6 +149,9 @@ function Users_view(
     if (config('enable_full_name')) {
         $user_table_headers['first_name'] = Users_table_header_link('first_name', __('settings.profile.firstname'), $order_by);
         $user_table_headers['last_name'] = Users_table_header_link('last_name', __('settings.profile.lastname'), $order_by);
+    }
+    if (config('display_badge_number')) {
+        $user_table_headers['badge_number'] = Users_table_header_link('badge_number', __('general.profile.badge_number'), $order_by);
     }
     if (config('enable_dect')) {
         $user_table_headers['dect'] = Users_table_header_link('dect', __('general.dect'), $order_by);
@@ -628,15 +632,15 @@ function User_view(
         }
     }
 
-    $needs_drivers_license = false;
-    foreach ($user_angeltypes as $angeltype) {
-        $needs_drivers_license = $needs_drivers_license || $angeltype->requires_driver_license;
-    }
+    // $needs_drivers_license = false;
+    // foreach ($user_angeltypes as $angeltype) {
+    //     $needs_drivers_license = $needs_drivers_license || $angeltype->requires_driver_license;
+    // }
 
-    $needs_ifsg_certificate = false;
-    foreach ($user_angeltypes as $angeltype) {
-        $needs_ifsg_certificate = $needs_ifsg_certificate || $angeltype->requires_ifsg_certificate;
-    }
+    // $needs_ifsg_certificate = false;
+    // foreach ($user_angeltypes as $angeltype) {
+    //     $needs_ifsg_certificate = $needs_ifsg_certificate || $angeltype->requires_ifsg_certificate;
+    // }
 
     $self_worklog = config('enable_self_worklog') || !$its_me;
 

@@ -9,10 +9,9 @@ abstract class Engine implements EngineInterface
     protected array $sharedData = [];
 
     /**
-     * @param mixed[]|string $key
-     * @param null           $value
+     * @param mixed[]|string       $key
      */
-    public function share(array|string $key, $value = null): void
+    public function share(array|string $key, mixed $value = null): void
     {
         if (!is_array($key)) {
             $key = [$key => $value];

@@ -9,6 +9,8 @@
     "build": "NODE_ENV=production yarn build:webpack",
     "build:webpack": "webpack",
     "build:watch": "webpack --watch",
+    "build-dev": "NODE_ENV=development yarn dev:webpack",
+    "dev:webpack": "webpack",
     "lint": "yarn lint:eslint && yarn lint:prettier && yarn lint:ec",
     "lint:eslint": "eslint .",
     "lint:prettier": "prettier --check resources/assets webpack.config.js",

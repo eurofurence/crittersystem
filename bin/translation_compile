@@ -1,0 +1,37 @@
+#!/usr/bin/env sh
+#
+
+############################################################
+## Info: This script (re)compiles the translation files
+############################################################
+
+# Step 1
+echo
+echo "Updating the translation files"
+
+# Step 2
+echo " - Removing compiled files"
+echo "---------------------------------------------------------------"
+find resources/lang -type f -name '*.mo' -exec rm -v {} \;
+echo "---------------------------------------------------------------"
+echo
+
+# Step 3
+echo " - Compiling..."
+echo "---------------------------------------------------------------"
+# find resources/lang -type f -name '*.po' -exec sh -c 'msgfmt "${1%.*}.po" -o"${1%.*}.mo" && echo "${1%.*}.po"' shell {} \;
+find resources/lang -type f -name '*.po' -exec sh -c 'msgfmt "${1%.*}.po" -o"${1%.*}.mo" && echo "Compiling: ${1%.*}.po > ${1%.*}.mo"' shell {} \;
+echo "---------------------------------------------------------------"
+echo
+
+# Step 4
+if [ "$(find resources/lang -type f -name '*.po' | wc -l)" -eq "$(find resources/lang -type f -name '*.mo' | wc -l)" ]; then
+    echo " - File count match (Source vs. Compiled)"
+else
+    echo " - Could not generate all files... Something went wrong..."
+fi
+echo
+
+# Step 5
+echo "Done"
+echo

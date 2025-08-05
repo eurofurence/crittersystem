@@ -7,7 +7,7 @@
 $primary: #005953;
 $light: #f5f5f5;
 
-$info: #03CC00;
+$info: #03cc00;
 
 @font-face {
   font-family: 'Roboto';
@@ -61,14 +61,13 @@ h6,
   color: $primary;
 }
 
-.navbar-brand
-.icon-icon_angel {
+.navbar-brand .icon-icon_angel {
   background-color: $primary !important;
 }
 
 body {
   &::after {
-    content: "";
+    content: '';
     background: url('theme19/bg.png') no-repeat top left;
     background-size: contain;
     background-position-y: 30px;
@@ -78,11 +77,11 @@ body {
     bottom: 0;
     right: 0;
     position: fixed;
-    z-index: -1;   
+    z-index: -1;
   }
 }
 
 // Custom
 .bi-telegram {
-	color: #24A1DE;
+  color: #24a1de;
 }

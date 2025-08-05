@@ -6,8 +6,12 @@
 # pip install mike
 #
 # Local Test: mkdocs serve
-# Build: mkdocs build
+# Build - local files: mkdocs build
 #
+# How to use/compile:
+# Use Mike to create the branch gh-pages (make sure you have the branch locally)
+# Deploy: mike deploy [version]
+# Default identifier: dev
 
 # Server configuration
 dev_addr: 127.0.0.1:8888
@@ -34,19 +38,6 @@ exclude_docs: |
 
 # This setting controls the directory structure of the generated documentation, and thereby the URL format used for linking to pages.
 use_directory_urls: false #false = allows to run locally
-
-# Theme section
-# DEFAULT THEME
-#theme:
-#  name: readthedocs
-#  highlightjs: true
-#  include_homepage_in_sidebar: true
-#  prev_next_buttons_location: bottom
-#  navigation_depth: 3
-#  collapse_navigation: true
-#  titles_only: false
-#  sticky_navigation: true
-#  locale: en
 
 theme:
   name: material
@@ -88,6 +79,9 @@ theme:
     - navigation.path
     # - toc.integrate
     - navigation.top
+    - content.code.copy
+    - content.code.select
+    - content.tabs.link
 
   plugins:
     - group
@@ -101,6 +95,44 @@ theme:
       version_selector: true
       css_dir: css
       javascript_dir: js
+
+markdown_extensions:
+  - admonition
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - codehilite:
+      guess_lang: false
+  - pymdownx.caret:
+      smart_insert: True # Use smart logic with insert characters.
+      insert: True       # Enable insert feature.
+      superscript: True  # Enable superscript feature.
+  - pymdownx.snippets
+  - toc:
+      permalink: true
+      title: Sections
+      separator: "_"
+  - pymdownx.tasklist:
+      custom_checkbox: false
+  - pymdownx.keys
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+extra_css:
+  - stylesheets/extra.css
 
 extra:
   version:
@@ -124,40 +156,50 @@ plugins:
   - awesome-pages
   - privacy
 
+##################################################
+# Navigation
+##################################################
+nav:
+  - Home: index.md
 
-# Extensions
-# markdown_extensions:
-#   - admonition:
-#   - codehilite:
-#       guess_lang: false
-#   - toc:
-#       permalink: true
-#       separator: "_"
-#   - footnotes:
-#   - pymdownx.betterem:
-#       smart_enable: all
-#   - pymdownx.caret:
-#       smart_insert: True # Use smart logic with insert characters.
-#       insert: True       # Enable insert feature.
-#       superscript: True  # Enable superscript feature.
-#   - pymdownx.critic:
-#       mode: "view" # view just parses the markup and displays it in its HTML equivalent rendering. accept strips out the critic markup and replaces them with the suggested changes. reject rejects all the suggestions and strips the critic markup out replacing it with the original.
-#   - pymdownx.details:
-#   # - pymdownx.emoji:
-#   #     emoji_index: !!python/name:material.extensions.emoji.twemoji
-#   #     emoji_generator: !!python/name:material.extensions.emoji.twemoji
-#   - pymdownx.extra:
-#   - pymdownx.inlinehilite:
-#   - pymdownx.keys:
-#   - pymdownx.magiclink:
-#   - pymdownx.mark:
-#   - pymdownx.smartsymbols:
-#   - pymdownx.superfences:
-#   - pymdownx.tasklist:
-#       custom_checkbox: true
-#   - pymdownx.tabbed:
-#   - pymdownx.progressbar:
-# #  - pymdownx.b64:
-# #  - pymdownx.arithmatex:
-# #  - pymdownx.tilde:
+  - Manual:
+    - manuals/index.md
+
+    - Deploy:
+      - Docker: manuals/deploy/docker.md
+      - Web Server: manuals/deploy/webserver.md
+
+    - Development:
+      - Docs: manuals/development/docs/index.md
+
+    - Modules:
+      - News: modules/news/index.md
+      - Meetings: modules/meetings/index.md
+      - Shifts: modules/shifts/index.md
+      - Critter Types: modules/critter_types/index.md
+      - Ask the Info Desk: modules/ask_info_desk/index.md
+      - Locations: modules/locations/index.md
+      - Admin:
+        - modules/admin/index.md
+        - Arrive Critters: modules/admin/critters_arrive.md
+        - Active Critters: modules/admin/critters_active.md
+        - All Critters: modules/admin/critters_all.md
+        - Free Critters: modules/admin/critters_free.md
+        - Answer Questions: modules/admin/answer_questions.md
+        - Shift Types: modules/admin/shift_types.md
+        - Create Shifts: modules/admin/shifts_create.md
+        - Locations: modules/admin/locations.md
+        - Group Rights: modules/admin/group_rights.md
+        - Import Schedule: modules/admin/import_schedule.md
+        - Logs: modules/admin/logs.md
+        - Config: modules/admin/config.md
+        - V2-Export: modules/admin/v2_export.md
+      - Next Shift: modules/next_shift/index.md
+      - Messages: modules/messages/index.md
+      - Information: modules/information/index.md
+      - Language: modules/language/index.md
+      - Account: modules/account/index.md
+
+  - Workflow:
+    - workflows/workflow_login.md
 
