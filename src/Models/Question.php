@@ -62,7 +62,7 @@ class Question extends BaseModel
         'answerer_id'        => 'integer',
         'answered_at'        => 'datetime',
         'editor_id'          => 'integer',
-        'editing_started_at' => 'datetime'
+        'editing_started_at' => 'datetime',
     ];
 
     public function answerer(): BelongsTo
@@ -83,7 +83,8 @@ class Question extends BaseModel
     /**
      * @return Builder|QueryBuilder
      */
-    public static function hasEditor(): Builder {
+    public static function hasEditor(): Builder
+    {
         return static::whereNotNull('editor_id');
     }
 
