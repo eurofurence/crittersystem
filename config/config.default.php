@@ -248,34 +248,28 @@ return [
         // '[name]' => [config]
         'ef' => [
             // Enable Oauth
-            'enabled' => env(key: 'APP_OAUTH_EF_ENABLED', default: true),
+            'enabled' => env(key: 'APP_OAUTH_EF_ENABLED', default: false),
 
             // Name shown to the user
             'name' => env(key: 'APP_OAUTH_EF_NAME', default: 'Eurofurence IDP'),
 
             // Auth client ID
-            // 'client_id' => env(key: 'APP_OAUTH_EF_CLIENT_ID', default: null),
-            'client_id' => env(key: 'APP_OAUTH_EF_CLIENT_ID', default: 'critter-dev-test'),
+            'client_id' => env(key: 'APP_OAUTH_EF_CLIENT_ID', default: null),
 
             // Auth client secret
-            // 'client_secret' => env(key: 'APP_OAUTH_EF_CLIENT_SECRET', default: null),
-            'client_secret' => env(key: 'APP_OAUTH_EF_CLIENT_SECRET', default: 'ByuUosSphby4g2ZYlg0WSqkGX2my5837'),
+            'client_secret' => env(key: 'APP_OAUTH_EF_CLIENT_SECRET', default: null),
 
             // Authentication URL
-            // 'url_auth' => env(key: 'APP_OAUTH_GENERIC_URL_AUTH', default: null),
-            'url_auth' => 'https://sso.rustybraze.net/realms/ef-devops/protocol/openid-connect/auth',
+            'url_auth' => env(key: 'APP_OAUTH_GENERIC_URL_AUTH', default: null),
 
             // Token URL
-            // 'url_token' => env(key: 'APP_OAUTH_GENERIC_URL_TOKEN', default: null),
-            'url_token' => 'https://sso.rustybraze.net/realms/ef-devops/protocol/openid-connect/token',
+            'url_token' => env(key: 'APP_OAUTH_GENERIC_URL_TOKEN', default: null),
 
             // User info URL which provides userdata
-            // 'url_info' => env(key: 'APP_OAUTH_GENERIC_URL_USER_INFO', default: null),
-            'url_info' => 'https://sso.rustybraze.net/realms/ef-devops/protocol/openid-connect/userinfo',
+            'url_info' => env(key: 'APP_OAUTH_GENERIC_URL_USER_INFO', default: null),
 
             // User URL to provider, linked on provider settings page (optional)
-            // 'url' => env(key: 'APP_OAUTH_GENERIC_URL_PROVIDER', default: null),
-            'url' => 'https://sso.rustybraze.net/realms/ef-devops',
+            'url' => env(key: 'APP_OAUTH_GENERIC_URL_PROVIDER', default: null),
 
             // OAuth Scopes
             'scope' => env(key: 'APP_OAUTH_EF_SCOPE', default: ['openid', 'profile', 'email', 'groups']),
