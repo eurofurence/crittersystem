@@ -14,6 +14,7 @@ use Engelsystem\Models\AngelType;
 use Engelsystem\Models\Shifts\Shift;
 use Engelsystem\Models\Shifts\ShiftType;
 use Engelsystem\Models\User\User;
+use Illuminate\Database\Eloquent\Builder;
 
 class DashboardsController extends BaseController
 {
@@ -39,6 +40,7 @@ class DashboardsController extends BaseController
     {
         $date_requested = DateTime::createFromFormat('Y-m-d', $this->request->input('start', date('Y-m-d')));
         $date_end = (clone $date_requested)->add(new DateInterval('P10D')); // + 10 days from start
+        $filter_department = $this->request->input('department');
 
         // Get all data we want to display, one row per shift and critter (type)
         $query = $this->shift
@@ -52,6 +54,7 @@ class DashboardsController extends BaseController
                     ->on('needed_angel_types.angel_type_id', '=', 'shift_entries.angel_type_id');
             })
             ->leftJoin('users', 'shift_entries.user_id', '=', 'users.id')
+            ->leftJoin('department_shifts', 'shifts.id', '=', 'department_shifts.shift_id')
             ->select(
                 'shifts.id AS shifts_id',
                 'shifts.title AS shifts_title',
@@ -70,10 +73,16 @@ class DashboardsController extends BaseController
                 'locations.name AS locations_name',
                 'locations.description AS locations_description',
                 'users.id AS users_id',
-                'users.name AS users_name'
+                'users.name AS users_name',
+                'department_shifts.department_id AS departments_department_id'
             )
             ->whereDate('shifts.start', '>=', $date_requested)
             ->whereDate('shifts.end', '<', $date_end)
+            ->when(!empty($filter_department), function (Builder $query, int $filter_department): void {
+                $query
+                ->where('department_shifts.department_id', $filter_department);
+                var_dump($filter_department);
+            })
             ->orderBy('shifts_start', 'asc')
             ->orderBy('shifts_end', 'asc')
             ->orderBy('shifts_title', 'asc')
@@ -103,7 +112,8 @@ class DashboardsController extends BaseController
             }
             // Add user to apropriate shift type array
             if ($shift_data->users_id !== null) {
-                $current_shift_info[$shift_data->angel_types_id]['users'][$shift_data->users_id] = $shift_data->users_name;
+                $current_shift_info[$shift_data->angel_types_id][
+                    'users'][$shift_data->users_id] = $shift_data->users_name;
                 $current_shift_info[$shift_data->angel_types_id]['have']++;
                 $shifts_arr[$shift_data->shifts_id]['critter_types'] = $current_shift_info;
             }
@@ -120,10 +130,11 @@ class DashboardsController extends BaseController
             'pages/dashboards/shift_overview.twig',
             [
                 'critter_types' => $critter_types,
-                'shifts' => $shifts,
                 'date_requested' => $date_requested->format('Y-m-d'),
-                'reload' => $this->request->input('reload'),
+                'filter_department' => $filter_department,
                 'hide_past' => $this->request->input('hide_past'),
+                'reload' => $this->request->input('reload'),
+                'shifts' => $shifts,
             ]
         );
     }
