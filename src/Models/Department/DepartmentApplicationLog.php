@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Engelsystem\Models;
+namespace Engelsystem\Models\Department;
 
 use Engelsystem\Models\BaseModel;
 use Engelsystem\Models\User\User;

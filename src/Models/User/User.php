@@ -7,8 +7,8 @@ namespace Engelsystem\Models\User;
 use Carbon\Carbon;
 use Engelsystem\Models\AngelType;
 use Engelsystem\Models\BaseModel;
-use Engelsystem\Models\Department;
-use Engelsystem\Models\DepartmentApplicationLog;
+use Engelsystem\Models\Department\Department;
+use Engelsystem\Models\Department\DepartmentApplicationLog;
 use Engelsystem\Models\Group;
 use Engelsystem\Models\Message;
 use Engelsystem\Models\News;
@@ -337,5 +337,16 @@ class User extends BaseModel
         return $admin_flag
             || $this->groups->contains('name', 'Shift Coordinator')
             || $this->responsibleForDepartments->contains($department);
+    }
+
+    public function isStaff(): bool
+    {
+        return auth()->canAny(
+            [
+                'user.type.internal_staff',
+                'user.type.staff',
+                'user.type.admin',
+            ]
+        );
     }
 }

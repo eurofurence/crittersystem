@@ -6,10 +6,11 @@ namespace Engelsystem\Events\Listener;
 
 use Engelsystem\Config\Config;
 use Engelsystem\Helpers\Authenticator;
-use Engelsystem\Models\AngelType;
+use Engelsystem\Models\Department\Department;
+use Engelsystem\Models\Group;
 use Engelsystem\Models\User\User;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Psr\Log\LoggerInterface;
 
 class OAuth2
@@ -22,91 +23,312 @@ class OAuth2
     }
 
     /**
+     * Handle OAuth login event
+     *
+     * @param string     $event    Event name
      * @param string     $provider OAuth provider name
-     * @param Collection $data OAuth userdata
+     * @param Collection $data     OAuth userdata
      */
     public function login(string $event, string $provider, Collection $data): void
     {
+        // Get user info
         $user = $this->auth->user();
-        $ssoTeams = $this->getSsoTeams($provider);
+        if (!$user) {
+            $this->log->warning('OAuth {provider}: No authenticated user found', ['provider' => $provider]);
+            return;
+        }
+
+        // Get departments configuration
+        $departments = $this->config[$provider]['departments'] ?? [];
+        if (empty($departments)) {
+            $this->log->info('OAuth {provider}: No departments configured', ['provider' => $provider]);
+            return;
+        }
+
+        // Get user groups from OAuth data
         $groupsKey = ($this->config[$provider] ?? [])['groups'] ?? 'groups';
         $userGroups = $data->get($groupsKey, []);
+        if (empty($userGroups)) {
+            $this->log->info(
+                'OAuth {provider}: User {user} has no groups',
+                ['provider' => $provider, 'user' => $user->name]
+            );
+        }
 
+        // Process departments
         foreach ($userGroups as $groupName) {
-            if (!isset($ssoTeams[$groupName])) {
+            if (!isset($departments[$groupName])) {
                 continue;
             }
 
-            $this->syncTeams($provider, $user, $ssoTeams[$groupName]);
-        }
-    }
-
-    public function getSsoTeams(string $provider): array
-    {
-        $config = $this->config[$provider] ?? [];
-
-        $teams = [];
-        foreach ($config['teams'] ?? [] as $ssoName => $conf) {
-            $conf = Arr::wrap($conf);
-            $teamId = $conf['id'] ?? $conf[0];
-            $isSupporter = $conf['supporter'] ?? false;
-
-            $teams[$ssoName] = ['id' => $teamId, 'supporter' => $isSupporter];
+            $departmentConfig = $departments[$groupName];
+            $this->processDepartment($provider, $user, $groupName, $departmentConfig);
         }
 
-        return $teams;
+        // Process user promotion
+        $this->processUserPromotion($provider, $user, $departments['PROMOTE'] ?? []);
     }
 
-    protected function syncTeams(string $providerName, User $user, array $ssoTeam): void
-    {
-        $currentUserAngeltypes = $user->userAngelTypes;
-        $angelType = AngelType::find($ssoTeam['id']);
-        /** @var AngelType $userAngeltype */
-        $userAngeltype = $currentUserAngeltypes->where('pivot.angel_type_id', $ssoTeam['id'])->first();
-        $supporter = $ssoTeam['supporter'];
-        $confirmed = $supporter ? $user->id : null;
-
-        if (!$userAngeltype) {
-            $this->log->info(
-                'SSO {provider}: Added to angeltype {angeltype}, confirmed: {confirmed}, supporter: {supporter}',
+    /**
+     * Process a department for a user
+     *
+     * @param string $provider OAuth provider name
+     * @param User $user User to process
+     * @param string $departmentId Department ID from the IDP/SSO
+     * @param array $departmentConfig Department configuration
+     */
+    protected function processDepartment(
+        string $provider,
+        User $user,
+        string $departmentId,
+        array $departmentConfig
+    ): void {
+        if (!$user) {
+            $this->log->warning(
+                'OAuth {provider}: Cannot process department {id} for null user',
                 [
-                    'provider'  => $providerName,
-                    'angeltype' => $angelType->name,
-                    'confirmed' => $confirmed ? 'yes' : 'no',
-                    'supporter' => $supporter ? 'yes' : 'no',
+                    'provider' => $provider,
+                    'id' => $departmentId,
                 ]
             );
-
-            $user->userAngelTypes()->attach($angelType, ['supporter' => $supporter, 'confirm_user_id' => $confirmed]);
-
             return;
         }
 
-        if (!$supporter) {
+        // Check if department exists
+        $department = $this->findOrCreateDepartment($provider, $departmentId, $departmentConfig);
+
+        if (!$department) {
             return;
         }
 
-        if ($userAngeltype->pivot->supporter != $supporter) {
-            $userAngeltype->pivot->supporter = $supporter;
-            $userAngeltype->pivot->save();
+        try {
+            // Add user to department if not already a member
+            if (!$user->departments()->where('department_id', $department->id)->exists()) {
+                $user->departments()->attach($department, [
+                    'uuid' => (string) Str::uuid(),
+                    'status' => 'approved',
+                ]);
+                $this->log->info(
+                    'OAuth {provider}: Added user {user} to department {department}',
+                    [
+                        'provider' => $provider,
+                        'user' => $user->name,
+                        'department' => $department->name,
+                    ]
+                );
+            }
 
-            $this->log->info(
-                'SSO {provider}: Set supporter state for angeltype {angeltype}',
+            // Assign permissions
+            $this->assignPermissions($provider, $user, $departmentConfig['permission_slugs'] ?? []);
+        } catch (\Exception $e) {
+            $this->log->error(
+                'OAuth {provider}: Error processing department {department} for user {user}: {error}',
                 [
-                    'provider'  => $providerName,
-                    'angeltype' => $userAngeltype->pivot->angelType->name,
+                    'provider' => $provider,
+                    'department' => $department->name,
+                    'user' => $user->name,
+                    'error' => $e->getMessage(),
                 ]
             );
         }
+    }
 
-        if (!$userAngeltype->pivot->confirm_user_id) {
-            $userAngeltype->pivot->confirmUser()->associate($user);
-            $userAngeltype->pivot->save();
-            $this->log->info(
-                'SSO {provider}: Set confirmed state for angeltype {angeltype}',
+    /**
+     * Find or create a department
+     *
+     * @param string $provider OAuth provider name
+     * @param string $departmentId Department ID from the IDP/SSO
+     * @param array $departmentConfig Department configuration
+     * @return Department|null Department or null if not found and not created
+     */
+    protected function findOrCreateDepartment(
+        string $provider,
+        string $departmentId,
+        array $departmentConfig
+    ): ?Department {
+        // Check if department exists by slug
+        $slug = $departmentConfig['slug'] ?? null;
+        if (!$slug) {
+            $this->log->warning(
+                'OAuth {provider}: Department {id} has no slug defined',
                 [
-                    'provider'  => $providerName,
-                    'angeltype' => $userAngeltype->pivot->angelType->name,
+                    'provider' => $provider,
+                    'id' => $departmentId,
+                ]
+            );
+            return null;
+        }
+
+        // Try to find department by slug or name
+        $department = Department::where('slug', $slug)
+            ->orWhere('name', $departmentConfig['name'] ?? $slug)
+            ->first();
+
+        // If department doesn't exist and auto-creation is enabled, create it
+        if (!$department && ($this->config[$provider]['departments']['policy_department_create'] ?? '') === 'auto') {
+            $department = new Department();
+            $department->name = $departmentConfig['name'] ?? $slug;
+            $department->description = $departmentConfig['description'] ?? '';
+            $department->staff_only = $departmentConfig['default_hidden'] ?? false;
+
+            // Generate slug from name
+            $baseSlug = Str::slug($department->name);
+            $generatedSlug = $baseSlug;
+            $counter = 1;
+
+            // Check for conflicts and add counter if needed
+            while (Department::where('slug', $generatedSlug)->exists()) {
+                $generatedSlug = $baseSlug . '-' . $counter;
+                $counter++;
+            }
+
+            $department->slug = $generatedSlug;
+            $department->save();
+
+            $this->log->info(
+                'OAuth {provider}: Created department {name} with ID {id}',
+                [
+                    'provider' => $provider,
+                    'name' => $department->name,
+                    'id' => $department->id,
+                ]
+            );
+        } elseif (!$department) {
+            $this->log->info(
+                'OAuth {provider}: Department {name} not found and auto-creation disabled',
+                [
+                    'provider' => $provider,
+                    'name' => $departmentConfig['name'] ?? $slug,
+                ]
+            );
+            return null;
+        }
+
+        return $department;
+    }
+
+    /**
+     * Assign permissions to a user
+     *
+     * @param string $provider OAuth provider name
+     * @param User $user User to assign permissions to
+     * @param array $permissionSlugs Permission slugs to assign
+     */
+    protected function assignPermissions(string $provider, User $user, array $permissionSlugs): void
+    {
+        if (!$user) {
+            $this->log->warning(
+                'OAuth {provider}: Cannot assign permissions to null user',
+                [
+                    'provider' => $provider,
+                ]
+            );
+            return;
+        }
+
+        if (empty($permissionSlugs)) {
+            return;
+        }
+
+        foreach ($permissionSlugs as $slug) {
+            if (empty($slug)) {
+                continue;
+            }
+
+            try {
+                // Find group by name (since there's no slug field)
+                $group = Group::where('slug', $slug)->first();
+
+                if (!$group) {
+                    $this->log->info(
+                        'OAuth {provider}: Permission {slug} not found, skipping',
+                        [
+                            'provider' => $provider,
+                            'slug' => $slug,
+                        ]
+                    );
+                    continue;
+                }
+
+                // Add user to group if not already a member
+                if (!$user->groups->contains($group->id)) {
+                    $user->groups()->attach($group);
+                    $this->log->info(
+                        'OAuth {provider}: Added user {user} to group {group}',
+                        [
+                            'provider' => $provider,
+                            'user' => $user->name,
+                            'group' => $group->name,
+                        ]
+                    );
+                }
+            } catch (\Exception $e) {
+                $this->log->error(
+                    'OAuth {provider}: Error assigning permission {slug} to user {user}: {error}',
+                    [
+                        'provider' => $provider,
+                        'slug' => $slug,
+                        'user' => $user->name,
+                        'error' => $e->getMessage(),
+                    ]
+                );
+            }
+        }
+    }
+
+    /**
+     * Process user promotion
+     *
+     * @param string $provider OAuth provider name
+     * @param User $user User to process
+     * @param array $promoteConfig Promotion configuration
+     */
+    protected function processUserPromotion(string $provider, User $user, array $promoteConfig): void
+    {
+        if (!$user) {
+            $this->log->warning(
+                'OAuth {provider}: Cannot process promotion for null user',
+                [
+                    'provider' => $provider,
+                ]
+            );
+            return;
+        }
+
+        if (empty($promoteConfig)) {
+            return;
+        }
+
+        try {
+            // Get user ID from OAuth provider
+            $userId = $user->oauth->where('provider', $provider)->first()?->identifier;
+
+            if (!$userId || !isset($promoteConfig[$userId])) {
+                return;
+            }
+
+            $permissionSlugs = $promoteConfig[$userId] ?? [];
+            if (empty($permissionSlugs)) {
+                return;
+            }
+
+            $this->assignPermissions($provider, $user, $permissionSlugs);
+
+            $this->log->info(
+                'OAuth {provider}: Promoted user {user} with permissions {permissions}',
+                [
+                    'provider' => $provider,
+                    'user' => $user->name,
+                    'permissions' => implode(', ', $permissionSlugs),
+                ]
+            );
+        } catch (\Exception $e) {
+            $this->log->error(
+                'OAuth {provider}: Error promoting user {user}: {error}',
+                [
+                    'provider' => $provider,
+                    'user' => $user->name,
+                    'error' => $e->getMessage(),
                 ]
             );
         }

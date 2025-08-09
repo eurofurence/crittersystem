@@ -3,6 +3,10 @@
 
 {% block title %}{{ __('general.login') }}{% endblock %}
 
+{% set oauth_enabled = config('oauth')['ef'].enabled or config('oauth')['generic'].enabled %}
+{% set login_hidden = not config('enable_password') and oauth_enabled %}
+
+
 {% block content %}
     <div class="col-md-12">
         <div class="row mb-3 mt-5">
@@ -31,36 +35,41 @@
         <div class="row mb-5">
             <div class="col-md-6 offset-md-3 col-lg-4 offset-lg-4">
                 <div class="card {{ m.type_bg_class() }} registration">
-                    {% set login_hidden = not config('enable_password') %}
                     <div class="card-body">
                         {% include 'layouts/parts/messages.twig' %}
 
                         {% if session_get('show_welcome', false) %}
                             {{ m.alert(config('welcome_msg') | md, null, true) }}
                         {% endif %}
-                        {%  if config('oauth') is not empty %}
+
+                        {% if oauth_enabled %}
                             <div class="row">
                                 <div class="mb-3 btn-group">
                                     {% for name,config in config('oauth') %}
+                                        {% if config.enabled %}
                                         <a href="{{ url('/oauth/' ~ name) }}" class="btn btn-primary btn-lg{% if config.hidden|default(false) %} d-none{% endif %}">
                                             {{ __(
                                                 'oauth.login-using-provider',
                                                 [__(config.name|default(name|capitalize))]
                                             ) }}
                                         </a>
+                                        {% endif %}
                                     {% endfor %}
                                 </div>
                             </div>
-                        {% endif %}
-                        <div class="row">
-                            <div class="col-md-12 text-center{% if login_hidden %} d-none{% endif %}">
-                                <a class="text-muted text-tiny" data-bs-toggle="collapse" href="#user_password_login_form" role="button" aria-expanded="false" aria-controls="user_password_login_form">
-                                    {{ __('login.use_username_password') }}
-                                </a>
+
+                            <div class="row">
+                                <div class="col-md-12 text-center{% if login_hidden %} d-none{% endif %}">
+                                    <a class="text-muted text-tiny" data-bs-toggle="collapse" href="#user_password_login_form" role="button" aria-expanded="false" aria-controls="user_password_login_form">
+                                        {{ __('login.use_username_password') }}
+                                    </a>
+                                </div>
                             </div>
-                        </div>
+                        {% endif %}
+
+                            
                     </div>
-                    <div class="collapse" id="user_password_login_form">
+                    <div {% if oauth_enabled %}class="collapse" {% endif %}id="user_password_login_form">
                         <div class="card-body{% if login_hidden %} d-none{% endif %}">
                             <div class="row">
                                 <div class="col-md-12">
@@ -125,7 +134,7 @@
                     {% set registration_url = config('external_registration_url') ?: url('/register') %}
                     <a href="{{ registration_url }}" class="btn btn-primary">{{ __('general.register') }} &raquo;</a>
                 {% else %}
-                    {% if not config('enable_password') %}
+                    {% if not config('enable_password') and oauth_enabled %}
                         <p>{{ __('login.registration.external') }}</p>
                     {% else %}
                         {{ m.alert(__('login.registration.disabled'), 'danger') }}

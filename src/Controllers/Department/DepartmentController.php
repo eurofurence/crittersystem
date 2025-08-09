@@ -2,17 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Engelsystem\Controllers;
+namespace Engelsystem\Controllers\Department;
 
 use Engelsystem\Controllers\BaseController;
 use Engelsystem\Http\Request;
 use Engelsystem\Http\Response;
-use Engelsystem\Models\Department;
+use Engelsystem\Models\Department\Department;
 use Engelsystem\Models\User\User;
+use Illuminate\Support\Str;
 use Psr\Log\LoggerInterface;
 
 class DepartmentController extends BaseController
 {
+//    /** @var string[] */
+//    protected array $permissions = [
+//        'faq.view',
+//        'faq.viewx',
+//    ];
+
     public function __construct(
         protected LoggerInterface $log,
         protected Response $response,
@@ -25,7 +32,7 @@ class DepartmentController extends BaseController
         $user = auth()->user();
         $query = Department::query();
 
-        if (!$user->groups->contains('name', 'Staff - Internal')) {
+        if (!$user->isStaff()) {
             $query->where('staff_only', false);
         }
 
@@ -47,7 +54,7 @@ class DepartmentController extends BaseController
         $department = Department::where('uuid', $departmentUUID)->firstOrFail();
         $user = auth()->user();
 
-        if ($department->staff_only && !$user->canManageDepartment($department)) {
+        if ($department->staff_only && !$user->isStaff()) {
             dd('not allowed - DepartmentController.php:52');
             //            throw new HttpForbidden();
 //            return $this->response->redirectTo('/departments');
@@ -95,6 +102,19 @@ class DepartmentController extends BaseController
         $department->name = $data['name'];
         $department->description = $data['description'];
         $department->staff_only = (bool) $data['staff_only'];
+
+        // Generate slug from name
+        $baseSlug = Str::slug($data['name']);
+        $slug = $baseSlug;
+        $counter = 1;
+
+        // Check for conflicts and add counter if needed
+        while (Department::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+
+        $department->slug = $slug;
         $department->save();
 
         $this->log->info('Department {name} created by {user}', [
@@ -137,6 +157,25 @@ class DepartmentController extends BaseController
             'description' => 'optional|max:255',
             'staff_only' => 'optional|checked',
         ]);
+
+        // Check if name has changed
+        $nameChanged = $department->name !== $data['name'];
+
+        // If name changed, update the slug
+        if ($nameChanged) {
+            // Generate slug from name
+            $baseSlug = Str::slug($data['name']);
+            $slug = $baseSlug;
+            $counter = 1;
+
+            // Check for conflicts and add counter if needed (excluding current department)
+            while (Department::where('slug', $slug)->where('id', '!=', $department->id)->exists()) {
+                $slug = $baseSlug . '-' . $counter;
+                $counter++;
+            }
+
+            $data['slug'] = $slug;
+        }
 
         $department->update($data);
 

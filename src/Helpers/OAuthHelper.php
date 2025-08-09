@@ -38,7 +38,7 @@ class OAuthHelper
 
     public function getProvider(string $name): AbstractProvider
     {
-        $config = $this->getProviderConfig($name);
+        $config = $this->getProviderConfig(provider: $name);
 
         return new GenericProvider(
             [

@@ -131,9 +131,10 @@ class RegistrationController extends BaseController
 
         $preselectedAngelTypes = [];
 
-        if ($this->session->has('oauth2_connect_provider')) {
-            $preselectedAngelTypes = $this->loadAngelTypesFromSessionOAuthGroups();
-        }
+        // TODO: FIX THIS OR REPLACE - Session saving the groups should be replaced by departments...maybe
+        // if ($this->session->has('oauth2_connect_provider')) {
+        //     $preselectedAngelTypes = $this->loadAngelTypesFromSessionOAuthGroups();
+        // }
 
         foreach (AngelType::whereRestricted(false)->whereHideRegister(false)->get() as $angelType) {
             // preselect every angel type without restriction
@@ -143,24 +144,24 @@ class RegistrationController extends BaseController
         return $preselectedAngelTypes;
     }
 
-    /**
-     * @return Array<string, 1>
-     */
-    private function loadAngelTypesFromSessionOAuthGroups(): array
-    {
-        $oAuthAngelTypes = [];
-        $ssoTeams = $this->oAuth->getSsoTeams($this->session->get('oauth2_connect_provider'));
-        $oAuth2Groups = $this->session->get('oauth2_groups');
+    // /**
+    //  * @return Array<string, 1>
+    //  */
+    // private function loadAngelTypesFromSessionOAuthGroups(): array
+    // {
+    //     $oAuthAngelTypes = [];
+    //     $ssoTeams = $this->oAuth->getSsoTeams($this->session->get('oauth2_connect_provider'));
+    //     $oAuth2Groups = $this->session->get('oauth2_groups');
 
-        foreach ($ssoTeams as $name => $team) {
-            if (in_array($name, $oAuth2Groups)) {
-                // preselect angel type from oauth
-                $oAuthAngelTypes['angel_types_' . $team['id']] = 1;
-            }
-        }
+    //     foreach ($ssoTeams as $name => $team) {
+    //         if (in_array($name, $oAuth2Groups)) {
+    //             // preselect angel type from oauth
+    //             $oAuthAngelTypes['angel_types_' . $team['id']] = 1;
+    //         }
+    //     }
 
-        return $oAuthAngelTypes;
-    }
+    //     return $oAuthAngelTypes;
+    // }
 
     /**
      * @return Array<string, 1>

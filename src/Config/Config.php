@@ -12,7 +12,15 @@ class Config extends Fluent
     protected $attributes = []; // phpcs:ignore
 
     /**
-     * @param string|array $key
+     * Retrieves a configuration value by key.
+     *
+     * If the provided key is null, returns all configuration attributes.
+     * If the key exists, returns the corresponding value.
+     * Otherwise, returns the specified default value.
+     *
+     * @param string|array|null $key     The configuration key or keys to retrieve, or null to retrieve all.
+     * @param mixed             $default The default value to return if the key does not exist.
+     * @return mixed                     The configuration value(s) or the default value.
      */
     public function get(mixed $key, mixed $default = null): mixed
     {
@@ -28,7 +36,14 @@ class Config extends Fluent
     }
 
     /**
-     * @param string|array $key
+     * Sets a configuration value or multiple values.
+     *
+     * If an array is provided as the first argument, each key-value pair in the array
+     * will be set recursively. Otherwise, sets the specified key to the given value.
+     *
+     * @param string|array  $key    The configuration key to set, or an associative array of key-value pairs.
+     * @param mixed|null    $value  The value to set for the given key. Ignored if $key is an array.
+     *
      */
     public function set(mixed $key, mixed $value = null): void
     {
@@ -44,7 +59,10 @@ class Config extends Fluent
     }
 
     /**
-     * @param string $key
+     * Checks if the specified configuration key exists.
+     *
+     * @param mixed $key The configuration key to check for existence.
+     * @return bool True if the key exists, false otherwise.
      */
     public function has(mixed $key): bool
     {
@@ -52,7 +70,10 @@ class Config extends Fluent
     }
 
     /**
-     * @param string $key
+     * Removes the configuration value associated with the specified key.
+     *
+     * @param mixed $key The key of the configuration item to remove.
+     * @return void
      */
     public function remove(mixed $key): void
     {
