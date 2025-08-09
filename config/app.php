@@ -48,6 +48,8 @@ return [
         // Basic initialization
         \Engelsystem\Middleware\SendResponseHandler::class,
         \Engelsystem\Middleware\ExceptionHandler::class,
+        // Migration gate must run as early as possible
+        \Engelsystem\Middleware\MigrationGate::class,
 
         // Changes of request/response parameters
         \Engelsystem\Middleware\SetLocale::class,

@@ -19,7 +19,18 @@ class HealthControllerTest extends TestCase
     {
         /** @var Response|MockObject $response */
         $response = $this->createMock(Response::class);
-        $this->setExpects($response, 'withContent', ['Ok'], $response);
+        $this->setExpects($response, 'withHeader', ['Content-Type', 'application/json'], $response, 1);
+        $this->setExpects(
+            $response,
+            'withHeader',
+            ['Cache-Control', 'no-store, no-cache, must-revalidate'],
+            $response,
+            1
+        );
+        $this->setExpects($response, 'withContent', [$this->callback(function ($json) {
+            $data = json_decode($json, true);
+            return is_array($data) && ($data['status'] ?? null) === 'ok' && isset($data['time']);
+        })], $response);
 
         $controller = new HealthController($response);
         $controller->index();
