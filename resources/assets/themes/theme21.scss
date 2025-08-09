@@ -344,6 +344,7 @@ table.table.table-striped.data {
   backdrop-filter: blur(32px);
   border: unset;
   box-shadow: 0 5px 5px 5px rgba(0, 0, 0, 0.2), inset -1px -1px rgba(181, 181, 181, 0.55);
+  color: #fff;
 }
 
 .alert-info {
@@ -356,6 +357,10 @@ table.table.table-striped.data {
 
 .alert-danger {
   background-color: transparentize(#b90000, 0.5);
+}
+
+.alert-warning, .alert-warning a {
+  color: #000;
 }
 
 #buildup_start,
