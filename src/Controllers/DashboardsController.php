@@ -81,7 +81,6 @@ class DashboardsController extends BaseController
             ->when(!empty($filter_department), function (Builder $query, int $filter_department): void {
                 $query
                 ->where('department_shifts.department_id', $filter_department);
-                var_dump($filter_department);
             })
             ->orderBy('shifts_start', 'asc')
             ->orderBy('shifts_end', 'asc')
