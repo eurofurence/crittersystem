@@ -30,6 +30,7 @@ _NOSYNC/
 # PHPstorm files
 /.idea/
 /.phpstorm.meta.php
+.junie/
 
 # Docker .env files
 /docker/.env

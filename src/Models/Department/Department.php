@@ -2,14 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Engelsystem\Models;
+namespace Engelsystem\Models\Department;
 
 use Carbon\Carbon;
+use Engelsystem\Models\AngelType;
 use Engelsystem\Models\BaseModel;
+use Engelsystem\Models\Location;
 use Engelsystem\Models\Shifts\Shift;
 use Engelsystem\Models\User\User;
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -17,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $id               ID of the department
  * @property string $uuid             UUID of the department
  * @property string $name             Name of the department
+ * @property string $slug             Slug of the department
  * @property string $description      Description of the department
  * @property bool   $staff_only       Whether the department is staff-only
  * @property Carbon|null $created_at  Creation timestamp
@@ -55,6 +58,7 @@ class Department extends BaseModel
 
     protected $fillable = [ // phpcs:ignore
         'name',
+        'slug',
         'description',
         'staff_only',
     ];
@@ -117,16 +121,20 @@ class Department extends BaseModel
     public function staffUsers(): BelongsToMany
     {
         return $this->approvedUsers()
-            ->whereHas('groups', function ($query): void {
-                $query->where('name', 'Staff - Internal');
+            ->whereHas('groups.privileges', function ($query): void {
+                $query->orwhere('name', 'user.type.internal_staff')
+                ->orWhere('name', 'user.type.staff')
+                ->orWhere('name', 'user.type.admin');
             });
     }
 
     public function otherUsers(): BelongsToMany
     {
         return $this->approvedUsers()
-            ->whereDoesntHave('groups', function ($query): void {
-                $query->where('name', 'Staff - Internal');
+            ->whereDoesntHave('groups.privileges', function ($query): void {
+                $query->orwhere('name', 'user.type.internal_staff')
+                    ->orWhere('name', 'user.type.staff')
+                    ->orWhere('name', 'user.type.admin');
             });
     }
 }

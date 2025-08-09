@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Engelsystem\Controllers;
+namespace Engelsystem\Controllers\Department;
 
-use Engelsystem\Models\BaseModel;
 use Engelsystem\Http\Request;
 use Engelsystem\Http\Response;
-use Engelsystem\Models\Department;
-use Engelsystem\Models\DepartmentApplicationLog;
+use Engelsystem\Models\BaseModel;
+use Engelsystem\Models\Department\Department;
+use Engelsystem\Models\Department\DepartmentApplicationLog;
 use Psr\Log\LoggerInterface;
 
 class DepartmentApplicationController extends BaseModel
@@ -26,7 +26,16 @@ class DepartmentApplicationController extends BaseModel
         $department = Department::where('uuid', $uuid)->firstOrFail();
         $user = auth()->user();
 
-        if ($department->staff_only && !$user->groups->contains('name', 'Staff - Internal')) {
+//        if ($department->staff_only && !$user->groups->contains('name', 'Staff - Internal')) {
+        if (
+            $department->staff_only && !auth()->canAny(
+                [
+                'user.type.internal_staff',
+                'user.type.staff',
+                'user.type.admin',
+                ]
+            )
+        ) {
 //            throw new HttpForbidden();
             dd('not allowed - DepartmentApplicationController.php:33');
         }

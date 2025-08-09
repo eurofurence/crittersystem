@@ -73,7 +73,7 @@ class OAuthController extends BaseController
         ) {
             $this->session->remove('oauth2_state');
 
-            $this->log->warning('Invalid OAuth state');
+            $this->log->warning('Invalid OAuth state - Redirect URL Recalled');
 
             throw new HttpNotFound('oauth.invalid-state');
         }
