@@ -14,10 +14,9 @@ use PDOException;
 
 class InstallController extends BaseController
 {
-
-        protected $fileOk = '/storage/migration.ok';
-        protected $fileFail = '/storage/migration.fail';
-        protected $fileRunning = '/storage/migration.running';
+    protected string $fileOk = '/storage/migration.ok';
+    protected string $fileFail = '/storage/migration.fail';
+    protected string $fileRunning = '/storage/migration.running';
 
 
     public function __construct(
