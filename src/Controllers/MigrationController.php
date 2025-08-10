@@ -18,9 +18,9 @@ class MigrationController extends BaseController
     public function index(): Response
     {
         $baseDir = __DIR__ . '/../..';
-        $fileOk = $baseDir . '/config/migration.ok';
-        $fileFail = $baseDir . '/config/migration.fail';
-        $fileRunning = $baseDir . '/config/migration.running';
+        $fileOk = $baseDir . '/storage/migration.ok';
+        $fileFail = $baseDir . '/storage/migration.fail';
+        $fileRunning = $baseDir . '/storage/migration.running';
 
         if (!file_exists($fileOk)) {
             // Missing OK file, evaluate other markers

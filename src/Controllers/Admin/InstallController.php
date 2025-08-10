@@ -242,7 +242,7 @@ class InstallController extends BaseController
      */
     private function isInstallationComplete(): bool
     {
-        return file_exists($this->getBaseDir() . '/config/migration.ok');
+        return file_exists($this->getBaseDir() . '/storage/migration.ok');
     }
 
     /**
@@ -295,9 +295,9 @@ class InstallController extends BaseController
         $baseDir = $this->getBaseDir();
 
         return [
-            'migration_ok' => file_exists($baseDir . '/config/migration.ok'),
-            'migration_fail' => file_exists($baseDir . '/config/migration.fail'),
-            'migration_running' => file_exists($baseDir . '/config/migration.running'),
+            'migration_ok' => file_exists($baseDir . '/storage/migration.ok'),
+            'migration_fail' => file_exists($baseDir . '/storage/migration.fail'),
+            'migration_running' => file_exists($baseDir . '/storage/migration.running'),
             'migrate_script' => file_exists($baseDir . '/bin/migrate'),
         ];
     }
