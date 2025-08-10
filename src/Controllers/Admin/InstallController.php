@@ -208,7 +208,7 @@ class InstallController extends BaseController
 
             // For safety, only allow SELECT, SHOW, DESCRIBE commands in manual execution
             $firstWord = strtoupper(explode(' ', trim($sql))[0]);
-            if (!in_array($firstWord, ['SELECT', 'SHOW', 'DESCRIBE', 'EXPLAIN', 'DELETE'])) {
+            if (!in_array($firstWord, ['SELECT', 'SHOW', 'DESCRIBE', 'EXPLAIN', 'DELETE', 'DROP'])) {
                 return $this->response
                     ->withStatus(code: 400)
                     ->withJson(

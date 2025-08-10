@@ -133,8 +133,11 @@ class Migrate
             print_r($e);
             printf(PHP_EOL . str_repeat('*', 100) . PHP_EOL . PHP_EOL);
 
-            throw new Exception(message:'Migration failed', code: $e->getCode(), previous: $e);
-//            throw $e;
+            if (PHP_SAPI === 'cli') {
+                throw new Exception(message:'Migration failed', code: $e->getCode(), previous: $e);
+            } else {
+                die('Migration fail');
+            }
         }
 
         $this->unlockTable();
@@ -262,7 +265,11 @@ class Migrate
                 printf('Table LOCK detected - You can force the lock bypass with --force' . PHP_EOL);
                 printf(PHP_EOL . str_repeat('*', 100) . PHP_EOL . PHP_EOL);
 
-                throw new Exception(message:'Unable to acquire migration table lock', code: 0, previous: null);
+                if (PHP_SAPI === 'cli') {
+                    throw new Exception(message:'Unable to acquire migration table lock', code: 0, previous: null);
+                } else {
+                    die('Unable to acquire migration table lock');
+                }
             }
 
             $this->getTableQuery()
