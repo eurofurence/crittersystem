@@ -6,9 +6,9 @@
     <meta id="csrf" name="csrf-token" content="{{ csrf_token() }}">
 
     <title>Installation Workflow - CritterSystem</title>
-    
+
     <script src="/assets/special/xterm/lib/xterm.js"></script>
-    
+
     <link href="/assets/special/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/assets/special/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="/assets/special/xterm/css/xterm.css" rel="stylesheet">
@@ -43,7 +43,7 @@
                                 Authenticate
                             </button>
                         </div>
-                        <div class="form-text">This password is set via the SETUP_ADMIN_PASSWORD environment variable.</div>
+                        <div class="form-text">This password is set via the APP_INITIAL_ADMIN_PASSWORD environment variable.</div>
                     </div>
                 </div>
                 <div id="auth-error" class="alert alert-danger mt-3 hidden"></div>
@@ -66,7 +66,7 @@
                         <div class="col-md-6">
                             <h6>Database Connection</h6>
                             <div id="db-status" class="mb-3"></div>
-                            
+
                             <h6>System Information</h6>
                             <div id="system-info" class="mb-3"></div>
                         </div>
