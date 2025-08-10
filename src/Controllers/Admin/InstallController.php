@@ -14,6 +14,12 @@ use PDOException;
 
 class InstallController extends BaseController
 {
+
+        protected $fileOk = '/storage/migration.ok';
+        protected $fileFail = '/storage/migration.fail';
+        protected $fileRunning = '/storage/migration.running';
+
+
     public function __construct(
         protected Response $response,
         protected Config $config,
@@ -113,7 +119,7 @@ class InstallController extends BaseController
         }
 
         // Check if migration is already running
-        $runningFile = $this->getBaseDir() . '/config/migration.running';
+        $runningFile = $this->getBaseDir() . $this->fileRunning;
         if (file_exists($runningFile)) {
             return $this->response
                 ->withStatus(409)
@@ -163,7 +169,7 @@ class InstallController extends BaseController
 
             if ($exitCode !== 0) {
                 // Create failure marker
-                file_put_contents($this->getBaseDir() . '/config/migration.fail', date('c') . "\n" . $output);
+                file_put_contents($this->getBaseDir() . $this->fileFail, date('c') . "\n" . $output);
             }
 
             return $this->response
@@ -176,7 +182,7 @@ class InstallController extends BaseController
             }
 
             // Create failure marker
-            file_put_contents($this->getBaseDir() . '/config/migration.fail', date('c') . "\n" . $e->getMessage());
+            file_put_contents($this->getBaseDir() . $this->fileFail, date('c') . "\n" . $e->getMessage());
 
             return $this->response
                 ->withStatus(500)
@@ -242,7 +248,7 @@ class InstallController extends BaseController
      */
     private function isInstallationComplete(): bool
     {
-        return file_exists($this->getBaseDir() . '/storage/migration.ok');
+        return file_exists($this->getBaseDir() . $this->fileOk);
     }
 
     /**
@@ -295,9 +301,9 @@ class InstallController extends BaseController
         $baseDir = $this->getBaseDir();
 
         return [
-            'migration_ok' => file_exists($baseDir . '/storage/migration.ok'),
-            'migration_fail' => file_exists($baseDir . '/storage/migration.fail'),
-            'migration_running' => file_exists($baseDir . '/storage/migration.running'),
+            'migration_ok' => file_exists($baseDir . $this->fileOk),
+            'migration_fail' => file_exists($baseDir . $this->fileFail),
+            'migration_running' => file_exists($baseDir . $this->fileRunning),
             'migrate_script' => file_exists($baseDir . '/bin/migrate'),
         ];
     }
