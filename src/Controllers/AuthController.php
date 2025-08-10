@@ -6,6 +6,7 @@ namespace Engelsystem\Controllers;
 
 use Carbon\Carbon;
 use Engelsystem\Config\Config;
+use Engelsystem\Helpers\AccessMode;
 use Engelsystem\Models\EventConfig;
 use Engelsystem\Helpers\Authenticator;
 use Engelsystem\Helpers\OAuthHelper;
@@ -128,9 +129,8 @@ class AuthController extends BaseController
 
     protected function checkAccessMode(User $user): ?Response
     {
-        $mode = $this->getCurrentMode();
-
-        switch ($mode) {
+        $accessMode = app(AccessMode::class);
+        switch ($accessMode->getMode()) {
             case 'staff':
                 if (!$this->hasStaffAccess($user)) {
                     $this->addNotification('auth.login.staff_only', NotificationType::ERROR);
@@ -151,18 +151,6 @@ class AuthController extends BaseController
     }
 
     /**
-     * Retrieves the current access mode configuration.
-     *
-     * @return string Returns the current access mode value as specified in the configuration.
-     *                If no configuration is found, it defaults to 'public'.
-     */
-    protected function getCurrentMode(): string
-    {
-        $config = $this->eventConfig->where('name', 'access_mode')->first();
-        return $config ? $config->value : 'public';
-    }
-
-    /**
      * Determines if the given user has staff access based on their privileges.
      *
      * @param mixed $user The user object whose access privileges are being checked.
@@ -175,6 +163,7 @@ class AuthController extends BaseController
         return $user->privileges()
             ->where(function ($query): void {
                 $query->where('name', 'user.type.internal_staff')
+                    ->orWhere('name', 'user.type.staff')
                     ->orWhere('name', 'admin');
             })
             ->exists();
