@@ -39,7 +39,7 @@ class MigrateOauth extends Migration
         $this->db->table('oauth')
             ->where('provider', $oldName)
             ->update([
-                'name' => $newName,
+                'provider' => $newName,
             ]);
     }
 }
