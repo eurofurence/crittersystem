@@ -50,6 +50,8 @@ return [
         \Engelsystem\Middleware\ExceptionHandler::class,
         // Migration gate must run as early as possible
         \Engelsystem\Middleware\MigrationGate::class,
+        // Maintenance mode check - after migration gate, before normal operations
+        \Engelsystem\Middleware\MaintenanceMiddleware::class,
 
         // Changes of request/response parameters
         \Engelsystem\Middleware\SetLocale::class,
