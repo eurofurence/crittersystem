@@ -1,9 +1,5 @@
-// Install workflow JavaScript functionality
-// This file is compiled with webpack
-
-// import { Terminal } from '@xterm/xterm';
-// import { Terminal } from '/assets/special/xterm/lib/xterm.js';
-// import '/assets/special/install.css';
+// Install workflow JavaScript
+// This file is NOT compiled with webpack - make sure that is located at: `/assets/special/'
 
 // Global variables
 let terminal;
@@ -15,6 +11,14 @@ let csrfToken = document.getElementById("csrf").getAttribute('content');
 document.addEventListener('DOMContentLoaded', function() {
     // Try to check if already authenticated
     refreshStatus();
+
+    // Handle the buttons/actions
+    document.getElementById('btn-authenticate').addEventListener('click', authenticate);
+    document.getElementById('btn-refreshStatus').addEventListener('click', refreshStatus);
+    document.getElementById('migrate-btn').addEventListener('click', startMigration);
+    document.getElementById('terminal-toggle').addEventListener('click', toggleTerminal);
+    document.getElementById('btn-executeSql').addEventListener('click', executeSql);
+    document.getElementById('btn-clearSqlResult').addEventListener('click', clearSqlResult);
 });
 
 // Add CSRF Token to URL
@@ -121,9 +125,9 @@ function displaySystemStatus(status) {
     const files = status.migration_files;
     migrationInfo.innerHTML = `
         <p class="mb-1">${getStatusIcon(files.migrate_script)} Migration script available</p>
-        <p class="mb-1">${getStatusIcon(files.migration_ok)} Migration complete</p>
+        <p class="mb-1">${getStatusIcon(!files.migration_running)} Not currently running</p>
         <p class="mb-1">${getStatusIcon(!files.migration_fail)} No migration failures</p>
-        <p class="mb-0">${getStatusIcon(!files.migration_running)} Not currently running</p>
+        <p class="mb-1">${getStatusIcon(files.migration_ok)} Migration complete</p>
     `;
 
     showStepContent('status');
@@ -349,11 +353,3 @@ document.getElementById('setup-password').addEventListener('keypress', function(
         authenticate();
     }
 });
-
-// Export functions to global scope for onclick handlers
-window.authenticate = authenticate;
-window.refreshStatus = refreshStatus;
-window.startMigration = startMigration;
-window.toggleTerminal = toggleTerminal;
-window.executeSql = executeSql;
-window.clearSqlResult = clearSqlResult;

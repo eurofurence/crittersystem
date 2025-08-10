@@ -38,7 +38,7 @@
                     <div class="col-md-6">
                         <div class="input-group">
                             <input type="password" class="form-control" id="setup-password" placeholder="Setup admin password">
-                            <button class="btn btn-primary" type="button" onclick="authenticate()">
+                            <button class="btn btn-primary" type="button" id="btn-authenticate">
                                 <span id="auth-spinner" class="spinner-border spinner-border-sm hidden" role="status"></span>
                                 Authenticate
                             </button>
@@ -71,11 +71,11 @@
                             <div id="system-info" class="mb-3"></div>
                         </div>
                         <div class="col-md-6">
-                            <h6>Migration Files</h6>
+                            <h6>Migration Status</h6>
                             <div id="migration-info"></div>
                         </div>
                     </div>
-                    <button class="btn btn-primary" onclick="refreshStatus()">
+                    <button class="btn btn-primary" id="btn-refreshStatus">
                         <i class="bi bi-arrow-clockwise"></i> Refresh Status
                     </button>
                 </div>
@@ -95,11 +95,11 @@
                 <p>Execute database migrations to set up the application schema.</p>
                 <div id="migration-content" class="hidden">
                     <div class="d-flex gap-2 mb-3">
-                        <button class="btn btn-success" onclick="startMigration()" id="migrate-btn">
+                        <button class="btn btn-success" id="migrate-btn">
                             <span id="migrate-spinner" class="spinner-border spinner-border-sm hidden" role="status"></span>
                             <i class="bi bi-database-up"></i> Start Migration
                         </button>
-                        <button class="btn btn-secondary" onclick="toggleTerminal()" id="terminal-toggle">
+                        <button class="btn btn-secondary" id="terminal-toggle">
                             <i class="bi bi-terminal"></i> Show Terminal
                         </button>
                     </div>
@@ -125,11 +125,11 @@
                         <textarea class="form-control font-monospace" id="sql-query" rows="4" placeholder="SELECT * FROM information_schema.tables;"></textarea>
                     </div>
                     <div class="d-flex gap-2 mb-3">
-                        <button class="btn btn-primary" onclick="executeSql()">
+                        <button class="btn btn-primary" id="btn-executeSql">
                             <span id="sql-spinner" class="spinner-border spinner-border-sm hidden" role="status"></span>
                             <i class="bi bi-play"></i> Execute Query
                         </button>
-                        <button class="btn btn-secondary" onclick="clearSqlResult()">
+                        <button class="btn btn-secondary" id="btn-clearSqlResult">
                             <i class="bi bi-x-circle"></i> Clear Results
                         </button>
                     </div>

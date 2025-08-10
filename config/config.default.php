@@ -638,7 +638,7 @@ return [
             'default-src \'self\'; '
             . ' frame-src https://nav.eurofurence.org; '
             . ' font-src \'self\'; '
-            . ' script-src \'self\' \'unsafe-inline\'; '
+            . ' script-src \'self\'; '
             . ' style-src \'self\' \'unsafe-inline\'; '
             . ' img-src \'self\' data:;',
         'X-XSS-Protection'        => '1; mode=block',
