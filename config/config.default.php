@@ -12,48 +12,48 @@ return [
     // Group: Main Application
     // #################################################################
     // Application name (not the event name)
-    'app_name'                => env('APP_NAME', 'Critter System'), //NEW ENV NAME: APP_NAME
+    'app_name'                => env('APP_NAME', 'Critter System'),
 
     // Set to development to enable debugging messages [production, development]
-    'environment'             => env('ENVIRONMENT', 'production'), //NEW ENV NAME: APP_ENV
+    'environment'             => env('APP_ENV', 'production'),
 
     // Application URL and base path to use instead of the auto-detected
-    'url'                     => env('APP_URL'), //NEW ENV NAME: APP_URL
+    'url'                     => env('APP_URL'),
 
     // Enable maintenance mode (show a static page to all users)
     'maintenance'             => (bool) env('APP_ENABLE_MAINTENANCE', false),
 
     // For accessing /metrics (and /stats)
-    'api_key'                 => env('API_KEY', null), //NEW ENV NAME: APP_METRICS_API_KEY
+    'api_key'                 => env('APP_METRICS_API_KEY', null),
 
     // Enable installation workflow interface
     'enable_install_workflow' => (bool) env(key: 'APP_ENABLE_INSTALL_WORKFLOW', default: false),
 
     // Login DEV Warning Message
-    'login_dev_warning'     => env('DEV_WARNING_MESSAGE', false), //NEW ENV NAME: APP_ENABLE_DEMO_MODE
+    'login_dev_warning'     => env('APP_ENABLE_DEMO_MODE', false),
 
     // Initial admin password, configured on first migration
     'setup_admin_password'    => env('APP_INITIAL_ADMIN_PASSWORD', null),
 
     // Redirect to this site after logging in or when clicking the page name
     // Must be one of news, meetings, user_shifts, angeltypes, questions
-    'home_site'               => env('HOME_SITE', 'news'),
+    'home_site'               => env('APP_HOME_SITE', 'news'),
 
     // Required user fields
     'required_user_fields' => [
-        'pronoun'            => (bool) env('PRONOUN_REQUIRED', false),
-        'firstname'          => (bool) env('FIRSTNAME_REQUIRED', false),
-        'lastname'           => (bool) env('LASTNAME_REQUIRED', false),
-        'tshirt_size'        => (bool) env('TSHIRT_SIZE_REQUIRED', false), //TODO: REMOVE
-        'mobile'             => (bool) env('MOBILE_REQUIRED', false),
-        'dect'               => (bool) env('DECT_REQUIRED', false),
+        'pronoun'            => (bool) env('APP_REQUIRE_PRONOUN', false),
+        'firstname'          => (bool) env('APP_REQUIRE_FIRSTNAME', false),
+        'lastname'           => (bool) env('APP_REQUIRE_LASTNAME', false),
+        'tshirt_size'        => (bool) env('APP_REQUIRE_TSHIRT_SIZE', false), //TODO: REMOVE
+        'mobile'             => (bool) env('APP_REQUIRE_MOBILE', false),
+        'dect'               => (bool) env('APP_REQUIRE_DECT', false),
     ],
 
     // Local time zone
-    'timezone'                => env('TIMEZONE', 'Europe/Berlin'),
+    'timezone'                => env('APP_TIMEZONE', 'Europe/Berlin'),
 
     // The default locale to use
-    'default_locale'          => env('DEFAULT_LOCALE', 'en_US'),
+    'default_locale'          => env('APP_DEFAULT_LOCALE', 'en_US'),
 
     // Available locales in /resources/lang/
     // To disable a locale in config.php, you can set its value to null
@@ -63,7 +63,7 @@ return [
     ],
 
     // Default theme - ID comes from THEMES section
-    'theme'                   => env('THEME', 21),
+    'theme'                   => env('APP_DEFAULT_THEME', 21),
     // #################################################################
 
     // #################################################################
@@ -71,10 +71,10 @@ return [
     // #################################################################
     // MySQL-Connection Settings
     'database'                => [
-        'host'     => env('MYSQL_HOST', 'localhost'),
-        'database' => env('MYSQL_DATABASE', 'critterdb'),
-        'username' => env('MYSQL_USER', ''),
-        'password' => env('MYSQL_PASSWORD', ''),
+        'host'     => env('APP_MYSQL_HOST', 'localhost'),
+        'database' => env('APP_MYSQL_DATABASE', 'critterdb'),
+        'username' => env('APP_MYSQL_USER', ''),
+        'password' => env('APP_MYSQL_PASSWORD', ''),
     ],
     // #################################################################
 
@@ -83,20 +83,20 @@ return [
     // #################################################################
     'email'                   => [
         // Can be mail, smtp, sendmail, log or an symfony mailer dsn string like smtps://[usr]:[pass]@smtp.foo.bar:465
-        'driver' => env('MAIL_DRIVER', 'mail'),
+        'driver' => env('APP_MAIL_DRIVER', 'mail'),
         'from'   => [
             // From address of all emails
-            'address' => env('MAIL_FROM_ADDRESS', 'noreply@example.com'),
-            'name'    => env('MAIL_FROM_NAME', env('APP_NAME', 'Critter System')),
+            'address' => env('APP_MAIL_FROM_ADDRESS', 'noreply@example.com'),
+            'name'    => env('APP_MAIL_FROM_NAME', env('APP_NAME', 'Critter System')),
         ],
 
-        'host'       => env('MAIL_HOST', 'localhost'),
-        'port'       => env('MAIL_PORT', 587),
+        'host'       => env('APP_MAIL_HOST', 'localhost'),
+        'port'       => env('APP_MAIL_PORT', 587),
         // If tls transport encryption should be enabled
-        'tls'        => env('MAIL_TLS'),
-        'username'   => env('MAIL_USERNAME'),
-        'password'   => env('MAIL_PASSWORD'),
-        'sendmail'   => env('MAIL_SENDMAIL', '/usr/sbin/sendmail -bs'),
+        'tls'        => env('APP_MAIL_TLS'),
+        'username'   => env('APP_MAIL_USERNAME'),
+        'password'   => env('APP_MAIL_PASSWORD'),
+        'sendmail'   => env('APP_MAIL_SENDMAIL', '/usr/sbin/sendmail -bs'),
     ],
     // #################################################################
 
@@ -263,16 +263,16 @@ return [
             'client_secret' => env(key: 'APP_OAUTH_EF_CLIENT_SECRET', default: null),
 
             // Authentication URL
-            'url_auth' => env(key: 'APP_OAUTH_GENERIC_URL_AUTH', default: null),
+            'url_auth' => env(key: 'APP_OAUTH_EF_URL_AUTH', default: null),
 
             // Token URL
-            'url_token' => env(key: 'APP_OAUTH_GENERIC_URL_TOKEN', default: null),
+            'url_token' => env(key: 'APP_OAUTH_EF_URL_TOKEN', default: null),
 
             // User info URL which provides userdata
-            'url_info' => env(key: 'APP_OAUTH_GENERIC_URL_USER_INFO', default: null),
+            'url_info' => env(key: 'APP_OAUTH_EF_URL_USER_INFO', default: null),
 
             // User URL to provider, linked on provider settings page (optional)
-            'url' => env(key: 'APP_OAUTH_GENERIC_URL_PROVIDER', default: null),
+            'url' => env(key: 'APP_OAUTH_EF_URL_PROVIDER', default: null),
 
             // OAuth Scopes
             'scope' => env(key: 'APP_OAUTH_EF_SCOPE', default: ['openid', 'profile', 'email', 'groups']),
