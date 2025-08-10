@@ -21,14 +21,14 @@ class MigrationGate implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        // Don't block health monitoring
+        // Don't block health monitoring and install workflow
         $path = (new Uri((string) $request->getUri()))->getPath();
         if ($request instanceof Request) {
             $path = $request->getPathInfo();
         }
         $path = urldecode($path);
 
-        if ($path === '/health') {
+        if ($path === '/health' || str_starts_with($path, '/admin/install')) {
             return $handler->handle($request);
         }
 

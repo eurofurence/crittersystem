@@ -198,6 +198,16 @@ class Response extends SymfonyResponse implements ResponseInterface
         return $response->withContent($content);
     }
 
+    public function withJson(mixed $content): static
+    {
+        $new = $this
+            ->withHeader('Content-Type', 'application/json');
+
+            $new->setContent($content);
+
+        return $new;
+    }
+
     /**
      * Redirect to a route with an error message
      *

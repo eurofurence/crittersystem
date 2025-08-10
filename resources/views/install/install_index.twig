@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta id="csrf" name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>Installation Workflow - CritterSystem</title>
+    
+    <script src="/assets/special/xterm/lib/xterm.js"></script>
+    
+    <link href="/assets/special/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/special/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="/assets/special/xterm/css/xterm.css" rel="stylesheet">
+    <link href="/assets/special/install.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-light">
+    <div class="container install-container">
+        <div class="text-center mb-4">
+            <h1 class="h2"><i class="bi bi-gear-fill"></i> CritterSystem Installation</h1>
+            <p class="text-muted">Complete the installation process for your CritterSystem instance</p>
+        </div>
+
+        <!-- Authentication Step -->
+        <div class="step-card card" id="auth-step">
+            <div class="step-header">
+                <div class="d-flex align-items-center">
+                    <div class="step-number" id="auth-number">1</div>
+                    <h5 class="mb-0">Authentication</h5>
+                </div>
+                <span class="badge bg-secondary status-badge" id="auth-status">Required</span>
+            </div>
+            <div class="card-body" id="auth-body">
+                <p>Enter the setup admin password to proceed with installation.</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="setup-password" placeholder="Setup admin password">
+                            <button class="btn btn-primary" type="button" onclick="authenticate()">
+                                <span id="auth-spinner" class="spinner-border spinner-border-sm hidden" role="status"></span>
+                                Authenticate
+                            </button>
+                        </div>
+                        <div class="form-text">This password is set via the SETUP_ADMIN_PASSWORD environment variable.</div>
+                    </div>
+                </div>
+                <div id="auth-error" class="alert alert-danger mt-3 hidden"></div>
+            </div>
+        </div>
+
+        <!-- System Status Step -->
+        <div class="step-card card" id="status-step">
+            <div class="step-header">
+                <div class="d-flex align-items-center">
+                    <div class="step-number" id="status-number">2</div>
+                    <h5 class="mb-0">System Status</h5>
+                </div>
+                <span class="badge bg-secondary status-badge" id="status-status">Pending</span>
+            </div>
+            <div class="card-body" id="status-body">
+                <p>Checking system requirements and database connectivity.</p>
+                <div id="status-content" class="hidden">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Database Connection</h6>
+                            <div id="db-status" class="mb-3"></div>
+                            
+                            <h6>System Information</h6>
+                            <div id="system-info" class="mb-3"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Migration Files</h6>
+                            <div id="migration-info"></div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="refreshStatus()">
+                        <i class="bi bi-arrow-clockwise"></i> Refresh Status
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Database Migration Step -->
+        <div class="step-card card" id="migration-step">
+            <div class="step-header">
+                <div class="d-flex align-items-center">
+                    <div class="step-number" id="migration-number">3</div>
+                    <h5 class="mb-0">Database Migration</h5>
+                </div>
+                <span class="badge bg-secondary status-badge" id="migration-status">Pending</span>
+            </div>
+            <div class="card-body" id="migration-body">
+                <p>Execute database migrations to set up the application schema.</p>
+                <div id="migration-content" class="hidden">
+                    <div class="d-flex gap-2 mb-3">
+                        <button class="btn btn-success" onclick="startMigration()" id="migrate-btn">
+                            <span id="migrate-spinner" class="spinner-border spinner-border-sm hidden" role="status"></span>
+                            <i class="bi bi-database-up"></i> Start Migration
+                        </button>
+                        <button class="btn btn-secondary" onclick="toggleTerminal()" id="terminal-toggle">
+                            <i class="bi bi-terminal"></i> Show Terminal
+                        </button>
+                    </div>
+                    <div id="terminal-container" class="terminal-container hidden"></div>
+                    <div id="migration-result" class="mt-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SQL Console Step (for troubleshooting) -->
+        <div class="step-card card" id="sql-step">
+            <div class="step-header">
+                <div class="d-flex align-items-center">
+                    <div class="step-number" id="sql-number">4</div>
+                    <h5 class="mb-0">SQL Console <small class="text-muted">(Troubleshooting)</small></h5>
+                </div>
+                <span class="badge bg-secondary status-badge">Optional</span>
+            </div>
+            <div class="card-body" id="sql-body">
+                <p>Execute SQL queries for troubleshooting database issues. Only SELECT, SHOW, DESCRIBE, and EXPLAIN statements are allowed.</p>
+                <div id="sql-content" class="hidden">
+                    <div class="mb-3">
+                        <textarea class="form-control font-monospace" id="sql-query" rows="4" placeholder="SELECT * FROM information_schema.tables;"></textarea>
+                    </div>
+                    <div class="d-flex gap-2 mb-3">
+                        <button class="btn btn-primary" onclick="executeSql()">
+                            <span id="sql-spinner" class="spinner-border spinner-border-sm hidden" role="status"></span>
+                            <i class="bi bi-play"></i> Execute Query
+                        </button>
+                        <button class="btn btn-secondary" onclick="clearSqlResult()">
+                            <i class="bi bi-x-circle"></i> Clear Results
+                        </button>
+                    </div>
+                    <div id="sql-result"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completion Step -->
+        <div class="step-card card" id="completion-step">
+            <div class="step-header">
+                <div class="d-flex align-items-center">
+                    <div class="step-number" id="completion-number">5</div>
+                    <h5 class="mb-0">Installation Complete</h5>
+                </div>
+                <span class="badge bg-secondary status-badge" id="completion-status">Pending</span>
+            </div>
+            <div class="card-body" id="completion-body">
+                <p>Installation will be complete when the migration.ok file is created.</p>
+                <div id="completion-content" class="hidden">
+                    <div class="alert alert-success">
+                        <h6><i class="bi bi-check-circle"></i> Installation Complete!</h6>
+                        <p class="mb-0">Your CritterSystem instance has been successfully installed. You can now access the application.</p>
+                    </div>
+                    <a href="/" class="btn btn-primary">
+                        <i class="bi bi-house"></i> Go to Application
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/assets/special/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/special/xterm/lib/xterm.js"></script>
+    <script src="/assets/special/install.js"></script>
+</body>
+</html>

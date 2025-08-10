@@ -60,7 +60,7 @@ _NOSYNC/
 
 # Frontend files
 /node_modules
-/public/assets
+/public/assets/*
 /package-lock.json
 /yarn-error.log
 /.yarn-cache

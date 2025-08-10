@@ -13,6 +13,15 @@ $route->post('/register', 'RegistrationController@save');
 $route->get('/credits', 'CreditsController@index');
 $route->get('/health', 'HealthController@index');
 
+// Installation workflow
+$route->addGroup('/admin/install', function (RouteCollector $route): void {
+    $route->get('', 'Admin\\InstallController@index');
+    $route->post('/authenticate', 'Admin\\InstallController@authenticate');
+    $route->get('/status', 'Admin\\InstallController@status');
+    $route->post('/migrate', 'Admin\\InstallController@migrate');
+    $route->post('/sql', 'Admin\\InstallController@executeSql');
+});
+
 // Authentication
 $route->get('/login', 'AuthController@login');
 $route->post('/login', 'AuthController@postLogin');

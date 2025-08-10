@@ -21,16 +21,19 @@ return [
     'url'                     => env('APP_URL'), //NEW ENV NAME: APP_URL
 
     // Enable maintenance mode (show a static page to all users)
-    'maintenance'             => (bool) env('MAINTENANCE', false), //NEW ENV NAME: APP_ENABLE_MAINTENANCE
+    'maintenance'             => (bool) env('APP_ENABLE_MAINTENANCE', false),
 
     // For accessing /metrics (and /stats)
-    'api_key'                 => env('API_KEY', ''), //NEW ENV NAME: APP_METRICS_API_KEY
+    'api_key'                 => env('API_KEY', null), //NEW ENV NAME: APP_METRICS_API_KEY
+
+    // Enable installation workflow interface
+    'enable_install_workflow' => (bool) env(key: 'APP_ENABLE_INSTALL_WORKFLOW', default: false),
 
     // Login DEV Warning Message
     'login_dev_warning'     => env('DEV_WARNING_MESSAGE', false), //NEW ENV NAME: APP_ENABLE_DEMO_MODE
 
     // Initial admin password, configured on first migration
-    'setup_admin_password'    => env('SETUP_ADMIN_PASSWORD'), //NEW ENV NAME: APP_INITIAL_ADMIN_PASSWORD
+    'setup_admin_password'    => env('APP_INITIAL_ADMIN_PASSWORD', null),
 
     // Redirect to this site after logging in or when clicking the page name
     // Must be one of news, meetings, user_shifts, angeltypes, questions
@@ -634,6 +637,8 @@ return [
         'Content-Security-Policy' =>
             'default-src \'self\'; '
             . ' frame-src https://nav.eurofurence.org; '
+            . ' font-src \'self\'; '
+            . ' script-src \'self\' \'unsafe-inline\'; '
             . ' style-src \'self\' \'unsafe-inline\'; '
             . ' img-src \'self\' data:;',
         'X-XSS-Protection'        => '1; mode=block',
