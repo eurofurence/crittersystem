@@ -14,6 +14,7 @@ use Engelsystem\Http\Request;
 use Engelsystem\Http\Response;
 use Engelsystem\Models\Question;
 use Psr\Log\LoggerInterface;
+use Illuminate\Support\Collection;
 
 class QuestionsController extends BaseController
 {
@@ -55,14 +56,18 @@ class QuestionsController extends BaseController
     }
 
     /**
-    * @param Collection|Question[]
-    * @return Collection|Question[]
-    */
-    public function unlockStaleLocks(array $questions): array
+     * Unlocks stale locks on the given collection of questions. A lock is considered stale if the
+     * editor has been editing the question for over 30 minutes and has not saved it.
+     *
+     * @param Collection $questions The collection of questions to process.
+     * @return Collection The updated collection of questions with stale locks removed.
+     */
+    public function unlockStaleLocks(Collection $questions): Collection
     {
         $now = Carbon::now();
         return $questions->map(function ($q) use ($now) {
-            if ($q->editor_id && $q->editing_started_at->addMinutes(30) < $now) {
+            $started = $q->editing_started_at ?? null;
+            if ($q->editor_id && $started instanceof Carbon && $started->copy()->addMinutes(30)->lt($now)) {
                 $q->editor()->disassociate();
                 $q->editing_started_at = null;
                 $q->save();
