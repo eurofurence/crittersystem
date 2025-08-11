@@ -145,7 +145,7 @@ class ShiftCalendarRenderer
             div('shift-calendar table-responsive', [
                 $this->renderTimeLane(),
                 $this->renderShiftLanes(),
-            ]) . $this->renderLegend();
+            ]);
     }
 
     /**
@@ -344,7 +344,7 @@ class ShiftCalendarRenderer
      */
     private function renderLegend()
     {
-        return div('legend mt-3', [
+        return div('legend sticky-legend mt-3', [
             badge(__('Your shift'), 'primary'),
             badge(__('Help needed'), 'danger'),
             badge(__('Other critter type needed / collides with my shifts'), 'warning'),
