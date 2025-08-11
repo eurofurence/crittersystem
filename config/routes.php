@@ -257,6 +257,7 @@ $route->addGroup(
                 $route->post('', 'Admin\\QuestionsController@delete');
                 $route->get('/{question_id:\d+}', 'Admin\\QuestionsController@edit');
                 $route->post('/{question_id:\d+}', 'Admin\\QuestionsController@save');
+                $route->get('/{question_id:\d+}/unlock', 'Admin\\QuestionsController@unlock');
             }
         );
 

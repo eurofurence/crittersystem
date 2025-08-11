@@ -1073,6 +1073,9 @@ msgstr "Title is required"
 msgid "validation.text.required"
 msgstr "Text is required"
 
+msgid "question.edit.locked"
+msgstr "This question is already being edited by another user."
+
 msgid "general.badge_number"
 msgstr "Badge Number"
 

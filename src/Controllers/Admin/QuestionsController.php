@@ -7,6 +7,7 @@ namespace Engelsystem\Controllers\Admin;
 use Carbon\Carbon;
 use Engelsystem\Controllers\BaseController;
 use Engelsystem\Controllers\HasUserNotifications;
+use Engelsystem\Controllers\NotificationType;
 use Engelsystem\Helpers\Authenticator;
 use Engelsystem\Http\Redirector;
 use Engelsystem\Http\Request;
@@ -41,10 +42,33 @@ class QuestionsController extends BaseController
             ->get()
             ->load(['user.state', 'answerer.state']);
 
+        /*
+         * Leon: To my knowledge we do not have a cronjob,
+         * so we run this every time an admin lists all questions.
+         */
+        $questions = $this->unlockStaleLocks($questions);
+
         return $this->response->withView(
             'pages/questions/index.twig',
             ['questions' => $questions, 'is_admin' => true]
         );
+    }
+
+    /**
+    * @param Collection|Question[]
+    * @return Collection|Question[]
+    */
+    public function unlockStaleLocks(array $questions): array
+    {
+        $now = Carbon::now();
+        return $questions->map(function ($q) use ($now) {
+            if ($q->editor_id && $q->editing_started_at->addMinutes(30) < $now) {
+                $q->editor()->disassociate();
+                $q->editing_started_at = null;
+                $q->save();
+            }
+            return $q;
+        });
     }
 
     public function delete(Request $request): Response
@@ -66,10 +90,20 @@ class QuestionsController extends BaseController
     public function edit(Request $request): Response
     {
         $questionId = (int) $request->getAttribute('question_id');
+        $question = $this->question->find($questionId);
 
-        $questions = $this->question->find($questionId);
+        if ($question->editor) {
+            if ($question->editor->id !== $this->auth->user()->id) {
+                $this->addNotification('question.edit.locked', NotificationType::ERROR);
+                return $this->redirect->to('/admin/questions');
+            }
+        } else {
+            $question->editor()->associate($this->auth->user());
+            $question->editing_started_at = Carbon::now();
+            $question->save();
+        }
 
-        return $this->showEdit($questions);
+        return $this->showEdit($question);
     }
 
     public function save(Request $request): Response
@@ -100,6 +134,8 @@ class QuestionsController extends BaseController
         $question->answer = globalCleanText($data['answer']);
         $question->answered_at = Carbon::now();
         $question->answerer()->associate($this->auth->user());
+        $question->editing_started_at = null;
+        $question->editor()->dissociate();
 
         if (!is_null($data['preview'])) {
             return $this->showEdit($question);
@@ -115,6 +151,22 @@ class QuestionsController extends BaseController
         $this->addNotification('question.edit.success');
 
         return $this->redirect->to('/admin/questions');
+    }
+
+    public function unlock(Request $request): Response
+    {
+        $questionId = (int) $request->getAttribute('question_id');
+        $question = $this->question->find($questionId);
+
+        if ($question->editor->id !== $this->auth->user()->id) {
+            return new Response('', 423);
+        }
+
+        $question->editing_started_at = null;
+        $question->editor()->dissociate();
+        $question->save();
+
+        return new Response('', 200);
     }
 
     protected function showEdit(?Question $question): Response
