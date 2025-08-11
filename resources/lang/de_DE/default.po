@@ -2130,3 +2130,24 @@ msgstr "Use the button to automatically retrieve your Badge ID"
 
 msgid "settings.profile.badge_number_update"
 msgstr "Update"
+
+msgid "Mon"
+msgstr "Mo"
+
+msgid "Tue"
+msgstr "Di"
+
+msgid "Wed"
+msgstr "Mi"
+
+msgid "Thu"
+msgstr "Do"
+
+msgid "Fri"
+msgstr "Fr"
+
+msgid "Sat"
+msgstr "Sa"
+
+msgid "Sun"
+msgstr "So"
