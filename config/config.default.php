@@ -396,6 +396,11 @@ return [
     // Supported themes
     // To disable a theme in config.php, you can set its value to null
     'themes' => [
+        22 => [
+            'name' => 'Eurofurence 2025 - CVD',
+            'type' => 'dark',
+            'navbar_classes' => 'navbar-dark',
+        ],
         21 => [
             'name' => 'Eurofurence 2025',
             'type' => 'dark',
