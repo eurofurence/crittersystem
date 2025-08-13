@@ -216,6 +216,19 @@ $route->addGroup(
             }
         );
 
+        // Purge
+        $route->addGroup(
+            '/purge',
+            function (RouteCollector $route): void {
+                $route->get('', 'Admin\\PurgeController@index');
+                $route->post('/preview', 'Admin\\PurgeController@preview');
+                $route->post('/execute', 'Admin\\PurgeController@execute');
+                $route->get('/audit-logs', 'Admin\\PurgeController@auditLogs');
+                $route->get('/download-backup/{id:\d+}', 'Admin\\PurgeController@downloadBackup');
+                $route->get('/status/{id:\d+}', 'Admin\\PurgeController@getStatus');
+            }
+        );
+
         // Schedule
         $route->addGroup(
             '/schedule',

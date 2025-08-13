@@ -198,12 +198,31 @@ class Response extends SymfonyResponse implements ResponseInterface
         return $response->withContent($content);
     }
 
-    public function withJson(mixed $content): static
+    public function withJson(mixed $content, int $options = 0): static
     {
-        $new = $this
-            ->withHeader('Content-Type', 'application/json');
+        $new = $this->withHeader('Content-Type', 'application/json; charset=utf-8');
 
-            $new->setContent($content);
+        try {
+            $json = json_encode($content, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | $options);
+            if ($json === false) {
+                $error = [
+                    'error' => 'Failed to encode JSON',
+                    'code' => json_last_error(),
+                    'message' => json_last_error_msg(),
+                ];
+                $json = json_encode($error, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                $new = $new->withStatus(500);
+            }
+        } catch (\Throwable $e) {
+            $json = json_encode([
+                'error' => 'Failed to encode JSON',
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            $new = $new->withStatus(500);
+        }
+
+        $new->setContent($json);
 
         return $new;
     }

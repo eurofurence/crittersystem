@@ -1,0 +1,152 @@
+{% extends 'layouts/app.twig' %}
+{% import 'macros/base.twig' as m %}
+{% import 'macros/form.twig' as f %}
+
+{% block title %}{{ __('Purge Data') }}{% endblock %}
+
+{% block content %}
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1>{{ block('title') }}</h1>
+            <a href="{{ url('admin/purge/audit-logs') }}" class="btn btn-outline-primary">
+                <i class="fa fa-history"></i> {{ __('Audit Logs') }}
+            </a>
+        </div>
+
+        <div class="alert alert-danger">
+            <strong>{{ __('Warning!') }}</strong>
+            {{ __('This operation will permanently delete selected data. This action cannot be undone.') }}
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        {{ __('Purge Configuration') }}
+                    </div>
+                    <div class="card-body">
+                        <form method="post" action="{{ url('/admin/purge/preview') }}" id="purge-form">
+                            {{ csrf() }}
+
+                            <div class="mb-3">
+                                <label class="form-label">{{ __('Categories to Purge') }}</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="categories[]" value="users" id="category-users">
+                                    <label class="form-check-label" for="category-users">
+                                        {{ __('Users') }} <small class="text-muted">(based on last_login_at)</small>
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="categories[]" value="shifts" id="category-shifts">
+                                    <label class="form-check-label" for="category-shifts">
+                                        {{ __('Shifts') }} <small class="text-muted">(based on created_at)</small>
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="categories[]" value="news" id="category-news">
+                                    <label class="form-check-label" for="category-news">
+                                        {{ __('News') }} <small class="text-muted">(based on created_at)</small>
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="categories[]" value="logs" id="category-logs">
+                                    <label class="form-check-label" for="category-logs">
+                                        {{ __('Logs') }} <small class="text-muted">(based on created_at)</small>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                {{ f.input('cutoff_date', __('Cutoff Date'), {
+                                    'type': 'date',
+                                    'required': true,
+                                    'help_text': __('Data created/last accessed before this date will be deleted')
+                                }) }}
+                            </div>
+
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-warning" id="preview-btn">
+                                    <i class="fa fa-eye"></i> {{ __('Preview Purge') }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        {{ __('Preview Results') }}
+                    </div>
+                    <div class="card-body" id="preview-results"
+                         data-msg-select-category="{{ __('Please select at least one category to purge.') }}"
+                         data-msg-select-date="{{ __('Please select a cutoff date.') }}"
+                         data-msg-past-date="{{ __('Cutoff date must be in the past.') }}"
+                         data-msg-generating="{{ __('Generating preview...') }}"
+                         data-msg-error-generating="{{ __('An error occurred while generating preview.') }}"
+                         data-msg-network-error="{{ __('Network error occurred. Please try again.') }}"
+                         data-msg-preview-title="{{ __('Preview Results') }}"
+                         data-msg-preview-intro="{{ __('Data that will be affected if purge is executed on') }}"
+                         data-msg-category="{{ __('Category') }}"
+                         data-msg-primary-items="{{ __('Primary Items') }}"
+                         data-msg-related-data="{{ __('Related Data') }}"
+                         data-msg-related-items="{{ __('related items') }}"
+                         data-msg-no-dependencies="{{ __('No dependencies') }}"
+                         data-msg-total="{{ __('Total') }}"
+                         data-msg-warning="{{ __('Warning:') }}"
+                         data-msg-permanent-delete="{{ __('This operation will permanently delete {items} primary items') }}"
+                         data-msg-and="{{ __('and') }}"
+                         data-msg-cannot-undo="{{ __('This action cannot be undone.') }}"
+                         data-msg-proceed-delete="{{ __('Proceed to Delete') }}"
+                         data-msg-cancel="{{ __('Cancel') }}"
+                         data-msg-no-data-found="{{ __('No data found matching the selected criteria.') }}"
+                         data-msg-must-type-delete="{{ __('You must type "DELETE" to confirm.') }}"
+                         data-msg-executing="{{ __('Creating backup and executing purge...') }}"
+                         data-msg-purge-success="{{ __('Purge completed successfully.') }}"
+                         data-msg-purge-error="{{ __('An error occurred during purge execution.') }}"
+                         data-msg-final-status="{{ __('Final status:') }}"
+                         data-msg-total-affected="{{ __('Total affected:') }}"
+                    >
+                        <p class="text-muted">{{ __('Select categories and date, then click Preview to see what will be affected.') }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Purge Confirmation Modal -->
+<div class="modal fade" id="purgeConfirmModal" tabindex="-1" aria-labelledby="purgeConfirmModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="purgeConfirmModalLabel">{{ __('Confirm Purge') }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-warning">
+          <i class="fa fa-exclamation-triangle"></i>
+          {{ __('This action will permanently delete the selected data. Type DELETE to confirm.') }}
+        </div>
+        <div id="confirmError" class="alert alert-danger d-none"></div>
+        <div class="mb-3">
+          <label for="confirmText" class="form-label">{{ __('Type DELETE to confirm') }}</label>
+          <input type="text" id="confirmText" class="form-control" placeholder="DELETE" autocomplete="off">
+        </div>
+        <div id="executeStatus"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
+        <button type="button" id="confirmPurgeBtn" class="btn btn-danger">
+          <i class="fa fa-trash"></i> {{ __('Delete') }}
+        </button>
+      </div>
+</div>
+</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ parent() }}
+<script src="{{ asset('assets/purge.js') }}"></script>
+{% endblock %}
