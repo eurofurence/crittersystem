@@ -255,14 +255,18 @@ class ShiftCalendarRenderer
                 return div($class . ' day');
             }
             return div($class . ' day', [
-                $time->format(__('m-d')) . '<br>' . $time->format(__('H:i')),
+                __($time->format('D')) . ', '
+                . $time->format(__('m-d')) . '<br>'
+                . $time->format(__('H:i')),
             ]);
         } elseif ($time->isStartOfHour()) {
             if (!$label) {
                 return div($class . ' hour');
             }
             return div($class . ' hour', [
-                $time->format(__('m-d')) . '<br>' . $time->format(__('H:i')),
+                __($time->format('D')) . ', '
+                . $time->format(__('m-d')) . '<br>'
+                . $time->format(__('H:i')),
             ]);
         }
         return div($class);
