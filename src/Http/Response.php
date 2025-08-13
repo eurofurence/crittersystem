@@ -202,10 +202,14 @@ class Response extends SymfonyResponse implements ResponseInterface
     {
         $new = $this->withHeader('Content-Type', 'application/json; charset=utf-8');
 
-        // Check if is already JSON - then bypass
-        if (json_validate($content)) {
-            $new->setContent($content);
-            return $new;
+        try {
+            // Check if is already JSON - then bypass
+            if (json_validate($content)) {
+                $new->setContent($content);
+                return $new;
+            }
+        } catch (\Throwable $e) {
+            // Just continue the code
         }
 
         try {
