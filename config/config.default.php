@@ -641,7 +641,7 @@ return [
         'Referrer-Policy'         => 'strict-origin-when-cross-origin',
         'Content-Security-Policy' =>
             'default-src \'self\'; '
-            . ' frame-src https://nav.eurofurence.org; '
+            . ' frame-src https://www.google.com/maps/ https://identity.eurofurence.org https://nav.eurofurence.org; '
             . ' font-src \'self\'; '
             . ' script-src \'self\'; '
             . ' style-src \'self\' \'unsafe-inline\'; '
