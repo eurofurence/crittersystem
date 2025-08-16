@@ -1,5 +1,7 @@
 [![License: GPL v2](https://img.shields.io/badge/License-GPL_v2-blue.svg)](LICENSE)
 
+[![Docker Verify, Build and Publish](https://github.com/eurofurence/crittersystem/actions/workflows/docker-build.yml/badge.svg?branch=dev)](https://github.com/eurofurence/crittersystem/actions/workflows/docker-build.yml)
+
 # Critter System
 
 Shift planning and volunteer management system used at Eurofurence events. This repository contains the application
