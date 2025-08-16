@@ -57,12 +57,13 @@ function make_navigation()
     $page = current_page();
     $menu = [];
     $pages = [
-        'news'           => [__('news.title'), 'news'],
-        'meetings'       => [__('news.title.meetings'), 'user_meetings'],
-        'user_shifts'    => [__('general.shifts'), 'user_shifts'],
-        'angeltypes'     => [__('angeltypes.angeltypes'), 'angeltypes'],
-        'questions'      => [__('Ask the Info Desk'), 'question.add'],
-        'departments'    => [__('departments.title.plural'), 'dept.view'],
+        'news'                     => [__('news.title'), 'news'],
+//        'meetings'               => [__('news.title.meetings'), 'user_meetings'],
+        'user_shifts'              => [__('general.shifts'), 'user_shifts'],
+        'user/certifications'      => [__('certifications.title'), 'certificates.view'],
+        'questions'                => [__('Ask the Info Desk'), 'question.add'],
+        'angeltypes'               => [__('angeltypes.angeltypes'), 'angeltypes'],
+        'departments'              => [__('departments.title.plural'), 'dept.view'],
     ];
 
     foreach ($pages as $menu_page => $options) {
@@ -87,20 +88,21 @@ function make_navigation()
         // path              => name,
         // path              => [name, permission],
 
-        'admin_arrive'       => [admin_arrive_title(), 'users.arrive.list'],
-        'admin_active'       => ['Active Critters', 'admin_active'],
-        'users'              => ['All Critters', 'admin_user'],
-        'admin_free'         => ['Free Critters','admin_free'],
-        'admin/questions'    => ['Answer questions', 'question.edit'],
-        'admin/shifttypes'   => ['shifttype.shifttypes', 'shifttypes.view'],
-        'admin_shifts'       => ['Create shifts', 'admin_shifts'],
-        'admin/locations'    => ['location.locations', 'admin_locations'],
-        'admin_groups'       => ['Grouprights', 'admin_groups'],
-        'admin/schedule'     => ['schedule.import', 'schedule.import'],
-        'admin/logs'         => ['log.log', 'admin_log'],
-        'admin/purge'        => ['Purge Data', 'user.type.admin'],
-        'admin/config'       => ['config.config', 'config.edit'],
-        'adminv2/export'     => ['V2-Export', 'admin_user'],
+        'admin_arrive'           => [admin_arrive_title(), 'users.arrive.list'],
+        'admin_active'           => ['Active Critters', 'admin_active'],
+        'users'                  => ['All Critters', 'admin_user'],
+        'admin_free'             => ['Free Critters','admin_free'],
+        'admin/questions'        => ['Answer questions', 'question.edit'],
+        'admin/shifttypes'       => ['shifttype.shifttypes', 'shifttypes.view'],
+        'admin/certifications'   => ['Certifications', 'certificates.manage'],
+        'admin_shifts'           => ['Create shifts', 'admin_shifts'],
+        'admin/locations'        => ['location.locations', 'admin_locations'],
+        'admin_groups'           => ['Grouprights', 'admin_groups'],
+        'admin/schedule'         => ['schedule.import', 'schedule.import'],
+        'admin/logs'             => ['log.log', 'admin_log'],
+        'admin/purge'            => ['Purge Data', 'user.type.admin'],
+        'admin/config'           => ['config.config', 'config.edit'],
+        'adminv2/export'         => ['V2-Export', 'admin_user'],
     ];
 
     if (config('autoarrive')) {

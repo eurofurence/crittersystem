@@ -172,6 +172,9 @@ function AngelType_edit_view(AngelType $angeltype, bool $supporter_mode)
                     ),
                 form_textarea('description', __('general.description'), $angeltype->description),
                 form_info('', __('Please use markdown for the description.')),
+                heading(__('Certification Requirements'), 3),
+                form_info('', __('Select which certifications are required for this critter type.')),
+                AngelType_certification_requirements_form($angeltype, $supporter_mode),
                 heading(__('Contact'), 3),
                 form_info(
                     '',
@@ -184,6 +187,86 @@ function AngelType_edit_view(AngelType $angeltype, bool $supporter_mode)
             ]),
         ]
     );
+}
+
+/**
+ * Render certification requirements form section for angeltype edit.
+ *
+ * @param AngelType $angeltype The angeltype being edited
+ * @param bool      $supporter_mode Is the user a supporter of this angeltype?
+ * @return string
+ */
+function AngelType_certification_requirements_form(AngelType $angeltype, bool $supporter_mode)
+{
+    // Get all available certifications
+    $certifications = \Engelsystem\Models\Certification::where('is_active', true)
+        ->orderBy('title')
+        ->get();
+
+    if ($certifications->isEmpty()) {
+        return form_info('', __('No certifications available. Create certifications first to add requirements.'));
+    }
+
+    // Get currently required certifications for this angel type
+    $required_certification_ids = $angeltype->requiredCertifications->pluck('id')->toArray();
+
+    $certification_fields = [];
+
+    if ($supporter_mode) {
+        // In supporter mode, just show the current requirements
+        if (empty($required_certification_ids)) {
+            $certification_fields[] = form_info(__('Required Certifications'), __('None'));
+        } else {
+            $required_names = $angeltype->requiredCertifications->pluck('title')->toArray();
+            $certification_fields[] = form_info(__('Required Certifications'), implode(', ', $required_names));
+        }
+    } else {
+        // Admin mode - show multi-select checkboxes
+        $certification_fields[] = form_info('', __('angeltypes.certification_requirements.help'));
+
+        // Group certifications in rows of 2 for better layout
+        $certification_chunks = $certifications->chunk(2);
+
+        $count_entries = 0;
+
+        foreach ($certification_chunks as $chunk) {
+            $row_html = '<div class="row">';
+            foreach ($chunk as $certification) {
+                $count_entries += 1;
+
+                $is_checked = in_array($certification->id, $required_certification_ids);
+                $checkbox_html = form_checkbox(
+                    'certification_requirements[' . $count_entries . ']',
+                    htmlspecialchars($certification->title),
+                    $is_checked,
+                    $certification->id
+                );
+                $row_html .= '<div class="col-md-6 pb-3">' . $checkbox_html . '</div>';
+
+                // Add description as help text if available
+                if ($certification->description) {
+                    $description = htmlspecialchars(substr($certification->description, 0, 100));
+                    if (strlen($certification->description) > 100) {
+                        $description .= '...';
+                    }
+                    $row_html .= '<div class="col-md-6"><small class="text-muted">' . $description . '</small></div>';
+                }
+            }
+            $row_html .= '</div>';
+            $certification_fields[] = $row_html;
+        }
+
+        if ($angeltype->id) {
+            $certification_fields[] = form_info(
+                '',
+                __('angeltypes.certification_requirements.warning')
+                . ' <a href="' . url('/admin/user-certifications') . '">'
+                . __('user_certifications.admin.title') . '</a>.'
+            );
+        }
+    }
+
+    return implode('', $certification_fields);
 }
 
 /**
@@ -607,6 +690,36 @@ function AngelType_view_info(
     if ($angeltype->description != '') {
         $info[] = $parsedown->parse(htmlspecialchars($angeltype->description));
     }
+
+    // Show certification requirements
+    $required_certifications = $angeltype->requiredCertifications;
+    if ($required_certifications->isNotEmpty()) {
+        $info[] = '<h3>' . __('Required Certifications') . '</h3>';
+        $cert_list = '<ul class="list-group list-group-flush">';
+        foreach ($required_certifications as $certification) {
+            $cert_list .= '<li class="list-group-item d-flex justify-content-between align-items-start">';
+            $cert_list .= '<div class="ms-2 me-auto">';
+            $cert_list .= '<div class="fw-bold">' . htmlspecialchars($certification->title) . '</div>';
+            if ($certification->description) {
+                $cert_list .= '<small class="text-muted">' . htmlspecialchars($certification->description) . '</small>';
+            }
+            $cert_list .= '</div>';
+
+            // Show validity information
+            if ($certification->is_perpetual) {
+                $cert_list .= '<span class="badge bg-info rounded-pill">Perpetual</span>';
+            } elseif ($certification->validity_period_days) {
+                $cert_list .= '<span class="badge bg-secondary rounded-pill">' . $certification->validity_period_days . ' days</span>';
+            }
+            $cert_list .= '</li>';
+        }
+        $cert_list .= '</ul>';
+        $info[] = $cert_list;
+
+        // Add note about certification requirements
+        $info[] = info(__('angeltypes.certification_requirements.user_info'), false);
+    }
+
     // if ($angeltype->requires_ifsg_certificate && $required_info_show) {
     //     $info[] = info(__('angeltype.ifsg.required.info.preview'), true);
     // }

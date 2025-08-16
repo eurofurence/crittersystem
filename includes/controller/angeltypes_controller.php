@@ -135,6 +135,44 @@ function angeltype_edit_controller()
         if ($valid) {
             $angeltype->save();
 
+            // Handle certification requirements (only for admins, not supporters)
+            if (!$supporter_mode) {
+                // Get current requirements
+                $current_requirements = $angeltype->requiredCertifications->pluck('id')->toArray();
+
+                // Get new requirements from form
+                $new_requirements = $request->has('certification_requirements')
+                    ? (array) $request->input('certification_requirements')
+                    : [];
+
+                // Convert to integers and filter valid IDs
+                $new_requirements = array_filter(array_map('intval', $new_requirements));
+
+                // Validate that all certification IDs exist and are active
+                if (!empty($new_requirements)) {
+                    $valid_certifications = \Engelsystem\Models\Certification::whereIn('id', $new_requirements)
+                        ->where('is_active', true)
+                        ->pluck('id')
+                        ->toArray();
+                    $new_requirements = array_intersect($new_requirements, $valid_certifications);
+                }
+
+                // Update requirements if changed
+                if (array_diff($current_requirements, $new_requirements) || array_diff($new_requirements, $current_requirements)) {
+                    // Sync the certification requirements
+                    $angeltype->requiredCertifications()->sync($new_requirements);
+
+                    // Log the change
+                    $certification_names = \Engelsystem\Models\Certification::whereIn('id', $new_requirements)
+                        ->pluck('title')
+                        ->toArray();
+                    engelsystem_log(
+                        'Updated certification requirements for angel type: ' . $angeltype->name
+                        . ' - Requirements: ' . (empty($certification_names) ? 'None' : implode(', ', $certification_names))
+                    );
+                }
+            }
+
             success(__('Critter type saved.'));
             engelsystem_log(
                 'Saved angel type: ' . $angeltype->name . ($angeltype->restricted ? ', restricted' : '')

@@ -1,0 +1,69 @@
+{% extends 'layouts/app.twig' %}
+{% import 'macros/base.twig' as m %}
+{% import 'macros/form.twig' as f %}
+
+{% set title = __('user_certifications.renew') ~ ': ' ~ certification.title %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-start mb-4">
+        <div>
+            <h1>
+                {{ m.icon('arrow-clockwise') }}
+                {{ title }}
+            </h1>
+            <p class="text-muted">
+                {% if is_expired %}
+                    {{ __('user_certifications.status.expired') }}
+                {% elseif is_expiring_soon %}
+                    {{ __('user_certifications.expiring_soon') }}
+                {% endif %}
+            </p>
+        </div>
+        <div>
+            <a href="{{ url('/user/certifications') }}" class="btn btn-outline-secondary">
+                {{ m.icon('arrow-left') }}
+                {{ __('form.back')|default('Back') }}
+            </a>
+        </div>
+    </div>
+
+    {% include 'layouts/parts/messages.twig' %}
+
+    <div class="card">
+        <div class="card-body">
+            <div class="mb-3">
+                <h5 class="mb-1">{{ certification.title }}</h5>
+                {% if pivot.date_expires %}
+                    <small class="text-muted">{{ __('user_certifications.date_expires') }}: {{ pivot.date_expires|date('Y-m-d') }}</small>
+                {% endif %}
+            </div>
+
+            <p class="mb-4">{{ __('user_certifications.renew') }}?</p>
+
+            <form method="POST" action="{{ url('/user/certifications/renew/' ~ certification.uuid) }}">
+                {{ csrf() }}
+
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="confirmRenew" name="confirmed" required>
+                    <label class="form-check-label" for="confirmRenew">
+                        {{ __('user_certifications.self_confirm_acknowledgment') }}
+                    </label>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <a href="{{ url('/user/certifications') }}" class="btn btn-secondary">
+                        {{ __('form.cancel') }}
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        {{ m.icon('arrow-clockwise') }}
+                        {{ __('user_certifications.confirm') }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

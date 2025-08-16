@@ -1,0 +1,495 @@
+{% extends 'layouts/app.twig' %}
+{% import 'macros/base.twig' as m %}
+{% import 'macros/form.twig' as f %}
+
+{% set title = __('user_certifications.my_certifications') %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {# Header #}
+        <div class="d-flex justify-content-between align-items-start mb-4">
+            <div>
+                <h1>
+                    {{ m.icon('award') }}
+                    {{ title }}
+                </h1>
+                <p class="text-muted">{{ __('user_certifications.user.description') }}</p>
+            </div>
+
+            <div class="dropdown">
+                <button class="btn btn-light btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    {{ m.icon('three-dots') }}
+                    {{ __('form.actions') }}
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item" href="#" data-action="print-certifications">
+                            {{ m.icon('printer') }}
+                            {{ __('user_certifications.print') }}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ url('/user/certifications/export') }}">
+                            {{ m.icon('download') }}
+                            {{ __('user_certifications.export') }}
+                        </a>
+                    </li>
+                    {% if has_permission('certification.help') %}
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="{{ url('/help/certifications') }}">
+                                {{ m.icon('question-circle') }}
+                                {{ __('user_certifications.help') }}
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        {% include 'layouts/parts/messages.twig' %}
+
+        {# Certification Overview Dashboard #}
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <div class="h3 text-success mb-1">{{ user_stats.active_count|default(0) }}</div>
+                        <div class="text-muted small">{{ __('user_certifications.stats.active') }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <div class="h3 text-warning mb-1">{{ user_stats.pending_count|default(0) }}</div>
+                        <div class="text-muted small">{{ __('user_certifications.stats.pending') }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <div class="h3 text-info mb-1">{{ user_stats.expiring_soon_count|default(0) }}</div>
+                        <div class="text-muted small">{{ __('user_certifications.stats.expiring_soon') }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <div class="h3 text-secondary mb-1">{{ user_stats.total_count|default(0) }}</div>
+                        <div class="text-muted small">{{ __('user_certifications.stats.total') }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            {# Main Certifications List #}
+            <div class="col-lg-8">
+                {# Filter Tabs #}
+                <div class="card">
+                    <div class="card-header">
+                        <ul class="nav nav-tabs card-header-tabs" id="certificationTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all-panel" type="button" role="tab">
+                                    {{ __('user_certifications.tabs.all') }}
+                                    <span class="badge bg-secondary ms-1">{{ user_certifications|length }}</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="active-tab" data-bs-toggle="tab" data-bs-target="#active-panel" type="button" role="tab">
+                                    {{ __('user_certifications.tabs.active') }}
+                                    <span class="badge bg-success ms-1">{{ user_stats.active_count|default(0) }}</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending-panel" type="button" role="tab">
+                                    {{ __('user_certifications.tabs.pending') }}
+                                    <span class="badge bg-warning ms-1">{{ user_stats.pending_count|default(0) }}</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="expiring-tab" data-bs-toggle="tab" data-bs-target="#expiring-panel" type="button" role="tab">
+                                    {{ __('user_certifications.tabs.expiring') }}
+                                    <span class="badge bg-info ms-1">{{ user_stats.expiring_soon_count|default(0) }}</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="tab-content" id="certificationTabContent">
+                        {# All Certifications Tab #}
+                        <div class="tab-pane fade show active" id="all-panel" role="tabpanel">
+                            {% if user_certifications|length > 0 %}
+                                <div class="list-group list-group-flush">
+                                    {% for user_cert in user_certifications %}
+                                        {% include 'user/certifications/certification-item.twig' with {'user_cert': user_cert} %}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="card-body text-center py-5">
+                                    <div class="text-muted">
+                                        {{ m.icon('inbox', 'fs-1 mb-3') }}
+                                        <h5>{{ __('user_certifications.no_certifications') }}</h5>
+                                        <p>{{ __('user_certifications.no_certifications_description') }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        {# Active Certifications Tab #}
+                        <div class="tab-pane fade" id="active-panel" role="tabpanel">
+                            {% set active_certs = user_certifications|filter(cert => cert.pivot.status in ['approved', 'self_confirmed'] and not cert.is_expired) %}
+                            {% if active_certs|length > 0 %}
+                                <div class="list-group list-group-flush">
+                                    {% for user_cert in active_certs %}
+                                        {% include 'user/certifications/certification-item.twig' with {'user_cert': user_cert} %}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="card-body text-center py-4">
+                                    <div class="text-muted">
+                                        {{ m.icon('check-circle', 'fs-1 mb-3 text-success') }}
+                                        <h5>{{ __('user_certifications.no_active') }}</h5>
+                                        <p>{{ __('user_certifications.no_active_description') }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        {# Pending Certifications Tab #}
+                        <div class="tab-pane fade" id="pending-panel" role="tabpanel">
+                            {% set pending_certs = user_certifications|filter(cert => cert.pivot.status == 'pending') %}
+                            {% if pending_certs|length > 0 %}
+                                <div class="list-group list-group-flush">
+                                    {% for user_cert in pending_certs %}
+                                        {% include 'user/certifications/certification-item.twig' with {'user_cert': user_cert} %}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="card-body text-center py-4">
+                                    <div class="text-muted">
+                                        {{ m.icon('clock', 'fs-1 mb-3 text-warning') }}
+                                        <h5>{{ __('user_certifications.no_pending') }}</h5>
+                                        <p>{{ __('user_certifications.no_pending_description') }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        {# Expiring Soon Tab #}
+                        <div class="tab-pane fade" id="expiring-panel" role="tabpanel">
+                            {% set expiring_certs = user_certifications|filter(cert => cert.pivot.date_expires and cert.pivot.date_expires|date('Y-m-d') <= 'now'|date_modify('+30 days')|date('Y-m-d') and cert.pivot.status in ['approved', 'self_confirmed']) %}
+                            {% if expiring_certs|length > 0 %}
+                                <div class="list-group list-group-flush">
+                                    {% for user_cert in expiring_certs %}
+                                        {% include 'user/certifications/certification-item.twig' with {'user_cert': user_cert} %}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="card-body text-center py-4">
+                                    <div class="text-muted">
+                                        {{ m.icon('calendar-check', 'fs-1 mb-3 text-info') }}
+                                        <h5>{{ __('user_certifications.no_expiring') }}</h5>
+                                        <p>{{ __('user_certifications.no_expiring_description') }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# Sidebar #}
+            <div class="col-lg-4">
+                {# Available Self-Confirmations #}
+                {% if available_self_confirmations|length > 0 %}
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                {{ m.icon('person-check') }}
+                                {{ __('user_certifications.self_confirm_available') }}
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted small">{{ __('user_certifications.self_confirm_description') }}</p>
+
+                            {% for certification in available_self_confirmations %}
+                                <div class="card border-primary mb-3">
+                                    <div class="card-body p-3">
+                                        <h6 class="card-title mb-2">{{ certification.title }}</h6>
+                                        {% if certification.description %}
+                                            <p class="card-text small text-muted">{{ certification.description|slice(0, 100) }}{% if certification.description|length > 100 %}...{% endif %}</p>
+                                        {% endif %}
+
+                                        <div class="d-grid">
+                                            <button type="button" class="btn btn-primary btn-sm"
+                                                    onclick="selfConfirm('{{ certification.uuid }}', '{{ certification.title }}')">
+                                                {{ m.icon('check') }}
+                                                {{ __('user_certifications.self_confirm') }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+
+                {# Quick Info Card #}
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            {{ m.icon('info-circle') }}
+                            {{ __('user_certifications.quick_info') }}
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row small">
+                            <dt class="col-5">{{ __('user_certifications.critter_name') }}:</dt>
+                            <dd class="col-7">{{ user.name }}</dd>
+
+                            <dt class="col-5">{{ __('user_certifications.critter_id') }}:</dt>
+                            <dd class="col-7">#{{ user.id }}</dd>
+
+                            {% if user.angel_types|length > 0 %}
+                                <dt class="col-5">{{ __('user_certifications.departments') }}:</dt>
+                                <dd class="col-7">
+                                    {% for angel_type in user.angel_types %}
+                                        <span class="badge bg-secondary me-1 mb-1">{{ angel_type.name }}</span>
+                                    {% endfor %}
+                                </dd>
+                            {% endif %}
+
+                            <dt class="col-5">{{ __('user_certifications.last_updated') }}:</dt>
+                            <dd class="col-7">
+                                {% if user_certifications|length > 0 %}
+                                    {{ user_certifications|map(cert => cert.updated_at)|max|date('M j, Y') }}
+                                {% else %}
+                                    {{ __('form.never') }}
+                                {% endif %}
+                            </dd>
+                        </dl>
+
+                        {% if has_permission('certification.contact') %}
+                            <hr>
+                            <h6>{{ __('user_certifications.need_help') }}</h6>
+                            <p class="small text-muted">{{ __('user_certifications.contact_description') }}</p>
+                            <a href="mailto:{{ config('app.certification_contact_email') }}" class="btn btn-outline-primary btn-sm w-100">
+                                {{ m.icon('envelope') }}
+                                {{ __('user_certifications.contact_support') }}
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {# Certification Status Legend #}
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            {{ m.icon('palette') }}
+                            {{ __('user_certifications.status_legend') }}
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column gap-2 small">
+                            <div class="d-flex align-items-center">
+                                {% include 'components/certification-status-badge.twig' with {'status': 'approved'} %}
+                                <span class="ms-2">{{ __('user_certifications.status_help.approved') }}</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                {% include 'components/certification-status-badge.twig' with {'status': 'self_confirmed'} %}
+                                <span class="ms-2">{{ __('user_certifications.status_help.self_confirmed') }}</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                {% include 'components/certification-status-badge.twig' with {'status': 'pending'} %}
+                                <span class="ms-2">{{ __('user_certifications.status_help.pending') }}</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                {% include 'components/certification-status-badge.twig' with {'status': 'expired'} %}
+                                <span class="ms-2">{{ __('user_certifications.status_help.expired') }}</span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                {% include 'components/certification-status-badge.twig' with {'status': 'revoked'} %}
+                                <span class="ms-2">{{ __('user_certifications.status_help.revoked') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Self-Confirmation Modal #}
+    <div class="modal fade" id="selfConfirmModal" tabindex="-1" aria-labelledby="selfConfirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="selfConfirmModalLabel">
+                        {{ m.icon('person-check') }}
+                        {{ __('user_certifications.self_confirm_title') }}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('form.close') }}"></button>
+                </div>
+                <form id="selfConfirmForm">
+                    <div class="modal-body">
+                        {{ csrf() }}
+                        <input type="hidden" id="confirmCertificationId" name="certification_uuid">
+
+                        <div class="alert alert-info">
+                            <h6>{{ __('user_certifications.self_confirm_instructions') }}</h6>
+                            <p id="confirmCertificationDescription" class="mb-0"></p>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="confirmAgreement" name="agreement" required>
+                                <label class="form-check-label" for="confirmAgreement">
+                                    {{ __('user_certifications.self_confirm_agreement') }}
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            {{ f.textarea('notes', __('user_certifications.optional_notes'), {
+                                'rows': 3,
+                                'placeholder': __('user_certifications.self_confirm_notes_placeholder')
+                            }) }}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                            {{ __('form.cancel') }}
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            {{ m.icon('check') }}
+                            {{ __('user_certifications.confirm_certification') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {# JavaScript for User Certification Management #}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize tooltips
+            const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            tooltips.forEach(tooltip => {
+                new bootstrap.Tooltip(tooltip);
+            });
+
+            // Self-confirmation form handling
+            const selfConfirmForm = document.getElementById('selfConfirmForm');
+            if (selfConfirmForm) {
+                selfConfirmForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const formData = new FormData(this);
+
+                    fetch('{{ url('/user/certifications/self-confirm') }}', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const modal = bootstrap.Modal.getInstance(document.getElementById('selfConfirmModal'));
+                            modal.hide();
+
+                            // Show success message and reload
+                            showSuccessMessage('{{ __('user_certifications.self_confirm_success') }}');
+                            setTimeout(() => location.reload(), 2000);
+                        } else {
+                            alert(data.message || '{{ __('form.error_occurred') }}');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('{{ __('form.error_occurred') }}');
+                    });
+                });
+            }
+
+            // Tab persistence
+            const tabs = document.querySelectorAll('#certificationTabs button[data-bs-toggle="tab"]');
+            tabs.forEach(tab => {
+                tab.addEventListener('shown.bs.tab', function(e) {
+                    localStorage.setItem('activeCertificationTab', e.target.id);
+                });
+            });
+
+            // Restore active tab
+            const activeTab = localStorage.getItem('activeCertificationTab');
+            if (activeTab) {
+                const tabElement = document.getElementById(activeTab);
+                if (tabElement) {
+                    const tab = new bootstrap.Tab(tabElement);
+                    tab.show();
+                }
+            }
+        });
+
+        function selfConfirm(certificationId, certificationTitle) {
+            document.getElementById('confirmCertificationId').value = certificationId;
+            document.getElementById('confirmCertificationDescription').textContent =
+                `{{ __('user_certifications.self_confirm_for') }} "${certificationTitle}"`;
+
+            // Reset form
+            document.getElementById('confirmAgreement').checked = false;
+            document.querySelector('#selfConfirmForm textarea[name="notes"]').value = '';
+
+            const modal = new bootstrap.Modal(document.getElementById('selfConfirmModal'));
+            modal.show();
+        }
+
+        function showSuccessMessage(message) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-success alert-dismissible fade show position-fixed';
+            alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            alertDiv.innerHTML = `
+                <strong>{{ __('form.success') }}</strong> ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+
+            document.body.appendChild(alertDiv);
+
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.parentNode.removeChild(alertDiv);
+                }
+            }, 5000);
+        }
+    </script>
+
+    {# Print Styles #}
+    <style media="print">
+        .btn, .dropdown, .nav-tabs, .card-header .badge, .alert {
+            display: none !important;
+        }
+
+        .card {
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+        .tab-content .tab-pane {
+            display: block !important;
+            opacity: 1 !important;
+        }
+
+        .tab-content .tab-pane:not(.active) {
+            display: none !important;
+        }
+
+        @page {
+            margin: 1in;
+        }
+    </style>
+{% endblock %}

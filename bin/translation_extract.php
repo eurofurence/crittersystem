@@ -67,7 +67,7 @@ class TranslationStringExtractor
         // preg_match_all('/\{\{\s*\'__\'\s*\(\s*([\'"])(.*?)\1\s*\)\s*\}\}|\{\%\s*trans\s*\%\}(.*?)\{\%\s*endtrans\s*\%\}/', $content, $matches);
 
         // Match '__'('string') or __('string') or {{ '__'('string') }} or {% trans %}string{% endtrans %}
-        preg_match_all('/\'?__\'?\(\s*([\'"])(.*?)\1\s*\)|\{\{\s*\'__\'\s*\(\s*([\'"])(.*?)\1\s*\)\s*\}\}|\{\%\s*trans\s*\%\}(.*?)\{\%\s*endtrans\s*\%\}/', $content, $matches);
+        preg_match_all('/__\s*\(\s*([\'"])(.*?)\1\s*(?:,|\))/', $content, $matches);
 
         if (!empty($matches[2])) {
             foreach ($matches[2] as $match) {

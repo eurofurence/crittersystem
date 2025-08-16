@@ -1,0 +1,2629 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Eurofurence Critter System\\n"
+"POT-Creation-Date: 2019-12-01 15:13+0100\n"
+"PO-Revision-Date: 2024-08-17 13:40+0100\n"
+"Last-Translator: Pattarchus\n"
+"Language-Team: \n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e:1,2;translate;translatePlural\n"
+"X-Poedit-Basepath: ../../..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: resources/views\n"
+"X-Poedit-SearchPath-1: src\n"
+"X-Poedit-SearchPath-2: includes\n"
+
+msgid "email.greeting"
+msgstr "Hallo %s,"
+
+msgid "email.introduction"
+msgstr "hier ist eine Nachricht aus dem %s für Dich:"
+
+msgid "email.footer"
+msgstr ""
+"Diese E-Mail wurde automatisch generiert und muss daher nicht unterschrieben "
+"werden. Du hast diese E-Mail bekommen, weil Du im %s registriert bist."
+
+msgid "password.email.message"
+msgstr "Um dein Passwort zurückzusetzen, besuche %s"
+
+msgid "page.error.title"
+msgstr "Fehler %s"
+
+msgid "page.403.title"
+msgstr "Nicht erlaubt"
+
+msgid "page.403.headline"
+msgstr "Du darfst diese Seite nicht aufrufen"
+
+msgid "page.404.title"
+msgstr "Seite nicht gefunden"
+
+msgid "page.404.not_found"
+msgstr "No sleep found"
+
+msgid "page.405.title"
+msgstr "405: Anfragetyp nicht erlaubt"
+
+msgid "page.419.title"
+msgstr "Autorisierung ist abgelaufen"
+
+msgid "page.419.text"
+msgstr "Das angegebene CSRF Token ist ungültig oder abgelaufen"
+
+msgid "general.date"
+msgstr "d.m.Y"
+
+msgid "footer.eventinfo.name_start_end"
+msgstr "%1$s, vom %2$s bis %3$s"
+
+msgid "footer.eventinfo.name_start"
+msgstr "%1$s, ab dem %2$s"
+
+msgid "footer.eventinfo.start_end"
+msgstr "Event vom %1$s bis %2$s"
+
+msgid "footer.issues"
+msgstr "Bugs / Features"
+
+msgid "footer.github"
+msgstr "Entwicklerplattform"
+
+msgid "credits.title"
+msgstr "Credits"
+
+msgid "general.register"
+msgstr "Registrieren"
+
+msgid "general.login"
+msgstr "Login"
+
+msgid "page.403.login"
+msgstr "Bitte melde dich an."
+
+msgid "form.submit"
+msgstr "Absenden"
+
+msgid "form.send_notification"
+msgstr "%d Benachrichtigungen versenden"
+
+msgid "credits.source"
+msgstr "Quellcode"
+
+msgid "credits.version"
+msgstr "Version: _%s_"
+
+msgid "credits.credit"
+msgstr ""
+"Das ursprüngliche Crittersystem wurde entwickelt von [cookie](https://github."
+"com/cookieBerlin/engelsystem). Danach wurde es von [msquare](https://"
+"notrademark.de) (Maintainer) und [MyIgel](https://myigel.name) vollständig "
+"überarbeitet und verbessert. Seit EF28 nutzt [Eurofurence](https://eurofurence.org) einen eigenen Fork."
+
+msgid "credits.contributors"
+msgstr ""
+"Eine vollständige Liste der Mitwirkenden findest Du [auf GitHub](https://"
+"github.com/eurofurence/crittersystem/graphs/contributors)."
+
+msgid "login.welcome"
+msgstr "Willkommen beim %s!"
+
+msgid "event.buildup.start"
+msgstr "Aufbau startet"
+
+msgid "event.starts"
+msgstr "Event startet"
+
+msgid "event.ends"
+msgstr "Event endet"
+
+msgid "event.teardown.ends"
+msgstr "Abbau endet"
+
+msgid "login.password.reset"
+msgstr "Passwort vergessen"
+
+msgid "login.registration"
+msgstr "Bitte registriere Dich, wenn Du helfen möchtest!"
+
+msgid "login.registration.external"
+msgstr "Die Registrierung ist nur über einen externen Login möglich."
+
+msgid "login.registration.disabled"
+msgstr "Registrierung ist abgeschaltet."
+
+msgid "login.do"
+msgstr "Was kann ich machen?"
+
+msgid "login.jobs"
+msgstr "Informiere Dich über die Tätigkeiten bei denen Du uns helfen kannst."
+
+msgid "login.cookies"
+msgstr "Hinweis: Cookies müssen aktiviert sein!"
+
+msgid "password.reset.confirm"
+msgstr "Passwort wiederholen"
+
+msgid "password.recovery.success"
+msgstr ""
+"Wir haben dir eine E-Mail mit einem Link zum Passwort-zurücksetzen geschickt."
+
+msgid "password.reset.title"
+msgstr "Passwort wiederherstellen"
+
+msgid "password.recovery.text"
+msgstr ""
+"Wir werden eine E-Mail mit einem Link schicken, mit dem du das Passwort "
+"zurücksetzen kannst. Bitte benutze die E-Mail-Adresse, die du bei der Anmeldung "
+"verwendet hast."
+
+msgid "password.minimal_length"
+msgstr "Mindestlänge %d Zeichen"
+
+msgid "form.recover"
+msgstr "Wiederherstellen"
+
+msgid "Critter type %s deleted."
+msgstr "Crittertyp %s gelöscht."
+
+msgid "Delete critter type %s"
+msgstr "Lösche Crittertyp %s"
+
+msgid "Please check the name. Maybe it already exists."
+msgstr "Bitte überprüfe den Namen. Vielleicht ist er bereits vergeben."
+
+msgid "Critter type saved."
+msgstr "Crittertyp wurde gespeichert."
+
+msgid "Create critter type"
+msgstr "Crittertyp erstellen"
+
+msgid "Edit %s"
+msgstr "%s bearbeiten"
+
+msgid "Team %s"
+msgstr "Team %s"
+
+msgid "%s (not \"%s\")"
+msgstr "%s (kein \"%s\")"
+
+msgid "View"
+msgstr "Ansehen"
+
+msgid "Leave"
+msgstr "Verlassen"
+
+msgid "Join"
+msgstr "Mitmachen"
+
+msgid "Public Dashboard"
+msgstr "Öffentliches Dashboard"
+
+msgid "shifts.random"
+msgstr "Zufällige Schicht"
+
+msgid "%s has been subscribed to the shift."
+msgstr "%s wurde in die Schicht eingetragen."
+
+msgid "User is not in critter type."
+msgstr "User ist nicht im Crittertyp."
+
+msgid "This shift is already occupied."
+msgstr "Die Schicht ist schon voll."
+
+msgid "You need be accepted member of the critter type."
+msgstr "Du musst bestätigtes Mitglied des Crittertyps sein."
+
+msgid "This shift collides with one of your shifts."
+msgstr "Diese Schicht kollidiert mit deinen Schichten."
+
+msgid "This shift ended already."
+msgstr "Die Schicht ist schon vorbei."
+
+msgid "You are not marked as arrived."
+msgstr "Du bist nicht als angekommen markiert."
+
+msgid "You are not allowed to sign up yet."
+msgstr "Du darfst dich noch nicht anmelden."
+
+msgid "You are signed up for this shift."
+msgstr "Du bist für diese Schicht eingetragen."
+
+msgid "You are subscribed. Thank you!"
+msgstr "Du bist eingetragen. Danke!"
+
+msgid ""
+"You are not allowed to remove this shift entry. If necessary, ask a "
+"staff member or the Info Desk to do so."
+msgstr ""
+"Du darfst diesen Schichteintrag nicht entfernen. Falls notwendig, frage "
+"beim Staff oder beim Info Desk danach."
+
+msgid "Shift entry removed."
+msgstr "Schichteintrag gelöscht."
+
+msgid "This shift was imported from a schedule so some changes will be overwritten with the next import."
+msgstr ""
+"Diese Schicht wurde aus einem Fahrplan importiert. "
+"Dadurch werden einige Änderungen beim nächsten Import überschrieben."
+
+msgid "Please select a location."
+msgstr "Bitte einen Ort auswählen."
+
+msgid "Please enter a valid starting time for the shifts."
+msgstr "Bitte gib eine korrekte Startzeit für die Schichten ein."
+
+msgid "Please enter a valid ending time for the shifts."
+msgstr "Bitte gib eine korrekte Endzeit für die Schichten ein."
+
+msgid "The ending time has to be after the starting time."
+msgstr "Die Endzeit muss nach der Startzeit liegen."
+
+msgid "Please check your input for needed critters of type %s."
+msgstr "Bitte prüfe deine Eingabe für benötigte Critter."
+
+msgid "Shift updated."
+msgstr "Schicht aktualisiert."
+
+msgid "This page is much more comfortable with javascript."
+msgstr "Diese Seite ist mit JavaScript viel komfortabler."
+
+msgid "Shift type"
+msgstr "Schichttyp"
+
+msgid "title.title"
+msgstr "Titel"
+
+msgid "Location:"
+msgstr "Ort:"
+
+msgid "Start:"
+msgstr "Start:"
+
+msgid "End:"
+msgstr "Ende:"
+
+msgid "Shift deleted."
+msgstr "Schicht gelöscht."
+
+msgid "Do you want to delete the shift \"%s\" from %s to %s?"
+msgstr "Möchtest Du die Schicht \"%s\" von %s bis %s löschen?"
+
+msgid "Shift could not be found."
+msgstr "Schicht konnte nicht gefunden werden."
+
+msgid "There are unconfirmed critters in %d critter type. Critter type that needs approval:"
+msgid_plural "There are unconfirmed critters in %d critter types. Critter types that need approvals:"
+msgstr[0] "Es gibt nicht freigeschaltete Critter in %d Crittertypen! Crittertyp der bestätigt werden muss:"
+msgstr[1] "Es gibt nicht freigeschaltete Critter in %d Crittertypen! Crittertypen die bestätigt werden müssen:"
+
+msgid "Crittertype doesn't exist."
+msgstr "Der Crittertyp existiert nicht."
+
+msgid "You are not allowed to delete all users for this critter type."
+msgstr "Du darfst nicht alle Benutzer von diesem Crittertyp entfernen."
+
+msgid "Denied all users for critter type %s."
+msgstr "Alle Benutzer mit Crittertyp %s abgelehnt."
+
+msgid "Deny all users"
+msgstr "Alle Benutzer ablehnen"
+
+msgid "You are not allowed to confirm all users for this critter type."
+msgstr "Du darfst nicht alle Benutzer für diesen Crittertyp freischalten."
+
+msgid "Confirmed all users for critter type %s."
+msgstr "Alle Benutzer für Crittertyp %s freigeschaltet."
+
+msgid "Confirm all users"
+msgstr "Alle Benutzer bestätigen"
+
+msgid "You are not allowed to confirm this users critter type."
+msgstr "Du darfst diesen Benutzer nicht für diesen Crittertyp freischalten."
+
+msgid "%s confirmed for critter type %s."
+msgstr "%s für Crittertyp %s freigeschaltet."
+
+msgid "Confirm critter type for user"
+msgstr "Crittertyp für Benutzer bestätigen"
+
+msgid "You are not allowed to delete this users critter type."
+msgstr "Du darfst diesen Benutzer nicht von diesem Crittertyp entfernen."
+
+msgid "User \"%s\" removed from \"%s\"."
+msgstr "Benutzer \"%s\" von \"%s\" entfernt."
+
+msgid "Edit certificates"
+msgstr "Zertifikate bearbeiten"
+
+msgid "You successfully left \"%2$s\"."
+msgstr "Du hast erfolgreich \"%2$s\" verlassen."
+
+msgid "Leave critter type"
+msgstr "Crittertyp verlassen"
+
+msgid "No supporter update given."
+msgstr "Kein Update für Supporterrechte gegeben."
+
+msgid "Added supporter rights for %s to %s."
+msgstr "%s hat %s als Supporter bekommen."
+
+msgid "Removed supporter rights for %s from %s."
+msgstr "%s hat jetzt nicht mehr %s als Supporter."
+
+msgid "Add supporter rights"
+msgstr "Supporterrechte geben"
+
+msgid "Remove supporter rights"
+msgstr "Supporterrechte entfernen"
+
+msgid "User %s added to %s."
+msgstr "Benutzer %s zu %s hinzugefügt."
+
+msgid "Add user to critter type"
+msgstr "Benutzer zu Crittertyp hinzufügen"
+
+msgid "You are already a %s."
+msgstr "Du bist bereits %s."
+
+msgid "You joined %s."
+msgstr "Du bist %s beigetreten."
+
+msgid "Become a %s"
+msgstr "Werde ein %s"
+
+msgid "You cannot delete yourself."
+msgstr "Du kannst Dich nicht selber löschen."
+
+msgid "auth.password.error"
+msgstr "Dein Passwort stimmt nicht. Bitte probiere es nochmal."
+
+msgid "User deleted."
+msgstr "Critter gelöscht."
+
+msgid "Delete %s"
+msgstr "%s löschen"
+
+msgid "Please enter a valid number of vouchers."
+msgstr "Bitte gib eine korrekte Anzahl von Gutscheinen ein."
+
+msgid "Saved the number of vouchers."
+msgstr "Anzahl der Gutscheine gespeichert."
+
+msgid "User not found."
+msgstr "Benutzer nicht gefunden."
+
+msgid "Enough"
+msgstr "Genug"
+
+msgid "All users"
+msgstr "Alle Benutzer"
+
+msgid "User %s could not be notified by e-mail due to an error."
+msgstr ""
+"Aufgrund eines Fehlers konnte dem User %s keine E-Mail gesendet werden."
+
+msgid "%s (%s as %s) in %s, %s - %s"
+msgstr "%s (%s als %s) in %s, %s - %s"
+
+msgid "You have been assigned to a Shift:"
+msgstr "Du wurdest in eine Schicht eingetragen:"
+
+msgid "Assigned to Shift"
+msgstr "In Schicht eingetragen"
+
+msgid "You have been removed from a Shift:"
+msgstr "Du wurdest aus einer Schicht ausgetragen:"
+
+msgid "Removed from Shift"
+msgstr "Von Schicht ausgetragen"
+
+msgid "Your account has been deleted."
+msgstr "Dein Konto wurde gelöscht."
+
+msgid ""
+"Your %s account has been deleted. If you have any questions regarding your "
+"account deletion, please contact the Info Desk."
+msgstr ""
+"Dein %s-Konto wurde gelöscht. Wenn Du dazu Fragen hast, kontaktiere bitte "
+"den Info Desk."
+
+msgid "Active Critters"
+msgstr "Aktive Critter"
+
+msgid ""
+"At least %s critters are forced to be active. The number has to be greater."
+msgstr ""
+"Mindestens %s Critter werden als aktiv gekennzeichnet. Die Nummer muss größer "
+"sein."
+
+msgid "Please enter a number of critter to be marked as active."
+msgstr ""
+"Bitte gib eine Anzahl an Crittern ein, die als Aktiv markiert werden sollen."
+
+msgid "Marked critters."
+msgstr "Critter wurden markiert."
+
+msgid "general.actions"
+msgstr "Aktionen"
+
+msgid "general.back"
+msgstr "Zurück"
+
+msgid "Apply"
+msgstr "Anwenden"
+
+msgid "Critter has been marked as active."
+msgstr "Critter wurde als aktiv markiert. "
+
+msgid "Critter not found."
+msgstr "Critter nicht gefunden."
+
+msgid "Critter has been marked as not active."
+msgstr "Critter wurde als nicht aktiv markiert."
+
+msgid "Critter has got a T-shirt."
+msgstr "Critter hat ein T-Shirt bekommen."
+
+msgid "Critter has got no T-shirt."
+msgstr "Critter hat kein T-Shirt bekommen."
+
+msgid "Set active"
+msgstr "Setze aktiv"
+
+msgid "Remove active"
+msgstr "Entferne aktiv"
+
+msgid "Got T-shirt"
+msgstr "T-Shirt bekommen"
+
+msgid "Remove T-shirt"
+msgstr "Entferne T-Shirt"
+
+msgid "Sum"
+msgstr "Summe"
+
+msgid "Search critter:"
+msgstr "Suche Critter:"
+
+msgid "Show all shifts"
+msgstr "Alle Schichten anzeigen"
+
+msgid "How many critters should be active?"
+msgstr "Wie viele Critter sollten aktiv sein?"
+
+msgid "Size"
+msgstr "Größe"
+
+msgid "No."
+msgstr "Nr."
+
+msgid "general.shifts"
+msgstr "Schichten"
+
+msgid "Length"
+msgstr "Länge"
+
+msgid "Length (in minutes)"
+msgstr "Länge (in Minuten)"
+
+msgid "Active"
+msgstr "Aktiv"
+
+msgid "Forced"
+msgstr "Erzwungen"
+
+msgid "T-shirt"
+msgstr "T-Shirt"
+
+msgid "T-shirt statistic"
+msgstr "T-Shirt Statistik"
+
+msgid "Given T-shirts"
+msgstr "Ausgegebene T-Shirts"
+
+msgid "Arrive critters"
+msgstr "Ankommende Critter"
+
+msgid "Critters"
+msgstr "Critter"
+
+msgid "Reset done. Critter has not arrived."
+msgstr "Zurückgesetzt. Critter ist noch nicht angekommen."
+
+msgid "Critter has been marked as arrived."
+msgstr "Critter wurde als angekommen markiert."
+
+msgid "Reset"
+msgstr "Zurücksetzen"
+
+msgid "Planned arrival"
+msgstr "Geplanter Ankunftstag"
+
+msgid "Arrival date"
+msgstr "Ankunftsdatum"
+
+msgid "Planned departure"
+msgstr "Geplante Abreise"
+
+msgid "Planned arrival statistics"
+msgstr "Geplante Ankunfts-Statistik"
+
+msgid "arrived sum"
+msgstr "Summe angekommen"
+
+msgid "title.date"
+msgstr "Datum"
+
+msgid "Arrival statistics"
+msgstr "Ankunfts-Statistik"
+
+msgid "Planned departure statistics"
+msgstr "Geplante Abreise-Statistik"
+
+msgid "Free Critters"
+msgstr "Freie Critter"
+
+msgid "Critter type"
+msgstr "Crittertyp"
+
+msgid "shift.next"
+msgstr "Nächste Schicht"
+
+msgid "general.shift"
+msgstr "Schicht"
+
+msgid "shift.angeltype_source"
+msgstr "Benötigte Critter von: %s"
+
+msgid "shift.angeltype_source.shift_type"
+msgstr "Programm %s via Schichttyp %s"
+
+msgid "shift.angeltype_source.location"
+msgstr "Programm %s via Ort %s"
+
+msgid "Last shift"
+msgstr "Letzte Schicht"
+
+msgid "general.dect"
+msgstr "Telegram"
+
+msgid "Grouprights"
+msgstr "Gruppenrechte"
+
+msgid "general.name"
+msgstr "Name"
+
+msgid "Privileges"
+msgstr "Privilegien"
+
+msgid "Edit group"
+msgstr "Gruppe bearbeiten"
+
+msgid "Please select a shift type."
+msgstr "Bitte einen Schichttyp wählen."
+
+msgid "Reset to previous state"
+msgstr "Auf vorherigen Stand zurücksetzen"
+
+msgid "Location"
+msgstr "Ort"
+
+msgid "Answer questions"
+msgstr "Fragen beantworten"
+
+msgid "There are unanswered questions!"
+msgstr "Es gibt unbeantwortete Fragen!"
+
+msgid "Locations"
+msgstr "Orte"
+
+msgid "general.description"
+msgstr "Beschreibung"
+
+msgid "Please use markdown for the description."
+msgstr "Bitte benutze Markdown für die Beschreibung."
+
+msgid "Needed critters:"
+msgstr "Benötigte Critter:"
+
+msgid "Needed critters"
+msgstr "Benötigte Critter"
+
+msgid "Create shifts"
+msgstr "Schichten erstellen"
+
+msgid "Additional description"
+msgstr "Zusätzliche Beschreibung"
+
+msgid "This description is for single shifts, otherwise please use the description in shift type."
+msgstr "Diese Beschreibung ist für einzelne Schichten, ansonsten nutze bitte die Beschreibung im Schichttyp."
+
+msgid "Please select a start time."
+msgstr "Bitte eine Startzeit auswählen."
+
+msgid "Please select an end time."
+msgstr "Bitte eine Endzeit auswählen."
+
+msgid "The shifts end has to be after its start."
+msgstr "Die Endzeit muss nach der Startzeit liegen."
+
+msgid "Please enter a shift duration in minutes."
+msgstr "Gib bitte eine Schichtlänge in Minuten ein."
+
+msgid "Please validate the change hour %s. It should be between 00:00 and 24:00."
+msgstr "Bitte korrigiere die Schichtwechselstunde %s. Sie sollte zwischen 00:00 und 24:00 Uhr liegen."
+
+msgid "Please split the shift-change hours by colons."
+msgstr "Trenne die Schichtwechselstunden mit einem Komma."
+
+msgid "Please select a mode."
+msgstr "Bitte einen Modus auswählen."
+
+msgid "Please check the needed critters for team %s."
+msgstr "Bitte gib die Anzahl der benötigten Critter vom Team %s an."
+
+msgid "There are 0 critters needed. Please enter the amounts of needed critters."
+msgstr "Es werden 0 Critter benötigt. Bitte ändere das."
+
+msgid "Please select a mode for needed critters."
+msgstr "Bitte wähle einen Modus für benötigte Critter."
+
+msgid "Please select needed critters."
+msgstr "Bitte wähle benötigte Critter."
+
+msgid "Time and location"
+msgstr "Zeit und Ort"
+
+msgid "Type and title"
+msgstr "Typ und Titel"
+
+msgid "Mode"
+msgstr "Modus"
+
+msgid "Create one shift"
+msgstr "Eine Schicht erstellen"
+
+msgid "Create multiple shifts"
+msgstr "Mehrere Schichten erstellen"
+
+msgid "Create multiple shifts with variable length"
+msgstr "Erstelle mehrere Schichten mit unterschiedlicher Länge"
+
+msgid "Shift change hours"
+msgstr "Schichtwechsel-Stunden"
+
+msgid "Create a shift over midnight."
+msgstr "Erstelle Schichten über Mitternacht"
+
+msgid "Copy needed critters from location settings"
+msgstr "Kopiere benötigte Critter von den Ort-Einstellungen"
+
+msgid "Copy needed critters from shift type settings"
+msgstr "Kopiere benötigte Critter von den Schichttyp-Einstellungen"
+
+msgid "The following critters are needed"
+msgstr "Die folgenden Critter werden benötigt"
+
+msgid "All Critters"
+msgstr "Alle Critter"
+
+msgid "This user does not exist."
+msgstr "Benutzer existiert nicht."
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "No"
+msgstr "Nein"
+
+msgid "Force active"
+msgstr "Aktiv erzwingen"
+
+msgid "Edit user"
+msgstr "User bearbeiten"
+
+msgid "general.datetime"
+msgstr "d.m.Y H:i"
+
+msgid "API Settings"
+msgstr "API Einstellungen"
+
+msgid "Please enter a freeload comment!"
+msgstr "Gib bitte einen Schwänz-Kommentar ein!"
+
+msgid "Shift saved."
+msgstr "Schicht gespeichert."
+
+msgid "Ask the Info Desk"
+msgstr "Frag den Info Desk"
+
+msgid "The administration has not configured any locations yet."
+msgstr "Die Administratoren habe noch keine Orte eingerichtet."
+
+msgid "The administration has not configured any shifts yet."
+msgstr "Die Administratoren haben noch keine Schichten angelegt."
+
+msgid ""
+"The administration has not configured any critter types yet - or you are not "
+"subscribed to any critter type."
+msgstr ""
+"Die Administratoren haben noch keine Crittertypen konfiguriert - oder Du hast "
+"noch keine Crittertypen ausgewählt."
+
+msgid "occupied"
+msgstr "belegt"
+
+msgid "free"
+msgstr "frei"
+
+msgid "Own"
+msgstr "Eigene"
+
+msgid "Occupancy"
+msgstr "Belegung"
+
+msgid ""
+"The tasks shown here are influenced by the critter types you joined already!"
+msgstr ""
+"Die Schichten, die hier angezeigt werden, sind von Deinen Einstellungen "
+"(Crittertypen/Aufgaben) abhängig!"
+
+msgid "Filter"
+msgstr "Filter"
+
+msgid "Yesterday"
+msgstr "Gestern"
+
+msgid "Today"
+msgstr "Heute"
+
+msgid "Tomorrow"
+msgstr "Morgen"
+
+msgid "last 8h"
+msgstr "letzte 8h"
+
+msgid "last 4h"
+msgstr "letzte 4h"
+
+msgid "next 4h"
+msgstr "nächste 4h"
+
+msgid "next 8h"
+msgstr "nächste 8h"
+
+msgid "iCal export and API"
+msgstr "iCal Export und API"
+
+msgid ""
+"Export your own shifts formatted as <a href=\"%s\" target=\"_blank\">iCal</a> or "
+"<a href=\"%s\" target=\"_blank\">JSON</a> (please keep the link secret, otherwise you have to reset the api key "
+"<a href=\"%s\">in your settings</a>)."
+msgstr ""
+"Exportiere Deine Schichten im <a href=\"%s\" target=\"_blank\">iCal</a> oder <a href=\"%s"
+"\" target=\"_blank\">JSON</a> Format (Link bitte geheimhalten, sonst musst du den API-Key in "
+"<a href=\"%s\">deinen Einstellungen</a> zurücksetzen)."
+
+msgid "All"
+msgstr "Alle"
+
+msgid "None"
+msgstr "Keine"
+
+msgid "general.logout"
+msgstr "Abmelden"
+
+msgid "Admin"
+msgstr "Admin"
+
+msgid "Manage locations"
+msgstr "Orte verwalten"
+
+msgid "No data found."
+msgstr "Nichts gefunden."
+
+msgid "Unconfirmed"
+msgstr "Unbestätigt"
+
+msgid "Supporter"
+msgstr "Supporter"
+
+msgid "Member"
+msgstr "Mitglied"
+
+msgid "Do you want to delete critter type %s?"
+msgstr "Möchtest Du den Crittertypen %s löschen?"
+
+msgid "angeltypes.restricted"
+msgstr "Benötigt Einführung"
+
+msgid "angeltypes.restricted.info"
+msgstr ""
+"Crittertypen, welche eine Einführung benötigen, müssen von einem Supporter freigeschaltet werden "
+"(double-opt-in)."
+
+msgid "shift.self_signup"
+msgstr "Schichten selbst eintragen"
+
+msgid "shift.self_signup.allowed"
+msgstr "Schichten selbst eintragen erlaubt"
+
+msgid "angeltypes.shift.self_signup.info"
+msgstr "Crittertypen, welche Schichten selbst eintragen erlaubt haben, "
+"erlauben Crittern sich selbst in ihre Schichten einzutragen, "
+"ist Schichten selbst eintragen nicht erlaubt können nur Supporter "
+"oder Admins Critter in die Schichten des Crittertyps eintragen."
+
+
+msgid "Requires driver license"
+msgstr "Benötigt Führerschein"
+
+msgid "Show on dashboard"
+msgstr "Auf dem Dashboard anzeigen"
+
+msgid "Contact"
+msgstr "Kontakt"
+
+msgid "Primary contact person/desk for user questions."
+msgstr "Ansprechpartner für Fragen."
+
+msgid "My driving license"
+msgstr "Meine Führerschein-Infos"
+
+msgid "angeltype.ifsg.required.info.preview"
+msgstr "Dieser Crittertyp benötigt eine Gesundheitsbelehrung."
+
+msgid "angeltype.driving_license.required.info.preview"
+msgstr "Dieser Crittertyp benötigt Führerschein-Infos."
+
+msgid ""
+"This critter type requires a driver license. Please enter your driver license "
+"information!"
+msgstr ""
+"Dieser Crittertyp benötigt Führerschein-Infos. Bitte trage Deine Führerschein-"
+"Infos ein!"
+
+msgid ""
+"You are unconfirmed for this critter type. Please go to the introduction for %s "
+"to get confirmed."
+msgstr ""
+"Du bist noch nicht für diesen Crittertyp bestätigt. Bitte gehe zur Einführung "
+"für %s um bestätigt zu werden."
+
+msgid "Confirm"
+msgstr "Bestätigen"
+
+msgid "Deny"
+msgstr "Ablehnen"
+
+msgid "Remove"
+msgstr "Entfernen"
+
+msgid "Driver"
+msgstr "Fahrer"
+
+msgid "Has car"
+msgstr "Hat Auto"
+
+msgid "Info"
+msgstr "Info"
+
+msgid "Supporters"
+msgstr "Supporter"
+
+msgid "Members"
+msgstr "Mitglieder"
+
+msgid "general.add"
+msgstr "Hinzufügen"
+
+msgid "Confirm all"
+msgstr "Alle bestätigen"
+
+msgid "Deny all"
+msgstr "Alle ablehnen"
+
+msgid "Membership"
+msgstr "Mitgliedschaft"
+
+msgid "Critters needed in the next 3 hrs"
+msgstr "Benötigte Critter in den nächsten 3 Stunden"
+
+msgid "Critters needed for nightshifts"
+msgstr "Benötigte Critter für Nachtschichten"
+
+msgid "Critters currently working"
+msgstr "Aktuell arbeitende Critter"
+
+msgid "Hours to be worked"
+msgstr "Noch zu schaffende Stunden"
+
+msgid "Fullscreen"
+msgstr "Vollbild"
+
+msgid "Filtered"
+msgstr "Filtern"
+
+msgid "No shifts found."
+msgstr "Keine Schichten gefunden."
+
+msgid "Your shift"
+msgstr "Meine Schicht"
+
+msgid "Help needed"
+msgstr "Hilfe benötigt"
+
+msgid "Other critter type needed / collides with my shifts"
+msgstr "Andere Crittertypen benötigt / kollidiert mit meinen Schichten"
+
+msgid "Shift is full"
+msgstr "Schicht ist voll"
+
+msgid "Shift is running/ended or you have not arrived"
+msgstr "Schicht läuft/vorbei oder du bist noch nicht angekommen"
+
+msgid "%d helper needed"
+msgid_plural "%d helpers needed"
+msgstr[0] "%d Helfer benötigt"
+msgstr[1] "%d Helfer benötigt"
+
+msgid "Sign up"
+msgstr "Eintragen"
+
+msgid "ended"
+msgstr "vorbei"
+
+msgid "please arrive for signup"
+msgstr "Ankommen zum Eintragen"
+
+msgid "not yet"
+msgstr "noch nicht"
+
+msgid "Become %s"
+msgstr "Werde ein %s"
+
+msgid "m-d"
+msgstr "d.m."
+
+msgid "Do you want to sign off %s from shift %s from %s to %s as %s?"
+msgstr "Möchtest Du %s von der Schicht %s von %s bis %s als %s austragen?"
+
+msgid "Do you want to sign off from your shift %s from %s to %s as %s?"
+msgstr "Möchtest du dich von deiner Schicht %s von %s bis %s als %s austragen?"
+
+msgid "Shift sign off"
+msgstr "Von Schicht austragen"
+
+msgid "Do you want to sign up the following user for this shift?"
+msgstr "Möchtest du den folgenden User für die Schicht eintragen?"
+
+msgid "Do you want to sign up the following user for this shift as %s?"
+msgstr "Möchtest du den folgenden User als %s in die Schicht eintragen?"
+
+msgid "Do you want to sign up for this shift as %s?"
+msgstr "Möchtest du dich für diese Schicht als %s eintragen?"
+
+msgid "Comment (for your eyes only):"
+msgstr "Kommentar (nur für Dich):"
+
+msgid "Shift signup"
+msgstr "Schicht Anmeldung"
+
+msgid "Freeloaded"
+msgstr "Geschwänzt"
+
+msgid "Freeload comment (Only for shift coordination and supporters):"
+msgstr "Schwänzer Kommentar (Nur für Supporter und die Schicht-Koordination):"
+
+msgid "Edit shift entry"
+msgstr "Schichteintrag bearbeiten"
+
+msgid "Critter:"
+msgstr "Critter:"
+
+msgid "Date, Duration:"
+msgstr "Termin, Dauer:"
+
+msgid "Title:"
+msgstr "Titel:"
+
+msgid "Type:"
+msgstr "Typ:"
+
+msgid "created at %s by %s"
+msgstr "erstellt am %s von %s"
+
+msgid "edited at %s by %s"
+msgstr "bearbeitet am %s von %s"
+
+msgid "History ID: %s"
+msgstr "Historien-ID: %s"
+
+msgid "This shift is in the far future and becomes available for signup at %s."
+msgstr ""
+"Diese Schicht liegt in der fernen Zukunft und du kannst dich ab %s eintragen."
+
+msgid "Do you really want to add supporter rights for %s to %s?"
+msgstr "Sollen %s %s als neuen Supporter bekommen?"
+
+msgid "Do you really want to remove supporter rights for %s from %s?"
+msgstr "Möchtest Du wirklich %s von %s als Supporter befreien?"
+
+msgid "Do you really want to deny all users for %s?"
+msgstr "Möchtest Du wirklich alle Benutzer als %s ablehnen?"
+
+msgid "Do you really want to confirm all users for %s?"
+msgstr "Möchtest Du wirklich alle Benutzer als %s bestätigen?"
+
+msgid "Do you really want to confirm %s for %s?"
+msgstr "Möchtest Du wirklich %s für %s bestätigen?"
+
+msgid "Do you really want to remove \"%s\" from \"%s\"?"
+msgstr "Möchtest Du wirklich \"%s\" von \"%s\" entfernen?"
+
+msgid "Do you really want to leave \"%2$s\"?"
+msgstr "Möchtest Du \"%2$s\" wirklich verlassen?"
+
+msgid "Do you really want to add %s to %s?"
+msgstr "Möchtest Du wirklich %s zu %s hinzufügen?"
+
+msgid "Do you want to become a %2$s?"
+msgstr "Möchtest Du ein %2$s werden?"
+
+msgid "Confirm user"
+msgstr "Benutzer bestätigen"
+
+msgid "Hide at Registration"
+msgstr "Ausblenden bei Registrierung"
+
+msgid "Back to profile"
+msgstr "Zurück zum Profil"
+
+msgid ""
+"Do you really want to delete the user including all his shifts and every "
+"other piece of his data?"
+msgstr ""
+"Möchtest Du wirklich den Critter inklusive aller seiner Schichten und allen "
+"anderen seiner Daten löschen?"
+
+msgid "Your password"
+msgstr "Dein Passwort"
+
+msgid "Critter can receive another %d vouchers."
+msgstr "Critter kann noch %d Gutscheine bekommen."
+
+msgid "Critter can receive another %d vouchers and is FA."
+msgstr "Critter kann noch %d Gutscheine bekommen und ist FA."
+
+msgid "Number of vouchers given out"
+msgstr "Anzahl Gutscheine bekommen"
+
+msgid "Voucher"
+msgstr "Gutschein"
+
+msgid "Freeloads"
+msgstr "Schwänzereien"
+
+msgid "Last login"
+msgstr "Letzter Login"
+
+msgid "Next shift %c"
+msgstr "Nächste Schicht %c"
+
+msgid "Shift started %c"
+msgstr "Schicht startete %c"
+
+msgid "Shift ends %c"
+msgstr "Schicht endet %c"
+
+msgid "Shift ended %c"
+msgstr "Schicht endete %c"
+
+msgid "Sign off"
+msgstr "Austragen"
+
+msgid "Sum:"
+msgstr "Summe:"
+
+msgid "T-shirt score"
+msgstr "T-Shirt Score"
+
+msgid "Work log entry"
+msgstr "Arbeitseinsatz"
+
+msgid "Added by %s at %s"
+msgstr "Erstellt von %s am %s"
+
+msgid "Day & Time"
+msgstr "Tag & Zeit"
+
+msgid "Duration"
+msgstr "Dauer"
+
+msgid "Name & Workmates"
+msgstr "Name & Kollegen"
+
+msgid "You have done enough."
+msgstr "Du hast genug gemacht."
+
+msgid "%s has done enough."
+msgstr "%s hat genug gemacht."
+
+msgid "Vouchers"
+msgstr "Gutscheine"
+
+msgid "iCal Export"
+msgstr "iCal Export"
+
+msgid "JSON Export"
+msgstr "JSON Export"
+
+msgid "Night shifts between %d and %d am are multiplied by %d for the %s score."
+msgstr "Nachtschichten zwischen %d und %d Uhr werden für den %4$s Score mit %3$d multipliziert."
+
+msgid ""
+"Go to the <a href=\"%s\">shifts table</a> to sign yourself up for some "
+"shifts."
+msgstr ""
+"Gehe zur <a href=\"%s\">Schicht-Tabelle</a>, um Dich für Schichten "
+"einzutragen."
+
+msgid "State"
+msgstr "Status"
+
+msgid "Not arrived"
+msgstr "Nicht angekommen"
+
+msgid "Freeloader"
+msgstr "Schwänzer"
+
+msgid "Arrived at %s"
+msgstr "Angekommen am %s"
+
+msgid "Not arrived (Planned: %s)"
+msgstr "Nicht angekommen (Geplant: %s)"
+
+msgid "Got %s of %s vouchers"
+msgstr "%s von %s Gutscheinen bekommen"
+
+msgid "Got no vouchers"
+msgstr "Keine Gutscheine bekommen"
+
+msgid "out of %s"
+msgstr "von %s"
+
+msgid "Rights"
+msgstr "Berechtigungen"
+
+msgid ""
+"You are not marked as arrived. Please go to the Info Desk and "
+"tell them that you arrived already."
+msgstr ""
+"Du bist nicht als angekommen markiert. Geh bitte zum Info Desk, "
+"und melde dich als angekommen."
+
+msgid ""
+"Please enter your planned date of departure on your settings page to give us "
+"a feeling for teardown capacities."
+msgstr ""
+"Bitte gib Dein geplantes Abreisedatum an, damit wir ein Gefühl für die Abbau-"
+"Planung bekommen."
+
+msgid "tshirt.required.hint"
+msgstr "Bitte gib eine T-Shirt-Größe in deinen Einstellungen an."
+
+msgid "dect.required.hint"
+msgstr ""
+"Bitte gib ein Telegram-Handle in deinen Einstellungen an. Wenn du "
+"keinen Telegram-Account hast, trage einfach '-' ein."
+
+msgid "pronoun.required.hint"
+msgstr "Bitte gib ein Pronomen in deinen Einstellungen an."
+
+msgid "firstname.required.hint"
+msgstr "Bitte gib einen Vornamen in deinen Einstellungen an."
+
+msgid "lastname.required.hint"
+msgstr "Bitte gib einen Nachnamen in deinen Einstellungen an."
+
+msgid "mobile.required.hint"
+msgstr "Bitte gib eine Handynummer in deinen Einstellungen an."
+
+msgid ""
+"Here you can change the user entry. Under the item 'Arrived' the critter is marked as present, "
+"a yes at Active means that the critter was active."
+msgstr ""
+"Hier kannst du den Benutzer Eintrag ändern. Unter dem Punkt 'Angekommen' wird der Critter als anwesend markiert, "
+"ein Ja bei Aktiv bedeutet, dass der Critter aktiv war."
+
+msgid ""
+"If the critter is active, it can claim a T-shirt. If T-shirt is set to 'Yes', the critter already got their T-shirt."
+msgstr ""
+"Ist der Critter Aktiv, hat er damit Anspruch auf ein T-Shirt. Wenn T-Shirt ein 'Ja' enthält, bedeutet dies, "
+"dass der Critter bereits sein T-Shirt erhalten hat."
+
+msgid "Here you can reset the password of this critter:"
+msgstr "Hier kannst du das Passwort für diesen Critter:"
+
+msgid "Here you can define the user groups of the critter:"
+msgstr "Hier kannst du die Benutzergruppen des Critter:"
+
+msgid "User groups saved."
+msgstr "Benutzergruppen gespeichert."
+
+msgid "You cannot edit critters with more rights."
+msgstr "Du kannst keine Critter mit mehr Rechten bearbeiten."
+
+msgid "You cannot edit your own rights."
+msgstr "Du kannst deine eigenen Rechte nicht bearbeiten."
+
+msgid "Changes were saved."
+msgstr "Änderung wurde gespeichert."
+
+msgid "Password reset done."
+msgstr "Passwort zurückgesetzt."
+
+msgid "The entries must match and must not be empty!"
+msgstr "Die Einträge müssen übereinstimmen und dürfen nicht leer sein!"
+
+msgid "Number of shifts: %s"
+msgstr "Anzahl an Schichten: %s"
+
+msgid "Shifts created."
+msgstr "Schichten erstellt."
+
+msgid "If the critter is active, it can claim a goodie. If goodie is set to 'Yes', the critter already got their goodie."
+msgstr "Ist der Critter Aktiv, hat er damit Anspruch auf ein Goodie. Wenn Goodie ein 'Ja' enthält, bedeutet dies, "
+"dass der Critter bereits sein Goodie erhalten hat."
+
+msgid "Goodie"
+msgstr "Goodie"
+
+msgid "goodie"
+msgstr "Goodie"
+
+msgid "Goodie score"
+msgstr "Goodie Score"
+
+msgid "Given goodies"
+msgstr "Ausgegebene Goodies"
+
+msgid "Goodie statistic"
+msgstr "Goodie Statistik"
+
+msgid "Remove goodie"
+msgstr "Goodie entfernen"
+
+msgid "Got goodie"
+msgstr "Goodie bekommen"
+
+msgid "Critter has got a goodie."
+msgstr "Critter hat enn Goodie bekommen."
+
+msgid "Critter has got no goodie."
+msgstr "Critter hat kein Goodie bekommen."
+
+msgid "page.404.text"
+msgstr ""
+"Diese Seite existiert nicht oder Du hast keinen Zugriff. Melde Dich an um "
+"Zugriff zu erhalten!"
+
+msgid "form.select_placeholder"
+msgstr "Bitte auswählen..."
+
+msgid "form.load_schedule"
+msgstr "Programm laden"
+
+msgid "form.import"
+msgstr "Importieren"
+
+msgid "form.edit"
+msgstr "Bearbeiten"
+
+msgid "form.save"
+msgstr "Speichern"
+
+msgid "form.preview"
+msgstr "Vorschau"
+
+msgid "form.delete"
+msgstr "Löschen"
+
+msgid "form.delete_all"
+msgstr "Alle löschen"
+
+msgid "form.updated"
+msgstr "Aktualisiert"
+
+msgid "form.cancel"
+msgstr "Abbrechen"
+
+msgid "form.markdown"
+msgstr "Du kannst hier Markdown verwenden"
+
+msgid "form.required"
+msgstr "Pflichtfeld"
+
+msgid "form.user_select"
+msgstr "Wähle einen User"
+
+msgid "schedule.import"
+msgstr "Programm importieren"
+
+msgid "schedule.edit.title"
+msgstr "Programm bearbeiten"
+
+msgid "schedule.delete.title"
+msgstr "Programm mit %u Schichten löschen"
+
+msgid "schedule.import.title"
+msgstr "Programm importieren"
+
+msgid "schedule.last_update"
+msgstr "Aktualisiert am: %s"
+
+msgid "schedule.import.text"
+msgstr ""
+"Importe erstellen Orte und erstellen, aktualisieren und löschen Schichten anhand eines schedule.xml exportes."
+
+msgid "schedule.import.load.title"
+msgstr "Programm importieren: Vorschau"
+
+msgid "schedule.import.load.info"
+msgstr "Importiere \"%s\" (Version \"%s\")"
+
+msgid "schedule.name"
+msgstr "Programm Name"
+
+msgid "schedule.url"
+msgstr "Programm URL (schedule.xml)"
+
+msgid "schedule.shift-type"
+msgstr "Schichttyp"
+
+msgid "schedule.needed-from-shift-type"
+msgstr "Crittertypen vom Schichttyp laden (sonst vom Ort)"
+
+msgid "schedule.minutes-before"
+msgstr "Minuten vor Talk beginn hinzufügen"
+
+msgid "schedule.minutes-after"
+msgstr "Minuten nach Talk ende hinzufügen"
+
+msgid "schedule.for_locations"
+msgstr "Für Orte"
+
+msgid "schedule.import.request_error"
+msgstr "Konnte Programm nicht laden."
+
+msgid "schedule.import.locations.add"
+msgstr "Neue Orte"
+
+msgid "schedule.import.shifts.add"
+msgstr "Neue Schichten"
+
+msgid "schedule.import.shifts.update"
+msgstr "Zu aktualisierende Schichten"
+
+msgid "schedule.import.shifts.delete"
+msgstr "Zu löschende Schichten"
+
+msgid "schedule.import.shift.dates"
+msgstr "Zeit"
+
+msgid "schedule.import.shift.type"
+msgstr "Typ"
+
+msgid "schedule.import.shift.location"
+msgstr "Ort"
+
+msgid "news.title"
+msgstr "News"
+
+msgid "news.title.meetings"
+msgstr "Treffen"
+
+msgid "news.add"
+msgstr "+"
+
+msgid "news.is_meeting"
+msgstr "[Treffen]"
+
+msgid "news.edit.is_highlighted"
+msgstr "Hervorgehoben"
+
+msgid "news.read_more"
+msgstr "Weiterlesen"
+
+msgid "news.updated"
+msgstr "Aktualisiert"
+
+msgid "news.comments"
+msgstr "Kommentare"
+
+msgid "news.comments.new"
+msgstr "Neuer Kommentar"
+
+msgid "news.comments.message"
+msgstr "Nachricht"
+
+msgid "news.edit.edit"
+msgstr "News bearbeiten"
+
+msgid "news.edit.add"
+msgstr "News erstellen"
+
+msgid "news.edit.subject"
+msgstr "Betreff"
+
+msgid "news.edit.is_meeting"
+msgstr "Treffen"
+
+msgid "news.edit.is_pinned"
+msgstr "Oben anpinnen"
+
+msgid "news.edit.message"
+msgstr "Nachricht"
+
+msgid "news.edit.hint"
+msgstr "Du kannst Markdown und den [more] Tag benutzen"
+
+msgid "news.delete.title"
+msgstr "News \"%s\" löschen"
+
+msgid "news.comments.delete.title"
+msgstr "Kommentar \"%s\" löschen"
+
+msgid "notification.news.updated.introduction"
+msgstr "Die News \"%1$s\" wurde aktualisiert"
+
+msgid "notification.news.updated.text"
+msgstr "Du kannst sie dir unter %3$s anschauen."
+
+msgid "form.search"
+msgstr "Suchen"
+
+msgid "log.log"
+msgstr "Logs"
+
+msgid "log.only_own"
+msgstr "Du siehst hier deine eigenen Logs. Die Logs anderer User können nur Bürokraten sehen."
+
+msgid "log.time"
+msgstr "Zeit"
+
+msgid "log.level"
+msgstr "Level"
+
+msgid "log.message"
+msgstr "Nachricht"
+
+msgid "settings.settings"
+msgstr "Einstellungen"
+
+msgid "settings.profile.entry_required"
+msgstr "Pflichtfeld"
+
+msgid "general.nick"
+msgstr "Nickname"
+
+msgid "settings.profile.nick.already-taken"
+msgstr "Der Nickname ist bereits vergeben."
+
+msgid "settings.profile.pronoun"
+msgstr "Pronomen"
+
+msgid "settings.profile.pronoun.info"
+msgstr "Wird auf deiner Profilseite und in Critterlisten angezeigt."
+
+msgid "settings.profile.firstname"
+msgstr "Vorname"
+
+msgid "settings.profile.lastname"
+msgstr "Nachname"
+
+msgid "settings.profile.planned_arrival_date"
+msgstr "Geplanter Ankunftstag"
+
+msgid "settings.profile.planned_departure_date"
+msgstr "Geplanter Abreisetag"
+
+msgid "settings.profile.mobile"
+msgstr "Handy"
+
+msgid "settings.profile.mobile_show"
+msgstr "Mache meine Handynummer für andere Benutzer sichtbar."
+
+msgid "settings.profile.email-preferences"
+msgstr "E-Mail Einstellungen"
+
+msgid "general.email"
+msgstr "E-Mail"
+
+msgid "settings.profile.email.already-taken"
+msgstr "Diese E-Mail-Adresse ist bereits vergeben."
+
+msgid "settings.profile.email_shiftinfo"
+msgstr "Das %s darf mir E-Mails senden (z.B. wenn sich meine Schichten ändern)."
+
+msgid "settings.profile.email_news"
+msgstr "Benachrichtige mich bei neuen News."
+
+msgid "settings.profile.email_messages"
+msgstr "Benachrichtige mich bei neuen privaten Nachrichten."
+
+msgid "settings.profile.email_by_human_allowed"
+msgstr "Erlaube Info Desk-Crittern mich per E-Mail zu kontaktieren."
+
+msgid "settings.profile.email_goodie"
+msgstr "Um gegebenenfalls Voucher für das nächste gleichartige Event zu erhalten stimme ich zu, "
+"dass mein Nickname, E-Mail-Adresse und geleistete Arbeit solange gespeichert werden."
+
+msgid "settings.profile.email_tshirt"
+msgstr "Um gegebenenfalls Voucher für das nächste gleichartige Event zu erhalten stimme ich zu, "
+"dass mein Nickname, E-Mail-Adresse, geleistete Arbeit und T-Shirt-Größe solange gespeichert werden."
+
+msgid "settings.profile.privacy"
+msgstr "Dies kann jederzeit durch eine E-Mail an <a href=\"mailto:%s\">%1$s</a> widerrufen werden."
+
+msgid "settings.profile.shirt_size"
+msgstr "T-Shirt-Größe"
+
+msgid "settings.profile.shirt_size.hint"
+msgstr "Ein straight-cut T-Shirt hat breite Schultern und einen fast quadratischen Körper. "
+"Ein fitted-cut (tailliertes) T-Shirt hat eine geschwungene Seitennaht, die an der Taille schmaler "
+"ist und einen größeren Brust- sowie Hüft-Umfang hat. "
+"Normalerweise fallen fitted-cut (taillierte) T-Shirts kleiner aus als straight-cut T-Shirts in der gleichen Größe, "
+"außerdem sind die Größen von Marke zu Marke unterscheiden."
+
+msgid "settings.profile.shirt.link"
+msgstr "Mehr Informationen"
+
+msgid "settings.profile.angeltypes.info"
+msgstr "Du kannst deine Crittertypen <a href=\"%s\">auf der Crittertypen-Seite</a> verwalten."
+
+msgid "settings.password"
+msgstr "Passwort"
+
+msgid "settings.password.info"
+msgstr "Hier kannst Du Dein Passwort ändern."
+
+msgid "settings.password.confirmation-does-not-match"
+msgstr "Passwort und Passwortwiederholung stimmen nicht überein."
+
+msgid "settings.password.password"
+msgstr "Altes Passwort"
+
+msgid "settings.password.new_password"
+msgstr "Neues Passwort"
+
+msgid "settings.password.new_password2"
+msgstr "Passwort wiederholen"
+
+msgid "settings.password.success"
+msgstr "Passwort wurde erfolgreich geändert."
+
+msgid "settings.sessions"
+msgstr "Sitzungen"
+
+msgid "settings.sessions.info"
+msgstr "Hier kannst Du deine Bowser-Sitzungen sehen und löschen."
+
+msgid "settings.sessions.current"
+msgstr "Aktuelle Sitzung"
+
+msgid "settings.sessions.id"
+msgstr "Sitzungs-ID"
+
+msgid "settings.sessions.last_activity"
+msgstr "Zuletzt verwendet"
+
+msgid "settings.theme"
+msgstr "Theme"
+
+msgid "settings.theme.info"
+msgstr "Hier kannst Du Dein Theme ändern."
+
+msgid "settings.theme.success"
+msgstr "Theme wurde erfolgreich geändert."
+
+msgid "settings.certificates"
+msgstr "Zertifikate"
+
+msgid "settings.certificates.info"
+msgstr "Diese Informationen sind nur für Supporter und Admins sichtbar."
+
+msgid "settings.certificates.title.ifsg"
+msgstr "Gesundheitsbelehrungen"
+
+msgid "settings.certificates.driving_license"
+msgstr "Führerschein"
+
+msgid "settings.certificates.has_car"
+msgstr ""
+"Ich habe mein eigenes Auto dabei und möchte es zum Fahren für das Event "
+"verwenden (Du wirst für Spritkosten entschädigt)"
+
+msgid "settings.certificates.drive_car"
+msgstr "Auto"
+
+msgid "settings.certificates.drive_3_5t"
+msgstr "3,5t Transporter"
+
+msgid "settings.certificates.drive_7_5t"
+msgstr "7,5t LKW"
+
+msgid "settings.certificates.drive_12t"
+msgstr "12t LKW"
+
+msgid "settings.certificates.drive_forklift"
+msgstr "Gabelstapler"
+
+msgid "settings.certificates.ifsg_light"
+msgstr "Ich wurde vor Ort nach IfSG §43 (Frikadellendiplom light) belehrt."
+
+msgid "settings.certificates.ifsg_light_admin"
+msgstr "Wurde vor Ort nach IfSG §43 (Frikadellendiplom light) belehrt."
+
+msgid "settings.certificates.ifsg"
+msgstr "Ich habe eine Belehrung nach §43 IfSG (Frikadellendiplom) bei meinem Gesundheitsamt "
+"erhalten und innerhalb von 3 Monaten die Zweitbelehrung durch uns oder meinen Arbeitgeber/Koch/Verein bekommen. "
+"Zusätzlich ist die Zweitbelehrung nicht älter als zwei Jahre."
+
+msgid "settings.certificates.ifsg_admin"
+msgstr "Hat eine Belehrung nach §43 IfSG (Frikadellendiplom) vom Gesundheitsamt "
+"erhalten und innerhalb von 3 Monaten die Zweitbelehrung durch uns oder einen Arbeitgeber/Koch/Verein bekommen. "
+"Zusätzlich ist die Zweitbelehrung nicht älter als zwei Jahre."
+
+msgid "settings.certificates.confirmed"
+msgstr "Zertifikat bestätigt"
+
+msgid "settings.certificates.ifsg_confirmed.hint"
+msgstr "Deine Gesundheitsbelehrung wurde bestätigt, du kannst deine Angaben nicht mehr selber ändern."
+
+msgid "settings.certificates.drive_confirmed.hint"
+msgstr "Dein Führerschein wurde bestätigt, du kannst deine Angaben nicht mehr selber ändern."
+
+msgid "settings.certificates.confirmation.info"
+msgstr "Du hast persönlich überprüft, dass die Zertifizierung / Bescheinigung den Anforderungen genügt."
+
+msgid "settings.certificates.success"
+msgstr "Zertifikate wurden erfolgreich aktualisiert."
+
+msgid "angeltype.ifsg.required"
+msgstr "Benötigt eine Gesundheitsbelehrung"
+
+msgid "ifsg.certificate"
+msgstr "Gesundheitsbelehrung"
+
+msgid "ifsg.certificate_light"
+msgstr "Gesundheitsbelehrung vor Ort"
+
+msgid "angeltype.ifsg.own"
+msgstr "Meine Gesundheitsbelehrung"
+
+msgid "angeltype.ifsg.required.info"
+msgstr "Dieser Crittertyp benötigt eine Gesundheitsbelehrung. Bitte trage deine Gesundheitsbelehrung ein!"
+
+msgid "angeltype.ifsg.required.info.here"
+msgstr "Dieser Crittertyp benötigt eine Gesundheitsbelehrung. "
+"Bitte trage deine Gesundheitsbelehrung hier ein: %s"
+
+msgid "angeltype.driving_license.required.info.here"
+msgstr ""
+"Du bist einem Crittertypen beigetreten, der Führerschein-Infos benötigt. "
+"Bitte trage Deine Führerschein-Infos hier ein: %s."
+
+msgid "ifsg.info"
+msgstr "Gesundheitsbelehrungs-Infos"
+
+msgid "driving_license.info"
+msgstr "Führerschein-Infos"
+
+msgid "settings.language"
+msgstr "Sprache"
+
+msgid "settings.language.info"
+msgstr "Hier kannst Du Deine Sprache ändern."
+
+msgid "settings.language.success"
+msgstr "Sprache wurde erfolgreich geändert."
+
+msgid "settings.api"
+msgstr "API"
+
+msgid "settings.api.about"
+msgstr ""
+"Die API erlaubt es dir, über externe Programme, mit dem %s zu interagieren. "
+"Sie ist noch nicht vollständig, wir arbeiten aber daran sie zu erweitern.\n"
+"Der Einstiegspunkt der API befindet sich unter `%s` und ist in der [OpenAPI Spezifikation](%s) beschrieben."
+
+msgid "settings.api.about.warning"
+msgstr ""
+"Teile deinen persönlichen API Key mit niemandem, er erlaubt es deine persönlichen Daten einzusehen "
+"und Änderungen in deinem Namen durch zu führen!"
+
+msgid "settings.api.shifts_json_show"
+msgstr "JSON Schichten Export anzeigen"
+
+msgid "settings.api.ical_show"
+msgstr "iCal export anzeigen"
+
+msgid "settings.api.news_show"
+msgstr "News feeds anzeigen"
+
+msgid "settings.api.key_show"
+msgstr "API Key anzeigen"
+
+msgid "settings.api.key_reset"
+msgstr "API Key zurücksetzen"
+
+msgid "settings.api.key_reset_confirm"
+msgstr "Wenn du den API Key zurücksetzt, musst ihn in allen deinen Anwendungen aktualisieren."
+
+msgid "settings.oauth"
+msgstr "Single Sign-On"
+
+msgid "settings.oauth.identity-provider"
+msgstr "Login-Dienst"
+
+msgid "oauth.login"
+msgstr "Login mit OAuth"
+
+msgid "oauth.login-using-provider"
+msgstr "Login mit %s"
+
+msgid "form.connect"
+msgstr "Verbinden"
+
+msgid "form.disconnect"
+msgstr "Trennen"
+
+msgid "faq.faq"
+msgstr "FAQ"
+
+msgid "faq.questions_link"
+msgstr "Wenn deine Frage hier nicht beantwortet wurde, <a href=\"%s\">frag den Info Desk</a>."
+
+msgid "faq.edit"
+msgstr "FAQ Eintrag bearbeiten"
+
+msgid "faq.add"
+msgstr "FAQ Eintrag erstellen"
+
+msgid "faq.delete.title"
+msgstr "FAQ \"%s\" löschen"
+
+msgid "question.questions"
+msgstr "Fragen"
+
+msgid "question.admin"
+msgstr "Fragen beantworten"
+
+msgid "question.faq_link"
+msgstr "Hast du eine generelle Frage? Vielleicht ist diese schon in den <a href=\"%s\">FAQ</a> beantwortet."
+
+msgid "question.add"
+msgstr "Stelle eine Frage"
+
+msgid "question.edit"
+msgstr "Frage bearbeiten"
+
+msgid "question.question"
+msgstr "Frage"
+
+msgid "question.answer"
+msgstr "Antwort"
+
+msgid "question.delete.title"
+msgstr "Frage \"%s\" löschen"
+
+msgid "question.contact_options"
+msgstr "Weitere Kontaktmöglichkeiten: "
+
+msgid "user.edit.shirt"
+msgstr "T-Shirt bearbeiten"
+
+msgid "user.edit.goodie"
+msgstr "Goodie bearbeiten"
+
+msgid "form.shirt"
+msgstr "T-Shirt"
+
+msgid "user.shirt_size"
+msgstr "T-Shirt größe"
+
+msgid "user.active"
+msgstr "Aktiv"
+
+msgid "user.force_active"
+msgstr "Aktiv (erzwungen)"
+
+msgid "user.arrived"
+msgstr "Angekommen"
+
+msgid "user.arrive"
+msgstr "Ankommen"
+
+msgid "user.got_shirt"
+msgstr "T-Shirt bekommen"
+
+msgid "user.got_goodie"
+msgstr "Goodie bekommen"
+
+msgid "message.title"
+msgstr "Nachrichten"
+
+msgid "message.choose_angel"
+msgstr "Wähle einen Critter:"
+
+msgid "message.to_conversation"
+msgstr "Zur Konversation"
+
+msgid "message.message"
+msgstr "Nachricht"
+
+msgid "general.angel"
+msgstr "Critter"
+
+msgid "worklog.add"
+msgstr "Arbeitseinsatz hinzufügen"
+
+msgid "worklog.edit"
+msgstr "Arbeitseinsatz bearbeiten"
+
+msgid "worklog.date"
+msgstr "Einsatzdatum"
+
+msgid "worklog.hours"
+msgstr "Arbeitsstunden"
+
+msgid "worklog.comment"
+msgstr "Kommentar"
+
+msgid "worklog.delete"
+msgstr "Arbeitseinsatz löschen"
+
+msgid "worklog.delete.info"
+msgstr "Möchtest du den Arbeitseinsatz von %s wirklich löschen?"
+
+msgid "angeltypes.angeltypes"
+msgstr "Crittertypen"
+
+msgid "angeltypes.about"
+msgstr "Teams-/Aufgabenbeschreibung"
+
+msgid "angeltypes.about.text"
+msgstr "Hier findest Du die Liste der Teams und ihrer Aufgaben. Wenn Du weitere Fragen hast, schaue in den FAQ nach."
+
+msgid "angeltypes.restricted.hint"
+msgstr "Dieser Crittertyp benötigt eine Einweisung bei einem Einführungstreffen. "
+"Weitere Informationen findest du möglicherweise in der Beschreibung."
+
+msgid "angeltypes.can-change-later"
+msgstr "Du kannst Deine Auswahl später in den Einstellungen ändern."
+
+msgid "angeltypes.hide_on_shift_view"
+msgstr "Auf Schicht-Ansicht ausblenden"
+
+msgid "angeltypes.hide_on_shift_view.info"
+msgstr "Wenn ausgewählt, können nur Admins und Mitglieder des Crittertyps auf der "
+"Schicht Seite die Filteroption für diesen Crittertyp sehen."
+
+msgid "location.location"
+msgstr "Ort"
+
+msgid "location.locations"
+msgstr "Orte"
+
+msgid "location.map_url"
+msgstr "Karte"
+
+msgid "location.required_angels"
+msgstr "Benötigte Critter (bei Fahrplan import)"
+
+msgid "location.map_url.info"
+msgstr "Die Karte wird auf der Ort-Seite als iframe eingebettet."
+
+msgid "location.create.title"
+msgstr "Ort erstellen"
+
+msgid "location.edit.title"
+msgstr "Ort bearbeiten"
+
+msgid "location.delete.title"
+msgstr "Ort \"%s\" löschen"
+
+msgid "location.delete.double_confirm"
+msgstr "Der Ort hat noch %d zugewiesene Schichten. "
+"Bist du sicher, dass du den Ort löschen willst?"
+
+msgid "shifttype.shifttypes"
+msgstr "Schichttypen"
+
+msgid "shifttype.edit.title"
+msgstr "Schichttyp bearbeiten"
+
+msgid "shifttype.create.title"
+msgstr "Schichttyp erstellen"
+
+msgid "shifttype.delete.title"
+msgstr "Schichttyp \"%s\" löschen"
+
+msgid "shifttype.required_angels"
+msgstr "Benötigte Critter (bei Fahrplan import)"
+
+msgid "event.day"
+msgstr "Tag %1$d"
+
+msgid "dashboard.day"
+msgstr "Tag"
+
+msgid "registration.title"
+msgstr "Critter-Registrierung"
+
+msgid "registration.login_data"
+msgstr "Anmeldedaten"
+
+msgid "registration.event_data"
+msgstr "Eventdaten"
+
+msgid "registration.what_todo"
+msgstr "Was möchtest Du machen?"
+
+msgid "registration.register"
+msgstr "Registrieren"
+
+msgid "confirmation.delete"
+msgstr "Möchtest du es wirklich löschen?"
+
+msgid "general.id"
+msgstr "ID"
+
+msgid "general.user"
+msgstr "Benutzer"
+
+msgid "general.count"
+msgstr "Anzahl"
+
+msgid "general.created_at"
+msgstr "Erstellt am"
+
+msgid "shifts.history"
+msgstr "Schichten Historie"
+
+msgid "shifts.history.schedule"
+msgstr "Programm: %s"
+
+msgid "shifts.history.delete_all.title"
+msgstr "%u Schichten löschen"
+
+msgid "shifts.start"
+msgstr "Start"
+
+msgid "shifts.end"
+msgstr "Ende"
+
+msgid "user.info"
+msgstr "Benutzer Info"
+
+msgid "user.info.hint"
+msgstr ""
+"Wird auf der Benutzer Seite für Schichtkoordinatoren und Admins angezeigt. "
+"Wenn ein Critter nicht als angekommen markiert ist, "
+"entfernt eine Benutzer Info die nicht-angekommen Nachricht im Systemmenü des Critters."
+
+msgid "user_info.not_arrived_hint"
+msgstr "Wenn du dich für Schichten eintragen willst, komm gerne beim Info Desk vorbei."
+
+msgid "design.title"
+msgstr "Design"
+
+msgid "notification.shift.updated.introduction"
+msgstr "Eine deiner Schichten wurde aktualisiert:"
+
+msgid "notification.shift.updated.type"
+msgstr "Schichttyp wurde von %s in %s geändert"
+
+msgid "notification.shift.updated.title"
+msgstr "Schicht Titel wurde von %s in %s geändert"
+
+msgid "notification.shift.updated.description"
+msgstr "Schicht Beschreibung wurde geändert"
+
+msgid "notification.shift.updated.start"
+msgstr "Schicht Start wurde von %s zu %s geändert"
+
+msgid "notification.shift.updated.end"
+msgstr "Schicht Ende wurde von %s zu %s geändert"
+
+msgid "notification.shift.updated.location"
+msgstr "Schicht Ort wurde von %s nach %s verschoben"
+
+msgid "notification.shift.updated.shift"
+msgstr "Die aktualisierte Schicht:"
+
+msgid "admin_shifts.no_locations"
+msgstr "Es wurde noch kein Ort erstellt. Ohne können keine Schichten erstellt werden."
+
+msgid "admin_shifts.no_shifttypes"
+msgstr "Es wurde noch kein Schichttyp erstellt. Ohne können keine Schichten erstellt werden."
+
+msgid "admin_shifts.no_angeltypes"
+msgstr "Es wurde noch kein Crittertyp erstellt. Ohne können keine Schichten erstellt werden."
+
+msgid "shift.sign_out.hint"
+msgstr "Du kannst dich bis %s Stunden vor dem Start der Schicht austragen. "
+"Wenn du nicht zu deiner Schicht kommen kannst, lass dich vom Info Desk austragen."
+
+msgid "Password reset in progress"
+msgstr "Passwort zurücksetzen aktiv"
+
+msgid "freeload.info.goodie"
+msgstr "Du warst bei dieser Schicht nicht anwesend. "
+"Die doppelte Länge der Schicht wurde von deinem %s abgezogen. "
+"Bitte wende dich bei Fragen an den Info Desk."
+
+msgid "freeload.info"
+msgstr "Du warst bei dieser Schicht nicht anwesend. "
+"Bitte wende dich bei Fragen an den Info Desk."
+
+msgid "freeload.freeloader.info"
+msgstr ""
+"Du warst bei mindestens %s Schichten nicht anwesend. Deshalb ist die Schicht-Registrierung "
+"gesperrt. Bitte gehe zum Info Desk um wieder entsperrt zu werden."
+
+msgid "freeload.freeloaded.info.goodie"
+msgstr ""
+"War ein Critter bei einer Schicht nicht anwesend, "
+"wird die doppelte Länge der Schicht von dem %s abgezogen. "
+"Bei %s geschwänzten Schichten wird die Schicht-Registration für den Critter gesperrt."
+
+msgid "freeload.freeloaded.info"
+msgstr ""
+"Der Critter war bei einer Schicht nicht anwesend. "
+"Bei %s geschwänzten Schichten wird die Schicht-Registration für den Critter gesperrt."
+
+msgid "config.config"
+msgstr "Konfiguration"
+
+msgid "config.edit.success"
+msgstr "Konfiguration erfolgreich angepasst"
+
+msgid "Add more critters"
+msgstr "Weitere Critter hinzufügen"
+
+msgid "validation.title.required"
+msgstr "Title is required"
+
+msgid "validation.text.required"
+msgstr "Text is required"
+
+msgid "question.edit.locked"
+msgstr "Diese Frage wird schon von einem anderen Benutzer bearbeitet."
+
+msgid "general.badge_number"
+msgstr "Badge Number"
+
+msgid "form.badge_number.admin"
+msgstr "Event Badge Number"
+
+msgid "settings.profile.badge_number"
+msgstr "Badge Number"
+
+msgid "badge_number.reset_info"
+msgstr "You can manually set/update the badge number"
+
+msgid "form.badge_number.success"
+msgstr "Badge information retrieved"
+
+msgid "general.profile.badge_number"
+msgstr "Badge Nr."
+
+msgid "settings.profile.badge_number_info"
+msgstr "Use the button to automatically retrieve your Badge ID"
+
+msgid "settings.profile.badge_number_update"
+msgstr "Update"
+
+msgid "Mon"
+msgstr "Mo"
+
+msgid "Tue"
+msgstr "Di"
+
+msgid "Wed"
+msgstr "Mi"
+
+msgid "Thu"
+msgstr "Do"
+
+msgid "Fri"
+msgstr "Fr"
+
+msgid "Sat"
+msgstr "Sa"
+
+msgid "Sun"
+msgstr "So"
+
+# Certifications / Trainings Management
+msgid "certifications.title"
+msgstr "Zertifikate"
+
+msgid "certifications.create.title"
+msgstr "Zertifikat erstellen"
+
+msgid "certifications.create.first"
+msgstr "Erstes Zertifikat erstellen"
+
+msgid "certifications.edit.title"
+msgstr "Zertifikat bearbeiten"
+
+msgid "certifications.filter.title"
+msgstr "Filtern & Suchen"
+
+msgid "certifications.filter.status"
+msgstr "Status"
+
+msgid "certifications.filter.validity"
+msgstr "Gültigkeitstyp"
+
+msgid "certifications.filter.self_confirmation"
+msgstr "Selbstbestätigung"
+
+msgid "certifications.search.placeholder"
+msgstr "Suche nach Name, Beschreibung oder Ansprechpartner..."
+
+msgid "certifications.active"
+msgstr "Aktiv"
+
+msgid "certifications.inactive"
+msgstr "Inaktiv"
+
+msgid "certifications.perpetual"
+msgstr "Dauerhaft"
+
+msgid "certifications.timed"
+msgstr "Zeitlich begrenzt"
+
+msgid "certifications.self_confirmable"
+msgstr "Selbstbestätigbar"
+
+msgid "certifications.not_self_confirmable"
+msgstr "Nicht selbstbestätigbar"
+
+msgid "certifications.results.showing"
+msgstr "Zeige {from} bis {to} von {total} Zertifikaten"
+
+msgid "certifications.results.filtered"
+msgstr "Gefilterte Ergebnisse angezeigt"
+
+msgid "certifications.title_field"
+msgstr "Titel"
+
+msgid "certifications.contact_person"
+msgstr "Ansprechpartner"
+
+msgid "certifications.contact_email"
+msgstr "Kontakt-E-Mail"
+
+msgid "certifications.validity"
+msgstr "Gültigkeit"
+
+msgid "certifications.status"
+msgstr "Status"
+
+msgid "certifications.critters_count"
+msgstr "Critter"
+
+msgid "certifications.created_at"
+msgstr "Erstellt"
+
+msgid "certifications.updated_at"
+msgstr "Aktualisiert"
+
+msgid "certifications.details"
+msgstr "Zertifikat-Details"
+
+msgid "certifications.description"
+msgstr "Beschreibung"
+
+msgid "certifications.location"
+msgstr "Ort"
+
+msgid "certifications.self_confirmation"
+msgstr "Selbstbestätigung"
+
+msgid "certifications.valid_for_days"
+msgstr "{days} Tage"
+
+msgid "certifications.back_to_list"
+msgstr "Zurück zu Zertifikaten"
+
+msgid "certifications.deactivate"
+msgstr "Deaktivieren"
+
+msgid "certifications.reactivate"
+msgstr "Reaktivieren"
+
+msgid "certifications.deactivate.confirm"
+msgstr "Sind Sie sicher, dass Sie das Zertifikat '{0}' deaktivieren möchten?"
+
+msgid "certifications.more_actions"
+msgstr "Weitere Aktionen"
+
+msgid "certifications.mass_revoke"
+msgstr "Massenwiderruf"
+
+msgid "certifications.mass_revoke.confirm"
+msgstr "Sind Sie sicher, dass Sie das Zertifikat '{0}' von allen Benutzern widerrufen möchten?"
+
+msgid "certifications.delete.confirm"
+msgstr "Sind Sie sicher, dass Sie das Zertifikat '{0}' löschen möchten? Dies kann nicht rückgängig gemacht werden."
+
+msgid "certifications.no_results.title"
+msgstr "Keine Zertifikate gefunden"
+
+msgid "certifications.no_results.filtered"
+msgstr "Keine Zertifikate entsprechen Ihren aktuellen Filtern. Versuchen Sie, Ihre Suchkriterien anzupassen."
+
+msgid "certifications.no_results.empty"
+msgstr "Es wurden noch keine Zertifikate erstellt."
+
+# User Certifications
+msgid "user_certifications.title"
+msgstr "Meine Zertifikate"
+
+msgid "user_certifications.manage"
+msgstr "Benutzer-Zertifikate verwalten"
+
+msgid "user_certifications.status.pending"
+msgstr "Ausstehend"
+
+msgid "user_certifications.status.approved"
+msgstr "Genehmigt"
+
+msgid "user_certifications.status.self_confirmed"
+msgstr "Selbstbestätigt"
+
+msgid "user_certifications.status.revoked"
+msgstr "Widerrufen"
+
+msgid "user_certifications.status.expired"
+msgstr "Abgelaufen"
+
+msgid "user_certifications.self_confirm"
+msgstr "Selbstbestätigen"
+
+msgid "user_certifications.date_completed"
+msgstr "Abschlussdatum"
+
+msgid "user_certifications.date_expires"
+msgstr "Läuft ab"
+
+msgid "user_certifications.expires_in"
+msgstr "Läuft in {days} Tagen ab"
+
+msgid "user_certifications.expired_since"
+msgstr "Vor {days} Tagen abgelaufen"
+
+msgid "user_certifications.never_expires"
+msgstr "Läuft nie ab"
+
+msgid "user_certifications.notes"
+msgstr "Notizen"
+
+msgid "user_certifications.certified_by"
+msgstr "Zertifiziert von"
+
+msgid "user_certifications.assign"
+msgstr "Zertifikat zuweisen"
+
+msgid "user_certifications.remove"
+msgstr "Zertifikat entfernen"
+
+msgid "user_certifications.bulk_actions"
+msgstr "Massenaktionen"
+
+# Form fields
+msgid "form.certification"
+msgstr "Zertifikat"
+
+msgid "form.certifications"
+msgstr "Zertifikate"
+
+msgid "form.validity_days"
+msgstr "Gültigkeitsdauer (Tage)"
+
+msgid "form.validity_months"
+msgstr "Gültigkeitsdauer (Monate)"
+
+msgid "form.allow_self_confirmation"
+msgstr "Selbstbestätigung erlauben"
+
+msgid "form.is_perpetual"
+msgstr "Dauerhaft (läuft nie ab)"
+
+msgid "form.is_active"
+msgstr "Aktiv"
+
+msgid "form.not_specified"
+msgstr "Nicht angegeben"
+
+# Pagination
+msgid "pagination.navigation"
+msgstr "Zertifikat-Seitennummerierung"
+
+msgid "pagination.previous"
+msgstr "Vorherige"
+
+msgid "pagination.next"
+msgstr "Nächste"
+
+# Notifications and messages
+msgid "certifications.created.success"
+msgstr "Zertifikat erfolgreich erstellt"
+
+msgid "certifications.updated.success"
+msgstr "Zertifikat erfolgreich aktualisiert"
+
+msgid "certifications.deleted.success"
+msgstr "Zertifikat erfolgreich gelöscht"
+
+msgid "certifications.assigned.success"
+msgstr "Zertifikat erfolgreich zugewiesen"
+
+msgid "certifications.removed.success"
+msgstr "Zertifikat erfolgreich entfernt"
+
+msgid "certifications.self_confirmed.success"
+msgstr "Zertifikat erfolgreich selbstbestätigt"
+
+msgid "certifications.mass_revoked.success"
+msgstr "Zertifikat von {count} Benutzern widerrufen"
+
+msgid "certifications.error.not_found"
+msgstr "Zertifikat nicht gefunden"
+
+msgid "certifications.error.already_assigned"
+msgstr "Benutzer hat dieses Zertifikat bereits"
+
+msgid "certifications.error.cannot_delete"
+msgstr "Zertifikat kann nicht gelöscht werden, da es Benutzern zugewiesen ist"
+
+msgid "certifications.error.self_confirmation_disabled"
+msgstr "Selbstbestätigung ist für dieses Zertifikat nicht erlaubt"
+
+msgid "certifications.error.permission_denied"
+msgstr "Sie haben keine Berechtigung, diese Aktion durchzuführen"
+
+# Additional certification keys
+msgid "certifications.allow_self_confirmation"
+msgstr "Selbstbestätigung erlauben"
+
+msgid "certifications.allow_self_confirmation.help"
+msgstr "Wenn aktiviert, können Benutzer ihr eigenes Zertifikat ohne Administrator-Genehmigung bestätigen"
+
+msgid "certifications.approve"
+msgstr "Genehmigen"
+
+msgid "certifications.approved_critters"
+msgstr "Genehmigte Critter"
+
+msgid "certifications.basic_information"
+msgstr "Grundinformationen"
+
+msgid "certifications.common_periods"
+msgstr "Häufige Gültigkeitszeiträume"
+
+msgid "certifications.contact_email.help"
+msgstr "E-Mail-Adresse für Fragen zu diesem Zertifikat"
+
+msgid "certifications.contact_information"
+msgstr "Kontaktinformationen"
+
+msgid "certifications.contact_person.help"
+msgstr "Name der für dieses Zertifikat verantwortlichen Person"
+
+msgid "certifications.create.description"
+msgstr "Erstellen Sie ein neues Zertifikat zur Verfolgung von Schulungen und Qualifikationen"
+
+msgid "certifications.create.submit"
+msgstr "Zertifikat erstellen"
+
+msgid "certifications.created"
+msgstr "Erstellt"
+
+msgid "certifications.critters"
+msgstr "Critter"
+
+msgid "certifications.current_status"
+msgstr "Aktueller Status"
+
+msgid "certifications.custom_validity_days"
+msgstr "Benutzerdefinierte Gültigkeitstage"
+
+msgid "certifications.custom_validity_days.help"
+msgstr "Geben Sie eine benutzerdefinierte Anzahl von Tagen ein, für die dieses Zertifikat gültig ist"
+
+msgid "certifications.date_certified"
+msgstr "Zertifizierungsdatum"
+
+msgid "certifications.description.help"
+msgstr "Detaillierte Beschreibung dessen, was dieses Zertifikat abdeckt"
+
+msgid "certifications.edit.description"
+msgstr "Bearbeiten Sie die Details dieses Zertifikats"
+
+msgid "certifications.expires_at"
+msgstr "Läuft ab am"
+
+msgid "certifications.help.contact_section"
+msgstr "Kontaktinformationen"
+
+msgid "certifications.help.contact_text"
+msgstr "Geben Sie Kontaktdaten für Benutzer an, die Fragen zu diesem Zertifikat haben"
+
+msgid "certifications.help.description_section"
+msgstr "Beschreibung"
+
+msgid "certifications.help.description_text"
+msgstr "Geben Sie eine klare Beschreibung dessen an, was dieses Zertifikat abdeckt und welche Anforderungen gelten"
+
+msgid "certifications.help.perpetual_text"
+msgstr "Dauerhafte Zertifikate laufen nie ab und bleiben unbegrenzt gültig"
+
+msgid "certifications.help.self_confirmation_text"
+msgstr "Wenn aktiviert, können Benutzer ihr eigenes Zertifikat ohne Administrator-Genehmigung bestätigen"
+
+msgid "certifications.help.timed_text"
+msgstr "Zeitlich begrenzte Zertifikate laufen nach einem bestimmten Zeitraum ab und müssen erneuert werden"
+
+msgid "certifications.help.title_section"
+msgstr "Titel"
+
+msgid "certifications.help.title_text"
+msgstr "Wählen Sie einen klaren, beschreibenden Namen für dieses Zertifikat"
+
+msgid "certifications.help.validity_section"
+msgstr "Gültigkeitseinstellungen"
+
+msgid "certifications.is_active"
+msgstr "Aktiv"
+
+msgid "certifications.is_active.help"
+msgstr "Nur aktive Zertifikate können Benutzern zugewiesen werden"
+
+msgid "certifications.is_perpetual"
+msgstr "Dauerhaft (läuft nie ab)"
+
+msgid "certifications.is_perpetual.help"
+msgstr "Dauerhafte Zertifikate laufen nie ab und bleiben unbegrenzt gültig"
+
+msgid "certifications.location.help"
+msgstr "Physischer Ort, an dem diese Zertifikatschulung stattfindet"
+
+msgid "certifications.no_critters_with_status"
+msgstr "Keine Critter mit diesem Status"
+
+msgid "certifications.no_expiry"
+msgstr "Kein Ablaufdatum"
+
+msgid "certifications.notes"
+msgstr "Notizen"
+
+msgid "certifications.quick_reference"
+msgstr "Schnellreferenz"
+
+msgid "certifications.remove"
+msgstr "Entfernen"
+
+msgid "certifications.remove.confirm"
+msgstr "Sind Sie sicher, dass Sie dieses Zertifikat entfernen möchten?"
+
+msgid "certifications.restore"
+msgstr "Wiederherstellen"
+
+msgid "certifications.revoke"
+msgstr "Widerrufen"
+
+msgid "certifications.revoke.confirm"
+msgstr "Sind Sie sicher, dass Sie dieses Zertifikat widerrufen möchten?"
+
+msgid "certifications.statistics"
+msgstr "Statistiken"
+
+msgid "certifications.status.approved"
+msgstr "Genehmigt"
+
+msgid "certifications.status.expired"
+msgstr "Abgelaufen"
+
+msgid "certifications.status.pending"
+msgstr "Ausstehend"
+
+msgid "certifications.status.revoked"
+msgstr "Widerrufen"
+
+msgid "certifications.status.self_confirmed"
+msgstr "Selbstbestätigt"
+
+msgid "certifications.title.help"
+msgstr "Wählen Sie einen klaren, beschreibenden Namen für dieses Zertifikat"
+
+msgid "certifications.total_critters"
+msgstr "Gesamte Critter"
+
+msgid "certifications.validity_period_days"
+msgstr "Gültigkeitsdauer (Tage)"
+
+msgid "certifications.validity_period_days.help"
+msgstr "Anzahl der Tage, für die dieses Zertifikat gültig bleibt"
+
+msgid "certifications.validity_period.30_days"
+msgstr "30 Tage (1 Monat)"
+
+msgid "certifications.validity_period.90_days"
+msgstr "90 Tage (3 Monate)"
+
+msgid "certifications.validity_period.180_days"
+msgstr "180 Tage (6 Monate)"
+
+msgid "certifications.validity_period.365_days"
+msgstr "365 Tage (1 Jahr)"
+
+msgid "certifications.validity_period.730_days"
+msgstr "730 Tage (2 Jahre)"
+
+msgid "certifications.validity_period.1095_days"
+msgstr "1095 Tage (3 Jahre)"
+
+msgid "certifications.validity_period.custom"
+msgstr "Benutzerdefinierter Zeitraum"
+
+msgid "certifications.validity_period.select"
+msgstr "Gültigkeitszeitraum auswählen"
+
+msgid "certifications.validity_settings"
+msgstr "Gültigkeitseinstellungen"
+
+msgid "certifications.view_details"
+msgstr "Details anzeigen"
+
+msgid "certifications.view_user_certs"
+msgstr "Benutzerzertifikate anzeigen"
+
+# Additional form keys
+msgid "form.actions"
+msgstr "Aktionen"
+
+msgid "form.clear"
+msgstr "Löschen"
+
+msgid "form.create"
+msgstr "Erstellen"
+
+msgid "form.days"
+msgstr "Tage"
+
+msgid "form.help"
+msgstr "Hilfe"
+
+msgid "form.save_changes"
+msgstr "Änderungen speichern"
+
+msgid "form.select_all"
+msgstr "Alle auswählen"
+
+msgid "form.view"
+msgstr "Anzeigen"
+
+# Additional pagination keys
+msgid "pagination.showing"
+msgstr "Zeige"

@@ -31,6 +31,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property-read UserAngelType                $pivot
  * @property-read Collection|ShiftEntry[]      $shiftEntries
  * @property-read Collection|User[]            $userAngelTypes
+ * @property-read Collection|Certification[]   $requiredCertifications
  *
  * @method static QueryBuilder|AngelType[] whereId($value)
  * @method static QueryBuilder|AngelType[] whereName($value)
@@ -111,6 +112,14 @@ class AngelType extends BaseModel
             ->belongsToMany(User::class, 'user_angel_type')
             ->using(UserAngelType::class)
             ->withPivot(UserAngelType::getPivotAttributes());
+    }
+
+    public function requiredCertifications(): BelongsToMany
+    {
+        return $this
+            ->belongsToMany(Certification::class, 'certifications_angel_type')
+            ->using(CertificationAngelType::class)
+            ->withTimestamps();
     }
 
     public function hasContactInfo(): bool

@@ -503,3 +503,52 @@ h5 {
 }
 .is-valid { border: 1px solid rgba(23, 195, 206, 0.9) !important; }
 .is-invalid { border: 1px dashed rgba(217, 52, 52, 0.9) !important; }
+
+
+/* Visibility fix: enforce opaque backgrounds for buttons and dropdowns */
+/* Buttons */
+.btn-primary,
+.btn-secondary {
+  background-color: #2f2f2f !important;
+}
+.btn-primary:hover,
+.btn-secondary:hover {
+  background-color: #3a3a3a !important;
+}
+.btn-primary:active,
+.btn-secondary:active {
+  background-color: #333333 !important;
+}
+
+.btn-success {
+  background-color: #17c3ce !important;
+}
+.btn-success:hover { background-color: #14aeb9 !important; }
+.btn-success:active { background-color: #109aa4 !important; }
+
+.btn-info {
+  background-color: #35bdf6 !important;
+  color: #fff !important;
+}
+.btn-info:hover { background-color: #1faef0 !important; }
+.btn-info:active { background-color: #1a9bd6 !important; }
+
+.btn-danger {
+  background-color: #d93434 !important;
+  border-color: #d93434 !important;
+}
+.btn-danger:hover { background-color: #c22f2f !important; }
+.btn-danger:active { background-color: #b52929 !important; }
+
+/* Dropdowns */
+.dropdown-menu,
+.choices__list--dropdown,
+.choices__inner {
+  background-color: #2f2f2f !important;
+}
+.dropdown-item:hover,
+.dropdown-item:focus,
+.dropdown-item.active,
+.dropdown-item:active {
+  background-color: #3a3a3a !important;
+}

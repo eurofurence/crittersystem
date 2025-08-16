@@ -462,3 +462,52 @@ h5 {
 .card .btn {
   text-decoration: none;
 }
+
+
+/* Visibility fix: enforce opaque backgrounds for buttons and dropdowns */
+/* Buttons */
+.btn-primary,
+.btn-secondary {
+  background-color: #2f2f2f !important;
+}
+.btn-primary:hover,
+.btn-secondary:hover {
+  background-color: #3a3a3a !important;
+}
+.btn-primary:active,
+.btn-secondary:active {
+  background-color: #333333 !important;
+}
+
+.btn-success {
+  background-color: #00aa00 !important;
+}
+.btn-success:hover { background-color: #009600 !important; }
+.btn-success:active { background-color: #008800 !important; }
+
+.btn-info {
+  background-color: #c8c8c8 !important;
+  color: #000 !important;
+}
+.btn-info:hover { background-color: #bdbdbd !important; }
+.btn-info:active { background-color: #b3b3b3 !important; }
+
+.btn-danger {
+  background-color: #aa0000 !important;
+  border-color: #aa0000 !important;
+}
+.btn-danger:hover { background-color: #990000 !important; }
+.btn-danger:active { background-color: #8a0000 !important; }
+
+/* Dropdowns */
+.dropdown-menu,
+.choices__list--dropdown,
+.choices__inner {
+  background-color: #2f2f2f !important;
+}
+.dropdown-item:hover,
+.dropdown-item:focus,
+.dropdown-item.active,
+.dropdown-item:active {
+  background-color: #3a3a3a !important;
+}

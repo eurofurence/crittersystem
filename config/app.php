@@ -67,6 +67,7 @@ return [
         \Engelsystem\Middleware\SessionHandler::class,
 
         // Handle request
+        \Engelsystem\Middleware\CertificationPermissions::class,
         \Engelsystem\Middleware\RequestHandler::class,
     ],
 

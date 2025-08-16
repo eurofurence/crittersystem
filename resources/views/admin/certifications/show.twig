@@ -1,0 +1,466 @@
+{% extends 'layouts/app.twig' %}
+{% import 'macros/base.twig' as m %}
+{% import 'macros/form.twig' as f %}
+
+{% block title %}{{ certification.title }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {# Header with Navigation #}
+        <div class="d-flex justify-content-between align-items-start mb-4">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{ url('/admin/certifications') }}">{{ __('certifications.title') }}</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ certification.title }}</li>
+                    </ol>
+                </nav>
+
+                <h1 class="mb-0">
+                    {% if certification.is_active %}
+                        <span class="badge bg-success me-2">{{ m.icon('check-circle') }}</span>
+                    {% else %}
+                        <span class="badge bg-secondary me-2">{{ m.icon('x-circle') }}</span>
+                    {% endif %}
+                    {{ certification.title }}
+                </h1>
+
+                {% if certification.description %}
+                    <p class="text-muted mt-2">{{ certification.description }}</p>
+                {% endif %}
+            </div>
+
+            {# Action Buttons #}
+            {% if can('admin_certificates') or can('certificates.manage') %}
+                <div class="btn-group" role="group">
+                    <a href="{{ url('/admin/certifications/' ~ certification.uuid ~ '/edit') }}"
+                       class="btn btn-primary">
+                        {{ m.icon('pencil') }}
+                        {{ __('form.edit') }}
+                    </a>
+
+                    {% if certification.is_active %}
+                        <form method="post" action="{{ url('/admin/certifications/' ~ certification.uuid ~ '/deactivate') }}" class="d-inline">
+                            {{ csrf() }}
+                            <button type="submit"
+                                    class="btn btn-outline-warning"
+                                    onclick="return confirm('{{ __('certifications.deactivate.confirm', [certification.title|e]) }}')">
+                                {{ m.icon('pause-circle') }}
+                                {{ __('certifications.deactivate') }}
+                            </button>
+                        </form>
+                    {% else %}
+                        <form method="post" action="{{ url('/admin/certifications/' ~ certification.uuid ~ '/reactivate') }}" class="d-inline">
+                            {{ csrf() }}
+                            <button type="submit" class="btn btn-outline-success">
+                                {{ m.icon('play-circle') }}
+                                {{ __('certifications.reactivate') }}
+                            </button>
+                        </form>
+                    {% endif %}
+
+                    <div class="btn-group" role="group">
+                        <button type="button"
+                                class="btn btn-outline-danger dropdown-toggle"
+                                data-bs-toggle="dropdown">
+                            {{ __('certifications.more_actions') }}
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <form method="post" action="{{ url('/admin/certifications/' ~ certification.uuid ~ '/mass-revoke') }}" class="d-inline w-100">
+                                    {{ csrf() }}
+                                    <button type="submit"
+                                            class="dropdown-item text-warning"
+                                            onclick="return confirm('{{ __('certifications.mass_revoke.confirm', [certification.title|e]) }}')">
+                                        {{ m.icon('person-x') }}
+                                        {{ __('certifications.mass_revoke') }}
+                                    </button>
+                                </form>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="post" action="{{ url('/admin/certifications/' ~ certification.uuid ~ '/delete') }}" class="d-inline w-100">
+                                    {{ csrf() }}
+                                    {{ f.hidden('uuid', certification.uuid) }}
+                                    {{ f.hidden('delete', 'on') }}
+                                    <button type="submit"
+                                            class="dropdown-item text-danger"
+                                            onclick="return confirm('{{ __('certifications.delete.confirm', [certification.title|e]) }}')">
+                                        {{ m.icon('trash') }}
+                                        {{ __('form.delete') }}
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        {% include 'layouts/parts/messages.twig' %}
+
+        <div class="row">
+            {# Certification Details #}
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            {{ m.icon('info-circle') }}
+                            {{ __('certifications.details') }}
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="col-sm-5">{{ __('certifications.status') }}:</dt>
+                            <dd class="col-sm-7">
+                                {% if certification.is_active %}
+                                    <span class="badge bg-success">{{ __('certifications.active') }}</span>
+                                {% else %}
+                                    <span class="badge bg-danger">{{ __('certifications.inactive') }}</span>
+                                {% endif %}
+                            </dd>
+
+                            <dt class="col-sm-5">{{ __('certifications.validity') }}:</dt>
+                            <dd class="col-sm-7">
+                                {% if certification.is_perpetual %}
+                                    <span class="badge bg-info">
+                                        {{ m.icon('infinity') }}
+                                        {{ __('certifications.perpetual') }}
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-warning text-dark">
+                                        {{ m.icon('clock') }}
+                                        {{ __('certifications.valid_for_days', {'days': certification.validity_period_days}) }}
+                                    </span>
+                                {% endif %}
+                            </dd>
+
+                            <dt class="col-sm-5">{{ __('certifications.self_confirmation') }}:</dt>
+                            <dd class="col-sm-7">
+                                {% if certification.allow_self_confirmation %}
+                                    <span class="badge bg-primary">
+                                        {{ m.icon('person-check') }}
+                                        {{ __('certifications.self_confirmable') }}
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-secondary">
+                                        {{ m.icon('person-x') }}
+                                        {{ __('certifications.not_self_confirmable') }}
+                                    </span>
+                                {% endif %}
+                            </dd>
+
+                            {% if certification.contact_person %}
+                                <dt class="col-sm-5">{{ __('certifications.contact_person') }}:</dt>
+                                <dd class="col-sm-7">{{ certification.contact_person }}</dd>
+                            {% endif %}
+
+                            {% if certification.contact_email %}
+                                <dt class="col-sm-5">{{ __('certifications.contact_email') }}:</dt>
+                                <dd class="col-sm-7">
+                                    <a href="mailto:{{ certification.contact_email }}">
+                                        {{ m.icon('envelope') }}
+                                        {{ certification.contact_email }}
+                                    </a>
+                                </dd>
+                            {% endif %}
+
+                            {% if certification.location %}
+                                <dt class="col-sm-5">{{ __('certifications.location') }}:</dt>
+                                <dd class="col-sm-7">{{ certification.location }}</dd>
+                            {% endif %}
+
+                            <dt class="col-sm-5">{{ __('certifications.created_at') }}:</dt>
+                            <dd class="col-sm-7">
+                                <small class="text-muted">{{ certification.created_at|date('Y-m-d H:i:s') }}</small>
+                            </dd>
+
+                            {% if certification.updated_at != certification.created_at %}
+                                <dt class="col-sm-5">{{ __('certifications.updated_at') }}:</dt>
+                                <dd class="col-sm-7">
+                                    <small class="text-muted">{{ certification.updated_at|date('Y-m-d H:i:s') }}</small>
+                                </dd>
+                            {% endif %}
+                        </dl>
+                    </div>
+                </div>
+
+                {# Statistics Card #}
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            {{ m.icon('bar-chart') }}
+                            {{ __('certifications.statistics') }}
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <div class="border-end">
+                                    <h4 class="text-primary">{{ userCounts.total|default(0) }}</h4>
+                                    <small class="text-muted">{{ __('certifications.total_critters') }}</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <h4 class="text-success">{{ userCounts.approved|default(0) }}</h4>
+                                <small class="text-muted">{{ __('certifications.approved_critters') }}</small>
+                            </div>
+                        </div>
+
+                        <hr class="my-3">
+
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <div class="border-end">
+                                    <h6 class="text-warning">{{ userCounts.pending|default(0) }}</h6>
+                                    <small class="text-muted">{{ __('certifications.status.pending') }}</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="border-end">
+                                    <h6 class="text-info">{{ userCounts.self_confirmed|default(0) }}</h6>
+                                    <small class="text-muted">{{ __('certifications.status.self_confirmed') }}</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <h6 class="text-danger">{{ userCounts.revoked|default(0) }}</h6>
+                                <small class="text-muted">{{ __('certifications.status.revoked') }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# User Lists #}
+            <div class="col-lg-8">
+                {# Status Filter Tabs #}
+                <ul class="nav nav-tabs" id="statusTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="approved-tab" data-bs-toggle="tab" data-bs-target="#approved" type="button" role="tab">
+                            <span class="badge bg-success me-1">{{ userCounts.approved|default(0) }}</span>
+                            {{ __('certifications.status.approved') }}
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="self-confirmed-tab" data-bs-toggle="tab" data-bs-target="#self-confirmed" type="button" role="tab">
+                            <span class="badge bg-info me-1">{{ userCounts.self_confirmed|default(0) }}</span>
+                            {{ __('certifications.status.self_confirmed') }}
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending" type="button" role="tab">
+                            <span class="badge bg-warning me-1">{{ userCounts.pending|default(0) }}</span>
+                            {{ __('certifications.status.pending') }}
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="revoked-tab" data-bs-toggle="tab" data-bs-target="#revoked" type="button" role="tab">
+                            <span class="badge bg-danger me-1">{{ userCounts.revoked|default(0) }}</span>
+                            {{ __('certifications.status.revoked') }}
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="expired-tab" data-bs-toggle="tab" data-bs-target="#expired" type="button" role="tab">
+                            <span class="badge bg-secondary me-1">{{ userCounts.expired|default(0) }}</span>
+                            {{ __('certifications.status.expired') }}
+                        </button>
+                    </li>
+                </ul>
+
+                {# Tab Content #}
+                <div class="tab-content" id="statusTabContent">
+                    {# Approved Users #}
+                    <div class="tab-pane fade show active" id="approved" role="tabpanel">
+                        {{ _self.renderUserTable(usersByStatus.approved|default([]), 'approved', certification) }}
+                    </div>
+
+                    {# Self-Confirmed Users #}
+                    <div class="tab-pane fade" id="self-confirmed" role="tabpanel">
+                        {{ _self.renderUserTable(usersByStatus.self_confirmed|default([]), 'self_confirmed', certification) }}
+                    </div>
+
+                    {# Pending Users #}
+                    <div class="tab-pane fade" id="pending" role="tabpanel">
+                        {{ _self.renderUserTable(usersByStatus.pending|default([]), 'pending', certification) }}
+                    </div>
+
+                    {# Revoked Users #}
+                    <div class="tab-pane fade" id="revoked" role="tabpanel">
+                        {{ _self.renderUserTable(usersByStatus.revoked|default([]), 'revoked', certification) }}
+                    </div>
+
+                    {# Expired Users #}
+                    <div class="tab-pane fade" id="expired" role="tabpanel">
+                        {{ _self.renderUserTable(usersByStatus.expired|default([]), 'expired', certification) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{# Macro for rendering user tables #}
+{% macro renderUserTable(users, status, certification) %}
+    {% import 'macros/base.twig' as m %}
+    {% import 'macros/form.twig' as f %}
+
+    <div class="card mt-3">
+        <div class="card-body">
+            {% if users|length > 0 %}
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>{{ __('general.name') }}</th>
+                                <th>{{ __('certifications.date_certified') }}</th>
+                                {% if not certification.is_perpetual %}
+                                    <th>{{ __('certifications.expires_at') }}</th>
+                                {% endif %}
+                                <th>{{ __('certifications.notes') }}</th>
+                                {% if can('admin_certificates') or can('certificates.manage') %}
+                                    <th class="text-end">{{ __('form.actions') }}</th>
+                                {% endif %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for userCert in users %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% set statusClass = {
+                                                'approved': 'success',
+                                                'self_confirmed': 'info',
+                                                'pending': 'warning',
+                                                'revoked': 'danger',
+                                                'expired': 'secondary'
+                                            } %}
+                                            <span class="badge bg-{{ statusClass[status] }} me-2">
+                                                {{ __(('certifications.status.' ~ status)) }}
+                                            </span>
+                                            <div>
+                                                <strong>{{ userCert.user.name }}</strong>
+                                                {% if userCert.user.email %}
+                                                    <br>
+                                                    <small class="text-muted">{{ userCert.user.email }}</small>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% if userCert.date_certified %}
+                                            <small>{{ userCert.date_certified|date('Y-m-d H:i') }}</small>
+                                        {% else %}
+                                            <span class="text-muted">{{ __('form.not_specified') }}</span>
+                                        {% endif %}
+                                    </td>
+                                    {% if not certification.is_perpetual %}
+                                        <td>
+                                            {% if userCert.date_expires %}
+                                                <small class="{% if userCert.isExpired() %}text-danger{% elseif userCert.isExpiringSoon() %}text-warning{% endif %}">
+                                                    {{ userCert.date_expires|date('Y-m-d') }}
+                                                    {% if userCert.isExpired() %}
+                                                        {{ m.icon('exclamation-triangle', null, 'text-danger') }}
+                                                    {% elseif userCert.isExpiringSoon() %}
+                                                        {{ m.icon('clock', null, 'text-warning') }}
+                                                    {% endif %}
+                                                </small>
+                                            {% else %}
+                                                <span class="text-muted">{{ __('certifications.no_expiry') }}</span>
+                                            {% endif %}
+                                        </td>
+                                    {% endif %}
+                                    <td>
+                                        {% if userCert.notes %}
+                                            <small>{{ userCert.notes|slice(0, 50) }}{% if userCert.notes|length > 50 %}...{% endif %}</small>
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    {% if can('admin_certificates') or can('certificates.manage') %}
+                                        <td class="text-end">
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <a href="{{ url('/admin/user/' ~ userCert.user.id ~ '/certifications') }}"
+                                                   class="btn btn-outline-primary btn-sm"
+                                                   title="{{ __('certifications.view_user_certs') }}">
+                                                    {{ m.icon('person') }}
+                                                </a>
+
+                                                {% if status == 'pending' %}
+                                                    <form method="post" action="{{ url('/admin/user/' ~ userCert.user.id ~ '/certifications/' ~ userCert.id) }}" class="d-inline">
+                                                        {{ csrf() }}
+                                                        {{ f.hidden('_method', 'PUT') }}
+                                                        {{ f.hidden('status', 'approved') }}
+                                                        {{ f.hidden('checked', 'on') }}
+                                                        <button type="submit"
+                                                                class="btn btn-outline-success btn-sm"
+                                                                title="{{ __('certifications.approve') }}">
+                                                            {{ m.icon('check') }}
+                                                        </button>
+                                                    </form>
+                                                {% endif %}
+
+                                                {% if status in ['approved', 'self_confirmed'] %}
+                                                    <form method="post" action="{{ url('/admin/user/' ~ userCert.user.id ~ '/certifications/' ~ userCert.id) }}" class="d-inline">
+                                                        {{ csrf() }}
+                                                        {{ f.hidden('_method', 'PUT') }}
+                                                        {{ f.hidden('status', 'revoked') }}
+                                                        {{ f.hidden('checked', 'on') }}
+                                                        <button type="submit"
+                                                                class="btn btn-outline-warning btn-sm"
+                                                                title="{{ __('certifications.revoke') }}"
+                                                                onclick="return confirm('{{ __('certifications.revoke.confirm', [userCert.user.name|e]) }}')">
+                                                            {{ m.icon('x') }}
+                                                        </button>
+                                                    </form>
+                                                {% endif %}
+
+                                                {% if status == 'revoked' %}
+                                                    <form method="post" action="{{ url('/admin/user/' ~ userCert.user.id ~ '/certifications/' ~ userCert.id) }}" class="d-inline">
+                                                        {{ csrf() }}
+                                                        {{ f.hidden('_method', 'PUT') }}
+                                                        {{ f.hidden('status', 'approved') }}
+                                                        {{ f.hidden('checked', 'on') }}
+                                                        <button type="submit"
+                                                                class="btn btn-outline-success btn-sm"
+                                                                title="{{ __('certifications.restore') }}">
+                                                            {{ m.icon('arrow-clockwise') }}
+                                                        </button>
+                                                    </form>
+                                                {% endif %}
+
+                                                <form method="post" action="{{ url('/admin/user/' ~ userCert.user.id ~ '/certifications/' ~ userCert.id ~ '/delete') }}" class="d-inline">
+                                                    {{ csrf() }}
+                                                    {{ f.hidden('checked', 'on') }}
+                                                    <button type="submit"
+                                                            class="btn btn-outline-danger btn-sm"
+                                                            title="{{ __('certifications.remove') }}"
+                                                            onclick="return confirm('{{ __('certifications.remove.confirm', [userCert.user.name|e]) }}')">
+                                                        {{ m.icon('trash') }}
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-4">
+                    <div class="text-muted">
+                        {{ m.icon('inbox', 32) }}
+                        <p class="mt-2">{{ __('certifications.no_critters_with_status', {'status': __(('certifications.status.' ~ status))}) }}</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
+{% block scripts %}
+{{ parent() }}
+<script src="{{ asset('assets/certifications.js') }}"></script>
+{% endblock %}

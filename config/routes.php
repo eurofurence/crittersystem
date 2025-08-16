@@ -285,6 +285,64 @@ $route->addGroup(
             }
         );
 
+        // Certifications
+        $route->addGroup(
+            '/certifications',
+            function (RouteCollector $route): void {
+                // Main certification management
+                $route->get('', 'Admin\\CertificationsController@index');
+                $route->get('/create', 'Admin\\CertificationsController@create');
+                $route->post('', 'Admin\\CertificationsController@store');
+                $route->get('/{certification_uuid:[0-9a-f-]+}', 'Admin\\CertificationsController@show');
+                $route->get('/{certification_uuid:[0-9a-f-]+}/edit', 'Admin\\CertificationsController@edit');
+                $route->put('/{certification_uuid:[0-9a-f-]+}', 'Admin\\CertificationsController@update');
+                $route->delete('/{certification_uuid:[0-9a-f-]+}', 'Admin\\CertificationsController@destroy');
+                // Fallback for environments without method override DELETE
+                $route->post(
+                    '/{certification_uuid:[0-9a-f-]+}/delete',
+                    'Admin\\CertificationsController@destroy'
+                );
+
+                // Certification actions
+                $route->post(
+                    '/{certification_uuid:[0-9a-f-]+}/mass-revoke',
+                    'Admin\\CertificationsController@massRevoke'
+                );
+                $route->post(
+                    '/{certification_uuid:[0-9a-f-]+}/deactivate',
+                    'Admin\\CertificationsController@deactivate'
+                );
+                $route->post(
+                    '/{certification_uuid:[0-9a-f-]+}/reactivate',
+                    'Admin\\CertificationsController@reactivate'
+                );
+            }
+        );
+
+        // User Certification Management
+        $route->addGroup(
+            '/user-certifications',
+            function (RouteCollector $route): void {
+                $route->get('', 'UserCertificationsController@index');
+                $route->post('', 'UserCertificationsController@store');
+                $route->put('/{user_certification_id:\d+}', 'UserCertificationsController@update');
+                $route->delete('/{user_certification_id:\d+}', 'UserCertificationsController@destroy');
+                // Fallback for environments without method override DELETE
+                $route->post('/{user_certification_id:\d+}/delete', 'UserCertificationsController@destroy');
+
+                // Bulk operations
+                $route->post('/bulk', 'UserCertificationsController@bulk');
+                $route->post('/bulk-add', 'UserCertificationsController@bulkAdd');
+
+                // Application review (admin)
+                $route->post('/approve', 'UserCertificationsController@approveApplication');
+                $route->post('/reject', 'UserCertificationsController@rejectApplication');
+
+                // Notes
+                $route->post('/{user_certification_id:\d+}/note', 'UserCertificationsController@addNote');
+            }
+        );
+
         // User
         $route->addGroup(
             '/user/{user_id:\d+}',
@@ -314,6 +372,20 @@ $route->addGroup(
                         );
                     }
                 );
+
+                // User Certifications
+                $route->addGroup(
+                    '/certifications',
+                    function (RouteCollector $route): void {
+                        $route->get('', 'UserCertificationsController@userIndex');
+                        $route->post('', 'UserCertificationsController@userStore');
+                        $route->put('/{user_certification_id:\d+}', 'UserCertificationsController@userUpdate');
+                        $route->delete('/{user_certification_id:\d+}', 'UserCertificationsController@userDestroy');
+                        // Fallback for environments without method override DELETE
+                        $route->post('/{user_certification_id:\d+}/delete', 'UserCertificationsController@userDestroy');
+                        $route->post('/{user_certification_id:\d+}/note', 'UserCertificationsController@addUserNote');
+                    }
+                );
             }
         );
 
@@ -325,6 +397,22 @@ $route->addGroup(
                 $route->post('[/{news_id:\d+}]', 'Admin\\NewsController@save');
             }
         );
+    }
+);
+
+// User certifications (own)
+$route->addGroup(
+    '/user/certifications',
+    function (RouteCollector $route): void {
+        $route->get('', 'UserCertificationsController@userIndex');
+        $route->post('/self-confirm', 'UserCertificationsController@selfConfirm');
+        $route->get('/self-confirm/{certification_uuid:[0-9a-f-]+}', 'UserCertificationsController@showSelfConfirm');
+        $route->get('/apply/{certification_uuid:[0-9a-f-]+}', 'UserCertificationsController@showApplyForm');
+        $route->post('/apply', 'UserCertificationsController@apply');
+        $route->post('/withdraw', 'UserCertificationsController@withdrawApplication');
+        $route->get('/export', 'UserCertificationsController@export');
+        $route->get('/renew/{certification_uuid:[0-9a-f-]+}', 'UserCertificationsController@renew');
+        $route->post('/renew/{certification_uuid:[0-9a-f-]+}', 'UserCertificationsController@processRenewal');
     }
 );
 

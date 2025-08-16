@@ -396,28 +396,28 @@ return [
     // Supported themes
     // To disable a theme in config.php, you can set its value to null
     'themes' => [
-        22 => [
-            'name' => 'Eurofurence 2025 - CVD',
+        21 => [
+            'name' => 'EF 29',
             'type' => 'dark',
             'navbar_classes' => 'navbar-dark',
         ],
-        21 => [
-            'name' => 'Eurofurence 2025',
+        22 => [
+            'name' => 'EF 29 - CVD',
             'type' => 'dark',
             'navbar_classes' => 'navbar-dark',
         ],
         20 => [
-            'name' => 'Eurofurence 2024 - Cyberpunk',
+            'name' => 'EF 28',
             'type' => 'dark',
             'navbar_classes' => 'navbar-dark',
         ],
         19 => [
-            'name' => 'Eurofurence Light',
+            'name' => 'EF Light',
             'type' => 'light',
             'navbar_classes' => 'navbar-light bg-light',
         ],
         18 => [
-            'name' => 'Eurofurence Dark',
+            'name' => 'EF Dark',
             'type' => 'dark',
             'navbar_classes' => 'navbar-primary navbar-dark bg-black border-dark',
         ],

@@ -1,0 +1,348 @@
+{% extends 'layouts/app.twig' %}
+{% import 'macros/base.twig' as m %}
+{% import 'macros/form.twig' as f %}
+
+{% block title %}{{ certification ? __('certifications.edit.title') : __('certifications.create.title') }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {# Header with Navigation #}
+        <div class="d-flex justify-content-between align-items-start mb-4">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{ url('/admin/certifications') }}">{{ __('certifications.title') }}</a>
+                        </li>
+                        {% if certification %}
+                            <li class="breadcrumb-item">
+                                <a href="{{ url('/admin/certifications/' ~ certification.uuid) }}">{{ certification.title }}</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ __('form.edit') }}</li>
+                        {% else %}
+                            <li class="breadcrumb-item active" aria-current="page">{{ __('form.create') }}</li>
+                        {% endif %}
+                    </ol>
+                </nav>
+                
+                <h1>
+                    {% if certification %}
+                        {{ m.icon('pencil') }}
+                        {{ __('certifications.edit.title') }}
+                    {% else %}
+                        {{ m.icon('plus-circle') }}
+                        {{ __('certifications.create.title') }}
+                    {% endif %}
+                </h1>
+                
+                {% if certification %}
+                    <p class="text-muted">{{ __('certifications.edit.description') }}</p>
+                {% else %}
+                    <p class="text-muted">{{ __('certifications.create.description') }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        {% include 'layouts/parts/messages.twig' %}
+
+        {# Form #}
+        <form method="post" action="{{ certification ? url('/admin/certifications/' ~ certification.uuid) : url('/admin/certifications') }}" novalidate data-validate="certification">
+            {{ csrf() }}
+            {% if certification %}
+                {{ f.hidden('_method', 'PUT') }}
+                {{ f.hidden('uuid', certification.uuid) }}
+            {% endif %}
+
+            <div class="row">
+                {# Basic Information #}
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                {{ m.icon('info-circle') }}
+                                {{ __('certifications.basic_information') }}
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    {{ f.input('title', __('certifications.title_field'), {
+                                        'required': true,
+                                        'required_icon': true,
+                                        'value': f.formData('title', certification ? certification.title : ''),
+                                        'max_length': 191,
+                                        'info': __('certifications.title.help')
+                                    }) }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    {{ f.textarea('description', __('certifications.description'), {
+                                        'value': f.formData('description', certification ? certification.description : ''),
+                                        'rows': 4,
+                                        'max_length': 1000,
+                                        'info': __('certifications.description.help')
+                                    }) }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ f.input('location', __('certifications.location'), {
+                                        'value': f.formData('location', certification ? certification.location : ''),
+                                        'max_length': 191,
+                                        'info': __('certifications.location.help')
+                                    }) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ f.checkbox('is_active', __('certifications.is_active'), {
+                                        'checked': f.formData('is_active', certification ? certification.is_active : true),
+                                        'info': __('certifications.is_active.help')
+                                    }) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Contact Information #}
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                {{ m.icon('person-lines-fill') }}
+                                {{ __('certifications.contact_information') }}
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ f.input('contact_person', __('certifications.contact_person'), {
+                                        'value': f.formData('contact_person', certification ? certification.contact_person : ''),
+                                        'max_length': 191,
+                                        'info': __('certifications.contact_person.help')
+                                    }) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ f.input('contact_email', __('certifications.contact_email'), {
+                                        'type': 'email',
+                                        'value': f.formData('contact_email', certification ? certification.contact_email : ''),
+                                        'max_length': 191,
+                                        'info': __('certifications.contact_email.help')
+                                    }) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Validity Settings #}
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                {{ m.icon('clock') }}
+                                {{ __('certifications.validity_settings') }}
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ f.checkbox('is_perpetual', __('certifications.is_perpetual'), {
+                                        'checked': f.formData('is_perpetual', certification ? certification.is_perpetual : false),
+                                        'info': __('certifications.is_perpetual.help')
+                                    }) }}
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="validity-period-container" style="display: {{ f.formData('is_perpetual', certification ? certification.is_perpetual : false) ? 'none' : 'block' }};">
+                                        {% set selected_validity = '' %}
+                                        {% if certification and certification.validity_period_days is not null %}
+                                            {% if certification.validity_period_days == 30 %}
+                                                {% set selected_validity = '30' %}
+                                            {% elseif certification.validity_period_days == 90 %}
+                                                {% set selected_validity = '90' %}
+                                            {% elseif certification.validity_period_days == 180 %}
+                                                {% set selected_validity = '180' %}
+                                            {% elseif certification.validity_period_days == 365 %}
+                                                {% set selected_validity = '365' %}
+                                            {% elseif certification.validity_period_days == 730 %}
+                                                {% set selected_validity = '730' %}
+                                            {% elseif certification.validity_period_days == 1095 %}
+                                                {% set selected_validity = '1095' %}
+                                            {% else %}
+                                                {% set selected_validity = 'custom' %}
+                                            {% endif %}
+                                        {% endif %}
+                                        {{ f.select('validity_period_days', __('certifications.validity_period_days'), {
+                                            '': __('certifications.validity_period.select'),
+                                            '30': __('certifications.validity_period.30_days'),
+                                            '90': __('certifications.validity_period.90_days'),
+                                            '180': __('certifications.validity_period.180_days'),
+                                            '365': __('certifications.validity_period.365_days'),
+                                            '730': __('certifications.validity_period.730_days'),
+                                            '1095': __('certifications.validity_period.1095_days'),
+                                            'custom': __('certifications.validity_period.custom')
+                                        }, {
+                                            'selected': selected_validity,
+                                            'info': __('certifications.validity_period_days.help')
+                                        }) }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {% set show_custom = false %}
+                                    {% if certification and certification.validity_period_days is not null %}
+                                        {% if certification.validity_period_days not in [30, 90, 180, 365, 730, 1095] %}
+                                            {% set show_custom = true %}
+                                        {% endif %}
+                                    {% endif %}
+                                    <div id="custom-validity-container" style="display: {{ show_custom ? 'block' : 'none' }};">
+                                        {% set custom_days = '' %}
+                                        {% if show_custom %}
+                                            {% set custom_days = certification.validity_period_days %}
+                                        {% endif %}
+                                        {{ f.number('custom_validity_days', __('certifications.custom_validity_days'), {
+                                            'value': custom_days,
+                                            'min': 1,
+                                            'max': 3650,
+                                            'step': 1,
+                                            'info': __('certifications.custom_validity_days.help')
+                                        }) }}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    {{ f.checkbox('allow_self_confirmation', __('certifications.allow_self_confirmation'), {
+                                        'checked': f.formData('allow_self_confirmation', certification ? certification.allow_self_confirmation : false),
+                                        'info': __('certifications.allow_self_confirmation.help')
+                                    }) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# Sidebar with Help and Actions #}
+                <div class="col-lg-4">
+                    {# Help Card #}
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                {{ m.icon('question-circle') }}
+                                {{ __('form.help') }}
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="small">
+                                <h6>{{ __('certifications.help.title_section') }}</h6>
+                                <p>{{ __('certifications.help.title_text') }}</p>
+
+                                <h6>{{ __('certifications.help.description_section') }}</h6>
+                                <p>{{ __('certifications.help.description_text') }}</p>
+
+                                <h6>{{ __('certifications.help.validity_section') }}</h6>
+                                <ul class="ps-3">
+                                    <li>{{ __('certifications.help.perpetual_text') }}</li>
+                                    <li>{{ __('certifications.help.timed_text') }}</li>
+                                    <li>{{ __('certifications.help.self_confirmation_text') }}</li>
+                                </ul>
+
+                                <h6>{{ __('certifications.help.contact_section') }}</h6>
+                                <p>{{ __('certifications.help.contact_text') }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Quick Reference Card #}
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                {{ m.icon('lightbulb') }}
+                                {{ __('certifications.quick_reference') }}
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="small">
+                                <h6>{{ __('certifications.common_periods') }}</h6>
+                                <ul class="list-unstyled">
+                                    <li><strong>30 {{ __('form.days') }}:</strong> {{ __('certifications.examples.short_term') }}</li>
+                                    <li><strong>365 {{ __('form.days') }}:</strong> {{ __('certifications.examples.annual') }}</li>
+                                    <li><strong>730 {{ __('form.days') }}:</strong> {{ __('certifications.examples.biennial') }}</li>
+                                    <li><strong>{{ __('certifications.perpetual') }}:</strong> {{ __('certifications.examples.permanent') }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Preview Card (for existing certifications) #}
+                    {% if certification %}
+                        <div class="card mt-3">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    {{ m.icon('eye') }}
+                                    {{ __('certifications.current_status') }}
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <dl class="row small">
+                                    <dt class="col-5">{{ __('certifications.status') }}:</dt>
+                                    <dd class="col-7">
+                                        {% if certification.is_active %}
+                                            <span class="badge bg-success">{{ __('certifications.active') }}</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">{{ __('certifications.inactive') }}</span>
+                                        {% endif %}
+                                    </dd>
+                                    <dt class="col-5">{{ __('certifications.critters') }}:</dt>
+                                    <dd class="col-7">{{ certification.certifications_user_count|default(0) }}</dd>
+                                    <dt class="col-5">{{ __('certifications.created') }}:</dt>
+                                    <dd class="col-7">{{ certification.created_at|date('Y-m-d') }}</dd>
+                                </dl>
+                                <a href="{{ url('/admin/certifications/' ~ certification.uuid) }}" class="btn btn-outline-primary btn-sm w-100">
+                                    {{ m.icon('eye') }}
+                                    {{ __('certifications.view_details') }}
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {# Form Actions #}
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <a href="{{ certification ? url('/admin/certifications/' ~ certification.uuid) : url('/admin/certifications') }}" 
+                                       class="btn btn-outline-secondary">
+                                        {{ m.icon('arrow-left') }}
+                                        {{ __('form.cancel') }}
+                                    </a>
+                                </div>
+                                
+                                <div class="d-flex gap-2">
+                                    {% if certification %}
+                                        {{ f.submit(__('form.save_changes'), {
+                                            'icon_left': 'check',
+                                            'btn_type': 'success'
+                                        }) }}
+                                    {% else %}
+                                        {{ f.submit(__('certifications.create.submit'), {
+                                            'icon_left': 'plus',
+                                            'btn_type': 'primary'
+                                        }) }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{{ parent() }}
+<script src="{{ asset('assets/certifications.js') }}"></script>
+{% endblock %}

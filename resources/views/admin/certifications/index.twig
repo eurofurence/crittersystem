@@ -1,0 +1,437 @@
+{% extends 'layouts/app.twig' %}
+{% import 'macros/base.twig' as m %}
+{% import 'macros/form.twig' as f %}
+
+{% block title %}{{ __('certifications.title') }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>
+            {{ block('title') }}
+            {% if can('admin_certificates') or can('certificates.manage') %}
+                {{ m.add(url('/admin/certifications/create'), __('certifications.create.title')) }}
+            {% endif %}
+        </h1>
+
+        {% include 'layouts/parts/messages.twig' %}
+
+        {# Search and Filter Form #}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            {{ m.icon('funnel') }}
+                            {{ __('certifications.filter.title') }}
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="get" action="{{ url('/admin/certifications') }}" class="row g-3">
+                            <div class="col-md-4">
+                                {{ f.input('search', __('form.search'), {
+                                    'value': search|default(''),
+                                    'placeholder': __('certifications.search.placeholder')
+                                }) }}
+                            </div>
+
+                            <div class="col-md-2">
+                                {{ f.select('active', __('certifications.filter.status'), {
+                                    '': __('form.select_all'),
+                                    '1': __('certifications.active'),
+                                    '0': __('certifications.inactive')
+                                }, {
+                                    'selected': filters.active|default('')
+                                }) }}
+                            </div>
+
+                            <div class="col-md-2">
+                                {{ f.select('perpetual', __('certifications.filter.validity'), {
+                                    '': __('form.select_all'),
+                                    '1': __('certifications.perpetual'),
+                                    '0': __('certifications.timed')
+                                }, {
+                                    'selected': filters.perpetual|default('')
+                                }) }}
+                            </div>
+
+                            <div class="col-md-2">
+                                {{ f.select('self_confirmable', __('certifications.filter.self_confirmation'), {
+                                    '': __('form.select_all'),
+                                    '1': __('certifications.self_confirmable'),
+                                    '0': __('certifications.not_self_confirmable')
+                                }, {
+                                    'selected': filters.self_confirmable|default('')
+                                }) }}
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="d-grid gap-2">
+                                    {{ f.submit(__('form.search'), {'icon_left': 'search', 'size': 'sm'}) }}
+                                    <a href="{{ url('/admin/certifications') }}" class="btn btn-outline-secondary btn-sm">
+                                        {{ m.icon('x-circle') }}
+                                        {{ __('form.clear') }}
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Results Summary #}
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-muted">
+                        {{ __('certifications.results.showing', {
+                            'total': certifications.total|default(0),
+                            'from': certifications.from|default(0),
+                            'to': certifications.to|default(0)
+                        }) }}
+                    </span>
+
+                    {% if (filters.active is defined and filters.active != '') or
+                          (filters.perpetual is defined and filters.perpetual != '') or
+                          (filters.self_confirmable is defined and filters.self_confirmable != '') or
+                          (search is defined and search != '') %}
+                        <small class="text-info">
+                            {{ m.icon('info-circle') }}
+                            {{ __('certifications.results.filtered') }}
+                        </small>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {# Certifications Table #}
+        <div class="row">
+            <div class="col-12">
+                {% if certifications.data|length > 0 %}
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>
+                                        <a href="{{ url('/admin/certifications', filters|merge({'sort_by': 'title', 'sort_direction': current_sort.direction == 'asc' ? 'desc' : 'asc'})) }}"
+                                           class="text-white text-decoration-none">
+                                            {{ __('certifications.title_field') }}
+                                            {% if current_sort.field == 'title' %}
+                                                {{ m.icon(current_sort.direction == 'asc' ? 'arrow-up' : 'arrow-down') }}
+                                            {% endif %}
+                                        </a>
+                                    </th>
+                                    <th>{{ __('certifications.contact_person') }}</th>
+                                    <th>{{ __('certifications.validity') }}</th>
+                                    <th>{{ __('certifications.status') }}</th>
+                                    <th>{{ __('certifications.critters_count') }}</th>
+                                    <th>{{ __('certifications.created_at') }}</th>
+                                    <th class="text-end">{{ __('form.actions') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for certification in certifications.data %}
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                {% if certification.is_active %}
+                                                    <span class="badge bg-success me-2">{{ m.icon('check-circle') }}</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary me-2">{{ m.icon('x-circle') }}</span>
+                                                {% endif %}
+                                                <div>
+                                                    <a href="{{ url('/admin/certifications/' ~ certification.uuid) }}" class="fw-bold text-decoration-none">
+                                                        {{ certification.title }}
+                                                    </a>
+                                                    {% if certification.description %}
+                                                        <br>
+                                                        <small class="text-muted">{{ certification.description|slice(0, 100) }}{% if certification.description|length > 100 %}...{% endif %}</small>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            {% if certification.contact_person %}
+                                                {{ certification.contact_person }}
+                                                {% if certification.contact_email %}
+                                                    <br>
+                                                    <small>
+                                                        <a href="mailto:{{ certification.contact_email }}" class="text-muted">
+                                                            {{ m.icon('envelope') }}
+                                                            {{ certification.contact_email }}
+                                                        </a>
+                                                    </small>
+                                                {% endif %}
+                                            {% else %}
+                                                <span class="text-muted">{{ __('form.not_specified') }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if certification.is_perpetual %}
+                                                <span class="badge bg-info">
+                                                    {{ m.icon('infinity') }}
+                                                    {{ __('certifications.perpetual') }}
+                                                </span>
+                                            {% else %}
+                                                <span class="badge bg-warning text-dark">
+                                                    {{ m.icon('clock') }}
+                                                    {{ __('certifications.valid_for_days', {'days': certification.validity_period_days}) }}
+                                                </span>
+                                            {% endif %}
+                                            {% if certification.allow_self_confirmation %}
+                                                <br>
+                                                <small class="badge bg-primary mt-1">
+                                                    {{ m.icon('person-check') }}
+                                                    {{ __('certifications.self_confirmable') }}
+                                                </small>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if certification.is_active %}
+                                                <span class="badge bg-success">{{ __('certifications.active') }}</span>
+                                            {% else %}
+                                                <span class="badge bg-danger">{{ __('certifications.inactive') }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-secondary">
+                                                {{ certification.certifications_user_count|default(0) }}
+                                                {{ __('certifications.critters') }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <small class="text-muted">
+                                                {{ certification.created_at|date('Y-m-d H:i') }}
+                                            </small>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a href="{{ url('/admin/certifications/' ~ certification.uuid) }}"
+                                                   class="btn btn-outline-primary btn-sm"
+                                                   title="{{ __('form.view') }}">
+                                                    {{ m.icon('eye') }}
+                                                </a>
+
+                                                {% if can('admin_certificates') or can('certificates.manage') %}
+                                                    <a href="{{ url('/admin/certifications/' ~ certification.uuid ~ '/edit') }}"
+                                                       class="btn btn-outline-secondary btn-sm"
+                                                       title="{{ __('form.edit') }}">
+                                                        {{ m.icon('pencil') }}
+                                                    </a>
+
+                                                    {% if certification.is_active %}
+                                                        <form method="post" action="{{ url('/admin/certifications/' ~ certification.uuid ~ '/deactivate') }}" class="d-inline">
+                                                            {{ csrf() }}
+                                                            <button type="submit"
+                                                                    class="btn btn-outline-warning btn-sm"
+                                                                    title="{{ __('certifications.deactivate') }}"
+                                                                    data-confirm="{{ __('certifications.deactivate.confirm', [certification.title|e]) }}">
+                                                                {{ m.icon('pause-circle') }}
+                                                            </button>
+                                                        </form>
+                                                    {% else %}
+                                                        <form method="post" action="{{ url('/admin/certifications/' ~ certification.uuid ~ '/reactivate') }}" class="d-inline">
+                                                            {{ csrf() }}
+                                                            <button type="submit"
+                                                                    class="btn btn-outline-success btn-sm"
+                                                                    title="{{ __('certifications.reactivate') }}">
+                                                                {{ m.icon('play-circle') }}
+                                                            </button>
+                                                        </form>
+                                                    {% endif %}
+
+                                                    <div class="btn-group" role="group">
+                                                        <button type="button"
+                                                                class="btn btn-outline-danger btn-sm dropdown-toggle"
+                                                                data-bs-toggle="dropdown"
+                                                                title="{{ __('certifications.more_actions') }}">
+                                                            {{ m.icon('three-dots-vertical') }}
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li>
+                                                                <form method="post" action="{{ url('/admin/certifications/' ~ certification.uuid ~ '/mass-revoke') }}" class="d-inline w-100">
+                                                                    {{ csrf() }}
+                                                                    <button type="submit"
+                                                                            class="dropdown-item text-warning"
+                                                                            data-confirm="{{ __('certifications.mass_revoke.confirm', [certification.title|e]) }}">
+                                                                        {{ m.icon('person-x') }}
+                                                                        {{ __('certifications.mass_revoke') }}
+                                                                    </button>
+                                                                </form>
+                                                            </li>
+                                                            <li><hr class="dropdown-divider"></li>
+                                                            <li>
+                                                                <form method="post" action="{{ url('/admin/certifications/' ~ certification.uuid ~ '/delete') }}" class="d-inline w-100">
+                                                                    {{ csrf() }}
+                                                                    {{ f.hidden('uuid', certification.uuid) }}
+                                                                    {{ f.hidden('delete', 'on') }}
+                                                                    <button type="submit"
+                                                                            class="dropdown-item text-danger"
+                                                                            data-confirm="{{ __('certifications.delete.confirm', [certification.title|e]) }}">
+                                                                        {{ m.icon('trash') }}
+                                                                        {{ __('form.delete') }}
+                                                                    </button>
+                                                                </form>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {# Pagination #}
+                    {% if certifications.last_page > 1 %}
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <div class="pagination-info">
+                                <small class="text-muted">
+                                    {{ __('pagination.showing') }} {{ certifications.from }} {{ __('pagination.to') }} {{ certifications.to }} {{ __('pagination.of') }} {{ certifications.total }} {{ __('pagination.results') }}
+                                </small>
+                            </div>
+                            <nav aria-label="{{ __('pagination.navigation') }}">
+                                <ul class="pagination mb-0">
+                                    {# Previous Page Link #}
+                                    {% if certifications.current_page == 1 %}
+                                        <li class="page-item disabled">
+                                            <span class="page-link">{{ __('pagination.previous') }}</span>
+                                        </li>
+                                    {% else %}
+                                        {% set prev_page = certifications.current_page - 1 %}
+                                        {% set prev_params = [] %}
+                                        {% for key, value in filter_state %}
+                                            {% if key != 'page' and value %}
+                                                {% set prev_params = prev_params|merge([key ~ '=' ~ value|url_encode]) %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% set prev_params = prev_params|merge(['page=' ~ prev_page]) %}
+                                        {% set prev_url = url('/admin/certifications') ~ '?' ~ prev_params|join('&') %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ prev_url }}">
+                                                {{ __('pagination.previous') }}
+                                            </a>
+                                        </li>
+                                    {% endif %}
+
+                                    {# Pagination Elements #}
+                                    {% set start_page = max(1, certifications.current_page - 2) %}
+                                    {% set end_page = min(certifications.last_page, certifications.current_page + 2) %}
+
+                                    {% if start_page > 1 %}
+                                        {% set first_params = [] %}
+                                        {% for key, value in filter_state %}
+                                            {% if key != 'page' and value %}
+                                                {% set first_params = first_params|merge([key ~ '=' ~ value|url_encode]) %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% set first_params = first_params|merge(['page=1']) %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ url('/admin/certifications') ~ '?' ~ first_params|join('&') }}">1</a>
+                                        </li>
+                                        {% if start_page > 2 %}
+                                            <li class="page-item disabled">
+                                                <span class="page-link">...</span>
+                                            </li>
+                                        {% endif %}
+                                    {% endif %}
+
+                                    {% for page in start_page..end_page %}
+                                        {% if page == certifications.current_page %}
+                                            <li class="page-item active">
+                                                <span class="page-link">{{ page }}</span>
+                                            </li>
+                                        {% else %}
+                                            {% set page_params = [] %}
+                                            {% for key, value in filter_state %}
+                                                {% if key != 'page' and value %}
+                                                    {% set page_params = page_params|merge([key ~ '=' ~ value|url_encode]) %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% set page_params = page_params|merge(['page=' ~ page]) %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="{{ url('/admin/certifications') ~ '?' ~ page_params|join('&') }}">{{ page }}</a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {% if end_page < certifications.last_page %}
+                                        {% if end_page < certifications.last_page - 1 %}
+                                            <li class="page-item disabled">
+                                                <span class="page-link">...</span>
+                                            </li>
+                                        {% endif %}
+                                        {% set last_params = [] %}
+                                        {% for key, value in filter_state %}
+                                            {% if key != 'page' and value %}
+                                                {% set last_params = last_params|merge([key ~ '=' ~ value|url_encode]) %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% set last_params = last_params|merge(['page=' ~ certifications.last_page]) %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ url('/admin/certifications') ~ '?' ~ last_params|join('&') }}">{{ certifications.last_page }}</a>
+                                        </li>
+                                    {% endif %}
+
+                                    {# Next Page Link #}
+                                    {% if certifications.current_page == certifications.last_page %}
+                                        <li class="page-item disabled">
+                                            <span class="page-link">{{ __('pagination.next') }}</span>
+                                        </li>
+                                    {% else %}
+                                        {% set next_page = certifications.current_page + 1 %}
+                                        {% set next_params = [] %}
+                                        {% for key, value in filter_state %}
+                                            {% if key != 'page' and value %}
+                                                {% set next_params = next_params|merge([key ~ '=' ~ value|url_encode]) %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% set next_params = next_params|merge(['page=' ~ next_page]) %}
+                                        {% set next_url = url('/admin/certifications') ~ '?' ~ next_params|join('&') %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ next_url }}">
+                                                {{ __('pagination.next') }}
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        </div>
+                    {% endif %}
+
+                {% else %}
+                    {# No Results Found #}
+                    <div class="text-center py-5">
+                        <div class="mb-3">
+                            {{ m.icon('inbox', 64) }}
+                        </div>
+                        <h4 class="text-muted">{{ __('certifications.no_results.title') }}</h4>
+                        <p class="text-muted">
+                            {% if (filters.active is defined and filters.active != '') or
+                                  (filters.perpetual is defined and filters.perpetual != '') or
+                                  (filters.self_confirmable is defined and filters.self_confirmable != '') or
+                                  (search is defined and search != '') %}
+                                {{ __('certifications.no_results.filtered') }}
+                            {% else %}
+                                {{ __('certifications.no_results.empty') }}
+                            {% endif %}
+                        </p>
+                        {% if can('admin_certificates') or can('certificates.manage') %}
+                            <a href="{{ url('/admin/certifications/create') }}" class="btn btn-primary">
+                                {{ m.icon('plus-circle') }}
+                                {{ __('certifications.create.first') }}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{{ parent() }}
+<script src="{{ asset('assets/certifications.js') }}"></script>
+{% endblock %}

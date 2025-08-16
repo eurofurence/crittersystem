@@ -52,6 +52,7 @@ module.exports = {
     ...themeEntries,
     vendor: './resources/assets/js/vendor.js',
     purge: './resources/assets/js/admin/purge.js',
+    certifications: './resources/assets/js/certifications.js',
   },
   output: {
     path: path.resolve('public/assets'),
