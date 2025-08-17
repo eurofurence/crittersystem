@@ -42,6 +42,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize bulk operations functionality
     initBulkOperations();
+    
+    // Initialize enhanced user table sorting and filtering
+    initEnhancedUserTableFeatures();
 });
 
 /**
@@ -2997,5 +3000,270 @@ function handleBulkAction(event) {
         button.innerHTML = originalText;
         
         showAlert('An error occurred during bulk operation.', 'danger');
+    });
+}
+
+/**
+ * Initialize enhanced user table features including sorting and filtering
+ */
+function initEnhancedUserTableFeatures() {
+    initTableSorting();
+    initTableFiltering();
+    initStatusNotifications();
+}
+
+/**
+ * Initialize table sorting functionality
+ */
+function initTableSorting() {
+    // Handle sort dropdown options
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.sort-option')) {
+            e.preventDefault();
+            
+            const sortOption = e.target.closest('.sort-option');
+            const sortType = sortOption.dataset.sort;
+            const targetStatus = sortOption.dataset.target;
+            
+            sortUserTable(targetStatus, sortType);
+        }
+    });
+
+    // Handle column header sorting
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.sortable')) {
+            const header = e.target.closest('.sortable');
+            const table = header.closest('table');
+            const status = table.querySelector('.sortable-tbody').dataset.status;
+            const sortType = header.dataset.sort;
+            
+            // Toggle sort direction
+            const currentDirection = header.dataset.direction || 'asc';
+            const newDirection = currentDirection === 'asc' ? 'desc' : 'asc';
+            header.dataset.direction = newDirection;
+            
+            // Update sort icons
+            table.querySelectorAll('.sortable i').forEach(icon => {
+                icon.className = 'fa fa-sort text-muted ms-1';
+            });
+            
+            const icon = header.querySelector('i');
+            icon.className = newDirection === 'asc' 
+                ? 'fa fa-sort-up text-primary ms-1' 
+                : 'fa fa-sort-down text-primary ms-1';
+            
+            sortUserTable(status, sortType + (newDirection === 'desc' ? '-desc' : ''));
+        }
+    });
+}
+
+/**
+ * Sort user table by specified criteria
+ */
+function sortUserTable(status, sortType) {
+    const table = document.querySelector(`#users-table-${status}`);
+    if (!table) return;
+    
+    const tbody = table.querySelector('.sortable-tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    
+    rows.sort((a, b) => {
+        let aVal, bVal;
+        
+        switch (sortType) {
+            case 'name':
+            case 'name-desc':
+                aVal = a.dataset.userName || '';
+                bVal = b.dataset.userName || '';
+                break;
+                
+            case 'date':
+            case 'date-desc':
+                aVal = new Date(a.dataset.certifiedAt || 0);
+                bVal = new Date(b.dataset.certifiedAt || 0);
+                break;
+                
+            case 'expires':
+            case 'expires-desc':
+                aVal = new Date(a.dataset.expiresAt || '9999-12-31');
+                bVal = new Date(b.dataset.expiresAt || '9999-12-31');
+                break;
+                
+            default:
+                return 0;
+        }
+        
+        let result;
+        if (aVal < bVal) result = -1;
+        else if (aVal > bVal) result = 1;
+        else result = 0;
+        
+        // Reverse for desc sorts
+        if (sortType.includes('-desc')) {
+            result *= -1;
+        }
+        
+        return result;
+    });
+    
+    // Clear and re-append sorted rows
+    tbody.innerHTML = '';
+    rows.forEach(row => tbody.appendChild(row));
+    
+    // Add visual feedback
+    tbody.style.opacity = '0.7';
+    setTimeout(() => {
+        tbody.style.opacity = '1';
+    }, 200);
+}
+
+/**
+ * Initialize table filtering functionality
+ */
+function initTableFiltering() {
+    // Add search inputs to each tab if they don't exist
+    document.querySelectorAll('.tab-pane').forEach(tabPane => {
+        const card = tabPane.querySelector('.card');
+        if (!card) return;
+        
+        const cardHeader = card.querySelector('.card-header');
+        if (!cardHeader || cardHeader.querySelector('.table-search')) return;
+        
+        const status = tabPane.id;
+        
+        // Create search input
+        const searchContainer = document.createElement('div');
+        searchContainer.className = 'table-search ms-2';
+        searchContainer.innerHTML = `
+            <div class="input-group input-group-sm" style="width: 200px;">
+                <span class="input-group-text">
+                    <i class="fa fa-search"></i>
+                </span>
+                <input type="text" class="form-control" placeholder="Search users..." 
+                       id="search-${status}" data-target="${status}">
+            </div>
+        `;
+        
+        cardHeader.appendChild(searchContainer);
+    });
+    
+    // Handle search input
+    document.addEventListener('input', function(e) {
+        if (e.target.matches('[id^="search-"]')) {
+            const searchTerm = e.target.value.toLowerCase();
+            const targetStatus = e.target.dataset.target;
+            
+            filterUserTable(targetStatus, searchTerm);
+        }
+    });
+}
+
+/**
+ * Filter user table by search term
+ */
+function filterUserTable(status, searchTerm) {
+    const table = document.querySelector(`#users-table-${status}`);
+    if (!table) return;
+    
+    const rows = table.querySelectorAll('tbody tr');
+    let visibleCount = 0;
+    
+    rows.forEach(row => {
+        const userName = row.dataset.userName || '';
+        const userNameText = row.querySelector('strong')?.textContent?.toLowerCase() || '';
+        
+        if (userName.includes(searchTerm) || userNameText.includes(searchTerm)) {
+            row.style.display = '';
+            visibleCount++;
+        } else {
+            row.style.display = 'none';
+        }
+    });
+    
+    // Update empty state
+    showSearchResults(status, visibleCount, searchTerm);
+}
+
+/**
+ * Show search results or empty state
+ */
+function showSearchResults(status, count, searchTerm) {
+    const tabPane = document.querySelector(`#${status}`);
+    let emptyState = tabPane.querySelector('.search-empty-state');
+    
+    if (count === 0 && searchTerm) {
+        if (!emptyState) {
+            emptyState = document.createElement('div');
+            emptyState.className = 'search-empty-state text-center py-4';
+            emptyState.innerHTML = `
+                <div class="text-muted">
+                    <i class="fa fa-search fa-2x mb-3"></i>
+                    <h6>No users found matching "${searchTerm}"</h6>
+                    <p>Try adjusting your search terms.</p>
+                </div>
+            `;
+            
+            const cardBody = tabPane.querySelector('.card-body');
+            cardBody.appendChild(emptyState);
+        }
+        
+        emptyState.querySelector('h6').textContent = `No users found matching "${searchTerm}"`;
+        emptyState.style.display = 'block';
+    } else if (emptyState) {
+        emptyState.style.display = 'none';
+    }
+}
+
+/**
+ * Initialize status-based notifications and visual indicators
+ */
+function initStatusNotifications() {
+    // Highlight pending approvals
+    updatePendingIndicators();
+    
+    // Set up periodic updates for expiring certifications
+    setInterval(updateExpiryWarnings, 300000); // Check every 5 minutes
+    updateExpiryWarnings();
+}
+
+/**
+ * Update pending approval indicators
+ */
+function updatePendingIndicators() {
+    const pendingTab = document.querySelector('#pending-tab');
+    const pendingBadge = pendingTab?.querySelector('.badge');
+    
+    if (pendingBadge && parseInt(pendingBadge.textContent) > 0) {
+        // Add pulsing animation for pending items
+        pendingTab.classList.add('position-relative');
+        
+        // Animate the notification dot
+        const notificationDot = pendingTab.querySelector('.position-absolute');
+        if (notificationDot) {
+            setInterval(() => {
+                notificationDot.style.animation = 'none';
+                setTimeout(() => {
+                    notificationDot.style.animation = 'pulse 2s infinite';
+                }, 10);
+            }, 3000);
+        }
+    }
+}
+
+/**
+ * Update expiry warnings for certifications expiring soon
+ */
+function updateExpiryWarnings() {
+    document.querySelectorAll('[data-expires-at]').forEach(row => {
+        const expiresAt = new Date(row.dataset.expiresAt);
+        const now = new Date();
+        const daysToExpiry = Math.ceil((expiresAt - now) / (1000 * 60 * 60 * 24));
+        
+        const expiryBadge = row.querySelector('.badge');
+        if (expiryBadge && daysToExpiry <= 7 && daysToExpiry > 0) {
+            expiryBadge.classList.remove('bg-warning');
+            expiryBadge.classList.add('bg-danger');
+            expiryBadge.innerHTML = `<i class="fa fa-exclamation-triangle"></i> ${daysToExpiry} days`;
+        }
     });
 }

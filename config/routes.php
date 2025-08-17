@@ -297,7 +297,8 @@ $route->addGroup(
                 $route->get('/{certification_uuid:[0-9a-f-]+}/edit', 'Admin\\CertificationsController@edit');
                 $route->put('/{certification_uuid:[0-9a-f-]+}', 'Admin\\CertificationsController@update');
                 $route->delete('/{certification_uuid:[0-9a-f-]+}', 'Admin\\CertificationsController@destroy');
-                // Fallback for environments without method override DELETE
+                // Fallback for environments without method override
+                $route->post('/{certification_uuid:[0-9a-f-]+}/update', 'Admin\\CertificationsController@update');
                 $route->post(
                     '/{certification_uuid:[0-9a-f-]+}/delete',
                     'Admin\\CertificationsController@destroy'

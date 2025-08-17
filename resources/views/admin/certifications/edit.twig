@@ -46,10 +46,9 @@
         {% include 'layouts/parts/messages.twig' %}
 
         {# Form #}
-        <form method="post" action="{{ certification ? url('/admin/certifications/' ~ certification.uuid) : url('/admin/certifications') }}" novalidate data-validate="certification">
+        <form method="post" action="{{ certification ? url('/admin/certifications/' ~ certification.uuid ~ '/update') : url('/admin/certifications') }}" novalidate data-validate="certification">
             {{ csrf() }}
             {% if certification %}
-                {{ f.hidden('_method', 'PUT') }}
                 {{ f.hidden('uuid', certification.uuid) }}
             {% endif %}
 

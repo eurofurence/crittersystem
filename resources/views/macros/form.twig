@@ -232,8 +232,8 @@ Renders a Bootstrap checkbox element with mb-3.
 @param {string} [opt.class="mb-3"] - CSS classes for the checkbox element. Defaults to "mb-3".
 #}
 {% macro checkbox(name, label, opt) %}
-    <div class="form-check {{ opt.class is defined ? opt.class : 'mb-3' }}">
-        <input class="form-check-input" type="checkbox" id="{{ name }}" name="{{ name }}"
+    <div class="form-check form-switch {{ opt.class is defined ? opt.class : 'mb-3' }}">
+        <input class="form-check-input" type="checkbox" role="switch" id="{{ name }}" name="{{ name }}"
             value="{{ opt.value|default('1') }}"
             {%- if opt.checked|default(false) %} checked{% endif %}
             {%- if opt.disabled|default(false) %} disabled{% endif %}
@@ -339,7 +339,7 @@ Renders a "checkbox" element that will be styled as switch.
 #}
 {% macro switch(name, label, opt) %}
     <div class="form-check form-switch mb-3">
-        <input class="form-check-input" type="checkbox" id="{{ name }}" name="{{ name }}"
+        <input class="form-check-input" type="checkbox" role="switch" id="{{ name }}" name="{{ name }}"
             value="{{ opt.value|default('1') }}"
             {%- if opt.checked|default(false) %} checked{% endif %}
             {%- if opt.disabled|default(false) %} disabled{% endif %}

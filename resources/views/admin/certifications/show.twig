@@ -241,35 +241,45 @@
 
             {# User Lists #}
             <div class="col-lg-8">
-                {# Status Filter Tabs #}
+                {# Status Filter Tabs with enhanced badges #}
                 <ul class="nav nav-tabs" id="statusTabs" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="approved-tab" data-bs-toggle="tab" data-bs-target="#approved" type="button" role="tab">
                             <span class="badge bg-success me-1">{{ userCounts.approved|default(0) }}</span>
+                            {{ m.icon('check-circle') }}
                             {{ __('certifications.status.approved') }}
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="self-confirmed-tab" data-bs-toggle="tab" data-bs-target="#self-confirmed" type="button" role="tab">
                             <span class="badge bg-info me-1">{{ userCounts.self_confirmed|default(0) }}</span>
+                            {{ m.icon('person-check') }}
                             {{ __('certifications.status.self_confirmed') }}
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending" type="button" role="tab">
+                        <button class="nav-link position-relative" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending" type="button" role="tab">
                             <span class="badge bg-warning me-1">{{ userCounts.pending|default(0) }}</span>
+                            {{ m.icon('clock') }}
                             {{ __('certifications.status.pending') }}
+                            {% if userCounts.pending|default(0) > 0 %}
+                                <span class="position-absolute top-0 start-100 translate-middle p-1 bg-warning border border-light rounded-circle">
+                                    <span class="visually-hidden">Pending approvals</span>
+                                </span>
+                            {% endif %}
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="revoked-tab" data-bs-toggle="tab" data-bs-target="#revoked" type="button" role="tab">
                             <span class="badge bg-danger me-1">{{ userCounts.revoked|default(0) }}</span>
+                            {{ m.icon('x-circle') }}
                             {{ __('certifications.status.revoked') }}
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="expired-tab" data-bs-toggle="tab" data-bs-target="#expired" type="button" role="tab">
                             <span class="badge bg-secondary me-1">{{ userCounts.expired|default(0) }}</span>
+                            {{ m.icon('calendar-x') }}
                             {{ __('certifications.status.expired') }}
                         </button>
                     </li>
@@ -313,6 +323,54 @@
     {% import 'macros/form.twig' as f %}
 
     <div class="card mt-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="mb-0">
+                {% set statusIcons = {
+                    'approved': 'check-circle',
+                    'self_confirmed': 'person-check',
+                    'pending': 'clock',
+                    'revoked': 'x-circle',
+                    'expired': 'calendar-x'
+                } %}
+                {% set statusClasses = {
+                    'approved': 'success',
+                    'self_confirmed': 'info',
+                    'pending': 'warning',
+                    'revoked': 'danger',
+                    'expired': 'secondary'
+                } %}
+                {{ m.icon(statusIcons[status]) }}
+                {{ __(('certifications.status.' ~ status)) }}
+                <span class="badge bg-{{ statusClasses[status] }} ms-2">{{ users|length }}</span>
+            </h6>
+
+            {% if users|length > 0 %}
+                <div class="btn-group btn-group-sm" role="group">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                        {{ m.icon('funnel') }} Sort
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item sort-option" href="#" data-sort="name" data-target="{{ status }}">
+                            {{ m.icon('sort-alpha-down') }} Name A-Z
+                        </a></li>
+                        <li><a class="dropdown-item sort-option" href="#" data-sort="name-desc" data-target="{{ status }}">
+                            {{ m.icon('sort-alpha-up') }} Name Z-A
+                        </a></li>
+                        <li><a class="dropdown-item sort-option" href="#" data-sort="date" data-target="{{ status }}">
+                            {{ m.icon('calendar-plus') }} Date (Newest)
+                        </a></li>
+                        <li><a class="dropdown-item sort-option" href="#" data-sort="date-desc" data-target="{{ status }}">
+                            {{ m.icon('calendar-minus') }} Date (Oldest)
+                        </a></li>
+                        {% if not certification.is_perpetual %}
+                        <li><a class="dropdown-item sort-option" href="#" data-sort="expires" data-target="{{ status }}">
+                            {{ m.icon('hourglass-split') }} Expiry (Soonest)
+                        </a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
         <div class="card-body">
             {% if users|length > 0 %}
                 {# Bulk Actions for pending status #}
@@ -362,18 +420,27 @@
                 {% endif %}
 
                 <div class="table-responsive">
-                    <table class="table table-sm table-hover">
-                        <thead>
+                    <table class="table table-sm table-hover" id="users-table-{{ status }}">
+                        <thead class="table-dark">
                             <tr>
                                 {% if (status == 'pending' or status in ['approved', 'self_confirmed']) and (can('admin_certificates') or can('certificates.manage')) %}
                                     <th width="40">
                                         <input class="form-check-input" type="checkbox" id="select-all-header-{{ status }}" data-target="{{ status }}">
                                     </th>
                                 {% endif %}
-                                <th>{{ __('general.name') }}</th>
-                                <th>{{ __('certifications.date_certified') }}</th>
+                                <th class="sortable" data-sort="name">
+                                    {{ __('general.name') }}
+                                    <i class="fa fa-sort text-muted ms-1"></i>
+                                </th>
+                                <th class="sortable" data-sort="certified_at">
+                                    {{ __('certifications.date_certified') }}
+                                    <i class="fa fa-sort text-muted ms-1"></i>
+                                </th>
                                 {% if not certification.is_perpetual %}
-                                    <th>{{ __('certifications.expires_at') }}</th>
+                                    <th class="sortable" data-sort="expires_at">
+                                        {{ __('certifications.expires_at') }}
+                                        <i class="fa fa-sort text-muted ms-1"></i>
+                                    </th>
                                 {% endif %}
                                 <th>{{ __('certifications.notes') }}</th>
                                 {% if can('admin_certificates') or can('certificates.manage') %}
@@ -381,9 +448,13 @@
                                 {% endif %}
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="sortable-tbody" data-status="{{ status }}">
                             {% for userCert in users %}
-                                <tr>
+                                <tr data-user-name="{{ userCert.name|lower }}"
+                                    data-certified-at="{{ userCert.pivot.created_at }}"
+                                    {% if not certification.is_perpetual and userCert.pivot.expires_at %}
+                                        data-expires-at="{{ userCert.pivot.expires_at }}"
+                                    {% endif %}>
                                     {% if (status == 'pending' or status in ['approved', 'self_confirmed']) and (can('admin_certificates') or can('certificates.manage')) %}
                                         <td>
                                             <input class="form-check-input bulk-select"
@@ -402,42 +473,83 @@
                                                 'revoked': 'danger',
                                                 'expired': 'secondary'
                                             } %}
-                                            <span class="badge bg-{{ statusClass[status] }} me-2">
-                                                {{ __(('certifications.status.' ~ status)) }}
+                                            {% set statusIcon = {
+                                                'approved': 'check-circle',
+                                                'self_confirmed': 'person-check',
+                                                'pending': 'clock',
+                                                'revoked': 'x-circle',
+                                                'expired': 'calendar-x'
+                                            } %}
+                                            <span class="badge bg-{{ statusClass[status] }} me-2" title="{{ __(('certifications.status.' ~ status)) }}">
+                                                {{ m.icon(statusIcon[status], 12) }}
                                             </span>
                                             <div>
                                                 {% if userCert %}
                                                     <strong>{{ userCert.name }}</strong>
-{#                                                     {% if userCert.email %} #}
-{#                                                         <br> #}
-{#                                                         <small class="text-muted">{{ userCert.email }}</small> #}
-{#                                                     {% endif %} #}
+                                                    {% if userCert.id %}
+                                                        <br>
+                                                        <small class="text-muted">ID: {{ userCert.id }}</small>
+                                                    {% endif %}
                                                 {% else %}
-                                                    <strong>Unknown User</strong>
+                                                    <strong class="text-danger">Unknown User</strong>
+                                                    <br>
+                                                    <small class="text-muted">User may have been deleted</small>
                                                 {% endif %}
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         {% if userCert.pivot.date_certified %}
-                                            <small>{{ userCert.pivot.date_certified|date('Y-m-d H:i') }}</small>
+                                            <div>
+                                                <strong>{{ userCert.pivot.date_certified|date('M j, Y') }}</strong>
+                                                <br>
+                                                <small class="text-muted">{{ userCert.pivot.date_certified|date('g:i A') }}</small>
+                                            </div>
+                                        {% elseif userCert.pivot.created_at %}
+                                            <div>
+                                                <strong>{{ userCert.pivot.created_at|date('M j, Y') }}</strong>
+                                                <br>
+                                                <small class="text-muted">{{ userCert.pivot.created_at|date('g:i A') }}</small>
+                                            </div>
                                         {% else %}
-                                            <span class="text-muted">{{ __('form.not_specified') }}</span>
+                                            <span class="text-muted">
+                                                {{ m.icon('calendar-x') }}
+                                                {{ __('form.not_specified') }}
+                                            </span>
                                         {% endif %}
                                     </td>
                                     {% if not certification.is_perpetual %}
                                         <td>
                                             {% if userCert.pivot.date_expires %}
-                                                {% set isExpired = userCert.pivot.date_expires|date('Y-m-d') < 'now'|date('Y-m-d') %}
-                                                {% set isExpiringSoon = not isExpired and userCert.pivot.date_expires|date('Y-m-d') <= ('now'|date_modify('+30 days'))|date('Y-m-d') %}
-                                                <small class="{% if isExpired %}text-danger{% elseif isExpiringSoon %}text-warning{% endif %}">
-                                                    {{ userCert.pivot.date_expires|date('Y-m-d') }}
+                                                {% set expiryDate = userCert.pivot.date_expires|date('Y-m-d') %}
+                                                {% set today = 'now'|date('Y-m-d') %}
+                                                {% set isExpired = expiryDate < today %}
+                                                {% set daysToExpiry = (userCert.pivot.date_expires|date('U') - 'now'|date('U')) / 86400 %}
+                                                {% set isExpiringSoon = not isExpired and daysToExpiry <= 30 %}
+
+                                                <div class="d-flex align-items-center">
                                                     {% if isExpired %}
-                                                        {{ m.icon('exclamation-triangle', null, 'text-danger') }}
+                                                        <span class="badge bg-danger me-2">
+                                                            {{ m.icon('exclamation-triangle', 12) }}
+                                                            Expired
+                                                        </span>
                                                     {% elseif isExpiringSoon %}
-                                                        {{ m.icon('clock', null, 'text-warning') }}
+                                                        <span class="badge bg-warning text-dark me-2">
+                                                            {{ m.icon('clock', 12) }}
+                                                            {{ daysToExpiry|round }} days
+                                                        </span>
+                                                    {% else %}
+                                                        <span class="badge bg-success me-2">
+                                                            {{ m.icon('check-circle', 12) }}
+                                                            Valid
+                                                        </span>
                                                     {% endif %}
-                                                </small>
+                                                    <div>
+                                                        <strong class="{% if isExpired %}text-danger{% elseif isExpiringSoon %}text-warning{% endif %}">
+                                                            {{ userCert.pivot.date_expires|date('M j, Y') }}
+                                                        </strong>
+                                                    </div>
+                                                </div>
                                             {% else %}
                                                 <span class="text-muted">{{ __('certifications.no_expiry') }}</span>
                                             {% endif %}
@@ -460,9 +572,8 @@
                                                 </a>
 
                                                 {% if status == 'pending' %}
-                                                    <form method="post" action="{{ url('/admin/user/' ~ userCert.id ~ '/certifications/' ~ userCert.pivot.id) }}" class="d-inline" data-action-form="approve">
+                                                    <form method="post" action="{{ url('/admin/user/' ~ userCert.id ~ '/certifications/' ~ userCert.pivot.id ~ '/update') }}" class="d-inline" data-action-form="approve">
                                                         {{ csrf() }}
-                                                        {{ f.hidden('_method', 'PUT') }}
                                                         {{ f.hidden('status', 'approved') }}
                                                         {{ f.hidden('checked', 'on') }}
                                                         <button type="submit"
@@ -478,9 +589,8 @@
                                                 {% endif %}
 
                                                 {% if status in ['approved', 'self_confirmed'] %}
-                                                    <form method="post" action="{{ url('/admin/user/' ~ userCert.id ~ '/certifications/' ~ userCert.pivot.id) }}" class="d-inline" data-action-form="revoke">
+                                                    <form method="post" action="{{ url('/admin/user/' ~ userCert.id ~ '/certifications/' ~ userCert.pivot.id ~ '/delete') }}" class="d-inline" data-action-form="revoke">
                                                         {{ csrf() }}
-                                                        {{ f.hidden('_method', 'DELETE') }}
                                                         {{ f.hidden('status', 'revoked') }}
                                                         {{ f.hidden('checked', 'on') }}
                                                         <button type="submit"
@@ -496,9 +606,8 @@
                                                 {% endif %}
 
                                                 {% if status == 'revoked' %}
-                                                    <form method="post" action="{{ url('/admin/user/' ~ userCert.id ~ '/certifications/' ~ userCert.pivot.id) }}" class="d-inline" data-action-form="approve">
+                                                    <form method="post" action="{{ url('/admin/user/' ~ userCert.id ~ '/certifications/' ~ userCert.pivot.id ~ '/update') }}" class="d-inline" data-action-form="approve">
                                                         {{ csrf() }}
-                                                        {{ f.hidden('_method', 'PUT') }}
                                                         {{ f.hidden('status', 'approved') }}
                                                         {{ f.hidden('checked', 'on') }}
                                                         <button type="submit"
@@ -532,11 +641,53 @@
                     </table>
                 </div>
             {% else %}
-                <div class="text-center py-4">
-                    <div class="text-muted">
-                        {{ m.icon('inbox', 32) }}
-                        <p class="mt-2">{{ __('certifications.no_critters_with_status', {'status': __(('certifications.status.' ~ status))}) }}</p>
+                <div class="text-center py-5">
+                    <div class="mb-4">
+                        {% set emptyStateIcons = {
+                            'approved': 'people',
+                            'self_confirmed': 'person-check',
+                            'pending': 'hourglass-split',
+                            'revoked': 'person-x',
+                            'expired': 'calendar-x'
+                        } %}
+                        {% set emptyStateColors = {
+                            'approved': 'text-success',
+                            'self_confirmed': 'text-info',
+                            'pending': 'text-warning',
+                            'revoked': 'text-danger',
+                            'expired': 'text-secondary'
+                        } %}
+                        {{ m.icon(emptyStateIcons[status], 48, emptyStateColors[status]) }}
                     </div>
+                    <h5 class="text-muted mb-3">
+                        {{ __('certifications.no_critters_with_status', {'status': __(('certifications.status.' ~ status))}) }}
+                    </h5>
+                    {% if status == 'pending' %}
+                        <p class="text-muted mb-0">
+                            {{ m.icon('info-circle') }}
+                            New certification requests will appear here for approval.
+                        </p>
+                    {% elseif status == 'approved' %}
+                        <p class="text-muted mb-0">
+                            {{ m.icon('info-circle') }}
+                            Approved critters will be listed here once certifications are granted.
+                        </p>
+                    {% elseif status == 'self_confirmed' %}
+                        <p class="text-muted mb-0">
+                            {{ m.icon('info-circle') }}
+                            Self-confirmed certifications will appear here when users validate their own skills.
+                        </p>
+                    {% elseif status == 'revoked' %}
+                        <p class="text-muted mb-0">
+                            {{ m.icon('info-circle') }}
+                            Revoked certifications are moved here for record-keeping.
+                        </p>
+                    {% elseif status == 'expired' %}
+                        <p class="text-muted mb-0">
+                            {{ m.icon('info-circle') }}
+                            Expired certifications will appear here when they reach their end date.
+                        </p>
+                    {% endif %}
                 </div>
             {% endif %}
         </div>
