@@ -72,15 +72,6 @@
                                     <div class="card {% if theme.type =='light' %}bg-light{% else %}bg-secondary{% endif %}">
                                         <div class="card-body bg-body">
                                             {{ question.text|nl2br }}
-
-                                    {% if question.answer %}
-                                        <p class="card-text mt-3 mx-3">
-                                            Answer: <br>
-                                            {{ question.answer }}
-                                        </p>
-                                    {% endif %}
-
-
                                         </div>
 
                                         <div class="card-footer {{ m.type_bg_class() }} d-flex align-items-center">
@@ -120,6 +111,21 @@
                                         </div>
                                     </div>
                                 </div>
+                                {% if question.answer %}
+                                    <div class="col-md-11 offset-md-1 mt-3">
+                                        <div class="card bg-info">
+                                            <div class="card-body bg-body {{ m.type_text_class() }}">
+                                                {{ question.answer|markdown }}
+                                            </div>
+                                            <div class="card-footer {{ m.type_bg_class() }} d-flex align-items-center {{ m.type_text_class() }}">
+                                                <div class="me-3">
+                                                    {{ m.icon('clock') }} {{ question.updated_at.format(__('general.datetime')) }}
+                                                </div>
+                                                {{ m.user(question.answerer, {'pronoun': true}) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
                             </div> <!-- row -->
                         {% endfor %}
                     {% endblock %}

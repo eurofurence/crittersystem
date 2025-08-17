@@ -12,7 +12,7 @@
             <form id="bulkAddForm">
                 <div class="modal-body">
                     {{ csrf() }}
-                    
+
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
@@ -67,7 +67,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ __('form.cancel') }}
                     </button>
                     <button type="submit" class="btn btn-primary">
@@ -95,7 +95,7 @@
                 <div class="modal-body">
                     {{ csrf() }}
                     <input type="hidden" id="editExpiryId" name="user_certification_id">
-                    
+
                     <div class="mb-3">
                         {{ f.input('date_expires', __('user_certifications.expiry_date'), {
                             'type': 'date',
@@ -117,7 +117,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ __('form.cancel') }}
                     </button>
                     <button type="submit" class="btn btn-primary">
@@ -145,13 +145,13 @@
                 <div class="modal-body">
                     {{ csrf() }}
                     <input type="hidden" id="addNoteId" name="user_certification_id">
-                    
+
                     <div class="mb-3">
                         <label for="addNoteText" class="form-label">
                             {{ __('user_certifications.note') }}
                             <span class="text-danger">*</span>
                         </label>
-                        <textarea class="form-control" id="addNoteText" name="note" rows="4" 
+                        <textarea class="form-control" id="addNoteText" name="note" rows="4"
                                   placeholder="{{ __('user_certifications.note_placeholder') }}" required></textarea>
                         <div class="form-text">{{ __('user_certifications.note.help') }}</div>
                     </div>
@@ -163,7 +163,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         {{ __('form.cancel') }}
                     </button>
                     <button type="submit" class="btn btn-primary">
@@ -189,7 +189,7 @@
                 <div id="confirmationDetails" class="alert alert-info" style="display: none;"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     {{ __('form.cancel') }}
                 </button>
                 <button type="button" class="btn btn-danger" id="confirmationSubmit">
@@ -212,9 +212,9 @@
         // Bulk add form submission
         document.getElementById('bulkAddForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             const formData = new FormData(this);
-            
+
             fetch('{{ url('/admin/user-certifications/bulk-add') }}', {
                 method: 'POST',
                 body: formData
@@ -237,10 +237,10 @@
         // Edit expiry form submission
         document.getElementById('editExpiryForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             const formData = new FormData(this);
             const userCertId = formData.get('user_certification_id');
-            
+
             fetch(`{{ url('/admin/user-certifications') }}/${userCertId}`, {
                 method: 'PUT',
                 body: formData
@@ -263,10 +263,10 @@
         // Add note form submission
         document.getElementById('addNoteForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             const formData = new FormData(this);
             const userCertId = formData.get('user_certification_id');
-            
+
             fetch(`{{ url('/admin/user-certifications') }}/${userCertId}/note`, {
                 method: 'POST',
                 body: formData
@@ -291,7 +291,7 @@
     window.editExpiry = function(userCertId, currentDate) {
         document.getElementById('editExpiryId').value = userCertId;
         document.getElementById('editExpiryDate').value = currentDate || '';
-        
+
         const modal = new bootstrap.Modal(document.getElementById('editExpiryModal'));
         modal.show();
     };
@@ -299,14 +299,14 @@
     window.addNote = function(userCertId) {
         document.getElementById('addNoteId').value = userCertId;
         document.getElementById('addNoteText').value = '';
-        
+
         const modal = new bootstrap.Modal(document.getElementById('addNoteModal'));
         modal.show();
     };
 
     window.showConfirmation = function(message, details, callback) {
         document.getElementById('confirmationMessage').textContent = message;
-        
+
         const detailsElement = document.getElementById('confirmationDetails');
         if (details) {
             detailsElement.textContent = details;
@@ -314,14 +314,14 @@
         } else {
             detailsElement.style.display = 'none';
         }
-        
+
         const submitButton = document.getElementById('confirmationSubmit');
         submitButton.onclick = function() {
             callback();
             const modal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
             modal.hide();
         };
-        
+
         const modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
         modal.show();
     };

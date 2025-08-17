@@ -381,7 +381,8 @@ $route->addGroup(
                         $route->post('', 'UserCertificationsController@userStore');
                         $route->put('/{user_certification_id:\d+}', 'UserCertificationsController@userUpdate');
                         $route->delete('/{user_certification_id:\d+}', 'UserCertificationsController@userDestroy');
-                        // Fallback for environments without method override DELETE
+                        // Fallback for environments without method override
+                        $route->post('/{user_certification_id:\d+}/update', 'UserCertificationsController@userUpdate');
                         $route->post('/{user_certification_id:\d+}/delete', 'UserCertificationsController@userDestroy');
                         $route->post('/{user_certification_id:\d+}/note', 'UserCertificationsController@addUserNote');
                     }

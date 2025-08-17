@@ -31,7 +31,7 @@
             </div>
 
             <div class="d-flex gap-2">
-                <a href="{{ url('/admin/certifications') }}" class="btn btn-outline-secondary">
+                <a href="{{ url('/admin/certifications') }}" class="btn btn-secondary">
                     {{ m.icon('arrow-left') }}
                     {{ __('certifications.back_to_list') }}
                 </a>
@@ -105,7 +105,7 @@
                             {{ __('form.search') }}
                         </button>
                         {% if request.input('search_user') or request.input('certification') or request.input('status') or request.input('department') %}
-                            <a href="{{ url('/admin/user-certifications') }}" class="btn btn-outline-secondary w-100 mt-1">
+                            <a href="{{ url('/admin/user-certifications') }}" class="btn btn-secondary w-100 mt-1">
                                 {{ m.icon('x-circle') }}
                                 {{ __('form.clear') }}
                             </a>
@@ -166,7 +166,7 @@
                             <div class="d-flex gap-2">
                                 {# Bulk Actions #}
                                 <div class="dropdown">
-                                    <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
                                         {{ m.icon('three-dots') }}
                                         {{ __('user_certifications.bulk_actions') }}
                                     </button>
@@ -279,7 +279,7 @@
                                             </td>
                                             <td>
                                                 <div class="dropdown">
-                                                    <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
                                                         {{ m.icon('three-dots') }}
                                                     </button>
                                                     <ul class="dropdown-menu">

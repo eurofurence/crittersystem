@@ -36,6 +36,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Handle print certification functionality
     initPrintHandler();
+    
+    // Initialize enhanced action feedback for admin inline actions
+    initEnhancedActionFeedback();
+    
+    // Initialize bulk operations functionality
+    initBulkOperations();
 });
 
 /**
@@ -2468,4 +2474,528 @@ function handlePrintCertifications() {
             alert('Unable to open print dialog. Please use your browser\'s print function (Ctrl+P).');
         }
     }
+}
+
+/**
+ * Initialize enhanced action feedback for admin inline actions
+ */
+function initEnhancedActionFeedback() {
+    // Handle approve action buttons
+    const approveButtons = document.querySelectorAll('button[data-action="approve"]');
+    approveButtons.forEach(button => {
+        button.addEventListener('click', handleApproveAction);
+    });
+    
+    // Handle revoke action buttons  
+    const revokeButtons = document.querySelectorAll('button[data-action="revoke"]');
+    revokeButtons.forEach(button => {
+        button.addEventListener('click', handleRevokeAction);
+    });
+    
+    // Handle form-based actions (for fallback support)
+    const actionForms = document.querySelectorAll('form[data-action-form]');
+    actionForms.forEach(form => {
+        form.addEventListener('submit', handleActionFormSubmit);
+    });
+}
+
+/**
+ * Handle approve action with enhanced feedback
+ */
+function handleApproveAction(e) {
+    e.preventDefault();
+    
+    const button = e.target.closest('button');
+    const userId = button.getAttribute('data-user-id');
+    const certId = button.getAttribute('data-cert-id');
+    const userName = button.getAttribute('data-user-name') || 'this user';
+    
+    // Enhanced confirmation dialog
+    const confirmed = confirm(
+        `Are you sure you want to APPROVE the certification for ${userName}?\n\n` +
+        `This action will:\n` +
+        `• Mark their certification as approved\n` +
+        `• Make it visible in their active certifications\n` +
+        `• Send a notification email (if enabled)\n\n` +
+        `This action can be reversed by revoking the certification later.`
+    );
+    
+    if (!confirmed) {
+        return;
+    }
+    
+    // Set loading state
+    setButtonLoadingState(button, 'Approving...', 'fa-check');
+    
+    // Prepare form data - use POST to /update endpoint instead of PUT with method override
+    const formData = new FormData();
+    formData.append('action', 'approve');
+    formData.append('status', 'approved');
+    formData.append('checked', 'on');  // Required by controller validation
+    
+    // Add CSRF token if available
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ||
+                     document.querySelector('input[name="_token"]')?.value;
+    if (csrfToken) {
+        formData.append('_token', csrfToken);
+    }
+    
+    // Send AJAX request to update endpoint
+    const actionUrl = `/admin/user/${userId}/certifications/${certId}/update`;
+    
+    fetch(actionUrl, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json().catch(() => ({})); // Handle non-JSON responses
+        }
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    })
+    .then(data => {
+        // Success feedback
+        showAlert('success', data.message || `Successfully approved certification for ${userName}!`);
+        
+        // Update UI elements
+        updateUserRowAfterAction(button, 'approved');
+        
+        // Reset button state
+        resetButtonState(button, 'Approve', 'fa-check');
+        
+    })
+    .catch(error => {
+        console.error('Approve action failed:', error);
+        
+        // Error feedback
+        showAlert('error', `Failed to approve certification: ${error.message}`);
+        
+        // Reset button state
+        resetButtonState(button, 'Approve', 'fa-check');
+    });
+}
+
+/**
+ * Handle revoke action with enhanced feedback
+ */
+function handleRevokeAction(e) {
+    e.preventDefault();
+    
+    const button = e.target.closest('button');
+    const userId = button.getAttribute('data-user-id');
+    const certId = button.getAttribute('data-cert-id');
+    const userName = button.getAttribute('data-user-name') || 'this user';
+    
+    // Enhanced confirmation dialog with warning
+    const confirmed = confirm(
+        `⚠️ REVOKE CERTIFICATION - ${userName}\n\n` +
+        `Are you sure you want to REVOKE this certification?\n\n` +
+        `This action will:\n` +
+        `• Remove the certification from their active list\n` +
+        `• Mark it as revoked in their certification history\n` +
+        `• Send a revocation notification (if enabled)\n` +
+        `• May affect their access to restricted areas/roles\n\n` +
+        `⚠️ This is a serious action that should only be taken when necessary.\n\n` +
+        `Type 'REVOKE' to confirm:`
+    );
+    
+    if (!confirmed) {
+        return;
+    }
+    
+    // Additional confirmation for revoke actions
+    const doubleConfirm = prompt(
+        `Final confirmation required.\n\nType 'REVOKE' to confirm revocation of ${userName}'s certification:`
+    );
+    
+    if (doubleConfirm !== 'REVOKE') {
+        showAlert('info', 'Revocation cancelled - confirmation text did not match.');
+        return;
+    }
+    
+    // Set loading state
+    setButtonLoadingState(button, 'Revoking...', 'fa-times');
+    
+    // Prepare form data - use POST to /delete endpoint instead of DELETE with method override  
+    const formData = new FormData();
+    formData.append('action', 'revoke');
+    formData.append('reason', 'Administrative revocation');
+    formData.append('checked', 'on');  // Required by controller validation
+    
+    // Add CSRF token if available
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ||
+                     document.querySelector('input[name="_token"]')?.value;
+    if (csrfToken) {
+        formData.append('_token', csrfToken);
+    }
+    
+    // Send AJAX request to delete endpoint
+    const actionUrl = `/admin/user/${userId}/certifications/${certId}/delete`;
+    
+    fetch(actionUrl, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json().catch(() => ({})); // Handle non-JSON responses
+        }
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    })
+    .then(data => {
+        // Success feedback
+        showAlert('success', data.message || `Successfully revoked certification for ${userName}.`);
+        
+        // Update UI elements
+        updateUserRowAfterAction(button, 'revoked');
+        
+        // Reset button state
+        resetButtonState(button, 'Revoke', 'fa-times');
+        
+    })
+    .catch(error => {
+        console.error('Revoke action failed:', error);
+        
+        // Error feedback  
+        showAlert('error', `Failed to revoke certification: ${error.message}`);
+        
+        // Reset button state
+        resetButtonState(button, 'Revoke', 'fa-times');
+    });
+}
+
+/**
+ * Handle form-based action submissions (fallback)
+ */
+function handleActionFormSubmit(e) {
+    e.preventDefault();
+    
+    const form = e.target;
+    const submitButton = form.querySelector('button[type="submit"]');
+    const action = form.getAttribute('data-action-form');
+    
+    if (action === 'approve' || action === 'revoke') {
+        // Use enhanced handlers for these actions
+        if (action === 'approve') {
+            // Trigger approve handler on the button
+            const approveButton = form.querySelector('button[data-action="approve"]');
+            if (approveButton) {
+                handleApproveAction({ target: approveButton, preventDefault: () => {} });
+                return;
+            }
+        } else if (action === 'revoke') {
+            // Trigger revoke handler on the button
+            const revokeButton = form.querySelector('button[data-action="revoke"]');
+            if (revokeButton) {
+                handleRevokeAction({ target: revokeButton, preventDefault: () => {} });
+                return;
+            }
+        }
+    }
+    
+    // Fallback to normal form submission with loading state
+    if (submitButton) {
+        setButtonLoadingState(submitButton, 'Processing...', 'fa-spinner');
+    }
+    
+    // Allow normal form submission
+    form.submit();
+}
+
+/**
+ * Set button to loading state
+ */
+function setButtonLoadingState(button, loadingText, originalIcon = '') {
+    // Store original state
+    button.setAttribute('data-original-text', button.innerHTML);
+    button.setAttribute('data-original-disabled', button.disabled);
+    
+    // Set loading state
+    button.disabled = true;
+    button.innerHTML = `<i class="fa fa-spinner fa-spin"></i> ${loadingText}`;
+}
+
+/**
+ * Reset button to original state
+ */
+function resetButtonState(button, originalText, originalIcon = '') {
+    // Use stored original state or provided defaults
+    const storedText = button.getAttribute('data-original-text');
+    const storedDisabled = button.getAttribute('data-original-disabled') === 'true';
+    
+    if (storedText) {
+        button.innerHTML = storedText;
+    } else if (originalIcon) {
+        button.innerHTML = `<i class="fa ${originalIcon}"></i> ${originalText}`;
+    } else {
+        button.innerHTML = originalText;
+    }
+    
+    button.disabled = storedDisabled;
+    
+    // Clean up stored attributes
+    button.removeAttribute('data-original-text');
+    button.removeAttribute('data-original-disabled');
+}
+
+/**
+ * Update user row UI after successful action
+ */
+function updateUserRowAfterAction(actionButton, newStatus) {
+    const userRow = actionButton.closest('tr');
+    if (!userRow) return;
+    
+    // Find and update status badge
+    const statusBadge = userRow.querySelector('.badge');
+    if (statusBadge) {
+        // Remove old status classes
+        statusBadge.classList.remove('bg-warning', 'bg-success', 'bg-danger', 'bg-secondary', 'bg-info');
+        
+        // Add new status class and text
+        switch (newStatus) {
+            case 'approved':
+                statusBadge.classList.add('bg-success');
+                statusBadge.textContent = 'Approved';
+                break;
+            case 'revoked':
+                statusBadge.classList.add('bg-danger');
+                statusBadge.textContent = 'Revoked';
+                break;
+            case 'pending':
+                statusBadge.classList.add('bg-warning');
+                statusBadge.textContent = 'Pending';
+                break;
+            default:
+                statusBadge.classList.add('bg-secondary');
+                statusBadge.textContent = newStatus;
+        }
+    }
+    
+    // Update action buttons based on new status
+    updateActionButtonsForStatus(userRow, newStatus);
+    
+    // Add visual feedback (brief highlight)
+    userRow.classList.add('table-success');
+    setTimeout(() => {
+        userRow.classList.remove('table-success');
+    }, 2000);
+}
+
+/**
+ * Update action buttons visibility based on status
+ */
+function updateActionButtonsForStatus(userRow, status) {
+    const approveButton = userRow.querySelector('button[data-action="approve"]');
+    const revokeButton = userRow.querySelector('button[data-action="revoke"]');
+    
+    if (approveButton && revokeButton) {
+        switch (status) {
+            case 'approved':
+                // Hide approve, show revoke
+                approveButton.style.display = 'none';
+                revokeButton.style.display = 'inline-block';
+                break;
+            case 'revoked':
+                // Show approve, hide revoke
+                approveButton.style.display = 'inline-block'; 
+                revokeButton.style.display = 'none';
+                break;
+            case 'pending':
+                // Show both
+                approveButton.style.display = 'inline-block';
+                revokeButton.style.display = 'inline-block';
+                break;
+            default:
+                // Show both by default
+                approveButton.style.display = 'inline-block';
+                revokeButton.style.display = 'inline-block';
+        }
+    }
+}
+
+/**
+ * Initialize bulk operations functionality
+ */
+function initBulkOperations() {
+    // Handle select all checkboxes
+    document.querySelectorAll('[id^="select-all-"]').forEach(selectAllCheckbox => {
+        selectAllCheckbox.addEventListener('change', function() {
+            const status = this.dataset.target;
+            const checkboxes = document.querySelectorAll(`.bulk-select[data-status="${status}"]`);
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+            updateBulkActionButtons(status);
+        });
+    });
+
+    // Handle individual checkbox changes
+    document.querySelectorAll('.bulk-select').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const status = this.dataset.status;
+            updateSelectAllCheckbox(status);
+            updateBulkActionButtons(status);
+        });
+    });
+
+    // Handle bulk action buttons
+    document.querySelectorAll('[id^="bulk-approve-"], [id^="bulk-revoke-"]').forEach(button => {
+        button.addEventListener('click', handleBulkAction);
+    });
+}
+
+/**
+ * Update the select all checkbox state based on individual selections
+ */
+function updateSelectAllCheckbox(status) {
+    const checkboxes = document.querySelectorAll(`.bulk-select[data-status="${status}"]`);
+    const selectAllCheckboxes = document.querySelectorAll(`[data-target="${status}"]`);
+    
+    const totalCheckboxes = checkboxes.length;
+    const checkedCheckboxes = document.querySelectorAll(`.bulk-select[data-status="${status}"]:checked`).length;
+    
+    selectAllCheckboxes.forEach(selectAll => {
+        if (checkedCheckboxes === 0) {
+            selectAll.checked = false;
+            selectAll.indeterminate = false;
+        } else if (checkedCheckboxes === totalCheckboxes) {
+            selectAll.checked = true;
+            selectAll.indeterminate = false;
+        } else {
+            selectAll.checked = false;
+            selectAll.indeterminate = true;
+        }
+    });
+}
+
+/**
+ * Update bulk action buttons based on selections
+ */
+function updateBulkActionButtons(status) {
+    const checkedCheckboxes = document.querySelectorAll(`.bulk-select[data-status="${status}"]:checked`);
+    const bulkButtons = document.querySelectorAll(`[data-status="${status}"][id^="bulk-"]`);
+    
+    bulkButtons.forEach(button => {
+        button.disabled = checkedCheckboxes.length === 0;
+        
+        // Update button text with count
+        const action = button.dataset.action;
+        const baseText = action === 'approve' ? 'Bulk Approve' : 'Bulk Revoke';
+        const icon = action === 'approve' ? 
+            '<i class="bi bi-check"></i>' : 
+            '<i class="bi bi-x"></i>';
+        
+        if (checkedCheckboxes.length > 0) {
+            button.innerHTML = `${icon} ${baseText} (${checkedCheckboxes.length})`;
+        } else {
+            button.innerHTML = `${icon} ${baseText}`;
+        }
+    });
+}
+
+/**
+ * Handle bulk action execution
+ */
+function handleBulkAction(event) {
+    event.preventDefault();
+    
+    const button = event.currentTarget;
+    const action = button.dataset.action;
+    const status = button.dataset.status;
+    const certificationId = button.dataset.certificationId;
+    
+    const checkedCheckboxes = document.querySelectorAll(`.bulk-select[data-status="${status}"]:checked`);
+    
+    if (checkedCheckboxes.length === 0) {
+        showAlert('Please select at least one certification to ' + action + '.', 'warning');
+        return;
+    }
+    
+    const certificationIds = Array.from(checkedCheckboxes).map(cb => parseInt(cb.value));
+    const count = certificationIds.length;
+    
+    // Show confirmation dialog
+    const actionText = action === 'approve' ? 'approve' : 'revoke';
+    const confirmMessage = `Are you sure you want to ${actionText} ${count} certification(s)?`;
+    
+    if (!confirm(confirmMessage)) {
+        return;
+    }
+    
+    // Additional confirmation for bulk revoke actions
+    if (action === 'revoke') {
+        const doubleConfirm = prompt(
+            `FINAL CONFIRMATION REQUIRED\n\nThis will revoke ${count} certification(s) which is a significant administrative action.\n\nType 'BULK REVOKE' to confirm:`
+        );
+        if (doubleConfirm !== 'BULK REVOKE') {
+            return;
+        }
+    }
+    
+    // Disable button and show loading state
+    const originalText = button.innerHTML;
+    button.disabled = true;
+    button.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Processing...';
+    
+    // Prepare form data
+    const formData = new FormData();
+    formData.append('action', action);
+    certificationIds.forEach(id => {
+        formData.append('certification_ids[]', id);
+    });
+    
+    // Add CSRF token
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ||
+                      document.querySelector('input[name="_token"]')?.value;
+    if (csrfToken) {
+        formData.append('_token', csrfToken);
+    }
+    
+    // Make AJAX request
+    fetch('/admin/user-certifications/bulk', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Restore button
+        button.disabled = false;
+        button.innerHTML = originalText;
+        
+        if (data.success) {
+            showAlert(data.message, 'success');
+            
+            // Refresh the page to show updated data
+            setTimeout(() => {
+                location.reload();
+            }, 1500);
+        } else {
+            showAlert(data.message || 'An error occurred during bulk operation.', 'danger');
+            
+            // Show error details if provided
+            if (data.error_details && data.error_details.length > 0) {
+                console.error('Bulk operation errors:', data.error_details);
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Bulk operation error:', error);
+        
+        // Restore button
+        button.disabled = false;
+        button.innerHTML = originalText;
+        
+        showAlert('An error occurred during bulk operation.', 'danger');
+    });
 }

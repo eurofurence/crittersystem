@@ -22,7 +22,7 @@
             <p class="text-muted">{{ __('user_certifications.self_confirm_description') }}</p>
         </div>
         <div>
-            <a href="{{ url('/user/certifications') }}" class="btn btn-outline-secondary">
+            <a href="{{ url('/user/certifications') }}" class="btn btn-secondary">
                 {{ m.icon('arrow-left') }}
                 {{ __('form.back')|default('Back') }}
             </a>
@@ -212,12 +212,12 @@
                 <div class="card-body">
                     <p class="small text-muted mb-3">{{ __('user_certifications.alternative_options_desc') }}</p>
                     <div class="d-grid gap-2">
-                        <a href="{{ url('/user/certifications/apply/' ~ certification.uuid) }}" class="btn btn-outline-primary btn-sm">
+                        <a href="{{ url('/user/certifications/apply/' ~ certification.uuid) }}" class="btn btn-primary btn-sm">
                             {{ m.icon('plus-circle') }}
                             {{ __('user_certifications.apply_formal') }}
                         </a>
                         {% if certification.contact_email %}
-                            <a href="mailto:{{ certification.contact_email }}" class="btn btn-outline-secondary btn-sm">
+                            <a href="mailto:{{ certification.contact_email }}" class="btn btn-secondary btn-sm">
                                 {{ m.icon('envelope-fill') }}
                                 {{ __('user_certifications.contact_trainer') }}
                             </a>
@@ -226,28 +226,28 @@
                 </div>
             </div>
 
-            {# Help Card #}
-            <div class="card mt-3">
-                <div class="card-header">
-                    <h6 class="card-title mb-0">
-                        {{ m.icon('question-circle-fill') }}
-                        {{ __('user_certifications.need_help') }}
-                    </h6>
-                </div>
-                <div class="card-body">
-                    <p class="small text-muted mb-2">{{ __('user_certifications.self_confirm_help_desc') }}</p>
-                    <div class="d-grid gap-2">
-                        <a href="{{ url('/help/certifications#self-confirmation') }}" class="btn btn-outline-secondary btn-sm">
-                            {{ m.icon('book-fill') }}
-                            {{ __('user_certifications.view_self_confirm_guide') }}
-                        </a>
-                        <a href="{{ url('/contact') }}" class="btn btn-outline-secondary btn-sm">
-                            {{ m.icon('chat-dots-fill') }}
-                            {{ __('user_certifications.contact_support') }}
-                        </a>
-                    </div>
-                </div>
-            </div>
+{#              #}{# Help Card #}
+{#             <div class="card mt-3"> #}
+{#                 <div class="card-header"> #}
+{#                     <h6 class="card-title mb-0"> #}
+{#                         {{ m.icon('question-circle-fill') }} #}
+{#                         {{ __('user_certifications.need_help') }} #}
+{#                     </h6> #}
+{#                 </div> #}
+{#                 <div class="card-body"> #}
+{#                     <p class="small text-muted mb-2">{{ __('user_certifications.self_confirm_help_desc') }}</p> #}
+{#                     <div class="d-grid gap-2"> #}
+{#                         <a href="{{ url('/help/certifications#self-confirmation') }}" class="btn btn-secondary btn-sm"> #}
+{#                             {{ m.icon('book-fill') }} #}
+{#                             {{ __('user_certifications.view_self_confirm_guide') }} #}
+{#                         </a> #}
+{#                         <a href="{{ url('/contact') }}" class="btn btn-secondary btn-sm"> #}
+{#                             {{ m.icon('chat-dots-fill') }} #}
+{#                             {{ __('user_certifications.contact_support') }} #}
+{#                         </a> #}
+{#                     </div> #}
+{#                 </div> #}
+{#             </div> #}
         </div>
     </div>
 </div>

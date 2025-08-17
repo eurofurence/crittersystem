@@ -1189,7 +1189,7 @@ msgid "certifications.self_confirmation"
 msgstr "Self-Confirmation"
 
 msgid "certifications.valid_for_days"
-msgstr "{days} days"
+msgstr "%d days"
 
 msgid "certifications.back_to_list"
 msgstr "Back to Certifications"
@@ -1256,10 +1256,10 @@ msgid "user_certifications.date_expires"
 msgstr "Expires"
 
 msgid "user_certifications.expires_in"
-msgstr "Expires in {days} days"
+msgstr "Expires in %d days"
 
 msgid "user_certifications.expired_since"
-msgstr "Expired {days} days ago"
+msgstr "Expired %d days ago"
 
 msgid "user_certifications.never_expires"
 msgstr "Never expires"
@@ -3044,7 +3044,7 @@ msgid "user_certifications.apply_standard_info"
 msgstr "Your application will be reviewed by a coordinator."
 
 msgid "user_certifications.apply_expiry_info"
-msgstr "If approved, the certification will be valid for {days} days."
+msgstr "If approved, the certification will be valid for %d days."
 
 msgid "user_certifications.apply_confirmation"
 msgstr "I confirm that the information in this application is correct."
@@ -3068,7 +3068,7 @@ msgid "user_certifications.perpetual_description"
 msgstr "This certification does not expire."
 
 msgid "user_certifications.time_limited_description"
-msgstr "This certification expires after {days} days."
+msgstr "This certification expires after %d days."
 
 msgid "user_certifications.contact_trainer"
 msgstr "Contact Trainer"
@@ -3134,7 +3134,7 @@ msgid "user_certifications.application_cancelled_on"
 msgstr "Application cancelled on"
 
 msgid "user_certifications.pending_for_days"
-msgstr "Pending for {days} days"
+msgstr "Pending for %d days"
 
 msgid "user_certifications.expires_on"
 msgstr "Expires on"
@@ -3248,7 +3248,7 @@ msgid "user_certifications.self_confirm_process_info"
 msgstr "Confirm that you have completed this certification to activate it immediately."
 
 msgid "user_certifications.self_confirm_expiry_info"
-msgstr "Upon confirmation, the certification will be valid for {days} days."
+msgstr "Upon confirmation, the certification will be valid for %d days."
 
 msgid "user_certifications.self_confirm_responsibility_title"
 msgstr "Your Responsibility"
@@ -3281,7 +3281,7 @@ msgid "user_certifications.self_responsibility_desc"
 msgstr "You are responsible for the correctness of your confirmation."
 
 msgid "user_certifications.valid_for_days"
-msgstr "Valid for {days} days"
+msgstr "Valid for %d days"
 
 msgid "user_certifications.renewal_required_desc"
 msgstr "You will need to renew this certification before it expires."
@@ -3306,3 +3306,16 @@ msgstr "Pending"
 
 msgid "department.badge.denied"
 msgstr "Denied"
+
+msgid "certification.create.sucess"
+msgstr "Certification created"
+
+msgid "certification.create.fail"
+msgstr "Error creating the certification"
+
+msgid "certification.create.error"
+msgstr "Error creating the certification"
+
+msgid "validation.description.min"
+msgstr "Error: Description needs to be longer"
+

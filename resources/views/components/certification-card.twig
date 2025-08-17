@@ -16,14 +16,14 @@
 {% set is_expiring_soon = is_expiring_soon|default(false) %}
 {% set show_actions = show_actions|default(true) %}
 
-<div class="list-group-item certification-item" 
+<div class="list-group-item certification-item"
      data-title="{{ certification.title|lower }}"
      data-description="{{ certification.description|lower }}"
      data-status="{{ user_status }}"
      data-type="{{ certification.is_perpetual ? 'perpetual' : 'time_limited' }}"
      data-self-confirmable="{{ certification.allow_self_confirmation ? 'yes' : 'no' }}"
      data-availability="{{ user_status != 'not_applied' ? 'have' : 'available' }}">
-    
+
     <div class="d-flex justify-content-between align-items-start">
         <div class="flex-grow-1">
             <div class="d-flex align-items-center mb-2 flex-wrap">
@@ -156,7 +156,7 @@
                                 {{ __('user_certifications.self_confirm') }}
                             </a>
                             <a href="{{ url('/user/certifications/apply/' ~ certification.uuid) }}"
-                               class="btn btn-outline-success btn-sm"
+                               class="btn btn-success btn-sm"
                                title="{{ __('user_certifications.apply_formal_tooltip') }}">
                                 {{ m.icon('plus-circle') }}
                                 {{ __('user_certifications.apply_formal') }}
@@ -173,7 +173,7 @@
                 {% elseif user_status == 'pending' %}
                     {# Withdrawal button for pending applications #}
                     <button type="button"
-                            class="btn btn-outline-warning btn-sm withdraw-application-btn"
+                            class="btn btn-warning btn-sm withdraw-application-btn"
                             data-certification-uuid="{{ certification.uuid }}"
                             data-certification-title="{{ certification.title }}"
                             title="{{ __('user_certifications.withdraw_application_tooltip') }}">
@@ -183,7 +183,7 @@
                     {% if certification.allow_self_confirmation %}
                         {# Also show self-confirm option for pending self-confirmable certifications #}
                         <a href="{{ url('/user/certifications/self-confirm/' ~ certification.uuid) }}"
-                           class="btn btn-outline-success btn-sm ms-1"
+                           class="btn btn-success btn-sm ms-1"
                            title="{{ __('user_certifications.self_confirm_pending_tooltip') }}">
                             {{ m.icon('check-circle') }}
                             {{ __('user_certifications.self_confirm') }}
@@ -191,7 +191,7 @@
                     {% endif %}
                 {% elseif (is_expired or is_expiring_soon) and certification.allow_self_confirmation %}
                     <a href="{{ url('/user/certifications/renew/' ~ certification.uuid) }}"
-                       class="btn btn-outline-primary btn-sm"
+                       class="btn btn-primary btn-sm"
                        title="{{ __('user_certifications.renew_tooltip') }}">
                         {{ m.icon('arrow-clockwise') }}
                         {{ __('user_certifications.renew') }}

@@ -21,12 +21,12 @@ class CertificationsController extends BaseController
     use HasUserNotifications;
 
     /** @var array<string> */
-    protected array $permissions = [];
-    // protected array $permissions = [
-    //     'certificates.admin',    // New primary certification admin permission
-    //     'certificates.manage',   // New certification management permission
-    //     'admin_certificates',    // Legacy permission for backward compatibility
-    // ];
+//    protected array $permissions = [];
+     protected array $permissions = [
+         'certificates.admin',    // New primary certification admin permission
+//         'certificates.manage',   // New certification management permission
+//         'admin_certificates',    // Legacy permission for backward compatibility
+     ];
 
     public function __construct(
         protected LoggerInterface $log,
@@ -166,6 +166,7 @@ class CertificationsController extends BaseController
         // Get user certifications for this certification
         $userCertifications = $certification->users()
             ->withPivot([
+                'id', // Add pivot table primary key
                 'status',
                 'date_certified',
                 'date_expires',
@@ -178,15 +179,82 @@ class CertificationsController extends BaseController
             ->orderBy('certifications_user.date_expires')
             ->get();
 
-        // Group by status for better display
-        $usersByStatus = $userCertifications->groupBy('pivot.status');
+        // Group by status for better display, with special handling for expired certifications
+        $usersByStatus = collect();
+        
+        // Handle edge case: no users have this certification
+        if ($userCertifications->isEmpty()) {
+            // Initialize empty collections for all status types
+            $usersByStatus = collect([
+                'approved' => collect(),
+                'pending' => collect(),
+                'self_confirmed' => collect(),
+                'revoked' => collect(),
+                'expired' => collect(),
+            ]);
+        } else {
+            $now = \Carbon\Carbon::now();
+            
+            foreach ($userCertifications as $user) {
+                $status = $user->pivot->status;
+                $dateExpires = $user->pivot->date_expires;
+                
+                // Override status to 'expired' if certification has passed its expiry date
+                if ($dateExpires && \Carbon\Carbon::parse($dateExpires)->isPast()) {
+                    $status = 'expired';
+                }
+                
+                // Group users by their effective status
+                if (!$usersByStatus->has($status)) {
+                    $usersByStatus->put($status, collect());
+                }
+                $usersByStatus->get($status)->push($user);
+            }
+        }
+
+        // Calculate individual status counts for statistics display with edge case handling
+        $statusCounts = [
+            'approved' => $usersByStatus->get('approved', collect())->count(),
+            'pending' => $usersByStatus->get('pending', collect())->count(),
+            'self_confirmed' => $usersByStatus->get('self_confirmed', collect())->count(),
+            'revoked' => $usersByStatus->get('revoked', collect())->count(),
+            'expired' => $usersByStatus->get('expired', collect())->count(),
+        ];
+
+        // Ensure all counts are integers and handle any edge cases
+        foreach ($statusCounts as $status => $count) {
+            $statusCounts[$status] = max(0, (int) $count);
+        }
+
+        // Calculate total by summing individual status counts for accuracy
+        $totalCount = array_sum($statusCounts);
+
+        $userCounts = [
+            'total' => $totalCount,
+            'approved' => $statusCounts['approved'],
+            'pending' => $statusCounts['pending'],
+            'self_confirmed' => $statusCounts['self_confirmed'],
+            'revoked' => $statusCounts['revoked'],
+            'expired' => $statusCounts['expired'],
+        ];
+
+        // Ensure all status collections are available for template access
+        $statusCollections = [];
+        foreach (['approved', 'pending', 'self_confirmed', 'revoked', 'expired'] as $status) {
+            $collection = $usersByStatus->get($status, collect());
+            // Ensure we have a proper Collection of User models
+            $statusCollections[$status] = $collection instanceof \Illuminate\Support\Collection 
+                ? $collection 
+                : collect($collection);
+        }
 
         return $this->response->withView(
             'admin/certifications/show',
             [
                 'certification' => $certification,
-                'users_by_status' => $usersByStatus,
-                'total_users' => $userCertifications->count(),
+                'usersByStatus' => (object) $statusCollections, // Convert to object for property access
+                'userCounts' => $userCounts, // Add the missing userCounts object
+                'total_users' => $userCertifications->count(), // Keep for backward compatibility
             ]
         );
     }

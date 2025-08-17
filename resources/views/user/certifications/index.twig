@@ -19,7 +19,7 @@
             </div>
 
             <div class="dropdown">
-                <button class="btn btn-light btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                <button class="btn btn-light btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
                     {{ m.icon('three-dots') }}
                     {{ __('form.actions') }}
                 </button>
@@ -115,7 +115,7 @@
                                                     </a>
                                                 {% endif %}
                                                 <button type="button"
-                                                        class="btn btn-outline-secondary btn-sm withdraw-application-btn"
+                                                        class="btn btn-secondary btn-sm withdraw-application-btn"
                                                         data-certification-uuid="{{ application.certification.uuid }}"
                                                         data-certification-title="{{ application.certification.title }}"
                                                         title="{{ __('user_certifications.withdraw_application_tooltip') }}">
@@ -264,7 +264,7 @@
 
 {#                             {% if applicationStats.total_applications > 10 %} #}
 {#                                 <div class="text-center mt-3"> #}
-{#                                     <a href="{{ url('/user/certifications/history') }}" class="btn btn-outline-primary"> #}
+{#                                     <a href="{{ url('/user/certifications/history') }}" class="btn btn-primary"> #}
 {#                                         {{ m.icon('list-ul') }} #}
 {#                                         {{ __('user_certifications.view_full_history') }} #}
 {#                                         <span class="badge bg-primary-subtle text-primary ms-2">{{ applicationStats.total_applications - 10 }}</span> #}
@@ -379,7 +379,7 @@
                     <div class="card-header">
                         <div class="d-flex justify-content-between align-items-center">
                             <h6 class="mb-0">{{ __('user_certifications.filters') }}</h6>
-                            <button type="button" class="btn btn-sm btn-outline-secondary" id="clear-filters" style="display: none;">
+                            <button type="button" class="btn btn-sm btn-secondary" id="clear-filters" style="display: none;">
                                 {{ m.icon('x-circle') }}
                                 {{ __('user_certifications.clear_filters') }}
                             </button>
@@ -508,7 +508,7 @@
                                     <form method="GET" action="{{ url('/user/certifications') }}" class="d-inline-block">
                                         <input type="hidden" name="type" value="self_confirmable">
                                         <input type="hidden" name="availability" value="available">
-                                        <button type="submit" class="btn btn-sm btn-outline-success quick-filter"
+                                        <button type="submit" class="btn btn-sm btn-success quick-filter"
                                                 data-filter="self_confirmable"
                                                 data-filter-type="self_confirmable"
                                                 aria-label="{{ __('user_certifications.filter_by_self_confirmable') }}"
@@ -521,7 +521,7 @@
                                     {# Available Quick Filter #}
                                     <form method="GET" action="{{ url('/user/certifications') }}" class="d-inline-block">
                                         <input type="hidden" name="availability" value="available">
-                                        <button type="submit" class="btn btn-sm btn-outline-primary quick-filter"
+                                        <button type="submit" class="btn btn-sm btn-primary quick-filter"
                                                 data-filter="available"
                                                 data-filter-type="available"
                                                 aria-label="{{ __('user_certifications.filter_by_available') }}"
@@ -534,7 +534,7 @@
                                     {# Expiring Quick Filter #}
                                     <form method="GET" action="{{ url('/user/certifications') }}" class="d-inline-block">
                                         <input type="hidden" name="status" value="approved">
-                                        <button type="submit" class="btn btn-sm btn-outline-warning quick-filter"
+                                        <button type="submit" class="btn btn-sm btn-warning quick-filter"
                                                 data-filter="expiring"
                                                 data-filter-type="expiring"
                                                 aria-label="{{ __('user_certifications.filter_by_expiring') }}"
@@ -547,7 +547,7 @@
                                     {# Expired Quick Filter #}
                                     <form method="GET" action="{{ url('/user/certifications') }}" class="d-inline-block">
                                         <input type="hidden" name="status" value="expired">
-                                        <button type="submit" class="btn btn-sm btn-outline-danger quick-filter"
+                                        <button type="submit" class="btn btn-sm btn-danger quick-filter"
                                                 data-filter="expired"
                                                 data-filter-type="expired"
                                                 aria-label="{{ __('user_certifications.filter_by_expired') }}"

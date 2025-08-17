@@ -67,7 +67,7 @@
                             <div class="col-md-2">
                                 <div class="d-grid gap-2">
                                     {{ f.submit(__('form.search'), {'icon_left': 'search', 'size': 'sm'}) }}
-                                    <a href="{{ url('/admin/certifications') }}" class="btn btn-outline-secondary btn-sm">
+                                    <a href="{{ url('/admin/certifications') }}" class="btn btn-secondary btn-sm">
                                         {{ m.icon('x-circle') }}
                                         {{ __('form.clear') }}
                                     </a>
@@ -207,14 +207,14 @@
                                         <td>
                                             <div class="btn-group" role="group">
                                                 <a href="{{ url('/admin/certifications/' ~ certification.uuid) }}"
-                                                   class="btn btn-outline-primary btn-sm"
+                                                   class="btn btn-primary btn-sm"
                                                    title="{{ __('form.view') }}">
                                                     {{ m.icon('eye') }}
                                                 </a>
 
                                                 {% if can('admin_certificates') or can('certificates.manage') %}
                                                     <a href="{{ url('/admin/certifications/' ~ certification.uuid ~ '/edit') }}"
-                                                       class="btn btn-outline-secondary btn-sm"
+                                                       class="btn btn-secondary btn-sm"
                                                        title="{{ __('form.edit') }}">
                                                         {{ m.icon('pencil') }}
                                                     </a>
@@ -223,7 +223,7 @@
                                                         <form method="post" action="{{ url('/admin/certifications/' ~ certification.uuid ~ '/deactivate') }}" class="d-inline">
                                                             {{ csrf() }}
                                                             <button type="submit"
-                                                                    class="btn btn-outline-warning btn-sm"
+                                                                    class="btn btn-warning btn-sm"
                                                                     title="{{ __('certifications.deactivate') }}"
                                                                     data-confirm="{{ __('certifications.deactivate.confirm', [certification.title|e]) }}">
                                                                 {{ m.icon('pause-circle') }}
@@ -233,7 +233,7 @@
                                                         <form method="post" action="{{ url('/admin/certifications/' ~ certification.uuid ~ '/reactivate') }}" class="d-inline">
                                                             {{ csrf() }}
                                                             <button type="submit"
-                                                                    class="btn btn-outline-success btn-sm"
+                                                                    class="btn btn-success btn-sm"
                                                                     title="{{ __('certifications.reactivate') }}">
                                                                 {{ m.icon('play-circle') }}
                                                             </button>
@@ -242,7 +242,7 @@
 
                                                     <div class="btn-group" role="group">
                                                         <button type="button"
-                                                                class="btn btn-outline-danger btn-sm dropdown-toggle"
+                                                                class="btn btn-danger btn-sm dropdown-toggle"
                                                                 data-bs-toggle="dropdown"
                                                                 title="{{ __('certifications.more_actions') }}">
                                                             {{ m.icon('three-dots-vertical') }}

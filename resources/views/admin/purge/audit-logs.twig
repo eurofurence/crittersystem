@@ -192,7 +192,7 @@
                                         <td>
                                             <div class="btn-group btn-group-sm" role="group">
                                                 <button type="button"
-                                                        class="btn btn-outline-info btn-sm"
+                                                        class="btn btn-info btn-sm"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#logModal{{ log.id }}"
                                                         title="{{ __('admin.purge.view_details') }}">
@@ -200,7 +200,7 @@
                                                 </button>
                                                 {% if log.backup_file_path and log.status == 'completed' %}
                                                     <a href="{{ url('admin/purge/download-backup/' ~ log.id) }}"
-                                                       class="btn btn-outline-success btn-sm"
+                                                       class="btn btn-success btn-sm"
                                                        title="{{ __('admin.purge.download_backup') }}">
                                                         <i class="fa fa-download"></i>
                                                     </a>

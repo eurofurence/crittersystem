@@ -172,6 +172,11 @@ class OAuthController extends BaseController
             $this->handleArrive($providerName, $oauth, $resourceOwner);
         }
 
+        // Handle arrive if staff with user.type.staff
+        if ($oauth->user->hasPermission('user.type.staff')) {
+            $this->handleArrive($providerName, $oauth, $resourceOwner);
+        }
+
         $response = $this->authController->loginUser($oauth->user);
         event('oauth2.login', ['provider' => $providerName, 'data' => $userdata]);
 

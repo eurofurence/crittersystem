@@ -32,6 +32,7 @@ class UserCertificationsController extends BaseController
         'userStore' => ['certificates.admin||certificates.manage||certificates.assign'],
         'userUpdate' => ['certificates.admin||certificates.manage||certificates.approve'],
         'userDestroy' => ['certificates.admin||certificates.manage||certificates.revoke'],
+        'bulk' => ['certificates.admin||certificates.manage'],
     ];
 
     public function __construct(
@@ -198,7 +199,7 @@ class UserCertificationsController extends BaseController
      */
     public function userStore(Request $request): Response
     {
-        $this->checkPermission('certification.admin');
+        $this->checkPermission('certificates.admin');
 
         $user = $this->getUser($request);
 
@@ -266,7 +267,7 @@ class UserCertificationsController extends BaseController
      */
     public function userUpdate(Request $request): Response
     {
-        $this->checkPermission('certification.admin');
+        $this->checkPermission('certificates.admin');
 
         $user = $this->getUser($request);
         $certificationUser = $this->resolveCertificationUser($request);
@@ -282,21 +283,8 @@ class UserCertificationsController extends BaseController
             // Update certification status
             $this->certificationService->updateUserCertification(
                 $certificationUser,
-                $validatedData['status']
+                $validatedData  // Pass the entire validated data array
             );
-
-            // Update additional fields if provided
-            if (isset($validatedData['date_expires'])) {
-                $certificationUser->date_expires = !empty($validatedData['date_expires'])
-                    ? new \Carbon\Carbon($validatedData['date_expires'])
-                    : null;
-            }
-
-            if (isset($validatedData['notes'])) {
-                $certificationUser->notes = $validatedData['notes'];
-            }
-
-            $certificationUser->save();
 
             $this->log->info('Updated certification {certification} for user {user}', [
                 'certification' => $certificationUser->certification->title,
@@ -309,8 +297,26 @@ class UserCertificationsController extends BaseController
 
             $this->addNotification('certification.user.update.success');
 
+            // Return JSON for AJAX requests
+            if ($this->isAjaxRequest($request)) {
+                return $this->response->withJson([
+                    'success' => true,
+                    'message' => 'Certification status updated successfully.',
+                    'status' => $validatedData['status'],
+                    'user' => $user->name,
+                ]);
+            }
+
             return $this->redirect->to('/users/' . $user->id . '/certifications');
         } catch (\InvalidArgumentException $e) {
+            // Return JSON for AJAX requests (userUpdate method)
+            if ($this->isAjaxRequest($request)) {
+                return $this->response->withJson([
+                    'success' => false,
+                    'message' => $e->getMessage()
+                ], 400);
+            }
+
             throw new ValidationException(
                 (new Validator())->addErrors(['general' => [$e->getMessage()]])
             );
@@ -322,7 +328,7 @@ class UserCertificationsController extends BaseController
      */
     public function userDestroy(Request $request): Response
     {
-        $this->checkPermission('certification.admin');
+        $this->checkPermission('certificates.admin');
 
         $user = $this->getUser($request);
         $certificationUser = $this->resolveCertificationUser($request);
@@ -350,8 +356,25 @@ class UserCertificationsController extends BaseController
 
             $this->addNotification('certification.user.remove.success');
 
+            // Return JSON for AJAX requests
+            if ($this->isAjaxRequest($request)) {
+                return $this->response->withJson([
+                    'success' => true,
+                    'message' => 'Certification removed successfully.',
+                    'user' => $user->name,
+                ]);
+            }
+
             return $this->redirect->to('/users/' . $user->id . '/certifications');
         } catch (\InvalidArgumentException $e) {
+            // Return JSON for AJAX requests (userDestroy method)
+            if ($this->isAjaxRequest($request)) {
+                return $this->response->withJson([
+                    'success' => false,
+                    'message' => $e->getMessage()
+                ], 400);
+            }
+
             throw new ValidationException(
                 (new Validator())->addErrors(['general' => [$e->getMessage()]])
             );
@@ -442,9 +465,13 @@ class UserCertificationsController extends BaseController
             }
 
             // Apply for the certification via service with application metadata
+//            $applicationNotes = sprintf(
+//                'Application submitted from IP %s at %s',
+//                $request->getClientIp(),
+//                Carbon::now()->toDateTimeString()
+//            );
             $applicationNotes = sprintf(
-                'Application submitted from IP %s at %s',
-                $request->getClientIp(),
+                'Application submitted at %s',
                 Carbon::now()->toDateTimeString()
             );
 
@@ -782,12 +809,19 @@ class UserCertificationsController extends BaseController
 
             // Add self-confirmation metadata to notes
             $selfConfirmationNotes = sprintf(
-                'Self-confirmed from IP %s at %s. %s',
-                $request->getClientIp(),
+                'Self-confirmed at %s. %s',
                 Carbon::now()->toDateTimeString(),
                 $certificationUser ? 'Updated existing record.' : 'Direct self-confirmation.'
             );
 
+//            // Add self-confirmation metadata to notes
+//            $selfConfirmationNotes = sprintf(
+//                'Self-confirmed from IP %s at %s. %s',
+//                $request->getClientIp(),
+//                Carbon::now()->toDateTimeString(),
+//                $certificationUser ? 'Updated existing record.' : 'Direct self-confirmation.'
+//            );
+//
             // Attempt self-confirmation via service
             $updatedCertification = $this->certificationService->selfConfirmCertification(
                 $user,
@@ -1093,7 +1127,7 @@ class UserCertificationsController extends BaseController
 
         if ($userId) {
             // Admin viewing specific user's certifications
-            $this->checkPermission('certification.admin');
+            $this->checkPermission('certificates.admin');
             return User::findOrFail($userId);
         }
 
@@ -1336,6 +1370,128 @@ class UserCertificationsController extends BaseController
             }
 
             return $this->redirect->to('/admin/user-certifications');
+        }
+    }
+
+    /**
+     * Handle bulk operations on user certifications
+     */
+    public function bulk(Request $request): Response
+    {
+        $data = $this->validate($request, [
+            'certification_ids' => 'required|array|min:1',
+            'certification_ids.*' => 'required|integer|min:1',
+            'action' => 'required|string|in:approve,revoke',
+        ]);
+
+        $certificationIds = $data['certification_ids'];
+        $action = $data['action'];
+        $results = [];
+        $errors = [];
+
+        try {
+            foreach ($certificationIds as $certificationId) {
+                try {
+                    $userCertification = CertificationUser::findOrFail($certificationId);
+
+                    // Validate the action is appropriate for the current status
+                    if ($action === 'approve' && !in_array($userCertification->status, ['pending', 'revoked'])) {
+                        $errors[] = "Certification {$certificationId}: Cannot approve certification with status '{$userCertification->status}'.";
+                        continue;
+                    }
+
+                    if ($action === 'revoke' && !in_array($userCertification->status, ['approved', 'self_confirmed'])) {
+                        $errors[] = "Certification {$certificationId}: Cannot revoke certification with status '{$userCertification->status}'.";
+                        continue;
+                    }
+
+                    // Perform the action
+                    if ($action === 'approve') {
+                        $userCertification->status = 'approved';
+                        $userCertification->date_certified = Carbon::now();
+                    } elseif ($action === 'revoke') {
+                        $userCertification->status = 'revoked';
+                        $userCertification->date_revoked = Carbon::now();
+                    }
+
+                    $userCertification->save();
+                    $results[] = $certificationId;
+
+                    // Log the action
+                    $this->log->info("Bulk {$action} certification", [
+                        'admin' => auth()->user()->name,
+                        'admin_id' => auth()->user()->id,
+                        'user_certification_id' => $userCertification->id,
+                        'user_id' => $userCertification->user_id,
+                        'certification_id' => $userCertification->certification_id,
+                        'action' => $action,
+                    ]);
+
+                } catch (ModelNotFoundException $e) {
+                    $errors[] = "Certification {$certificationId}: Not found.";
+                } catch (\Exception $e) {
+                    $errors[] = "Certification {$certificationId}: {$e->getMessage()}";
+                }
+            }
+
+            $successCount = count($results);
+            $errorCount = count($errors);
+
+            // Set notification message
+            if ($successCount > 0 && $errorCount === 0) {
+                $this->addNotification(
+                    "Successfully {$action}d {$successCount} certification(s).",
+                    NotificationType::INFORMATION
+                );
+            } elseif ($successCount > 0 && $errorCount > 0) {
+                $this->addNotification(
+                    "Processed {$successCount} certification(s) successfully, {$errorCount} failed.",
+                    NotificationType::WARNING
+                );
+            } else {
+                $this->addNotification(
+                    "Failed to process any certifications.",
+                    NotificationType::ERROR
+                );
+            }
+
+            if ($this->isAjaxRequest($request)) {
+                return $this->response->withJson([
+                    'success' => $successCount > 0,
+                    'processed' => $successCount,
+                    'errors' => $errorCount,
+                    'error_details' => $errors,
+                    'message' => $successCount > 0 ?
+                        "Successfully {$action}d {$successCount} certification(s)." :
+                        "Failed to process any certifications."
+                ]);
+            }
+
+            return $this->redirect->back();
+
+        } catch (ValidationException $e) {
+            if ($this->isAjaxRequest($request)) {
+                return $this->response->withJson(['error' => $e->getMessage()], 400);
+            }
+
+            $this->addNotification('Invalid bulk operation data.', NotificationType::ERROR);
+            return $this->redirect->back();
+        } catch (\Exception $e) {
+            $this->log->error('Error in bulk certification operation', [
+                'admin' => auth()->user()->name,
+                'admin_id' => auth()->user()->id,
+                'action' => $action ?? 'unknown',
+                'certification_ids' => $certificationIds ?? [],
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            if ($this->isAjaxRequest($request)) {
+                return $this->response->withJson(['error' => 'An error occurred during bulk operation.'], 500);
+            }
+
+            $this->addNotification('An error occurred during bulk operation.', NotificationType::ERROR);
+            return $this->redirect->back();
         }
     }
 

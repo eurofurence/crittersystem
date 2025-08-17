@@ -24,7 +24,7 @@
                         {% endif %}
                     </ol>
                 </nav>
-                
+
                 <h1>
                     {% if certification %}
                         {{ m.icon('pencil') }}
@@ -34,7 +34,7 @@
                         {{ __('certifications.create.title') }}
                     {% endif %}
                 </h1>
-                
+
                 {% if certification %}
                     <p class="text-muted">{{ __('certifications.edit.description') }}</p>
                 {% else %}
@@ -296,7 +296,7 @@
                                     <dt class="col-5">{{ __('certifications.created') }}:</dt>
                                     <dd class="col-7">{{ certification.created_at|date('Y-m-d') }}</dd>
                                 </dl>
-                                <a href="{{ url('/admin/certifications/' ~ certification.uuid) }}" class="btn btn-outline-primary btn-sm w-100">
+                                <a href="{{ url('/admin/certifications/' ~ certification.uuid) }}" class="btn btn-primary btn-sm w-100">
                                     {{ m.icon('eye') }}
                                     {{ __('certifications.view_details') }}
                                 </a>
@@ -313,13 +313,13 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <a href="{{ certification ? url('/admin/certifications/' ~ certification.uuid) : url('/admin/certifications') }}" 
-                                       class="btn btn-outline-secondary">
+                                    <a href="{{ certification ? url('/admin/certifications/' ~ certification.uuid) : url('/admin/certifications') }}"
+                                       class="btn btn-secondary">
                                         {{ m.icon('arrow-left') }}
                                         {{ __('form.cancel') }}
                                     </a>
                                 </div>
-                                
+
                                 <div class="d-flex gap-2">
                                     {% if certification %}
                                         {{ f.submit(__('form.save_changes'), {

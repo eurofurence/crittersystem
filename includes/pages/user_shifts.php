@@ -389,7 +389,8 @@ function ical_hint()
         return '';
     }
 
-    return heading(__('iCal export and API') . ' ' . button_help('user/ical'), 2)
+//    return heading(__('iCal export and API') . ' ' . button_help('user/ical'), 2)
+    return heading(__('iCal export and API') , 2)
         . '<p>' . sprintf(
             __('Export your own shifts formatted as <a href="%s" target="_blank">iCal</a> or <a href="%s" target="_blank">JSON</a> (please keep the link secret, otherwise you have to reset the api key <a href="%s">in your settings</a>).'),
             url('/ical', ['key' => $user->api_key]),
