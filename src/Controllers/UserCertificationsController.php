@@ -313,7 +313,7 @@ class UserCertificationsController extends BaseController
             if ($this->isAjaxRequest($request)) {
                 return $this->response->withJson([
                     'success' => false,
-                    'message' => $e->getMessage()
+                    'message' => $e->getMessage(),
                 ], 400);
             }
 
@@ -371,7 +371,7 @@ class UserCertificationsController extends BaseController
             if ($this->isAjaxRequest($request)) {
                 return $this->response->withJson([
                     'success' => false,
-                    'message' => $e->getMessage()
+                    'message' => $e->getMessage(),
                 ], 400);
             }
 
@@ -1396,12 +1396,16 @@ class UserCertificationsController extends BaseController
 
                     // Validate the action is appropriate for the current status
                     if ($action === 'approve' && !in_array($userCertification->status, ['pending', 'revoked'])) {
-                        $errors[] = "Certification {$certificationId}: Cannot approve certification with status '{$userCertification->status}'.";
+                        $errors[] = 'Certification ' . $certificationId .
+                            ': Cannot approve certification with status ' .
+                            $userCertification->status . '.';
                         continue;
                     }
 
                     if ($action === 'revoke' && !in_array($userCertification->status, ['approved', 'self_confirmed'])) {
-                        $errors[] = "Certification {$certificationId}: Cannot revoke certification with status '{$userCertification->status}'.";
+                        $errors[] = 'Certification ' . $certificationId .
+                            ': Cannot revoke certification with status ' .
+                            $userCertification->status . '.';
                         continue;
                     }
 
@@ -1418,7 +1422,7 @@ class UserCertificationsController extends BaseController
                     $results[] = $certificationId;
 
                     // Log the action
-                    $this->log->info("Bulk {$action} certification", [
+                    $this->log->info('Bulk ' . $action . ' certification', [
                         'admin' => auth()->user()->name,
                         'admin_id' => auth()->user()->id,
                         'user_certification_id' => $userCertification->id,
@@ -1426,11 +1430,10 @@ class UserCertificationsController extends BaseController
                         'certification_id' => $userCertification->certification_id,
                         'action' => $action,
                     ]);
-
                 } catch (ModelNotFoundException $e) {
-                    $errors[] = "Certification {$certificationId}: Not found.";
+                    $errors[] = 'Certification ' . $certificationId . ': Not found.';
                 } catch (\Exception $e) {
-                    $errors[] = "Certification {$certificationId}: {$e->getMessage()}";
+                    $errors[] = 'Certification ' . $certificationId . ': ' . $e->getMessage();
                 }
             }
 
@@ -1440,17 +1443,17 @@ class UserCertificationsController extends BaseController
             // Set notification message
             if ($successCount > 0 && $errorCount === 0) {
                 $this->addNotification(
-                    "Successfully {$action}d {$successCount} certification(s).",
+                    'Successfully ' . $action . 'd ' . $successCount . ' certification(s).',
                     NotificationType::INFORMATION
                 );
             } elseif ($successCount > 0 && $errorCount > 0) {
                 $this->addNotification(
-                    "Processed {$successCount} certification(s) successfully, {$errorCount} failed.",
+                    'Processed ' . $successCount . ' certification(s) successfully, ' . $errorCount . ' failed.',
                     NotificationType::WARNING
                 );
             } else {
                 $this->addNotification(
-                    "Failed to process any certifications.",
+                    'Failed to process any certifications.',
                     NotificationType::ERROR
                 );
             }
@@ -1462,13 +1465,12 @@ class UserCertificationsController extends BaseController
                     'errors' => $errorCount,
                     'error_details' => $errors,
                     'message' => $successCount > 0 ?
-                        "Successfully {$action}d {$successCount} certification(s)." :
-                        "Failed to process any certifications."
+                        'Successfully ' . $action . 'd ' . $successCount . ' certification(s).' :
+                        'Failed to process any certifications.',
                 ]);
             }
 
             return $this->redirect->back();
-
         } catch (ValidationException $e) {
             if ($this->isAjaxRequest($request)) {
                 return $this->response->withJson(['error' => $e->getMessage()], 400);

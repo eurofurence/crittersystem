@@ -20,13 +20,13 @@ class CertificationsController extends BaseController
 {
     use HasUserNotifications;
 
-    /** @var array<string> */
 //    protected array $permissions = [];
-     protected array $permissions = [
-         'certificates.admin',    // New primary certification admin permission
-//         'certificates.manage',   // New certification management permission
-//         'admin_certificates',    // Legacy permission for backward compatibility
-     ];
+    /** @var array<string> */
+    protected array $permissions = [
+        'certificates.admin',    // New primary certification admin permission
+    //    'certificates.manage',   // New certification management permission
+    //    'admin_certificates',    // Legacy permission for backward compatibility
+    ];
 
     public function __construct(
         protected LoggerInterface $log,
@@ -181,7 +181,7 @@ class CertificationsController extends BaseController
 
         // Group by status for better display, with special handling for expired certifications
         $usersByStatus = collect();
-        
+
         // Handle edge case: no users have this certification
         if ($userCertifications->isEmpty()) {
             // Initialize empty collections for all status types
@@ -193,17 +193,17 @@ class CertificationsController extends BaseController
                 'expired' => collect(),
             ]);
         } else {
-            $now = \Carbon\Carbon::now();
-            
+//            $now = \Carbon\Carbon::now();
+
             foreach ($userCertifications as $user) {
                 $status = $user->pivot->status;
                 $dateExpires = $user->pivot->date_expires;
-                
+
                 // Override status to 'expired' if certification has passed its expiry date
                 if ($dateExpires && \Carbon\Carbon::parse($dateExpires)->isPast()) {
                     $status = 'expired';
                 }
-                
+
                 // Group users by their effective status
                 if (!$usersByStatus->has($status)) {
                     $usersByStatus->put($status, collect());
@@ -243,8 +243,8 @@ class CertificationsController extends BaseController
         foreach (['approved', 'pending', 'self_confirmed', 'revoked', 'expired'] as $status) {
             $collection = $usersByStatus->get($status, collect());
             // Ensure we have a proper Collection of User models
-            $statusCollections[$status] = $collection instanceof \Illuminate\Support\Collection 
-                ? $collection 
+            $statusCollections[$status] = $collection instanceof \Illuminate\Support\Collection
+                ? $collection
                 : collect($collection);
         }
 
