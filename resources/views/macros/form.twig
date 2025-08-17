@@ -227,6 +227,7 @@ Renders a Bootstrap checkbox element with mb-3.
 @param {bool} [opt.checked=false] - Whether to add the "checked" attribute. Defaults to false.
 @param {bool} [opt.disabled=false] - Whether to add the "disabled" attribute. Defaults to false.
 @param {bool} [opt.raw_label=false] - Whether to use the raw label value (=do not escape). Defaults to false.
+@param {bool} [opt.hidden=false] - Hides... Simple as this... Defaults to false.
 @param {string} [opt.info] - If set an additional info icon will be added to the label with the text as tooltip.
 @param {string} [opt.class="mb-3"] - CSS classes for the checkbox element. Defaults to "mb-3".
 #}
@@ -236,8 +237,9 @@ Renders a Bootstrap checkbox element with mb-3.
             value="{{ opt.value|default('1') }}"
             {%- if opt.checked|default(false) %} checked{% endif %}
             {%- if opt.disabled|default(false) %} disabled{% endif %}
+            {%- if opt.hidden|default(false) %} style="display:none"{% endif %}
         >
-        <label class="form-check-label" for="{{ name }}">
+        <label class="form-check-label" for="{{ name }}" {%- if opt.hidden|default(false) %} style="display:none"{% endif %}>
             {%- if opt.raw_label|default(false) -%}
                 {{ label|raw }}
             {%- else -%}

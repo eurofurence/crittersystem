@@ -7,7 +7,7 @@
 Shift planning and volunteer management system used at Eurofurence events. This repository contains the application
 code, configuration, and documentation sources.
 
-- Documentation site: https://crittersystem.eurofurence.github.io/
+- Documentation site: https://eurofurence.github.io/crittersystem/
 - Documentation sources: docs/src
 - Original Fork: [engelsystem](https://github.com/engelsystem/engelsystem)
 

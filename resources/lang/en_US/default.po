@@ -3297,3 +3297,12 @@ msgstr "Learn more about how self-confirmation works and when to use it."
 
 msgid "user_certifications.view_self_confirm_guide"
 msgstr "View Self-Confirmation Guide"
+
+msgid "department.badge.approved"
+msgstr "Member"
+
+msgid "department.badge.pending"
+msgstr "Pending"
+
+msgid "department.badge.denied"
+msgstr "Denied"

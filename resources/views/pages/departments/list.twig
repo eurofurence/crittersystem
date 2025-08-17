@@ -45,7 +45,7 @@
                                     {% set userDept = user_departments.firstWhere('id', department.id) %}
                                     {% if userDept %}
                                         <span class="badge bg-{{ userDept.pivot.status == 'pending' ? 'warning' : 'success' }}">
-                                            {{ __(userDept.pivot.status|capitalize) }}
+                                            {{ __('department.badge.' ~ userDept.pivot.status) }}
                                         </span>
                                     {% endif %}
                                 </div>
