@@ -1,0 +1,129 @@
+{% extends "layouts/app.twig" %}
+{% import 'macros/base.twig' as m %}
+
+{% block title %}{{ __('angeltypes.angeltypes') }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h1>
+                {{ block('title') }}
+                <a class="btn btn-sm btn-secondary" href="{{ url('/crittertypes/edit') }}">
+                    <span class="bi bi-plus-lg"></span>
+                </a>
+            </h1>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <a href="{{ url('/crittertypes/about') }}" class="btn btn-secondary">{{ __('angeltypes.about') }}</a>
+    </div>
+
+    <div class="table-responsive d-none d-sm-block">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>{{ __('general.name') }}</th>
+                    <th class="d-none d-md-table-cell">{{ m.icon('mortarboard-fill') }} {{ __('angeltypes.restricted') }}</th>
+                    <th class="d-none d-lg-table-cell">{{ m.icon('pencil-square') }} {{ __('shift.self_signup.allowed') }}</th>
+                    <th class="d-none d-sm-table-cell">{{ __('Membership') }}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in angeltypes %}
+                    <tr>
+                        <td>
+                            <a class="text-break" href="{{ url('/crittertypes/' ~ t.id) }}">{{ t.name }}</a>
+                        </td>
+                        <td class="d-none d-md-table-cell">{{ t.restricted ? m.icon('mortarboard-fill') : '' }}</td>
+                        <td class="d-none d-lg-table-cell">{{ t.shift_self_signup ? m.icon('pencil-square') : '' }}</td>
+                        <td class="d-none d-sm-table-cell">{{ t.membership }}</td>
+                        <td>
+                            <div class="d-flex flex-wrap gap-2">
+                                <a class="btn btn-sm btn-info" href="{{ url('/crittertypes/' ~ t.id) }}">
+                                    {{ m.icon('eye') }} {{ isAdmin ? '' : __('View') }}
+                                </a>
+                                {% if isAdmin %}
+                                    <a class="btn btn-sm btn-primary" href="{{ url('/crittertypes/edit/' ~ t.id) }}">
+                                        {{ m.icon('pencil') }} {{ __('form.edit') }}
+                                    </a>
+                                    <a class="btn btn-sm btn-danger" href="{{ url('/crittertypes/' ~ t.id ~ '/delete') }}">
+                                        {{ m.icon('trash') }} {{ __('form.delete') }}
+                                    </a>
+                                {% endif %}
+                                {% if t.user_angel_type_id %}
+                                    <a class="btn btn-sm btn-warning" href="{{ url('/user-angeltypes', {'action':'delete', 'user_angeltype_id': t.user_angel_type_id}) }}">
+                                        {{ m.icon('box-arrow-right') }} {{ isAdmin ? __('Leave') : '' }}
+                                    </a>
+                                {% else %}
+                                    <a class="btn btn-sm {{ isAdmin ? 'btn-success' : 'btn-secondary' }}" href="{{ url('/user-angeltypes', {'action':'add', 'angeltype_id': t.id}) }}">
+                                        {{ m.icon('box-arrow-in-right') }} {{ isAdmin ? __('Join') : '' }}
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5">{{ __('No entries.') }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {# Mobile cards for xs screens #}
+    <div class="d-block d-sm-none">
+        {% for t in angeltypes %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <a class="h5 d-block text-decoration-none text-break mb-1" href="{{ url('/crittertypes/' ~ t.id) }}">{{ t.name }}</a>
+
+                    <div class="small text-muted">
+                        {% if t.restricted %}
+                            {{ m.icon('mortarboard-fill') }} {{ __('angeltypes.restricted') }}
+                        {% endif %}
+                        {% if t.shift_self_signup %}
+                            {% if t.restricted %} · {% endif %}
+                            {{ m.icon('pencil-square') }} {{ __('shift.self_signup.allowed') }}
+                        {% endif %}
+                    </div>
+
+                    <div class="mt-2">
+                        <span class="badge bg-secondary">{{ t.membership }}</span>
+                    </div>
+
+                    <div class="mt-2 d-flex flex-wrap gap-2">
+                        <a class="btn btn-sm btn-info" href="{{ url('/crittertypes/' ~ t.id) }}">
+                            {{ m.icon('eye') }} {{ isAdmin ? '' : __('View') }}
+                        </a>
+
+                        {% if isAdmin %}
+                            <a class="btn btn-sm btn-primary" href="{{ url('/crittertypes/edit/' ~ t.id) }}">
+                                {{ m.icon('pencil') }} {{ __('form.edit') }}
+                            </a>
+                            <a class="btn btn-sm btn-danger" href="{{ url('/crittertypes/' ~ t.id ~ '/delete') }}">
+                                {{ m.icon('trash') }} {{ __('form.delete') }}
+                            </a>
+                        {% endif %}
+
+                        {% if t.user_angel_type_id %}
+                            <a class="btn btn-sm btn-warning" href="{{ url('/user-angeltypes', {'action':'delete', 'user_angeltype_id': t.user_angel_type_id}) }}">
+                                {{ m.icon('box-arrow-right') }} {{ isAdmin ? __('Leave') : '' }}
+                            </a>
+                        {% else %}
+                            <a class="btn btn-sm {{ isAdmin ? 'btn-success' : 'btn-secondary' }}" href="{{ url('/user-angeltypes', {'action':'add', 'angeltype_id': t.id}) }}">
+                                {{ m.icon('box-arrow-in-right') }} {{ isAdmin ? __('Join') : '' }}
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-secondary">{{ __('No entries.') }}</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

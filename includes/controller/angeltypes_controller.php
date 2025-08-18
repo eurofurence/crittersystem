@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * DEPRECATED
+ * Moved to a new controller src/Controllers/CritterTypesController.php
+ * This legacy controller remains for reference only.
+ */
+
 use Engelsystem\Helpers\Carbon;
 use Engelsystem\Models\AngelType;
 use Engelsystem\Models\Location;

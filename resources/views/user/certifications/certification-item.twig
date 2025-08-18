@@ -37,7 +37,7 @@
 
                     {% if can_self_confirm %}
                         <a href="{{ url('/user/certifications/self-confirm/' ~ user_cert.certification.uuid) }}"
-                           class="btn btn-primary btn-sm"
+                           class="btn btn-sm btn-info"
                            data-action="self-confirm"
                            data-certification-uuid="{{ user_cert.certification.uuid }}"
                            data-certification-title="{{ user_cert.certification.title }}"
@@ -172,7 +172,7 @@
                     {{ __('user_certifications.renewal_available') }}
                 </div>
                 <a href="{{ url('/user/certifications/renew/' ~ user_cert.certification.uuid) }}"
-                   class="btn btn-primary btn-sm">
+                   class="btn btn-sm btn-info">
                     {{ m.icon('arrow-clockwise') }}
                     {{ __('user_certifications.renew') }}
                 </a>

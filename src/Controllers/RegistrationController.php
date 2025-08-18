@@ -96,7 +96,13 @@ class RegistrationController extends BaseController
                 'minPasswordLength' => $this->config->get('password_min_length'),
                 'tShirtSizes' => $this->config->get('tshirt_sizes'),
                 'tShirtLink' => $this->config->get('tshirt_link'),
-                'angelTypes' => AngelType::whereHideRegister(false)->get(),
+                'angelTypes' => (function () {
+                    $q = AngelType::whereHideRegister(false);
+                    if (!auth()->can('user.type.staff')) {
+                        $q->where('staff_only', false);
+                    }
+                    return $q->get();
+                })(),
                 'preselectedAngelTypes' => $preselectedAngelTypes,
                 'buildUpStartDate' => $this->userFactory->determineBuildUpStartDate()->format('Y-m-d'),
                 'tearDownEndDate' => $this->config->get('teardown_end')?->format('Y-m-d'),
@@ -136,7 +142,15 @@ class RegistrationController extends BaseController
         //     $preselectedAngelTypes = $this->loadAngelTypesFromSessionOAuthGroups();
         // }
 
-        foreach (AngelType::whereRestricted(false)->whereHideRegister(false)->get() as $angelType) {
+        foreach (
+            (function () {
+                $q = AngelType::whereRestricted(false)->whereHideRegister(false);
+                if (!auth()->can('user.type.staff')) {
+                    $q->where('staff_only', false);
+                }
+                return $q->get();
+            })() as $angelType
+        ) {
             // preselect every angel type without restriction
             $preselectedAngelTypes['angel_types_' . $angelType->id] = 1;
         }
@@ -168,7 +182,13 @@ class RegistrationController extends BaseController
      */
     private function loadAngelTypesFromSessionFormData(): array
     {
-        $angelTypes = AngelType::whereHideRegister(false)->get();
+        $angelTypes = (function () {
+            $q = AngelType::whereHideRegister(false);
+            if (!auth()->can('user.type.staff')) {
+                $q->where('staff_only', false);
+            }
+            return $q->get();
+        })();
         $selectedAngelTypes = [];
 
         foreach ($angelTypes as $angelType) {

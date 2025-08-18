@@ -15,7 +15,11 @@ class AngelTypesController extends BaseController
 
     public function about(): Response
     {
-        $angeltypes = AngelType::all();
+        $query = AngelType::query();
+        if (!auth()->can('user.type.staff')) {
+            $query->where('staff_only', false);
+        }
+        $angeltypes = $query->get();
 
         return $this->response->withView(
             'pages/angeltypes/about',

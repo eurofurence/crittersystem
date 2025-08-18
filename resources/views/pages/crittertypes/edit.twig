@@ -1,0 +1,186 @@
+{% extends "layouts/app.twig" %}
+{% import 'macros/base.twig' as m %}
+{% import 'macros/form.twig' as f %}
+
+{% set isNew = angeltype.id is not defined or not angeltype.id %}
+{% block title %}{{ isNew ? __('Create critter type') : __('Edit %s') | format(angeltype.name|e) }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="mb-3">
+        <a href="{{ isNew ? url('/crittertypes') : url('/crittertypes/' ~ angeltype.id) }}" class="btn btn-sm btn-secondary back">
+            {{ m.icon('chevron-left') }} {{ __('general.back') }}
+        </a>
+    </div>
+
+    <h1 class="text-break">{{ block('title') }}</h1>
+
+    <form method="post" action="">
+        {{ csrf() }}
+
+        {% if not supporterMode %}
+            {{ f.input('name', __('general.name'), {
+                'value': angeltype.name,
+                'max_length': 255,
+                'required': true,
+                'required_icon': true
+            }) }}
+
+            <div class="row g-3 mb-3">
+                <div class="col-12 col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="staff_only" name="staff_only" {% if angeltype.staff_only %}checked{% endif %}>
+                                <label class="form-check-label" for="staff_only">
+                                    {{ __('Staff Only') }}
+                                    <span class="bi bi-info-circle-fill text-info" data-bs-toggle="tooltip" title="{{ __('Restrict to STAFF ONLY') }}"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="restricted" name="restricted" {% if angeltype.restricted %}checked{% endif %}>
+                                <label class="form-check-label" for="restricted">
+                                    {{ __('angeltypes.restricted') }}
+                                    <span class="bi bi-info-circle-fill text-info" data-bs-toggle="tooltip" title="{{ __('angeltypes.restricted.info') }}"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="shift_self_signup" name="shift_self_signup" {% if angeltype.shift_self_signup %}checked{% endif %}>
+                                <label class="form-check-label" for="shift_self_signup">
+                                    {{ __('shift.self_signup') }}
+                                    <span class="bi bi-info-circle-fill text-info" data-bs-toggle="tooltip" title="{{ __('angeltypes.shift.self_signup.info') }}"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="show_on_dashboard" name="show_on_dashboard" {% if angeltype.show_on_dashboard %}checked{% endif %}>
+                                <label class="form-check-label" for="show_on_dashboard">{{ __('Show on dashboard') }}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="hide_register" name="hide_register" {% if angeltype.hide_register %}checked{% endif %}>
+                                <label class="form-check-label" for="hide_register">{{ __('Hide at Registration') }}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="hide_on_shift_view" name="hide_on_shift_view" {% if angeltype.hide_on_shift_view %}checked{% endif %}>
+                                <label class="form-check-label" for="hide_on_shift_view">
+                                    {{ __('angeltypes.hide_on_shift_view') }}
+                                    <span class="bi bi-info-circle-fill text-info" data-bs-toggle="tooltip" title="{{ __('angeltypes.hide_on_shift_view.info') }}"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            {{ f.static( __('general.name'), angeltype.name ) }}
+            {{ f.static( __('angeltypes.restricted'), angeltype.restricted ? __('Yes') : __('No') ) }}
+            {{ f.static( __('shift.self_signup'), angeltype.shift_self_signup ? __('Yes') : __('No') ) }}
+            {{ f.static( __('Show on dashboard'), angeltype.show_on_dashboard ? __('Yes') : __('No') ) }}
+            {{ f.static( __('Hide at Registration'), angeltype.hide_register ? __('Yes') : __('No') ) }}
+            {{ f.static( __('angeltypes.hide_on_shift_view'), angeltype.hide_on_shift_view ? __('Yes') : __('No') ) }}
+        {% endif %}
+
+        {{ f.textarea('description', __('general.description'), {
+            'value': angeltype.description
+        }) }}
+        <div class="mb-3"><small class="text-muted">{{ __('Please use markdown for the description.') }}</small></div>
+
+        <h3>{{ __('Certification Requirements') }}</h3>
+        <div class="mb-2"><small class="text-muted">{{ __('Select which certifications are required for this critter type.') }}</small></div>
+        {% if not supporterMode %}
+            {% if certifications is empty %}
+                {{ m.info(__('No certifications available. Create certifications first to add requirements.')) }}
+            {% else %}
+                <div class="row g-3">
+                    {% for cert in certifications %}
+                        <div class="col-12 col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="cert_{{ cert.id }}" name="certification_requirements[]" value="{{ cert.id }}" {% if cert.id in requiredCertificationIds %}checked{% endif %}>
+                                        <label class="form-check-label fw-semibold" for="cert_{{ cert.id }}">{{ cert.title }}</label>
+                                    </div>
+                                    {% if cert.description %}
+                                        <div class="mt-2"><small class="text-muted">{{ cert.description }}</small></div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% if angeltype.id %}
+                    <div class="mb-3"><small class="text-muted">{{ __('angeltypes.certification_requirements.warning') }} <a href="{{ url('/admin/user-certifications') }}">{{ __('user_certifications.admin.title') }}</a>.</small></div>
+                {% endif %}
+            {% endif %}
+        {% else %}
+            {% if requiredCertificationIds is empty %}
+                {{ m.info(__('None')) }}
+            {% else %}
+                <div class="row g-3">
+                    {% for cert in certifications %}
+                        {% if cert.id in requiredCertificationIds %}
+                        <div class="col-12 col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <div class="fw-semibold">{{ cert.title }}</div>
+                                    {% if cert.description %}
+                                        <div class="mt-2"><small class="text-muted">{{ cert.description }}</small></div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endif %}
+
+        <div class="row my-3">
+            <h3>{{ __('Contact') }}</h3>
+            {{ f.input('contact_name', __('general.name'), {'value': angeltype.contact_name}) }}
+
+            {% if config('enable_dect') %}
+                {{ f.input('contact_dect', __('general.dect'), {'value': angeltype.contact_dect}) }}
+            {% endif %}
+
+            {{ f.input('contact_email', __('general.email'), {'value': angeltype.contact_email}) }}
+        </div>
+
+        {{ f.submit(__('form.save'), {'icon_left': 'save'}) }}
+    </form>
+</div>
+{% endblock %}

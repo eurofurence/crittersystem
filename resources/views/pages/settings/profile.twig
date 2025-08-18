@@ -39,7 +39,9 @@
                                 </div>
                             {% endif %}
                         </div>
-                        {{ m.info(__('settings.profile.badge_number_info')) }}
+                        {% if not userdata.personalData.badge_number %}
+                            {{ m.info(__('settings.profile.badge_number_info')) }}
+                        {% endif %}
                     </div>
                 </div>
             {% endif %}
@@ -193,7 +195,7 @@
             {% endif %}
 
             <div class="col-12">
-                {{ m.info(__('settings.profile.angeltypes.info', [url('/angeltypes')]), true) }}
+                {{ m.info(__('settings.profile.angeltypes.info', [url('/crittertypes')]), true) }}
             </div>
 
             <div class="col-12">

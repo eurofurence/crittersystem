@@ -26,6 +26,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property boolean                           $show_on_dashboard # Show on public dashboard
  * @property boolean                           $hide_register # Hide from registration page
  * @property boolean                           $hide_on_shift_view # Hide from shift page
+ * @property boolean                           $staff_only # Visible only to staff (permission: user.type.staff)
  *
  * @property-read Collection|NeededAngelType[] $neededBy
  * @property-read UserAngelType                $pivot
@@ -43,6 +44,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @method static QueryBuilder|AngelType[] whereNoSelfSignup($value)
  * @method static QueryBuilder|AngelType[] whereShowOnDashboard($value)
  * @method static QueryBuilder|AngelType[] whereHideRegister($value)
+ * @method static QueryBuilder|AngelType[] whereStaffOnly($value)
  */
 class AngelType extends BaseModel
 {
@@ -61,6 +63,7 @@ class AngelType extends BaseModel
         'show_on_dashboard'         => true,
         'hide_register'             => false,
         'hide_on_shift_view'        => false,
+        'staff_only'                => false,
     ];
 
     /**
@@ -83,6 +86,7 @@ class AngelType extends BaseModel
         'show_on_dashboard',
         'hide_register',
         'hide_on_shift_view',
+        'staff_only',
     ];
 
     /** @var array<string, string> */
@@ -94,6 +98,7 @@ class AngelType extends BaseModel
         'show_on_dashboard'         => 'boolean',
         'hide_register'             => 'boolean',
         'hide_on_shift_view'        => 'boolean',
+        'staff_only'                => 'boolean',
     ];
 
     public function neededBy(): HasMany

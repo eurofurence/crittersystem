@@ -164,7 +164,7 @@
                         </div>
                     {% else %}
                         <a href="{{ url('/user/certifications/apply/' ~ certification.uuid) }}"
-                           class="btn btn-primary btn-sm"
+                           class="btn btn-sm btn-info"
                            title="{{ __('user_certifications.apply_tooltip') }}">
                             {{ m.icon('plus-circle') }}
                             {{ __('user_certifications.apply') }}
@@ -191,7 +191,7 @@
                     {% endif %}
                 {% elseif (is_expired or is_expiring_soon) and certification.allow_self_confirmation %}
                     <a href="{{ url('/user/certifications/renew/' ~ certification.uuid) }}"
-                       class="btn btn-primary btn-sm"
+                       class="btn btn-sm btn-info"
                        title="{{ __('user_certifications.renew_tooltip') }}">
                         {{ m.icon('arrow-clockwise') }}
                         {{ __('user_certifications.renew') }}

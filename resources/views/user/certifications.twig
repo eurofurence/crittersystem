@@ -227,7 +227,7 @@
                                         {% endif %}
 
                                         <div class="d-grid">
-                                            <button type="button" class="btn btn-primary btn-sm"
+                                            <button type="button" class="btn btn-sm btn-info"
                                                     onclick="selfConfirm('{{ certification.uuid }}', '{{ certification.title }}')">
                                                 {{ m.icon('check') }}
                                                 {{ __('user_certifications.self_confirm') }}
@@ -279,7 +279,7 @@
                             <hr>
                             <h6>{{ __('user_certifications.need_help') }}</h6>
                             <p class="small text-muted">{{ __('user_certifications.contact_description') }}</p>
-                            <a href="mailto:{{ config('app.certification_contact_email') }}" class="btn btn-primary btn-sm w-100">
+                            <a href="mailto:{{ config('app.certification_contact_email') }}" class="btn btn-sm btn-info w-100">
                                 {{ m.icon('envelope') }}
                                 {{ __('user_certifications.contact_support') }}
                             </a>

@@ -301,7 +301,7 @@
                                     <dt class="col-5">{{ __('certifications.created') }}:</dt>
                                     <dd class="col-7">{{ certification.created_at|date('Y-m-d') }}</dd>
                                 </dl>
-                                <a href="{{ url('/admin/certifications/' ~ certification.uuid) }}" class="btn btn-primary btn-sm w-100">
+                                <a href="{{ url('/admin/certifications/' ~ certification.uuid) }}" class="btn btn-sm btn-info w-100">
                                     {{ m.icon('eye') }}
                                     {{ __('certifications.view_details') }}
                                 </a>

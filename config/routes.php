@@ -86,9 +86,20 @@ $route->addGroup(
 $route->get('/metrics', 'Metrics\\Controller@metrics');
 $route->get('/stats', 'Metrics\\Controller@stats');
 
-// Angeltypes
+// Angeltypes (legacy entry points)
 $route->addGroup('/angeltypes', function (RouteCollector $route): void {
     $route->get('/about', 'AngelTypesController@about');
+});
+
+// Crittertypes (new)
+$route->addGroup('/crittertypes', function (RouteCollector $route): void {
+    $route->get('', 'CritterTypesController@index');
+    $route->get('/about', 'AngelTypesController@about');
+    $route->get('/edit[/{angeltype_id:\d+}]', 'CritterTypesController@edit');
+    $route->post('/edit[/{angeltype_id:\d+}]', 'CritterTypesController@save');
+    $route->get('/{angeltype_id:\d+}', 'CritterTypesController@show');
+    $route->get('/{angeltype_id:\d+}/delete', 'CritterTypesController@deleteConfirm');
+    $route->post('/{angeltype_id:\d+}/delete', 'CritterTypesController@delete');
 });
 
 // Shifts

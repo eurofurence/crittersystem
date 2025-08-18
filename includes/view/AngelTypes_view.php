@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * DEPRECATED
+ * Moved to a new controller src/Controllers/CritterTypesController.php
+ * This legacy view module remains for reference only.
+ */
+
 use Engelsystem\Models\AngelType;
 use Engelsystem\Models\User\User;
 use Engelsystem\Models\UserAngelType;

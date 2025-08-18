@@ -62,7 +62,7 @@ function make_navigation()
         'user_shifts'              => [__('general.shifts'), 'user_shifts'],
         'user/certifications'      => [__('certifications.title'), 'certificates.view'],
         'questions'                => [__('Ask the Info Desk'), 'question.add'],
-        'angeltypes'               => [__('angeltypes.angeltypes'), 'angeltypes'],
+        'crittertypes'             => [__('angeltypes.angeltypes'), 'angeltypes'],
         'departments'              => [__('departments.title.plural'), 'dept.view'],
     ];
 
