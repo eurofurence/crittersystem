@@ -76,6 +76,7 @@ class Certification extends BaseModel
         'is_perpetual',
         'validity_period_days',
         'allow_self_confirmation',
+        'staff_only',
         'is_active',
     ];
 
@@ -87,6 +88,7 @@ class Certification extends BaseModel
     protected $casts = [ // phpcs:ignore
         'is_perpetual' => 'boolean',
         'allow_self_confirmation' => 'boolean',
+        'staff_only' => 'boolean',
         'is_active' => 'boolean',
     ];
 

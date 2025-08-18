@@ -44,6 +44,20 @@ class CertificationService
             $query->where('allow_self_confirmation', (bool) $filters['self_confirmable']);
         }
 
+        // Allow direct staff_only filter if provided
+        if (array_key_exists('staff_only', $filters)) {
+            $query->where('staff_only', (bool) $filters['staff_only']);
+        }
+
+        // Visibility filter: if a user is provided and is not staff, hide staff_only certifications
+        if (isset($filters['visible_to_user']) && $filters['visible_to_user'] instanceof User) {
+            /** @var User $viewer */
+            $viewer = $filters['visible_to_user'];
+            if (!$viewer->hasPermission('user.type.staff')) {
+                $query->where('staff_only', false);
+            }
+        }
+
         if (isset($filters['search']) && !empty($filters['search'])) {
             $search = $filters['search'];
             $query->where(function ($q) use ($search): void {

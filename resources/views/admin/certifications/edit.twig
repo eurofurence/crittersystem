@@ -100,6 +100,12 @@
                                         'info': __('certifications.is_active.help')
                                     }) }}
                                 </div>
+                                <div class="col-md-6">
+                                    {{ f.checkbox('staff_only', __('certifications.staff_only'), {
+                                        'checked': f.formData('staff_only', certification ? certification.staff_only : false),
+                                        'info': __('certifications.staff_only.help')
+                                    }) }}
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -459,6 +459,7 @@ class CertificationsController extends BaseController
             'is_perpetual' => 'optional|checked',
             'validity_period_days' => 'optional|min:1|max:3650', // Max 10 years
             'allow_self_confirmation' => 'optional|checked',
+            'staff_only' => 'optional|checked',
             'is_active' => 'optional|checked',
         ];
 
@@ -580,6 +581,7 @@ class CertificationsController extends BaseController
         // Convert checkboxes to booleans
         $data['is_perpetual'] = isset($data['is_perpetual']);
         $data['allow_self_confirmation'] = isset($data['allow_self_confirmation']);
+        $data['staff_only'] = isset($data['staff_only']);
         // Default to active for new certifications
         $data['is_active'] = $data['is_active'] ?? true;
 

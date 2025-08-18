@@ -66,8 +66,11 @@ class UserCertificationsController extends BaseController
         // Get user's certifications
         $certifications = $this->certificationService->getUserCertifications($user, $filters);
 
-        // Get all available certifications for admin interface
-        $availableCertifications = $this->certificationService->getAllCertifications(['active' => true]);
+        // Get all available certifications visible to this user (hide staff-only if not staff)
+        $availableCertifications = $this->certificationService->getAllCertifications([
+            'active' => true,
+            'visible_to_user' => $user,
+        ]);
 
         // Get pending applications for "My Applications" section
         $pendingApplications = CertificationUser::with(['certification'])
