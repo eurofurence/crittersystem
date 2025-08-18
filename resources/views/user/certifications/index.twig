@@ -374,193 +374,193 @@
         {# Comprehensive Certification Catalog #}
         <div class="row">
             <div class="col-12">
-                {# Enhanced Search and Filters #}
-                <div class="card mb-3">
-                    <div class="card-header">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="mb-0">{{ __('user_certifications.filters') }}</h6>
-                            <button type="button" class="btn btn-sm btn-secondary" id="clear-filters" style="display: none;">
-                                {{ m.icon('x-circle') }}
-                                {{ __('user_certifications.clear_filters') }}
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        {# Active Filters Display #}
-                        <div id="active-filters" class="mb-3" style="display: none;">
-                            <div class="d-flex flex-wrap gap-2 align-items-center">
-                                <small class="text-muted">{{ __('user_certifications.active_filters') }}:</small>
-                                <div id="filter-badges"></div>
-                            </div>
-                        </div>
+{#                  #}{# Enhanced Search and Filters #}
+{#                 <div class="card mb-3"> #}
+{#                     <div class="card-header"> #}
+{#                         <div class="d-flex justify-content-between align-items-center"> #}
+{#                             <h6 class="mb-0">{{ __('user_certifications.filters') }}</h6> #}
+{#                             <button type="button" class="btn btn-sm btn-secondary" id="clear-filters" style="display: none;"> #}
+{#                                 {{ m.icon('x-circle') }} #}
+{#                                 {{ __('user_certifications.clear_filters') }} #}
+{#                             </button> #}
+{#                         </div> #}
+{#                     </div> #}
+{#                     <div class="card-body"> #}
+{#                          #}{# Active Filters Display #}
+{#                         <div id="active-filters" class="mb-3" style="display: none;"> #}
+{#                             <div class="d-flex flex-wrap gap-2 align-items-center"> #}
+{#                                 <small class="text-muted">{{ __('user_certifications.active_filters') }}:</small> #}
+{#                                 <div id="filter-badges"></div> #}
+{#                             </div> #}
+{#                         </div> #}
 
-                        <form method="GET" action="{{ url('/user/certifications') }}" class="row g-3" id="certification-filters"
-                              role="search"
-                              aria-label="{{ __('user_certifications.filter_form_aria_label') }}">
-                            <div class="col-md-4">
-                                <label for="search" class="form-label">
-                                    {{ m.icon('search') }}
-                                    {{ __('form.search') }}
-                                </label>
-                                <input type="search"
-                                       class="form-control"
-                                       id="search"
-                                       name="search"
-                                       value="{{ search }}"
-                                       placeholder="{{ __('user_certifications.search_placeholder') }}"
-                                       autocomplete="off"
-                                       aria-describedby="search-help">
-                                <div class="form-text" id="search-help">{{ __('user_certifications.search_help') }}</div>
-                            </div>
-                            <div class="col-md-2">
-                                <label for="status" class="form-label">
-                                    {{ m.icon('person-badge') }}
-                                    {{ __('user_certifications.my_status') }}
-                                </label>
-                                <select class="form-select" id="status" name="status">
-                                    <option value="">{{ __('user_certifications.all_statuses') }}</option>
-                                    <option value="approved"{{ currentStatus == 'approved' ? ' selected' : '' }}>
-                                        {{ __('user_certifications.status.approved') }}
-                                    </option>
-                                    <option value="pending"{{ currentStatus == 'pending' ? ' selected' : '' }}>
-                                        {{ __('user_certifications.status.pending') }}
-                                    </option>
-                                    <option value="self_confirmed"{{ currentStatus == 'self_confirmed' ? ' selected' : '' }}>
-                                        {{ __('user_certifications.status.self_confirmed') }}
-                                    </option>
-                                    <option value="expired"{{ currentStatus == 'expired' ? ' selected' : '' }}>
-                                        {{ __('user_certifications.status.expired') }}
-                                    </option>
-                                    <option value="revoked"{{ currentStatus == 'revoked' ? ' selected' : '' }}>
-                                        {{ __('user_certifications.status.revoked') }}
-                                    </option>
-                                    <option value="not_applied"{{ currentStatus == 'not_applied' ? ' selected' : '' }}>
-                                        {{ __('user_certifications.status.not_applied') }}
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <label for="type-filter" class="form-label">
-                                    {{ m.icon('tags') }}
-                                    {{ __('user_certifications.type') }}
-                                </label>
-                                <select class="form-select" id="type-filter" name="type">
-                                    <option value="">{{ __('user_certifications.all_types') }}</option>
-                                    <option value="self_confirmable"{{ request.get('type') == 'self_confirmable' ? ' selected' : '' }}>
-                                        {{ m.icon('check-circle') }} {{ __('user_certifications.self_confirmable') }}
-                                    </option>
-                                    <option value="perpetual"{{ request.get('type') == 'perpetual' ? ' selected' : '' }}>
-                                        {{ m.icon('infinity') }} {{ __('user_certifications.perpetual') }}
-                                    </option>
-                                    <option value="time_limited"{{ request.get('type') == 'time_limited' ? ' selected' : '' }}>
-                                        {{ m.icon('clock') }} {{ __('user_certifications.time_limited') }}
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <label for="availability-filter" class="form-label">
-                                    {{ m.icon('funnel') }}
-                                    {{ __('user_certifications.availability') }}
-                                </label>
-                                <select class="form-select" id="availability-filter" name="availability">
-                                    <option value="">{{ __('user_certifications.all_available') }}</option>
-                                    <option value="available"{{ request.get('availability') == 'available' ? ' selected' : '' }}>
-                                        {{ __('user_certifications.available_to_apply') }}
-                                    </option>
-                                    <option value="have"{{ request.get('availability') == 'have' ? ' selected' : '' }}>
-                                        {{ __('user_certifications.i_have') }}
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="col-md-1">
-                                <label for="sort-filter" class="form-label">
-                                    {{ m.icon('sort-alpha-down') }}
-                                    {{ __('user_certifications.sort') }}
-                                </label>
-                                <select class="form-select" id="sort-filter" name="sort">
-                                    <option value="title"{{ request.get('sort') == 'title' ? ' selected' : '' }}>
-                                        {{ __('user_certifications.sort.title') }}
-                                    </option>
-                                    <option value="status"{{ request.get('sort') == 'status' ? ' selected' : '' }}>
-                                        {{ __('user_certifications.sort.status') }}
-                                    </option>
-                                    <option value="type"{{ request.get('sort') == 'type' ? ' selected' : '' }}>
-                                        {{ __('user_certifications.sort.type') }}
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="col-md-1">
-                                <label class="form-label">&nbsp;</label>
-                                <button type="submit" class="btn btn-primary d-block w-100" title="{{ __('user_certifications.apply_server_filters') }}">
-                                    {{ m.icon('search') }}
-                                    <span class="d-none d-lg-inline">{{ __('form.search') }}</span>
-                                </button>
-                            </div>
-                        </form>
+{#                         <form method="GET" action="{{ url('/user/certifications') }}" class="row g-3" id="certification-filters" #}
+{#                               role="search" #}
+{#                               aria-label="{{ __('user_certifications.filter_form_aria_label') }}"> #}
+{#                             <div class="col-md-4"> #}
+{#                                 <label for="search" class="form-label"> #}
+{#                                     {{ m.icon('search') }} #}
+{#                                     {{ __('form.search') }} #}
+{#                                 </label> #}
+{#                                 <input type="search" #}
+{#                                        class="form-control" #}
+{#                                        id="search" #}
+{#                                        name="search" #}
+{#                                        value="{{ search }}" #}
+{#                                        placeholder="{{ __('user_certifications.search_placeholder') }}" #}
+{#                                        autocomplete="off" #}
+{#                                        aria-describedby="search-help"> #}
+{#                                 <div class="form-text" id="search-help">{{ __('user_certifications.search_help') }}</div> #}
+{#                             </div> #}
+{#                             <div class="col-md-2"> #}
+{#                                 <label for="status" class="form-label"> #}
+{#                                     {{ m.icon('person-badge') }} #}
+{#                                     {{ __('user_certifications.my_status') }} #}
+{#                                 </label> #}
+{#                                 <select class="form-select" id="status" name="status"> #}
+{#                                     <option value="">{{ __('user_certifications.all_statuses') }}</option> #}
+{#                                     <option value="approved"{{ currentStatus == 'approved' ? ' selected' : '' }}> #}
+{#                                         {{ __('user_certifications.status.approved') }} #}
+{#                                     </option> #}
+{#                                     <option value="pending"{{ currentStatus == 'pending' ? ' selected' : '' }}> #}
+{#                                         {{ __('user_certifications.status.pending') }} #}
+{#                                     </option> #}
+{#                                     <option value="self_confirmed"{{ currentStatus == 'self_confirmed' ? ' selected' : '' }}> #}
+{#                                         {{ __('user_certifications.status.self_confirmed') }} #}
+{#                                     </option> #}
+{#                                     <option value="expired"{{ currentStatus == 'expired' ? ' selected' : '' }}> #}
+{#                                         {{ __('user_certifications.status.expired') }} #}
+{#                                     </option> #}
+{#                                     <option value="revoked"{{ currentStatus == 'revoked' ? ' selected' : '' }}> #}
+{#                                         {{ __('user_certifications.status.revoked') }} #}
+{#                                     </option> #}
+{#                                     <option value="not_applied"{{ currentStatus == 'not_applied' ? ' selected' : '' }}> #}
+{#                                         {{ __('user_certifications.status.not_applied') }} #}
+{#                                     </option> #}
+{#                                 </select> #}
+{#                             </div> #}
+{#                             <div class="col-md-2"> #}
+{#                                 <label for="type-filter" class="form-label"> #}
+{#                                     {{ m.icon('tags') }} #}
+{#                                     {{ __('user_certifications.type') }} #}
+{#                                 </label> #}
+{#                                 <select class="form-select" id="type-filter" name="type"> #}
+{#                                     <option value="">{{ __('user_certifications.all_types') }}</option> #}
+{#                                     <option value="self_confirmable"{{ request.get('type') == 'self_confirmable' ? ' selected' : '' }}> #}
+{#                                         {{ m.icon('check-circle') }} {{ __('user_certifications.self_confirmable') }} #}
+{#                                     </option> #}
+{#                                     <option value="perpetual"{{ request.get('type') == 'perpetual' ? ' selected' : '' }}> #}
+{#                                         {{ m.icon('infinity') }} {{ __('user_certifications.perpetual') }} #}
+{#                                     </option> #}
+{#                                     <option value="time_limited"{{ request.get('type') == 'time_limited' ? ' selected' : '' }}> #}
+{#                                         {{ m.icon('clock') }} {{ __('user_certifications.time_limited') }} #}
+{#                                     </option> #}
+{#                                 </select> #}
+{#                             </div> #}
+{#                             <div class="col-md-2"> #}
+{#                                 <label for="availability-filter" class="form-label"> #}
+{#                                     {{ m.icon('funnel') }} #}
+{#                                     {{ __('user_certifications.availability') }} #}
+{#                                 </label> #}
+{#                                 <select class="form-select" id="availability-filter" name="availability"> #}
+{#                                     <option value="">{{ __('user_certifications.all_available') }}</option> #}
+{#                                     <option value="available"{{ request.get('availability') == 'available' ? ' selected' : '' }}> #}
+{#                                         {{ __('user_certifications.available_to_apply') }} #}
+{#                                     </option> #}
+{#                                     <option value="have"{{ request.get('availability') == 'have' ? ' selected' : '' }}> #}
+{#                                         {{ __('user_certifications.i_have') }} #}
+{#                                     </option> #}
+{#                                 </select> #}
+{#                             </div> #}
+{#                             <div class="col-md-1"> #}
+{#                                 <label for="sort-filter" class="form-label"> #}
+{#                                     {{ m.icon('sort-alpha-down') }} #}
+{#                                     {{ __('user_certifications.sort') }} #}
+{#                                 </label> #}
+{#                                 <select class="form-select" id="sort-filter" name="sort"> #}
+{#                                     <option value="title"{{ request.get('sort') == 'title' ? ' selected' : '' }}> #}
+{#                                         {{ __('user_certifications.sort.title') }} #}
+{#                                     </option> #}
+{#                                     <option value="status"{{ request.get('sort') == 'status' ? ' selected' : '' }}> #}
+{#                                         {{ __('user_certifications.sort.status') }} #}
+{#                                     </option> #}
+{#                                     <option value="type"{{ request.get('sort') == 'type' ? ' selected' : '' }}> #}
+{#                                         {{ __('user_certifications.sort.type') }} #}
+{#                                     </option> #}
+{#                                 </select> #}
+{#                             </div> #}
+{#                             <div class="col-md-1"> #}
+{#                                 <label class="form-label">&nbsp;</label> #}
+{#                                 <button type="submit" class="btn btn-primary d-block w-100" title="{{ __('user_certifications.apply_server_filters') }}"> #}
+{#                                     {{ m.icon('search') }} #}
+{#                                     <span class="d-none d-lg-inline">{{ __('form.search') }}</span> #}
+{#                                 </button> #}
+{#                             </div> #}
+{#                         </form> #}
 
-                        {# Quick Filter Buttons - Enhanced with server-side fallback #}
-                        <div class="row mt-3">
-                            <div class="col-12">
-                                <div class="d-flex flex-wrap gap-2">
-                                    <small class="text-muted align-self-center me-2">{{ __('user_certifications.quick_filters') }}:</small>
+{#                          #}{# Quick Filter Buttons - Enhanced with server-side fallback #}
+{#                         <div class="row mt-3"> #}
+{#                             <div class="col-12"> #}
+{#                                 <div class="d-flex flex-wrap gap-2"> #}
+{#                                     <small class="text-muted align-self-center me-2">{{ __('user_certifications.quick_filters') }}:</small> #}
 
-                                    {# Self-Confirmable Quick Filter #}
-                                    <form method="GET" action="{{ url('/user/certifications') }}" class="d-inline-block">
-                                        <input type="hidden" name="type" value="self_confirmable">
-                                        <input type="hidden" name="availability" value="available">
-                                        <button type="submit" class="btn btn-sm btn-success quick-filter"
-                                                data-filter="self_confirmable"
-                                                data-filter-type="self_confirmable"
-                                                aria-label="{{ __('user_certifications.filter_by_self_confirmable') }}"
-                                                title="{{ __('user_certifications.quick_filter_tooltip', {'type': __('user_certifications.self_confirmable_only')}) }}">
-                                            {{ m.icon('check-circle') }}
-                                            {{ __('user_certifications.self_confirmable_only') }}
-                                        </button>
-                                    </form>
+{#                                      #}{# Self-Confirmable Quick Filter #}
+{#                                     <form method="GET" action="{{ url('/user/certifications') }}" class="d-inline-block"> #}
+{#                                         <input type="hidden" name="type" value="self_confirmable"> #}
+{#                                         <input type="hidden" name="availability" value="available"> #}
+{#                                         <button type="submit" class="btn btn-sm btn-success quick-filter" #}
+{#                                                 data-filter="self_confirmable" #}
+{#                                                 data-filter-type="self_confirmable" #}
+{#                                                 aria-label="{{ __('user_certifications.filter_by_self_confirmable') }}" #}
+{#                                                 title="{{ __('user_certifications.quick_filter_tooltip', {'type': __('user_certifications.self_confirmable_only')}) }}"> #}
+{#                                             {{ m.icon('check-circle') }} #}
+{#                                             {{ __('user_certifications.self_confirmable_only') }} #}
+{#                                         </button> #}
+{#                                     </form> #}
 
-                                    {# Available Quick Filter #}
-                                    <form method="GET" action="{{ url('/user/certifications') }}" class="d-inline-block">
-                                        <input type="hidden" name="availability" value="available">
-                                        <button type="submit" class="btn btn-sm btn-primary quick-filter"
-                                                data-filter="available"
-                                                data-filter-type="available"
-                                                aria-label="{{ __('user_certifications.filter_by_available') }}"
-                                                title="{{ __('user_certifications.quick_filter_tooltip', {'type': __('user_certifications.available_only')}) }}">
-                                            {{ m.icon('plus-circle') }}
-                                            {{ __('user_certifications.available_only') }}
-                                        </button>
-                                    </form>
+{#                                      #}{# Available Quick Filter #}
+{#                                     <form method="GET" action="{{ url('/user/certifications') }}" class="d-inline-block"> #}
+{#                                         <input type="hidden" name="availability" value="available"> #}
+{#                                         <button type="submit" class="btn btn-sm btn-primary quick-filter" #}
+{#                                                 data-filter="available" #}
+{#                                                 data-filter-type="available" #}
+{#                                                 aria-label="{{ __('user_certifications.filter_by_available') }}" #}
+{#                                                 title="{{ __('user_certifications.quick_filter_tooltip', {'type': __('user_certifications.available_only')}) }}"> #}
+{#                                             {{ m.icon('plus-circle') }} #}
+{#                                             {{ __('user_certifications.available_only') }} #}
+{#                                         </button> #}
+{#                                     </form> #}
 
-                                    {# Expiring Quick Filter #}
-                                    <form method="GET" action="{{ url('/user/certifications') }}" class="d-inline-block">
-                                        <input type="hidden" name="status" value="approved">
-                                        <button type="submit" class="btn btn-sm btn-warning quick-filter"
-                                                data-filter="expiring"
-                                                data-filter-type="expiring"
-                                                aria-label="{{ __('user_certifications.filter_by_expiring') }}"
-                                                title="{{ __('user_certifications.quick_filter_tooltip', {'type': __('user_certifications.expiring_only')}) }}">
-                                            {{ m.icon('exclamation-triangle') }}
-                                            {{ __('user_certifications.expiring_only') }}
-                                        </button>
-                                    </form>
+{#                                      #}{# Expiring Quick Filter #}
+{#                                     <form method="GET" action="{{ url('/user/certifications') }}" class="d-inline-block"> #}
+{#                                         <input type="hidden" name="status" value="approved"> #}
+{#                                         <button type="submit" class="btn btn-sm btn-warning quick-filter" #}
+{#                                                 data-filter="expiring" #}
+{#                                                 data-filter-type="expiring" #}
+{#                                                 aria-label="{{ __('user_certifications.filter_by_expiring') }}" #}
+{#                                                 title="{{ __('user_certifications.quick_filter_tooltip', {'type': __('user_certifications.expiring_only')}) }}"> #}
+{#                                             {{ m.icon('exclamation-triangle') }} #}
+{#                                             {{ __('user_certifications.expiring_only') }} #}
+{#                                         </button> #}
+{#                                     </form> #}
 
-                                    {# Expired Quick Filter #}
-                                    <form method="GET" action="{{ url('/user/certifications') }}" class="d-inline-block">
-                                        <input type="hidden" name="status" value="expired">
-                                        <button type="submit" class="btn btn-sm btn-danger quick-filter"
-                                                data-filter="expired"
-                                                data-filter-type="expired"
-                                                aria-label="{{ __('user_certifications.filter_by_expired') }}"
-                                                title="{{ __('user_certifications.quick_filter_tooltip', {'type': __('user_certifications.expired_only')}) }}">
-                                            {{ m.icon('x-circle') }}
-                                            {{ __('user_certifications.expired_only') }}
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+{#                                      #}{# Expired Quick Filter #}
+{#                                     <form method="GET" action="{{ url('/user/certifications') }}" class="d-inline-block"> #}
+{#                                         <input type="hidden" name="status" value="expired"> #}
+{#                                         <button type="submit" class="btn btn-sm btn-danger quick-filter" #}
+{#                                                 data-filter="expired" #}
+{#                                                 data-filter-type="expired" #}
+{#                                                 aria-label="{{ __('user_certifications.filter_by_expired') }}" #}
+{#                                                 title="{{ __('user_certifications.quick_filter_tooltip', {'type': __('user_certifications.expired_only')}) }}"> #}
+{#                                             {{ m.icon('x-circle') }} #}
+{#                                             {{ __('user_certifications.expired_only') }} #}
+{#                                         </button> #}
+{#                                     </form> #}
+{#                                 </div> #}
+{#                             </div> #}
+{#                         </div> #}
+{#                     </div> #}
+{#                 </div> #}
 
                 {# Comprehensive Certification Catalog #}
                 <div class="card">

@@ -1147,7 +1147,7 @@ msgid "certifications.not_self_confirmable"
 msgstr "Not Self-Confirmable"
 
 msgid "certifications.results.showing"
-msgstr "Showing {from} to {to} of {total} certifications"
+msgstr "Showing %d certifications"
 
 msgid "certifications.results.filtered"
 msgstr "Filtered results displayed"
@@ -1201,7 +1201,7 @@ msgid "certifications.reactivate"
 msgstr "Reactivate"
 
 msgid "certifications.deactivate.confirm"
-msgstr "Are you sure you want to deactivate the certification '{0}'?"
+msgstr "Are you sure you want to deactivate the certification '%s'?"
 
 msgid "certifications.more_actions"
 msgstr "More Actions"
@@ -1210,10 +1210,10 @@ msgid "certifications.mass_revoke"
 msgstr "Mass Revoke"
 
 msgid "certifications.mass_revoke.confirm"
-msgstr "Are you sure you want to revoke the certification '{0}' from all users?"
+msgstr "Are you sure you want to revoke the certification '%s' from all users?"
 
 msgid "certifications.delete.confirm"
-msgstr "Are you sure you want to delete the certification '{0}'? This cannot be undone."
+msgstr "Are you sure you want to delete the certification '%s'? This cannot be undone."
 
 msgid "certifications.no_results.title"
 msgstr "No Certifications Found"
@@ -1334,7 +1334,7 @@ msgid "certifications.self_confirmed.success"
 msgstr "Certification self-confirmed successfully"
 
 msgid "certifications.mass_revoked.success"
-msgstr "Certification revoked from {count} users"
+msgstr "Certification revoked from %d users"
 
 msgid "certifications.error.not_found"
 msgstr "Certification not found"
@@ -3224,7 +3224,7 @@ msgid "user_certifications.no_certifications_available_description"
 msgstr "There are currently no certifications available to you."
 
 msgid "user_certifications.certifications_showing"
-msgstr "Showing {count} certifications"
+msgstr "Showing %d certifications"
 
 msgid "user_certifications.self_confirm_current_status"
 msgstr "Current Status"

@@ -2199,7 +2199,7 @@ msgid "certifications.not_self_confirmable"
 msgstr "Nicht selbstbestätigbar"
 
 msgid "certifications.results.showing"
-msgstr "Zeige {from} bis {to} von {total} Zertifikaten"
+msgstr "Zeige %d Zertifikaten"
 
 msgid "certifications.results.filtered"
 msgstr "Gefilterte Ergebnisse angezeigt"
@@ -2241,7 +2241,7 @@ msgid "certifications.self_confirmation"
 msgstr "Selbstbestätigung"
 
 msgid "certifications.valid_for_days"
-msgstr "{days} Tage"
+msgstr "%d Tage"
 
 msgid "certifications.back_to_list"
 msgstr "Zurück zu Zertifikaten"
@@ -2253,7 +2253,7 @@ msgid "certifications.reactivate"
 msgstr "Reaktivieren"
 
 msgid "certifications.deactivate.confirm"
-msgstr "Sind Sie sicher, dass Sie das Zertifikat '{0}' deaktivieren möchten?"
+msgstr "Sind Sie sicher, dass Sie das Zertifikat '%s' deaktivieren möchten?"
 
 msgid "certifications.more_actions"
 msgstr "Weitere Aktionen"
@@ -2262,10 +2262,10 @@ msgid "certifications.mass_revoke"
 msgstr "Massenwiderruf"
 
 msgid "certifications.mass_revoke.confirm"
-msgstr "Sind Sie sicher, dass Sie das Zertifikat '{0}' von allen Benutzern widerrufen möchten?"
+msgstr "Sind Sie sicher, dass Sie das Zertifikat '%s' von allen Benutzern widerrufen möchten?"
 
 msgid "certifications.delete.confirm"
-msgstr "Sind Sie sicher, dass Sie das Zertifikat '{0}' löschen möchten? Dies kann nicht rückgängig gemacht werden."
+msgstr "Sind Sie sicher, dass Sie das Zertifikat '%s' löschen möchten? Dies kann nicht rückgängig gemacht werden."
 
 msgid "certifications.no_results.title"
 msgstr "Keine Zertifikate gefunden"
@@ -2308,10 +2308,10 @@ msgid "user_certifications.date_expires"
 msgstr "Läuft ab"
 
 msgid "user_certifications.expires_in"
-msgstr "Läuft in {days} Tagen ab"
+msgstr "Läuft in %d Tagen ab"
 
 msgid "user_certifications.expired_since"
-msgstr "Vor {days} Tagen abgelaufen"
+msgstr "Vor %d Tagen abgelaufen"
 
 msgid "user_certifications.never_expires"
 msgstr "Läuft nie ab"
@@ -2386,7 +2386,7 @@ msgid "certifications.self_confirmed.success"
 msgstr "Zertifikat erfolgreich selbstbestätigt"
 
 msgid "certifications.mass_revoked.success"
-msgstr "Zertifikat von {count} Benutzern widerrufen"
+msgstr "Zertifikat von %d Benutzern widerrufen"
 
 msgid "certifications.error.not_found"
 msgstr "Zertifikat nicht gefunden"
