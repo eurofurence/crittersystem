@@ -127,7 +127,7 @@ class AuthController extends BaseController
         return $this->redirect->to('/');
     }
 
-    protected function checkAccessMode(User $user): ?Response
+    public function checkAccessMode(User $user): ?Response
     {
         $accessMode = app(AccessMode::class);
         switch ($accessMode->getMode()) {
