@@ -277,6 +277,7 @@ class CritterTypesController extends BaseController
                 $angeltype->name = $name;
             }
 
+            $angeltype->staff_only = $request->request->has('staff_only');
             $angeltype->restricted = $request->request->has('restricted');
             $angeltype->shift_self_signup = $request->request->has('shift_self_signup');
             $angeltype->show_on_dashboard = $request->request->has('show_on_dashboard');
