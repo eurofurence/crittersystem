@@ -9,9 +9,11 @@
         <div>
             <h1>
                 {{ block('title') }}
-                <a class="btn btn-sm btn-secondary" href="{{ url('/crittertypes/edit') }}">
-                    <span class="bi bi-plus-lg"></span>
-                </a>
+                {% if isShiftManager or isAdmin %}
+                    <a class="btn btn-sm btn-secondary" href="{{ url('/crittertypes/edit') }}">
+                        <span class="bi bi-plus-lg"></span>
+                    </a>
+                {% endif %}
             </h1>
         </div>
     </div>
@@ -36,6 +38,10 @@
                     <tr>
                         <td>
                             <a class="text-break" href="{{ url('/crittertypes/' ~ t.id) }}">{{ t.name }}</a>
+                            {% if t.staffOnly %}
+                                <br>
+                                <span class="badge bg-primary">Staff Only</span>
+                            {% endif %}
                         </td>
                         <td class="d-none d-md-table-cell">{{ t.restricted ? m.icon('mortarboard-fill') : '' }}</td>
                         <td class="d-none d-lg-table-cell">{{ t.shift_self_signup ? m.icon('pencil-square') : '' }}</td>
@@ -43,23 +49,23 @@
                         <td>
                             <div class="d-flex flex-wrap gap-2">
                                 <a class="btn btn-sm btn-info" href="{{ url('/crittertypes/' ~ t.id) }}">
-                                    {{ m.icon('eye') }} {{ isAdmin ? '' : __('View') }}
+                                    {{ m.icon('eye') }}
                                 </a>
                                 {% if isAdmin %}
                                     <a class="btn btn-sm btn-primary" href="{{ url('/crittertypes/edit/' ~ t.id) }}">
-                                        {{ m.icon('pencil') }} {{ __('form.edit') }}
+                                        {{ m.icon('pencil') }}
                                     </a>
                                     <a class="btn btn-sm btn-danger" href="{{ url('/crittertypes/' ~ t.id ~ '/delete') }}">
-                                        {{ m.icon('trash') }} {{ __('form.delete') }}
+                                        {{ m.icon('trash') }}
                                     </a>
                                 {% endif %}
                                 {% if t.user_angel_type_id %}
                                     <a class="btn btn-sm btn-warning" href="{{ url('/user-angeltypes', {'action':'delete', 'user_angeltype_id': t.user_angel_type_id}) }}">
-                                        {{ m.icon('box-arrow-right') }} {{ isAdmin ? __('Leave') : '' }}
+                                        {{ m.icon('box-arrow-right') }}
                                     </a>
                                 {% else %}
                                     <a class="btn btn-sm {{ isAdmin ? 'btn-success' : 'btn-secondary' }}" href="{{ url('/user-angeltypes', {'action':'add', 'angeltype_id': t.id}) }}">
-                                        {{ m.icon('box-arrow-in-right') }} {{ isAdmin ? __('Join') : '' }}
+                                        {{ m.icon('box-arrow-in-right') }}
                                     </a>
                                 {% endif %}
                             </div>
@@ -92,30 +98,33 @@
                     </div>
 
                     <div class="mt-2">
+                        {% if t.staffOnly %}
+                            <span class="badge bg-primary">Staff Only</span>
+                        {% endif %}
                         <span class="badge bg-secondary">{{ t.membership }}</span>
                     </div>
 
                     <div class="mt-2 d-flex flex-wrap gap-2">
                         <a class="btn btn-sm btn-info" href="{{ url('/crittertypes/' ~ t.id) }}">
-                            {{ m.icon('eye') }} {{ isAdmin ? '' : __('View') }}
+                            {{ m.icon('eye') }}
                         </a>
 
                         {% if isAdmin %}
                             <a class="btn btn-sm btn-primary" href="{{ url('/crittertypes/edit/' ~ t.id) }}">
-                                {{ m.icon('pencil') }} {{ __('form.edit') }}
+                                {{ m.icon('pencil') }}
                             </a>
                             <a class="btn btn-sm btn-danger" href="{{ url('/crittertypes/' ~ t.id ~ '/delete') }}">
-                                {{ m.icon('trash') }} {{ __('form.delete') }}
+                                {{ m.icon('trash') }}
                             </a>
                         {% endif %}
 
                         {% if t.user_angel_type_id %}
                             <a class="btn btn-sm btn-warning" href="{{ url('/user-angeltypes', {'action':'delete', 'user_angeltype_id': t.user_angel_type_id}) }}">
-                                {{ m.icon('box-arrow-right') }} {{ isAdmin ? __('Leave') : '' }}
+                                {{ m.icon('box-arrow-right') }}
                             </a>
                         {% else %}
                             <a class="btn btn-sm {{ isAdmin ? 'btn-success' : 'btn-secondary' }}" href="{{ url('/user-angeltypes', {'action':'add', 'angeltype_id': t.id}) }}">
-                                {{ m.icon('box-arrow-in-right') }} {{ isAdmin ? __('Join') : '' }}
+                                {{ m.icon('box-arrow-in-right') }}
                             </a>
                         {% endif %}
                     </div>

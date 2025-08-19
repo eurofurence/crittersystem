@@ -153,7 +153,11 @@ class UserCertificationsController extends BaseController
             $pendingApplicationsQuery->where('certification_id', $filters['certification_id']);
         }
 
-        $pendingApplications = $pendingApplicationsQuery->paginate($perPage, ['*'], 'page', $page);
+        // Avoid using Laravel's Paginator component (not installed). Do manual pagination.
+        $pendingApplications = $pendingApplicationsQuery
+            ->offset(($page - 1) * $perPage)
+            ->limit($perPage)
+            ->get();
 
         // Get recent applications activity (last 50 items for admin dashboard)
         $recentActivity = CertificationUser::with(['user', 'certification'])

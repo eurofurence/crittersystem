@@ -27,9 +27,25 @@ class CritterTypesController extends BaseController
         }
 
         $user = auth()->user();
+        $isStaffUser = $user->hasPermission('user.type.staff');
+        $isShiftManager = $user->hasPermission('shifttypes.edit');
 
         // Load angel types together with user's membership info (pivot)
-        $angeltypes = AngelType::query()
+//        $angeltypes = AngelType::query()
+//            ->select([
+//                'angel_types.*',
+//                'user_angel_type.id AS user_angel_type_id',
+//                'user_angel_type.confirm_user_id',
+//                'user_angel_type.supporter',
+//            ])
+//            ->leftJoin('user_angel_type', function (JoinClause $join) use ($user): void {
+//                $join->on('angel_types.id', 'user_angel_type.angel_type_id');
+//                $join->where('user_angel_type.user_id', $user->id);
+//            })
+//            ->get();
+
+        // Load angel types together with user's membership info (pivot)
+        $angeltypesQuery = AngelType::query()
             ->select([
                 'angel_types.*',
                 'user_angel_type.id AS user_angel_type_id',
@@ -39,26 +55,32 @@ class CritterTypesController extends BaseController
             ->leftJoin('user_angel_type', function (JoinClause $join) use ($user): void {
                 $join->on('angel_types.id', 'user_angel_type.angel_type_id');
                 $join->where('user_angel_type.user_id', $user->id);
-            })
-            ->get();
+            });
+
+        if (!$isStaffUser) {
+            $angeltypesQuery->where('staff_only', false);
+        }
+
+            $angeltypes = $angeltypesQuery->get();
 
         // Compute simple presentation fields expected by the view
         $items = [];
         foreach ($angeltypes as $type) {
-            $membership = 'Non Member';
+            $membership = '❌';
             if (!empty($type->user_angel_type_id)) {
                 if ($type->restricted && empty($type->confirm_user_id)) {
-                    $membership = __('Unconfirmed');
+                    $membership = __('❔ Unconfirmed');
                 } elseif ($type->supporter) {
-                    $membership = __('Supporter');
+                    $membership = __('🐱‍👤 Supporter');
                 } else {
-                    $membership = __('Member');
+                    $membership = __('✅ Member');
                 }
             }
 
             $items[] = [
                 'id' => $type->id,
                 'name' => $type->name,
+                'staffOnly' => (bool) $type->staff_only,
                 'restricted' => (bool) $type->restricted,
                 'shift_self_signup' => (bool) $type->shift_self_signup,
                 'membership' => $membership,
@@ -69,6 +91,8 @@ class CritterTypesController extends BaseController
         return $this->response->withView('pages/crittertypes/index', [
             'angeltypes' => $items,
             'isAdmin' => auth()->can('admin_angel_types'),
+            'isStaffUser' => $isStaffUser,
+            'isShiftManager' => $isShiftManager,
         ]);
     }
 
