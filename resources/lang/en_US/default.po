@@ -3327,6 +3327,3 @@ msgstr "Error creating the certification"
 
 msgid "validation.description.min"
 msgstr "Error: Description needs to be longer"
-
-msgid "settings.certificates.success"
-msgstr "Successfully applied"
