@@ -14,6 +14,8 @@ Thumbs.db
 _vimrc_local.vim
 .sass-cache
 
+project_control_docs/
+
 # NO SYNC Files/Folders
 _NOSYNC
 .NOSYNC
@@ -26,6 +28,8 @@ _NOSYNC/
 
 # Visual Studio files
 /.vs
+.github/copilot-*
+.github/instructions/
 
 # PHPstorm files
 /.idea/
@@ -60,7 +64,7 @@ _NOSYNC/
 
 # Frontend files
 /node_modules
-/public/assets
+/public/assets/*
 /package-lock.json
 /yarn-error.log
 /.yarn-cache

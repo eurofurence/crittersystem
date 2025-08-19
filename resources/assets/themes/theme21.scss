@@ -219,6 +219,18 @@ $headings-small-color: $gray-light;
   background-color: rgba(255, 0, 0, 0.45);
 }
 
+.btn-info {
+  background-color: rgba(200, 200, 200, 0.35);
+}
+
+.btn-info:hover {
+  background-color: rgba(200, 200, 200, 0.55);
+}
+
+.btn-info:active {
+  background-color: rgba(200, 200, 200, 0.45);
+}
+
 .table-responsive > .table,
 table.table.table-striped.data {
   background-color: unset;
@@ -232,6 +244,11 @@ table.table.table-striped.data {
 
 .text-info {
   color: rgb(210, 0, 0) !important;
+}
+
+.text-primary,
+.text-secondary {
+  color: #fff !important;
 }
 
 .bi-info-circle-fill {
@@ -285,6 +302,14 @@ table.table.table-striped.data {
   box-shadow: 0 5px 5px 5px rgba(0, 0, 0, 0.2), inset -1px -1px rgba(181, 181, 181, 0.55);
   background-color: unset !important;
   backdrop-filter: blur(32px);
+}
+
+.card.border-info {
+  box-shadow: 0 5px 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+.card.border-info > .card-body {
+  background-color: unset !important;
 }
 
 .shift-calendar.table-responsive {
@@ -447,4 +472,51 @@ h5 {
 .tooltip.show {
   --bs-tooltip-color: var(--bs-body-bg);
   --bs-tooltip-bg: var(--bs-body-color);
+
+/* Visibility fix: enforce opaque backgrounds for buttons and dropdowns */
+/* Buttons */
+.btn-primary,
+.btn-secondary {
+  background-color: #2f2f2f !important;
+}
+.btn-primary:hover,
+.btn-secondary:hover {
+  background-color: #3a3a3a !important;
+}
+.btn-primary:active,
+.btn-secondary:active {
+  background-color: #333333 !important;
+}
+
+.btn-success {
+  background-color: #00aa00 !important;
+}
+.btn-success:hover { background-color: #009600 !important; }
+.btn-success:active { background-color: #008800 !important; }
+
+.btn-info {
+  background-color: #c8c8c8 !important;
+  color: #000 !important;
+}
+.btn-info:hover { background-color: #bdbdbd !important; }
+.btn-info:active { background-color: #b3b3b3 !important; }
+
+.btn-danger {
+  background-color: #aa0000 !important;
+  border-color: #aa0000 !important;
+}
+.btn-danger:hover { background-color: #990000 !important; }
+.btn-danger:active { background-color: #8a0000 !important; }
+
+/* Dropdowns */
+.dropdown-menu,
+.choices__list--dropdown,
+.choices__inner {
+  background-color: #2f2f2f !important;
+}
+.dropdown-item:hover,
+.dropdown-item:focus,
+.dropdown-item.active,
+.dropdown-item:active {
+  background-color: #3a3a3a !important;
 }

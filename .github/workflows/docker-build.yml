@@ -8,6 +8,7 @@ on:
 #      - '!master'
 #      - '**'
     tags:
+      - 'v*'
       - 'v*.*.*'
       - 'dev-*'
       - 'alpha-*'
@@ -16,6 +17,9 @@ on:
     branches:
       - 'main'
       - 'dev'
+  release:
+    types:
+      - created
 
 env:
   REGISTRY: ghcr.io

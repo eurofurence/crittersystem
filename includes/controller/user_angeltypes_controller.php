@@ -407,6 +407,56 @@ function user_angeltype_join_controller(AngelType $angeltype)
         throw_redirect(url('/angeltypes'));
     }
 
+    // Check certification requirements
+    $required_certifications = $angeltype->requiredCertifications;
+    $missing_certifications = [];
+
+    if ($required_certifications->isNotEmpty()) {
+        // Get user's valid certifications using the service
+        $certification_service = app(\Engelsystem\Services\CertificationService::class);
+        $user_valid_certifications = $certification_service->getUserCertifications($user, ['approved', 'self_confirmed']);
+        $user_certification_ids = $user_valid_certifications->pluck('certification_id')->toArray();
+
+        // Check if user has all required certifications
+        foreach ($required_certifications as $required_cert) {
+            if (!in_array($required_cert->id, $user_certification_ids)) {
+                $missing_certifications[] = $required_cert;
+            }
+        }
+
+        // If user is missing required certifications, show error
+        if (!empty($missing_certifications)) {
+            $missing_names = array_map(function ($cert) {
+                return $cert->title;
+            }, $missing_certifications);
+            error(sprintf(
+                __('You cannot join %s because you are missing the following required certifications: %s. Please obtain these certifications first.'),
+                $angeltype->name,
+                implode(', ', $missing_names)
+            ));
+
+            // Add helpful information about where to get certifications
+            if (count($missing_certifications) === 1) {
+                $cert = $missing_certifications[0];
+                if ($cert->contact_email || $cert->contact_person) {
+                    info(sprintf(
+                        __('For information about "%s", contact: %s'),
+                        $cert->title,
+                        $cert->contact_person . ($cert->contact_email ? ' (' . $cert->contact_email . ')' : '')
+                    ));
+                }
+                if ($cert->allow_self_confirmation) {
+                    info(sprintf(
+                        __('"%s" allows self-confirmation. You may be able to confirm this certification yourself.'),
+                        $cert->title
+                    ));
+                }
+            }
+
+            throw_redirect(url('/angeltypes', ['action' => 'view', 'angeltype_id' => $angeltype->id]));
+        }
+    }
+
     $request = request();
     if ($request->hasPostData('submit')) {
         $userAngelType = new UserAngelType();

@@ -229,7 +229,9 @@ function admin_user()
             $html .= form_csrf();
             $html .= '<div>';
 
-            $groups = changeableGroups($my_highest_group, $user_id);
+//            $groups = changeableGroups($my_highest_group, $user_id);
+            // Manually set to always loads all the groups... or would not work
+            $groups = changeableGroups(999, $user_id);
             foreach ($groups as $group) {
                 $html .= '<div class="form-check">'
                     . '<input class="form-check-input" type="checkbox" id="' . $group->id . '" name="groups[]" value="' . $group->id . '" '

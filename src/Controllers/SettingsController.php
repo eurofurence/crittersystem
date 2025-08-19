@@ -428,6 +428,8 @@ class SettingsController extends BaseController
 
         $menu[url('/settings/profile')] = 'settings.profile';
 
+        $menu[url('/user/certifications')] = 'Certifications';
+
         if (empty(config('oauth'))) {
             $menu[url('/settings/password')] = ['title' => 'settings.password', 'icon' => 'key-fill'];
         }

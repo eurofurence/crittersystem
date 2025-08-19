@@ -1,0 +1,345 @@
+{% extends "layouts/app.twig" %}
+{% import 'macros/base.twig' as m %}
+
+{% block title %}
+    {{ __('admin.purge.audit_logs') }}
+{% endblock %}
+
+{% block content %}
+    <div class="container" id="audit-logs" data-has-active-purges="{{ has_active_purges ? '1' : '0' }}">
+        <div class="page-header">
+            <h1>
+                {{ __('admin.purge.audit_logs') }}
+                <small class="text-muted">{{ __('admin.purge.audit_logs_subtitle') }}</small>
+            </h1>
+        </div>
+
+        {# Statistics Cards #}
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="card-title">{{ stats.total_purges }}</h4>
+                                <p class="card-text">{{ __('admin.purge.total_purges') }}</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fa fa-database fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="card-title">{{ stats.completed_purges }}</h4>
+                                <p class="card-text">{{ __('admin.purge.completed_purges') }}</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fa fa-check-circle fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-warning text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="card-title">{{ stats.active_purges }}</h4>
+                                <p class="card-text">{{ __('admin.purge.active_purges') }}</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fa fa-spinner fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="card-title">{{ stats.total_affected_last_30_days }}</h4>
+                                <p class="card-text">{{ __('admin.purge.records_affected_30d') }}</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fa fa-trash fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Filter Controls #}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">{{ __('admin.purge.filter_logs') }}</h5>
+            </div>
+            <div class="card-body">
+                <form method="GET" class="row g-3">
+                    <div class="col-md-3">
+                        <label for="status" class="form-label">{{ __('admin.purge.status') }}</label>
+                        <select name="status" id="status" class="form-select">
+                            <option value="">{{ __('admin.purge.all_statuses') }}</option>
+                            <option value="initiated" {{ status == 'initiated' ? 'selected' : '' }}>{{ __('admin.purge.status_initiated') }}</option>
+                            <option value="in_progress" {{ status == 'in_progress' ? 'selected' : '' }}>{{ __('admin.purge.status_in_progress') }}</option>
+                            <option value="completed" {{ status == 'completed' ? 'selected' : '' }}>{{ __('admin.purge.status_completed') }}</option>
+                            <option value="failed" {{ status == 'failed' ? 'selected' : '' }}>{{ __('admin.purge.status_failed') }}</option>
+                            <option value="cancelled" {{ status == 'cancelled' ? 'selected' : '' }}>{{ __('admin.purge.status_cancelled') }}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="date_from" class="form-label">{{ __('admin.purge.date_from') }}</label>
+                        <input type="date" name="date_from" id="date_from" class="form-control" value="{{ date_from }}">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="date_to" class="form-label">{{ __('admin.purge.date_to') }}</label>
+                        <input type="date" name="date_to" id="date_to" class="form-control" value="{{ date_to }}">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">&nbsp;</label>
+                        <div>
+                            <button type="submit" class="btn btn-primary">{{ __('form.search') }}</button>
+                            <a href="{{ url('admin/purge/audit-logs') }}" class="btn btn-secondary">{{ __('form.reset') }}</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {# Audit Logs Table #}
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">{{ __('admin.purge.audit_log_history') }}</h5>
+                <div>
+                    <span class="badge bg-secondary">{{ logs|length }} {{ __('admin.purge.log_entries') }}</span>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                {% if logs|length > 0 %}
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>{{ __('admin.purge.initiated_at') }}</th>
+                                    <th>{{ __('admin.purge.user') }}</th>
+                                    <th>{{ __('admin.purge.categories') }}</th>
+                                    <th>{{ __('admin.purge.cutoff_date') }}</th>
+                                    <th>{{ __('admin.purge.status') }}</th>
+                                    <th>{{ __('admin.purge.affected_records') }}</th>
+                                    <th>{{ __('admin.purge.duration') }}</th>
+                                    <th>{{ __('admin.purge.actions') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for log in logs %}
+                                    <tr>
+                                        <td>
+                                            <small class="text-muted">{{ log.created_at.format('Y-m-d H:i:s') }}</small>
+                                        </td>
+                                        <td>
+                                            {% if log.user %}
+                                                <strong>{{ log.user.name }}</strong>
+                                                <br><small class="text-muted">{{ log.user.email ?? log.user.nick }}</small>
+                                            {% else %}
+                                                <span class="text-muted">{{ __('admin.purge.user_deleted') }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <span class="text-primary">{{ log.getCategoriesString() }}</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-light text-dark">{{ log.cutoff_date.format('Y-m-d') }}</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-{{ log.getStatusBadgeColor() }}">
+                                                {{ __('admin.purge.status_' ~ log.status) }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if log.affected_counts and log.affected_counts|length > 0 %}
+                                                <div class="small">
+                                                    {% for category, count in log.affected_counts %}
+                                                        <div>{{ category|title }}: <strong>{{ count }}</strong></div>
+                                                    {% endfor %}
+                                                    <div class="text-primary mt-1">
+                                                        <strong>{{ __('admin.purge.total') }}: {{ log.getTotalAffectedCount() }}</strong>
+                                                    </div>
+                                                </div>
+                                            {% else %}
+                                                <span class="text-muted">-</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if log.getDuration() %}
+                                                <span class="text-success">{{ log.getDuration() }}</span>
+                                            {% else %}
+                                                {% if log.isActive() %}
+                                                    <span class="text-warning">{{ __('admin.purge.in_progress') }}</span>
+                                                {% else %}
+                                                    <span class="text-muted">-</span>
+                                                {% endif %}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <button type="button"
+                                                        class="btn btn-info btn-sm"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#logModal{{ log.id }}"
+                                                        title="{{ __('admin.purge.view_details') }}">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                                {% if log.backup_file_path and log.status == 'completed' %}
+                                                    <a href="{{ url('admin/purge/download-backup/' ~ log.id) }}"
+                                                       class="btn btn-success btn-sm"
+                                                       title="{{ __('admin.purge.download_backup') }}">
+                                                        <i class="fa fa-download"></i>
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fa fa-inbox fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">{{ __('admin.purge.no_logs_found') }}</h5>
+                        <p class="text-muted">{{ __('admin.purge.no_logs_description') }}</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {# Detail Modals for each log entry #}
+        {% for log in logs %}
+            <div class="modal fade" id="logModal{{ log.id }}" tabindex="-1" aria-labelledby="logModalLabel{{ log.id }}" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="logModalLabel{{ log.id }}">
+                                {{ __('admin.purge.purge_details') }} #{{ log.id }}
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>{{ __('admin.purge.general_info') }}</h6>
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <td><strong>{{ __('admin.purge.id') }}:</strong></td>
+                                            <td>{{ log.id }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>{{ __('admin.purge.initiated_by') }}:</strong></td>
+                                            <td>{{ log.user ? log.user.name : __('admin.purge.user_deleted') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>{{ __('admin.purge.initiated_at') }}:</strong></td>
+                                            <td>{{ log.created_at.format('Y-m-d H:i:s') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>{{ __('admin.purge.completed_at') }}:</strong></td>
+                                            <td>{{ log.completed_at ? log.completed_at.format('Y-m-d H:i:s') : '-' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>{{ __('admin.purge.status') }}:</strong></td>
+                                            <td>
+                                                <span class="badge bg-{{ log.getStatusBadgeColor() }}">
+                                                    {{ __('admin.purge.status_' ~ log.status) }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>{{ __('admin.purge.operation_details') }}</h6>
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <td><strong>{{ __('admin.purge.categories') }}:</strong></td>
+                                            <td>{{ log.getCategoriesString() }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>{{ __('admin.purge.cutoff_date') }}:</strong></td>
+                                            <td>{{ log.cutoff_date.format('Y-m-d') }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>{{ __('admin.purge.total_affected') }}:</strong></td>
+                                            <td><strong>{{ log.getTotalAffectedCount() }}</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>{{ __('admin.purge.duration') }}:</strong></td>
+                                            <td>{{ log.getDuration() ?? '-' }}</td>
+                                        </tr>
+                                        {% if log.backup_file_path %}
+                                        <tr>
+                                            <td><strong>{{ __('admin.purge.backup_file') }}:</strong></td>
+                                            <td>
+                                                <code>{{ log.backup_file_path|basename }}</code>
+                                            </td>
+                                        </tr>
+                                        {% endif %}
+                                    </table>
+                                </div>
+                            </div>
+
+                            {% if log.affected_counts and log.affected_counts|length > 0 %}
+                                <h6 class="mt-3">{{ __('admin.purge.affected_records_by_category') }}</h6>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>{{ __('admin.purge.category') }}</th>
+                                                <th>{{ __('admin.purge.records_affected') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for category, count in log.affected_counts %}
+                                                <tr>
+                                                    <td>{{ category|title }}</td>
+                                                    <td><strong>{{ count }}</strong></td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% endif %}
+
+                            {% if log.error_message %}
+                                <h6 class="mt-3 text-danger">{{ __('admin.purge.error_details') }}</h6>
+                                <div class="alert alert-danger">
+                                    <pre>{{ log.error_message }}</pre>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="modal-footer">
+                            {% if log.backup_file_path and log.status == 'completed' %}
+                                <a href="{{ url('admin/purge/download-backup/' ~ log.id) }}" class="btn btn-success">
+                                    <i class="fa fa-download"></i> {{ __('admin.purge.download_backup') }}
+                                </a>
+                            {% endif %}
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('form.close') }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{{ parent() }}
+<script src="{{ asset('assets/purge.js') }}"></script>
+{% endblock %}

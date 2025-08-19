@@ -14,6 +14,7 @@ use Engelsystem\Http\Request;
 use Engelsystem\Http\Response;
 use Engelsystem\Http\UrlGeneratorInterface;
 use Engelsystem\Models\EventConfig;
+use Engelsystem\Helpers\AccessMode;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
@@ -53,6 +54,15 @@ class ConfigController extends BaseController
                 'welcome_msg' => [
                     'type' => 'text',
                     'rows' => 5,
+                ],
+                'access_mode' => [
+                    'type' => 'select',
+                    'choices' => [
+                        AccessMode::MODE_PUBLIC => 'Public',
+                        AccessMode::MODE_STAFF => 'Staff',
+                        AccessMode::MODE_ADMIN => 'Admin',
+                    ],
+                    'default' => AccessMode::MODE_PUBLIC,
                 ],
                 'buildup_start' => [
                     'type' => 'datetime-local',
@@ -155,7 +165,7 @@ class ConfigController extends BaseController
             $validation[] = empty($setting['required']) ? 'optional' : 'required';
 
             match ($setting['type']) {
-                'string', 'text' => null, // Anything is valid here when optional
+                'string', 'text', 'select' => null, // Anything is valid here when optional
                 'datetime-local' => $validation[] = 'date_time',
                 default => throw new InvalidArgumentException(
                     'Type ' . $setting['type'] . ' of ' . $key . ' not defined'

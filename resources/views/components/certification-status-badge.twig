@@ -1,0 +1,40 @@
+{% import 'macros/base.twig' as m %}
+
+{# Certification Status Badge Component
+   Usage: {% include 'components/certification-status-badge.twig' with {'status': user_cert.status} %}
+#}
+
+{% set badge_classes = {
+    'pending': 'bg-warning text-dark',
+    'approved': 'bg-success',
+    'self_confirmed': 'bg-info',
+    'revoked': 'bg-danger',
+    'expired': 'bg-secondary'
+} %}
+
+{% set badge_icons = {
+    'pending': 'clock',
+    'approved': 'check-circle-fill',
+    'self_confirmed': 'person-check-fill',
+    'revoked': 'x-circle-fill',
+    'expired': 'exclamation-triangle-fill'
+} %}
+
+{% set status_text = {
+    'pending': __('user_certifications.status.pending'),
+    'approved': __('user_certifications.status.approved'),
+    'self_confirmed': __('user_certifications.status.self_confirmed'),
+    'revoked': __('user_certifications.status.revoked'),
+    'expired': __('user_certifications.status.expired')
+} %}
+
+{% set badge_class = badge_classes[status]|default('bg-secondary') %}
+{% set badge_icon = badge_icons[status]|default('question-circle') %}
+{% set badge_text = status_text[status]|default(status|title) %}
+
+<span class="badge {{ badge_class }}" 
+      title="{{ badge_text }}"
+      data-bs-toggle="tooltip">
+    {{ m.icon(badge_icon) }}
+    {{ badge_text }}
+</span>

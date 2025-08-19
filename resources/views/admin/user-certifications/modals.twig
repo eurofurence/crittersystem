@@ -1,0 +1,328 @@
+{# Modal for Bulk Add Certifications #}
+<div class="modal fade" id="bulkAddModal" tabindex="-1" aria-labelledby="bulkAddModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bulkAddModalLabel">
+                    {{ m.icon('plus-circle') }}
+                    {{ __('user_certifications.bulk_add_title') }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('form.close') }}"></button>
+            </div>
+            <form id="bulkAddForm">
+                <div class="modal-body">
+                    {{ csrf() }}
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {% set cert_options = {'': __('user_certifications.select_certification_placeholder')} %}
+                                {% for certification in certifications %}
+                                    {% set cert_options = cert_options|merge({(certification.uuid): certification.title}) %}
+                                {% endfor %}
+                                {{ f.select('certification_uuid', __('user_certifications.certification'), cert_options, {
+                                    'required': true,
+                                    'info': __('user_certifications.bulk_add.certification_help')
+                                }) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{ f.select('status', __('user_certifications.initial_status'), {
+                                    'pending': __('user_certifications.status.pending'),
+                                    'approved': __('user_certifications.status.approved'),
+                                    'self_confirmed': __('user_certifications.status.self_confirmed')
+                                }, {
+                                    'selected': 'pending',
+                                    'required': true,
+                                    'info': __('user_certifications.bulk_add.status_help')
+                                }) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ f.textarea('user_selection', __('user_certifications.user_selection'), {
+                            'rows': 6,
+                            'placeholder': __('user_certifications.bulk_add.user_selection_placeholder'),
+                            'info': __('user_certifications.bulk_add.user_selection_help')
+                        }) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ f.input('notes', __('user_certifications.notes'), {
+                            'placeholder': __('user_certifications.bulk_add.notes_placeholder'),
+                            'info': __('user_certifications.bulk_add.notes_help')
+                        }) }}
+                    </div>
+
+                    <div class="alert alert-info">
+                        <h6>{{ __('user_certifications.bulk_add.instructions_title') }}</h6>
+                        <ul class="mb-0 small">
+                            <li>{{ __('user_certifications.bulk_add.instruction_1') }}</li>
+                            <li>{{ __('user_certifications.bulk_add.instruction_2') }}</li>
+                            <li>{{ __('user_certifications.bulk_add.instruction_3') }}</li>
+                            <li>{{ __('user_certifications.bulk_add.instruction_4') }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        {{ __('form.cancel') }}
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        {{ m.icon('plus') }}
+                        {{ __('user_certifications.add_certifications') }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{# Modal for Edit Expiry Date #}
+<div class="modal fade" id="editExpiryModal" tabindex="-1" aria-labelledby="editExpiryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editExpiryModalLabel">
+                    {{ m.icon('calendar-event') }}
+                    {{ __('user_certifications.edit_expiry_title') }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('form.close') }}"></button>
+            </div>
+            <form id="editExpiryForm">
+                <div class="modal-body">
+                    {{ csrf() }}
+                    <input type="hidden" id="editExpiryId" name="user_certification_id">
+
+                    <div class="mb-3">
+                        {{ f.input('date_expires', __('user_certifications.expiry_date'), {
+                            'type': 'date',
+                            'id': 'editExpiryDate',
+                            'info': __('user_certifications.edit_expiry.help')
+                        }) }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ f.textarea('reason', __('user_certifications.change_reason'), {
+                            'rows': 3,
+                            'placeholder': __('user_certifications.change_reason_placeholder'),
+                            'info': __('user_certifications.change_reason.help')
+                        }) }}
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <small>{{ __('user_certifications.edit_expiry.warning') }}</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        {{ __('form.cancel') }}
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        {{ m.icon('save') }}
+                        {{ __('form.save_changes') }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{# Modal for Add Note #}
+<div class="modal fade" id="addNoteModal" tabindex="-1" aria-labelledby="addNoteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addNoteModalLabel">
+                    {{ m.icon('note-sticky') }}
+                    {{ __('user_certifications.add_note_title') }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('form.close') }}"></button>
+            </div>
+            <form id="addNoteForm">
+                <div class="modal-body">
+                    {{ csrf() }}
+                    <input type="hidden" id="addNoteId" name="user_certification_id">
+
+                    <div class="mb-3">
+                        <label for="addNoteText" class="form-label">
+                            {{ __('user_certifications.note') }}
+                            <span class="text-danger">*</span>
+                        </label>
+                        <textarea class="form-control" id="addNoteText" name="note" rows="4"
+                                  placeholder="{{ __('user_certifications.note_placeholder') }}" required></textarea>
+                        <div class="form-text">{{ __('user_certifications.note.help') }}</div>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ f.checkbox('is_internal', __('user_certifications.internal_note'), {
+                            'info': __('user_certifications.internal_note.help')
+                        }) }}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        {{ __('form.cancel') }}
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        {{ m.icon('save') }}
+                        {{ __('user_certifications.add_note') }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{# Modal for Confirmation Actions #}
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">{{ __('form.confirm_action') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('form.close') }}"></button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmationMessage"></p>
+                <div id="confirmationDetails" class="alert alert-info" style="display: none;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    {{ __('form.cancel') }}
+                </button>
+                <button type="button" class="btn btn-danger" id="confirmationSubmit">
+                    {{ __('form.confirm') }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# JavaScript for Modal Functionality #}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize modals
+        const editExpiryModal = new bootstrap.Modal(document.getElementById('editExpiryModal'));
+        const addNoteModal = new bootstrap.Modal(document.getElementById('addNoteModal'));
+        const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+        const bulkAddModal = new bootstrap.Modal(document.getElementById('bulkAddModal'));
+
+        // Bulk add form submission
+        document.getElementById('bulkAddForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            fetch('{{ url('/admin/user-certifications/bulk-add') }}', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    bulkAddModal.hide();
+                    location.reload();
+                } else {
+                    alert(data.message || '{{ __('form.error_occurred') }}');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('{{ __('form.error_occurred') }}');
+            });
+        });
+
+        // Edit expiry form submission
+        document.getElementById('editExpiryForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const userCertId = formData.get('user_certification_id');
+
+            fetch(`{{ url('/admin/user-certifications') }}/${userCertId}`, {
+                method: 'PUT',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    editExpiryModal.hide();
+                    location.reload();
+                } else {
+                    alert(data.message || '{{ __('form.error_occurred') }}');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('{{ __('form.error_occurred') }}');
+            });
+        });
+
+        // Add note form submission
+        document.getElementById('addNoteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const userCertId = formData.get('user_certification_id');
+
+            fetch(`{{ url('/admin/user-certifications') }}/${userCertId}/note`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    addNoteModal.hide();
+                    location.reload();
+                } else {
+                    alert(data.message || '{{ __('form.error_occurred') }}');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('{{ __('form.error_occurred') }}');
+            });
+        });
+    });
+
+    // Global functions for modal actions (called from main page)
+    window.editExpiry = function(userCertId, currentDate) {
+        document.getElementById('editExpiryId').value = userCertId;
+        document.getElementById('editExpiryDate').value = currentDate || '';
+
+        const modal = new bootstrap.Modal(document.getElementById('editExpiryModal'));
+        modal.show();
+    };
+
+    window.addNote = function(userCertId) {
+        document.getElementById('addNoteId').value = userCertId;
+        document.getElementById('addNoteText').value = '';
+
+        const modal = new bootstrap.Modal(document.getElementById('addNoteModal'));
+        modal.show();
+    };
+
+    window.showConfirmation = function(message, details, callback) {
+        document.getElementById('confirmationMessage').textContent = message;
+
+        const detailsElement = document.getElementById('confirmationDetails');
+        if (details) {
+            detailsElement.textContent = details;
+            detailsElement.style.display = 'block';
+        } else {
+            detailsElement.style.display = 'none';
+        }
+
+        const submitButton = document.getElementById('confirmationSubmit');
+        submitButton.onclick = function() {
+            callback();
+            const modal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
+            modal.hide();
+        };
+
+        const modal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+        modal.show();
+    };
+</script>

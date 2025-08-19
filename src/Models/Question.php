@@ -17,7 +17,9 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property string      $text
  * @property string|null $answer
  * @property int|null    $answerer_id
+ * @property int|null    $editor_id
  * @property Carbon|null $answered_at
+ * @property Carbon|null $editing_started_at
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
@@ -38,9 +40,9 @@ class Question extends BaseModel
 
     /** @var array<string, null> default attributes */
     protected $attributes = [ // phpcs:ignore
-        'answer'      => null,
-        'answerer_id' => null,
-        'answered_at' => null,
+        'answer'             => null,
+        'answerer_id'        => null,
+        'answered_at'        => null,
     ];
 
     /** @var array<string> */
@@ -50,13 +52,17 @@ class Question extends BaseModel
         'answerer_id',
         'answer',
         'answered_at',
+        'editor_id',
+        'editing_started_at',
     ];
 
     /** @var array<string, string> */
     protected $casts = [ // phpcs:ignore
-        'user_id'     => 'integer',
-        'answerer_id' => 'integer',
-        'answered_at' => 'datetime',
+        'user_id'            => 'integer',
+        'answerer_id'        => 'integer',
+        'answered_at'        => 'datetime',
+        'editor_id'          => 'integer',
+        'editing_started_at' => 'datetime',
     ];
 
     public function answerer(): BelongsTo
@@ -67,6 +73,19 @@ class Question extends BaseModel
     public static function unanswered(): Builder
     {
         return static::whereAnswererId(null);
+    }
+
+    public function editor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'editor_id');
+    }
+
+    /**
+     * @return Builder|QueryBuilder
+     */
+    public static function hasEditor(): Builder
+    {
+        return static::whereNotNull('editor_id');
     }
 
     /**

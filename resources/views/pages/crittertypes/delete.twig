@@ -1,0 +1,28 @@
+{% extends "layouts/app.twig" %}
+{% import 'macros/base.twig' as m %}
+
+{% block title %}{{ __('Delete critter type %s') | format(angeltype.name|e) }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="mb-3">
+        <a href="{{ url('/crittertypes/' ~ angeltype.id) }}" class="btn btn-sm btn-secondary back">
+            {{ m.icon('chevron-left') }} {{ __('general.back') }}
+        </a>
+    </div>
+
+    <h1>{{ block('title') }}</h1>
+
+    <div class="alert alert-info" role="alert">
+        {{ __('Do you want to delete critter type %s?') | format(angeltype.name|e) }}
+    </div>
+
+    <form method="post" action="">
+        {{ csrf() }}
+        <div class="d-flex flex-wrap gap-2">
+            <a href="{{ url('/crittertypes') }}" class="btn btn-secondary">{{ m.icon('x-lg') }} {{ __('form.cancel') }}</a>
+            <button type="submit" class="btn btn-danger">{{ m.icon('trash') }} {{ __('form.delete') }}</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

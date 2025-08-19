@@ -1,0 +1,1577 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Eurofurence Critter System\\n"
+"POT-Creation-Date: 2017-12-29 19:01+0100\n"
+"PO-Revision-Date: 2024-08-17 13:40+0100\n"
+"Last-Translator: Pattarchus\n"
+"Language-Team: \n"
+"Last-Translator: Pattarchus\n"
+"Language-Team: \n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"Last-Translator: \n"
+"X-Poedit-SearchPath-0: .\n"
+
+msgid "auth.password.error"
+msgstr "Your password is incorrect. Please try it again."
+
+msgid "form.submit"
+msgstr "Submit"
+
+msgid "form.send_notification"
+msgstr "Send %d notifications"
+
+msgid "general.add"
+msgstr "Add"
+
+msgid "general.login"
+msgstr "Login"
+
+msgid "general.dect"
+msgstr "Telegram"
+
+msgid "general.name"
+msgstr "Name"
+
+msgid "general.shifts"
+msgstr "Shifts"
+
+msgid "general.description"
+msgstr "Description"
+
+msgid "page.403.title"
+msgstr "Forbidden"
+
+msgid "page.403.headline"
+msgstr "You are not allowed to access this page"
+
+msgid "page.403.login"
+msgstr "Please log in."
+
+msgid "page.error.title"
+msgstr "Error %s"
+
+msgid "page.404.title"
+msgstr "Page not found"
+
+msgid "page.404.not_found"
+msgstr "No sleep found"
+
+msgid "page.404.text"
+msgstr ""
+"This page could not be found or you don't have permission to view it. "
+"You probably have to sign in or register in order to gain access!"
+
+msgid "page.405.title"
+msgstr "405: Method not allowed"
+
+msgid "page.419.title"
+msgstr "Authentication expired"
+
+msgid "page.419.text"
+msgstr "The provided CSRF token is invalid or has expired"
+
+msgid "credits.credit"
+msgstr ""
+"The original engelsystem was written by "
+"[cookie](https://github.com/cookieBerlin/engelsystem)"
+". It was rewritten and enhanced by "
+"[msquare](https://notrademark.de)"
+" (maintainer) and "
+"[MyIgel](https://myigel.name)"
+". Since EF28 [Eurofurence](https://eurofurence.org) maintains their own fork."
+
+msgid "credits.contributors"
+msgstr ""
+"Please have a look at the "
+"[contributors list on GitHub](https://github.com/eurofurence/crittersystem/graphs/contributors)"
+" for a complete list."
+
+msgid "form.select_placeholder"
+msgstr "Please select..."
+
+msgid "form.load_schedule"
+msgstr "Load schedule"
+
+msgid "form.import"
+msgstr "Import"
+
+msgid "form.save"
+msgstr "Save"
+
+msgid "form.edit"
+msgstr "Edit"
+
+msgid "form.preview"
+msgstr "Preview"
+
+msgid "form.delete"
+msgstr "Delete"
+
+msgid "form.delete_all"
+msgstr "Delete all"
+
+msgid "form.updated"
+msgstr "Updated"
+
+msgid "form.cancel"
+msgstr "Cancel"
+
+msgid "form.required"
+msgstr "Required"
+
+msgid "form.markdown"
+msgstr "You can use Markdown here"
+
+msgid "form.user_select"
+msgstr "Select a user"
+
+msgid "schedule.import"
+msgstr "Import schedule"
+
+msgid "schedule.edit.title"
+msgstr "Edit schedule"
+
+msgid "schedule.delete.title"
+msgstr "Delete schedule with %u shifts"
+
+msgid "schedule.import.title"
+msgstr "Import schedule"
+
+msgid "schedule.last_update"
+msgstr "Last updated: %s"
+
+msgid "schedule.import.text"
+msgstr "Imports create locations and create, update and delete shifts according to a schedule.xml export."
+
+msgid "schedule.import.load.title"
+msgstr "Import schedule: Preview"
+
+msgid "schedule.import.load.info"
+msgstr "Import \"%s\" (version \"%s\")"
+
+msgid "schedule.name"
+msgstr "Programm name"
+
+msgid "schedule.url"
+msgstr "Schedule URL (schedule.xml)"
+
+msgid "schedule.shift-type"
+msgstr "Shift type"
+
+msgid "schedule.needed-from-shift-type"
+msgstr "Load critter types from shift type (else from location)"
+
+msgid "schedule.minutes-before"
+msgstr "Add minutes before talk begins"
+
+msgid "schedule.minutes-after"
+msgstr "Add minutes after talk ends"
+
+msgid "schedule.for_locations"
+msgstr "For locations"
+
+msgid "schedule.import.request_error"
+msgstr "Unable to load schedule."
+
+msgid "schedule.import.locations.add"
+msgstr "Locations to create"
+
+msgid "schedule.import.shifts.add"
+msgstr "Shifts to create"
+
+msgid "schedule.import.shifts.update"
+msgstr "Shifts to update"
+
+msgid "schedule.import.shifts.delete"
+msgstr "Shifts to delete"
+
+msgid "schedule.import.shift.dates"
+msgstr "Times"
+
+msgid "schedule.import.shift.type"
+msgstr "Type"
+
+msgid "title.title"
+msgstr "Title"
+
+msgid "schedule.import.shift.location"
+msgstr "Location"
+
+msgid "news.title"
+msgstr "News"
+
+msgid "news.title.meetings"
+msgstr "Meetings"
+
+msgid "news.add"
+msgstr "+"
+
+msgid "news.is_meeting"
+msgstr "[Meeting]"
+
+msgid "news.read_more"
+msgstr "Continue reading"
+
+msgid "news.updated"
+msgstr "Updated"
+
+msgid "news.comments"
+msgstr "Comments"
+
+msgid "news.comments.new"
+msgstr "New comment"
+
+msgid "news.comments.message"
+msgstr "Message"
+
+msgid "news.edit.edit"
+msgstr "Edit news"
+
+msgid "news.edit.add"
+msgstr "Add news"
+
+msgid "news.edit.subject"
+msgstr "Subject"
+
+msgid "news.edit.is_meeting"
+msgstr "Meeting"
+
+msgid "news.edit.is_highlighted"
+msgstr "Highlighted"
+
+msgid "news.edit.is_pinned"
+msgstr "Pin to top"
+
+msgid "news.edit.message"
+msgstr "Message"
+
+msgid "news.edit.hint"
+msgstr "You can use Markdown and the [more] tag"
+
+msgid "news.delete.title"
+msgstr "Delete news \"%s\""
+
+msgid "news.comments.delete.title"
+msgstr "Delete comment \"%s\""
+
+msgid "notification.news.updated.introduction"
+msgstr "The news \"%1$s\" was updated"
+
+msgid "notification.news.updated.text"
+msgstr "You can view it at %3$s"
+
+msgid "form.search"
+msgstr "Search"
+
+msgid "log.log"
+msgstr "Logs"
+
+msgid "log.only_own"
+msgstr "You can view your own logs. The logs of other users can be checked by bureaucrats."
+
+msgid "log.time"
+msgstr "Time"
+
+msgid "log.level"
+msgstr "Level"
+
+msgid "log.message"
+msgstr "Message"
+
+msgid "settings.settings"
+msgstr "Settings"
+
+msgid "settings.profile.entry_required"
+msgstr "Entry required"
+
+msgid "general.nick"
+msgstr "Nickname"
+
+msgid "settings.profile.nick.already-taken"
+msgstr "The nickname is already taken."
+
+msgid "settings.profile.pronoun"
+msgstr "Pronoun"
+
+msgid "settings.profile.pronoun.info"
+msgstr "Will be shown on your profile page and in critter lists."
+
+msgid "settings.profile.firstname"
+msgstr "First name"
+
+msgid "settings.profile.lastname"
+msgstr "Last name"
+
+msgid "settings.profile.planned_arrival_date"
+msgstr "Planned date of arrival"
+
+msgid "settings.profile.planned_departure_date"
+msgstr "Planned date of departure"
+
+msgid "settings.profile.mobile"
+msgstr "Mobile"
+
+msgid "settings.profile.mobile_show"
+msgstr "Show mobile number to other users to contact me."
+
+msgid "settings.profile.email-preferences"
+msgstr "E-mail preferences"
+
+msgid "general.email"
+msgstr "E-mail"
+
+msgid "settings.profile.email.already-taken"
+msgstr "This e-mail address is already taken."
+
+msgid "settings.profile.email_shiftinfo"
+msgstr "The %s is allowed to send me an e-mail (e.g. when my shifts change)."
+
+msgid "settings.profile.email_news"
+msgstr "Notify me of new news."
+
+msgid "settings.profile.email_messages"
+msgstr "Notify me on new private messages."
+
+msgid "settings.profile.email_by_human_allowed"
+msgstr "Allow Info Desk critters to contact me by e-mail."
+
+msgid "settings.profile.email_goodie"
+msgstr "To possibly receive vouchers for the next similar event, I consent "
+"that my nickname, e-mail address and worked hours will be stored until then."
+
+msgid "settings.profile.email_tshirt"
+msgstr "To possibly receive vouchers for the next similar event, I consent "
+"that my nickname, e-mail address, worked hours and T-shirt size will be stored until then."
+
+msgid "settings.profile.privacy"
+msgstr "To withdraw your approval, send an e-mail to <a href=\"mailto:%s\">%1$s</a>."
+
+msgid "settings.profile.shirt_size"
+msgstr "T-shirt size"
+
+msgid "settings.profile.shirt_size.hint"
+msgstr "A straight-cut shirt has wide shoulders and a body which is almost square. "
+"A fitted-cut t-shirt has a curved side seam which comes in at the waist "
+"and goes out at the upper and lower ends. "
+"Normally fitted-cut shirts are smaller then same size straight-cut shirts, "
+"and sizes differ between brands."
+
+msgid "settings.profile.shirt.link"
+msgstr "More information"
+
+msgid "settings.profile.angeltypes.info"
+msgstr "You can manage your critter types <a href=\"%s\">on the critter types page</a>."
+
+msgid "settings.password"
+msgstr "Password"
+
+msgid "settings.password.info"
+msgstr "Here you can change your password."
+
+msgid "settings.password.confirmation-does-not-match"
+msgstr "Password and password confirmation do not match."
+
+msgid "settings.password.password"
+msgstr "Old password"
+
+msgid "settings.password.new_password"
+msgstr "New password"
+
+msgid "settings.password.new_password2"
+msgstr "Password confirmation"
+
+msgid "settings.password.success"
+msgstr "Password was changed successfully."
+
+msgid "settings.sessions"
+msgstr "Sessions"
+
+msgid "settings.sessions.info"
+msgstr "Here you can see and delete your browser sessions."
+
+msgid "settings.sessions.current"
+msgstr "Current session"
+
+msgid "settings.sessions.id"
+msgstr "Session ID"
+
+msgid "settings.sessions.last_activity"
+msgstr "Last activity"
+
+msgid "settings.theme"
+msgstr "Theme"
+
+msgid "settings.theme.info"
+msgstr "Here you can change your theme."
+
+msgid "settings.theme.success"
+msgstr "Theme was changed successfully."
+
+msgid "settings.certificates"
+msgstr "Certificates"
+
+msgid "settings.certificates.info"
+msgstr "This information is only visible for supporters and admins."
+
+msgid "settings.certificates.title.ifsg"
+msgstr "Health instructions"
+
+msgid "settings.certificates.driving_license"
+msgstr "Driving license"
+
+msgid "settings.certificates.has_car"
+msgstr ""
+"I have my own car with me and am willing to use it for the event (You'll get "
+"reimbursed for fuel)"
+
+msgid "settings.certificates.drive_car"
+msgstr "Car"
+
+msgid "settings.certificates.drive_3_5t"
+msgstr "3.5t Transporter"
+
+msgid "settings.certificates.drive_7_5t"
+msgstr "7.5t Truck"
+
+msgid "settings.certificates.drive_12t"
+msgstr "12t Truck"
+
+msgid "settings.certificates.drive_forklift"
+msgstr "Forklift"
+
+msgid "settings.certificates.ifsg_light"
+msgstr "I was instructed about IfSG §43 (aka Frikadellendiplom light) on site."
+
+msgid "settings.certificates.ifsg_light_admin"
+msgstr "Was instructed about IfSG §43 (aka Frikadellendiplom light) on site."
+
+msgid "settings.certificates.ifsg"
+msgstr "I have gotten the instruction about §43 IfSG (aka Frikadellendiplom) from my Health Department "
+"and a second instruction from us or my employer/chef/association within 3 months. "
+"Additionally my second instruction is not older than 2 years."
+
+msgid "settings.certificates.ifsg_admin"
+msgstr "Got the instruction about §43 IfSG (aka Frikadellendiplom) from a Health Department "
+"and a second instruction from us or his employer/chef/association within 3 months. "
+"Additionally the second instruction is not older than 2 years."
+
+msgid "settings.certificates.confirmed"
+msgstr "Certificate confirmed"
+
+msgid "settings.certificates.ifsg_confirmed.hint"
+msgstr "Your health instruction has been confirmed, you can no longer change it by yourself."
+
+msgid "settings.certificates.drive_confirmed.hint"
+msgstr "Your driving license has been confirmed, you can no longer change it by yourself."
+
+msgid "settings.certificates.confirmation.info"
+msgstr "You personally checked that the certificate / license meets the requirements."
+
+msgid "settings.certificates.success"
+msgstr "Certificates were updated successfully."
+
+msgid "angeltype.ifsg.required"
+msgstr "Requires health instruction"
+
+msgid "ifsg.certificate"
+msgstr "Health instruction"
+
+msgid "ifsg.certificate_light"
+msgstr "Health instruction on site"
+
+msgid "angeltype.ifsg.own"
+msgstr "My health instruction"
+
+msgid "angeltype.ifsg.required.info.preview"
+msgstr "This critter type requires a health instruction."
+
+msgid "angeltype.ifsg.required.info"
+msgstr "This critter type requires a health instruction. Please enter your health instruction information!"
+
+msgid "angeltype.ifsg.required.info.here"
+msgstr "You joined a critter type which requires a health instruction. "
+"Please edit your health instruction information here: %s."
+
+msgid "angeltype.driving_license.required.info.here"
+msgstr ""
+"You joined a critter type which requires a driving license. "
+"Please edit your driving license information here: %s."
+
+msgid "angeltype.driving_license.required.info.preview"
+msgstr "This critter type requires a driver's license."
+
+msgid "ifsg.info"
+msgstr "Health instruction information"
+
+msgid "driving_license.info"
+msgstr "driving license information"
+
+msgid "settings.language"
+msgstr "Language"
+
+msgid "settings.language.info"
+msgstr "Here you can change your language."
+
+msgid "settings.language.success"
+msgstr "Language was changed successfully."
+
+msgid "settings.api"
+msgstr "API"
+
+msgid "settings.api.about"
+msgstr ""
+"The API allows you to interact with the %s by using external programs. "
+"It's not complete but we are working on extending it.\n"
+"The endpoint of the API is located at `%s` and described in the [OpenAPI specification](%s)."
+
+msgid "settings.api.about.warning"
+msgstr ""
+"Don't share your personal API key with anyone as it can be used to view your personal data "
+"and do changes on your behalf!"
+
+msgid "settings.api.shifts_json_show"
+msgstr "Show JSON shifts export"
+
+msgid "settings.api.ical_show"
+msgstr "Show iCal export"
+
+msgid "settings.api.news_show"
+msgstr "Show news feeds"
+
+msgid "settings.api.key_show"
+msgstr "Show API key"
+
+msgid "settings.api.key_reset"
+msgstr "Reset API key"
+
+msgid "settings.api.key_reset_confirm"
+msgstr "If you reset the API key you have to update it in all your applications."
+
+msgid "settings.oauth"
+msgstr "Single Sign-On"
+
+msgid "settings.oauth.identity-provider"
+msgstr "Identity provider"
+
+msgid "oauth.login"
+msgstr "Login using OAuth"
+
+msgid "oauth.login-using-provider"
+msgstr "Login using %s"
+
+msgid "form.connect"
+msgstr "Connect"
+
+msgid "form.disconnect"
+msgstr "Disconnect"
+
+msgid "faq.faq"
+msgstr "FAQ"
+
+msgid "faq.questions_link"
+msgstr "If you don't find an answer, you can <a href=\"%s\">ask the Info Desk</a>."
+
+msgid "faq.edit"
+msgstr "Edit FAQ entry"
+
+msgid "faq.add"
+msgstr "Add FAQ entry"
+
+msgid "faq.delete.title"
+msgstr "Delete FAQ \"%s\""
+
+msgid "question.questions"
+msgstr "Questions"
+
+msgid "question.admin"
+msgstr "Answer questions"
+
+msgid "question.faq_link"
+msgstr "For general questions, have a look at our <a href=\"%s\">FAQ</a>."
+
+msgid "question.add"
+msgstr "Ask a question"
+
+msgid "question.edit"
+msgstr "Edit question"
+
+msgid "question.question"
+msgstr "Question"
+
+msgid "question.answer"
+msgstr "Answer"
+
+msgid "question.delete.title"
+msgstr "Delete question \"%s\""
+
+msgid "question.contact_options"
+msgstr "Other contact options: "
+
+msgid "user.edit.shirt"
+msgstr "Edit T-shirt"
+
+msgid "user.edit.goodie"
+msgstr "Edit goodie"
+
+msgid "form.shirt"
+msgstr "T-Shirt"
+
+msgid "user.shirt_size"
+msgstr "T-shirt size"
+
+msgid "user.active"
+msgstr "Active"
+
+msgid "user.force_active"
+msgstr "Active (forced)"
+
+msgid "user.arrived"
+msgstr "Arrived"
+
+msgid "user.arrive"
+msgstr "Arrive"
+
+msgid "user.got_shirt"
+msgstr "Got T-shirt"
+
+msgid "user.got_goodie"
+msgstr "Got goodie"
+
+msgid "message.title"
+msgstr "Messages"
+
+msgid "message.choose_angel"
+msgstr "Choose a critter"
+
+msgid "message.to_conversation"
+msgstr "To Conversation"
+
+msgid "message.message"
+msgstr "Message"
+
+msgid "angel"
+msgstr "Critter"
+
+msgid "worklog.add"
+msgstr "Add work log"
+
+msgid "worklog.edit"
+msgstr "Edit work log"
+
+msgid "worklog.date"
+msgstr "Work date"
+
+msgid "worklog.hours"
+msgstr "Work hours"
+
+msgid "worklog.comment"
+msgstr "Comment"
+
+msgid "worklog.delete"
+msgstr "Delete work log"
+
+msgid "worklog.delete.info"
+msgstr "Do you really want to delete the work log for %s?"
+
+msgid "angeltypes.angeltypes"
+msgstr "Critter types"
+
+msgid "angeltypes.about"
+msgstr "Teams-/Job description"
+
+msgid "angeltypes.about.text"
+msgstr "Here you can find the list of teams and their tasks. If you have further questions, have a look at the FAQ."
+
+msgid "angeltypes.restricted"
+msgstr "Requires introduction"
+
+msgid "angeltypes.restricted.info"
+msgstr "Critter types which require introduction can only be used by a critter "
+"if enabled by a supporter (double opt-in)."
+
+msgid "angeltypes.restricted.hint"
+msgstr "This critter type requires the attendance at an introduction meeting. "
+"You might find additional information in the description."
+
+msgid "angeltypes.can-change-later"
+msgstr "You can change your selection later in the settings."
+
+msgid "angeltypes.shift.self_signup.info"
+msgstr "Critter types which have shift self sign-up enabled allow critters to self sign up for their shifts, "
+"if shift self sign-up is disabled only supporters and admins can sign critters into shifts of these critter types."
+
+msgid "shift.self_signup"
+msgstr "Shift self signup"
+
+msgid "shift.self_signup.allowed"
+msgstr "Shift self signup allowed"
+
+msgid "angeltypes.hide_on_shift_view"
+msgstr "Hide on shift view"
+
+msgid "angeltypes.hide_on_shift_view.info"
+msgstr "If checked only admins and members of the critter type "
+"can see the filter option for this critter type on the shifts page"
+
+msgid "registration.register"
+msgstr "Register"
+
+msgid "location.location"
+msgstr "Location"
+
+msgid "location.locations"
+msgstr "Locations"
+
+msgid "location.map_url"
+msgstr "Map"
+
+msgid "location.required_angels"
+msgstr "Required critters (on schedule import)"
+
+msgid "location.map_url.info"
+msgstr "The map will be embedded on the location page as an iframe."
+
+msgid "location.create.title"
+msgstr "Create location"
+
+msgid "location.edit.title"
+msgstr "Edit location"
+
+msgid "location.delete.title"
+msgstr "Delete location \"%s\""
+
+msgid "location.delete.double_confirm"
+msgstr "Location has %d shifts still assigned to it. "
+"Are you sure you want to delete it?"
+
+msgid "shifttype.shifttypes"
+msgstr "Shift types"
+
+msgid "shifttype.edit.title"
+msgstr "Edit shift type"
+
+msgid "shifttype.create.title"
+msgstr "Create shift type"
+
+msgid "shifttype.delete.title"
+msgstr "Delete shift type \"%s\""
+
+msgid "shifttype.required_angels"
+msgstr "Required critters (on schedule import)"
+
+msgid "event.day"
+msgstr "Day %1$d"
+
+msgid "dashboard.day"
+msgstr "Day"
+
+msgid "registration.title"
+msgstr "Critter registration"
+
+msgid "registration.login_data"
+msgstr "Login data"
+
+msgid "registration.event_data"
+msgstr "Event data"
+
+msgid "registration.what_todo"
+msgstr "What do you want to do?"
+
+msgid "tshirt.required.hint"
+msgstr "Please specify a T-shirt size in your settings!"
+
+msgid "dect.required.hint"
+msgstr ""
+"Please specify a Telegram handle in your settings! "
+"If you don't have a Telegram account, just enter '-'."
+
+msgid "pronoun.required.hint"
+msgstr "Please enter a pronoun in your settings!"
+
+msgid "firstname.required.hint"
+msgstr "Please enter a firstname in your settings!"
+
+msgid "lastname.required.hint"
+msgstr "Please enter a lastname in your settings!"
+
+msgid "mobile.required.hint"
+msgstr "Please enter a mobile number in your settings!"
+
+msgid "confirmation.delete"
+msgstr "Do you really want to delete it?"
+
+msgid "general.datetime"
+msgstr "Y-m-d H:i"
+
+msgid "general.date"
+msgstr "Y-m-d"
+
+msgid "general.id"
+msgstr "ID"
+
+msgid "general.user"
+msgstr "User"
+
+msgid "general.count"
+msgstr "Count"
+
+msgid "general.created_at"
+msgstr "Created at"
+
+msgid "shifts.random"
+msgstr "Random shift"
+
+msgid "shifts.history"
+msgstr "Shifts history"
+
+msgid "shifts.history.schedule"
+msgstr "Schedule: %s"
+
+msgid "shifts.history.delete_all.title"
+msgstr "Delete %u shifts"
+
+msgid "shifts.start"
+msgstr "Start"
+
+msgid "shifts.end"
+msgstr "End"
+
+msgid "user.info"
+msgstr "User info"
+
+msgid "user.info.hint"
+msgstr ""
+"Is displayed for shift coordinators and admins in the user view. "
+"If a critter is not marked as arrived a user-info removes the not-arrived notification in the critters sysmenu."
+
+msgid "user_info.not_arrived_hint"
+msgstr "If you want to sign up for shifts, feel free to drop by the Info Desk."
+
+msgid "email.greeting"
+msgstr "Hi %s,"
+
+msgid "email.introduction"
+msgstr "here is a message for you from the %s:"
+
+msgid "email.footer"
+msgstr ""
+"This e-mail is autogenerated and has not been signed. "
+"You got this e-mail because you are registered in the %s."
+
+msgid "password.email.message"
+msgstr "Please visit %s to recover your password."
+
+msgid "password.minimal_length"
+msgstr "Minimal length %d characters"
+
+msgid "footer.eventinfo.name_start_end"
+msgstr "%1$s, from %2$s to %3$s"
+
+msgid "footer.eventinfo.name_start"
+msgstr "%1$s, starting %2$s"
+
+msgid "footer.eventinfo.start_end"
+msgstr "Event from %1$s to %2$s"
+
+msgid "footer.issues"
+msgstr "Bugs / Features"
+
+msgid "footer.github"
+msgstr "Development Platform"
+
+msgid "credits.title"
+msgstr "Credits"
+
+msgid "general.register"
+msgstr "Register"
+
+msgid "shift.next"
+msgstr "Next shift"
+
+msgid "general.shift"
+msgstr "Shift"
+
+msgid "shift.angeltype_source"
+msgstr "Needed critters from: %s"
+
+msgid "shift.angeltype_source.shift_type"
+msgstr "Schedule %s via shift type %s"
+
+msgid "shift.angeltype_source.location"
+msgstr "Schedule %s via location %s"
+
+msgid "general.logout"
+msgstr "Logout"
+
+msgid "credits.source"
+msgstr "Source code"
+
+msgid "credits.version"
+msgstr "Version: _%s_"
+
+msgid "design.title"
+msgstr "Design"
+
+msgid "login.welcome"
+msgstr "Welcome to %s!"
+
+msgid "event.buildup.start"
+msgstr "Buildup starts"
+
+msgid "event.starts"
+msgstr "Event starts"
+
+msgid "event.ends"
+msgstr "Event ends"
+
+msgid "event.teardown.ends"
+msgstr "Teardown ends"
+
+msgid "login.password.reset"
+msgstr "I forgot my password"
+
+msgid "login.registration"
+msgstr "Please sign up, if you want to help us!"
+
+msgid "login.registration.external"
+msgstr "Registration is only available via external login."
+
+msgid "login.registration.disabled"
+msgstr "Registration is disabled."
+
+msgid "login.do"
+msgstr "What can I do?"
+
+msgid "login.jobs"
+msgstr "Read about the jobs you can do to help us."
+
+msgid "login.cookies"
+msgstr "Please note: You have to activate cookies!"
+
+msgid "login.use_username_password"
+msgstr "Login with username/password"
+
+msgid "general.angel"
+msgstr "Critter"
+
+msgid "title.date"
+msgstr "Date"
+
+msgid "password.reset.confirm"
+msgstr "Confirm password"
+
+msgid "password.recovery.success"
+msgstr "We sent you an e-mail containing your password recovery link."
+
+msgid "password.reset.title"
+msgstr "Password recovery"
+
+msgid "password.recovery.text"
+msgstr ""
+"We will send you an e-mail with a password recovery link. "
+"Please use the e-mail address you used for registration."
+
+msgid "form.recover"
+msgstr "Recover"
+
+msgid "notification.shift.updated.introduction"
+msgstr "Your shift has changed:"
+
+msgid "notification.shift.updated.type"
+msgstr "Shift type changed from %s to %s"
+
+msgid "notification.shift.updated.title"
+msgstr "Shift title changed from %s to %s"
+
+msgid "notification.shift.updated.description"
+msgstr "Shift description changed"
+
+msgid "notification.shift.updated.start"
+msgstr "Shift start changed from %s to %s"
+
+msgid "notification.shift.updated.end"
+msgstr "Shift end changed from %s to %s"
+
+msgid "notification.shift.updated.location"
+msgstr "Shift location moved from %s to %s"
+
+msgid "notification.shift.updated.shift"
+msgstr "The updated Shift:"
+
+msgid "general.actions"
+msgstr "Actions"
+
+msgid "general.back"
+msgstr "Back"
+
+msgid "admin_shifts.no_locations"
+msgstr "No location has been created yet. Shifts can't be created without one."
+
+msgid "admin_shifts.no_shifttypes"
+msgstr "No shift type has been created yet. Shifts can't be created without one."
+
+msgid "admin_shifts.no_angeltypes"
+msgstr "No critter type has been created yet. Shifts can't be created without one."
+
+msgid "shift.sign_out.hint"
+msgstr "You can self sign out up to %s hours before the start of the shift. "
+"If you can't attend your shift, ask Info Desk to sign you out."
+
+msgid "freeload.info.goodie"
+msgstr "You were not present for this shift. "
+"The double length of the shift was deducted from your %s. Please contact the Info Desk if you have questions."
+
+msgid "freeload.info"
+msgstr "You were not present for this shift. "
+"Please contact Info Desk if you have questions."
+
+msgid "freeload.freeloader.info"
+msgstr "You were not present for at least %s shifts. Therefore, shift registration is blocked. "
+"Please go to Info Desk to be unlocked again."
+
+msgid "freeload.freeloaded.info.goodie"
+msgstr ""
+"If a critter was not present for a shift, the double length of the shift is deducted from the %s. "
+"If %s shifts are freeloaded, the shift registration is blocked for the critter."
+
+msgid "freeload.freeloaded.info"
+msgstr ""
+"The critter was not present for a shift. "
+"If %s shifts are freeloaded, the shift registration is blocked for the critter."
+
+msgid "config.config"
+msgstr "Config"
+
+msgid "config.edit.success"
+msgstr "Configuration updated successfully"
+
+msgid "Add more critters"
+msgstr "Add more critter"
+
+msgid "auth.login.staff_only"
+msgstr "The system is not available for general public"
+
+msgid "auth.login.admin_only"
+msgstr "Login restricted to admins only"
+
+msgid "departments.title"
+msgstr "Department"
+
+msgid "departments.title.plural"
+msgstr "Departments"
+
+msgid "validation.title.required"
+msgstr "Title is required"
+
+msgid "validation.text.required"
+msgstr "Text is required"
+
+msgid "question.edit.locked"
+msgstr "This question is already being edited by another user."
+
+msgid "general.badge_number"
+msgstr "Badge Number"
+
+msgid "form.badge_number.admin"
+msgstr "Event Badge Number"
+
+msgid "settings.profile.badge_number"
+msgstr "Badge Number"
+
+msgid "badge_number.reset_info"
+msgstr "You can manually set/update the badge number"
+
+msgid "form.badge_number.success"
+msgstr "Badge information retrieved"
+
+msgid "general.profile.badge_number"
+msgstr "Badge Nr."
+
+msgid "settings.profile.badge_number_info"
+msgstr "Use the button to automatically retrieve your Badge ID"
+
+msgid "settings.profile.badge_number_update"
+msgstr "Update"
+
+# Certifications / Trainings Management
+msgid "certifications.title"
+msgstr "Certifications"
+
+msgid "certifications.create.title"
+msgstr "Create Certification"
+
+msgid "certifications.create.first"
+msgstr "Create First Certification"
+
+msgid "certifications.edit.title"
+msgstr "Edit Certification"
+
+msgid "certifications.filter.title"
+msgstr "Filter & Search"
+
+msgid "certifications.filter.status"
+msgstr "Status"
+
+msgid "certifications.filter.validity"
+msgstr "Validity Type"
+
+msgid "certifications.filter.self_confirmation"
+msgstr "Self-Confirmation"
+
+msgid "certifications.search.placeholder"
+msgstr "Search by name, description, or contact person..."
+
+msgid "certifications.active"
+msgstr "Active"
+
+msgid "certifications.inactive"
+msgstr "Inactive"
+
+msgid "certifications.perpetual"
+msgstr "Perpetual"
+
+msgid "certifications.timed"
+msgstr "Time-Limited"
+
+msgid "certifications.self_confirmable"
+msgstr "Self-Confirmable"
+
+msgid "certifications.not_self_confirmable"
+msgstr "Not Self-Confirmable"
+
+msgid "certifications.results.showing"
+msgstr "Showing {from} to {to} of {total} certifications"
+
+msgid "certifications.results.filtered"
+msgstr "Filtered results displayed"
+
+msgid "certifications.title_field"
+msgstr "Title"
+
+msgid "certifications.contact_person"
+msgstr "Contact Person"
+
+msgid "certifications.contact_email"
+msgstr "Contact Email"
+
+msgid "certifications.validity"
+msgstr "Validity"
+
+msgid "certifications.status"
+msgstr "Status"
+
+msgid "certifications.critters_count"
+msgstr "Critters"
+
+msgid "certifications.created_at"
+msgstr "Created"
+
+msgid "certifications.updated_at"
+msgstr "Updated"
+
+msgid "certifications.details"
+msgstr "Certification Details"
+
+msgid "certifications.description"
+msgstr "Description"
+
+msgid "certifications.location"
+msgstr "Location"
+
+msgid "certifications.self_confirmation"
+msgstr "Self-Confirmation"
+
+msgid "certifications.valid_for_days"
+msgstr "{days} days"
+
+msgid "certifications.back_to_list"
+msgstr "Back to Certifications"
+
+msgid "certifications.deactivate"
+msgstr "Deactivate"
+
+msgid "certifications.reactivate"
+msgstr "Reactivate"
+
+msgid "certifications.deactivate.confirm"
+msgstr "Are you sure you want to deactivate the certification '{0}'?"
+
+msgid "certifications.more_actions"
+msgstr "More Actions"
+
+msgid "certifications.mass_revoke"
+msgstr "Mass Revoke"
+
+msgid "certifications.mass_revoke.confirm"
+msgstr "Are you sure you want to revoke the certification '{0}' from all users?"
+
+msgid "certifications.delete.confirm"
+msgstr "Are you sure you want to delete the certification '{0}'? This cannot be undone."
+
+msgid "certifications.no_results.title"
+msgstr "No Certifications Found"
+
+msgid "certifications.no_results.filtered"
+msgstr "No certifications match your current filters. Try adjusting your search criteria."
+
+msgid "certifications.no_results.empty"
+msgstr "No certifications have been created yet."
+
+# User Certifications
+msgid "user_certifications.title"
+msgstr "My Certifications"
+
+msgid "user_certifications.manage"
+msgstr "Manage User Certifications"
+
+msgid "user_certifications.status.pending"
+msgstr "Pending"
+
+msgid "user_certifications.status.approved"
+msgstr "Approved"
+
+msgid "user_certifications.status.self_confirmed"
+msgstr "Self-Confirmed"
+
+msgid "user_certifications.status.revoked"
+msgstr "Revoked"
+
+msgid "user_certifications.status.expired"
+msgstr "Expired"
+
+msgid "user_certifications.self_confirm"
+msgstr "Self-Confirm"
+
+msgid "user_certifications.date_completed"
+msgstr "Date Completed"
+
+msgid "user_certifications.date_expires"
+msgstr "Expires"
+
+msgid "user_certifications.expires_in"
+msgstr "Expires in {days} days"
+
+msgid "user_certifications.expired_since"
+msgstr "Expired {days} days ago"
+
+msgid "user_certifications.never_expires"
+msgstr "Never expires"
+
+msgid "user_certifications.notes"
+msgstr "Notes"
+
+msgid "user_certifications.certified_by"
+msgstr "Certified by"
+
+msgid "user_certifications.assign"
+msgstr "Assign Certification"
+
+msgid "user_certifications.remove"
+msgstr "Remove Certification"
+
+msgid "user_certifications.bulk_actions"
+msgstr "Bulk Actions"
+
+# Form fields
+msgid "form.certification"
+msgstr "Certification"
+
+msgid "form.certifications"
+msgstr "Certifications"
+
+msgid "form.validity_days"
+msgstr "Validity Period (Days)"
+
+msgid "form.validity_months"
+msgstr "Validity Period (Months)"
+
+msgid "form.allow_self_confirmation"
+msgstr "Allow Self-Confirmation"
+
+msgid "form.is_perpetual"
+msgstr "Perpetual (Never Expires)"
+
+msgid "form.is_active"
+msgstr "Active"
+
+msgid "form.not_specified"
+msgstr "Not specified"
+
+# Pagination
+msgid "pagination.navigation"
+msgstr "Certification pagination"
+
+msgid "pagination.previous"
+msgstr "Previous"
+
+msgid "pagination.next"
+msgstr "Next"
+
+# Notifications and messages
+msgid "certifications.created.success"
+msgstr "Certification created successfully"
+
+msgid "certifications.updated.success"
+msgstr "Certification updated successfully"
+
+msgid "certifications.deleted.success"
+msgstr "Certification deleted successfully"
+
+msgid "certifications.assigned.success"
+msgstr "Certification assigned successfully"
+
+msgid "certifications.removed.success"
+msgstr "Certification removed successfully"
+
+msgid "certifications.self_confirmed.success"
+msgstr "Certification self-confirmed successfully"
+
+msgid "certifications.mass_revoked.success"
+msgstr "Certification revoked from {count} users"
+
+msgid "certifications.error.not_found"
+msgstr "Certification not found"
+
+msgid "certifications.error.already_assigned"
+msgstr "User already has this certification"
+
+msgid "certifications.error.cannot_delete"
+msgstr "Cannot delete certification that is assigned to users"
+
+msgid "certifications.error.self_confirmation_disabled"
+msgstr "Self-confirmation is not allowed for this certification"
+
+# Additional certification keys
+msgid "certifications.allow_self_confirmation"
+msgstr "Allow Self-Confirmation"
+
+msgid "certifications.allow_self_confirmation.help"
+msgstr "When enabled, users can confirm their own certification without administrator approval"
+
+msgid "certifications.approve"
+msgstr "Approve"
+
+msgid "certifications.approved_critters"
+msgstr "Approved Critters"
+
+msgid "certifications.basic_information"
+msgstr "Basic Information"
+
+msgid "certifications.common_periods"
+msgstr "Common Periods"
+
+msgid "certifications.contact_email.help"
+msgstr "Email address for questions about this certification"
+
+msgid "certifications.contact_information"
+msgstr "Contact Information"
+
+msgid "certifications.contact_person.help"
+msgstr "Name of the person responsible for this certification"
+
+msgid "certifications.create.description"
+msgstr "Create a new certification to track training and qualifications"
+
+msgid "certifications.create.submit"
+msgstr "Create Certification"
+
+msgid "certifications.created"
+msgstr "Created"
+
+msgid "certifications.critters"
+msgstr "Critters"
+
+msgid "certifications.current_status"
+msgstr "Current Status"
+
+msgid "certifications.custom_validity_days"
+msgstr "Custom Validity Days"
+
+msgid "certifications.custom_validity_days.help"
+msgstr "Enter a custom number of days this certification is valid"
+
+msgid "certifications.date_certified"
+msgstr "Date Certified"
+
+msgid "certifications.description.help"
+msgstr "Detailed description of what this certification covers"
+
+msgid "certifications.edit.description"
+msgstr "Edit the details of this certification"
+
+msgid "certifications.expires_at"
+msgstr "Expires At"
+
+msgid "certifications.help.contact_section"
+msgstr "Contact Information"
+
+msgid "certifications.help.contact_text"
+msgstr "Provide contact details for users who have questions about this certification"
+
+msgid "certifications.help.description_section"
+msgstr "Description"
+
+msgid "certifications.help.description_text"
+msgstr "Provide a clear description of what this certification covers and any requirements"
+
+msgid "certifications.help.perpetual_text"
+msgstr "Perpetual certifications never expire and remain valid indefinitely"
+
+msgid "certifications.help.self_confirmation_text"
+msgstr "When enabled, users can confirm their own certification without administrator approval"
+
+msgid "certifications.help.timed_text"
+msgstr "Time-limited certifications expire after a specified period and need renewal"
+
+msgid "certifications.help.title_section"
+msgstr "Title"
+
+msgid "certifications.help.title_text"
+msgstr "Choose a clear, descriptive name for this certification"
+
+msgid "certifications.help.validity_section"
+msgstr "Validity Settings"
+
+msgid "certifications.is_active"
+msgstr "Active"
+
+msgid "certifications.is_active.help"
+msgstr "Only active certifications can be assigned to users"
+
+msgid "certifications.is_perpetual"
+msgstr "Perpetual (Never Expires)"
+
+msgid "certifications.is_perpetual.help"
+msgstr "Perpetual certifications never expire and remain valid indefinitely"
+
+msgid "certifications.location.help"
+msgstr "Physical location where this certification training takes place"
+
+msgid "certifications.no_critters_with_status"
+msgstr "No critters with this status"
+
+msgid "certifications.no_expiry"
+msgstr "No Expiry"
+
+msgid "certifications.notes"
+msgstr "Notes"
+
+msgid "certifications.quick_reference"
+msgstr "Quick Reference"
+
+msgid "certifications.remove"
+msgstr "Remove"
+
+msgid "certifications.remove.confirm"
+msgstr "Are you sure you want to remove this certification?"
+
+msgid "certifications.restore"
+msgstr "Restore"
+
+msgid "certifications.revoke"
+msgstr "Revoke"
+
+msgid "certifications.revoke.confirm"
+msgstr "Are you sure you want to revoke this certification?"
+
+msgid "certifications.statistics"
+msgstr "Statistics"
+
+msgid "certifications.status.approved"
+msgstr "Approved"
+
+msgid "certifications.status.expired"
+msgstr "Expired"
+
+msgid "certifications.status.pending"
+msgstr "Pending"
+
+msgid "certifications.status.revoked"
+msgstr "Revoked"
+
+msgid "certifications.status.self_confirmed"
+msgstr "Self-Confirmed"
+
+msgid "certifications.title.help"
+msgstr "Choose a clear, descriptive name for this certification"
+
+msgid "certifications.total_critters"
+msgstr "Total Critters"
+
+msgid "certifications.validity_period_days"
+msgstr "Validity Period (Days)"
+
+msgid "certifications.validity_period_days.help"
+msgstr "Number of days this certification remains valid"
+
+msgid "certifications.validity_period.30_days"
+msgstr "30 days (1 month)"
+
+msgid "certifications.validity_period.90_days"
+msgstr "90 days (3 months)"
+
+msgid "certifications.validity_period.180_days"
+msgstr "180 days (6 months)"
+
+msgid "certifications.validity_period.365_days"
+msgstr "365 days (1 year)"
+
+msgid "certifications.validity_period.730_days"
+msgstr "730 days (2 years)"
+
+msgid "certifications.validity_period.1095_days"
+msgstr "1095 days (3 years)"
+
+msgid "certifications.validity_period.custom"
+msgstr "Custom period"
+
+msgid "certifications.validity_period.select"
+msgstr "Select validity period"
+
+msgid "certifications.validity_settings"
+msgstr "Validity Settings"
+
+msgid "certifications.view_details"
+msgstr "View Details"
+
+msgid "certifications.view_user_certs"
+msgstr "View User Certifications"
+
+# Additional form keys
+msgid "form.actions"
+msgstr "Actions"
+
+msgid "form.clear"
+msgstr "Clear"
+
+msgid "form.create"
+msgstr "Create"
+
+msgid "form.days"
+msgstr "Days"
+
+msgid "form.help"
+msgstr "Help"
+
+msgid "form.save_changes"
+msgstr "Save Changes"
+
+msgid "form.select_all"
+msgstr "Select All"
+
+msgid "form.view"
+msgstr "View"
+
+# Additional pagination keys
+msgid "pagination.showing"
+msgstr "Showing"
+
+msgid "certifications.error.permission_denied"
+msgstr "You do not have permission to perform this action"

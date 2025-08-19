@@ -1423,7 +1423,7 @@ msgid "schedule.import.shift.location"
 msgstr "Ort"
 
 msgid "news.title"
-msgstr "News"
+msgstr "Ankündigungen"
 
 msgid "news.title.meetings"
 msgstr "Treffen"
@@ -2113,6 +2113,9 @@ msgstr "Auto-Update"
 msgid "dashboard.hide_past"
 msgstr "Vergangene verbergen"
 
+msgid "question.edit.locked"
+msgstr "Diese Frage wird schon von einem anderen Benutzer bearbeitet."
+
 msgid "general.badge_number"
 msgstr "Badge Number"
 
@@ -2136,3 +2139,951 @@ msgstr "Use the button to automatically retrieve your Badge ID"
 
 msgid "settings.profile.badge_number_update"
 msgstr "Update"
+
+msgid "Mon"
+msgstr "Mo"
+
+msgid "Tue"
+msgstr "Di"
+
+msgid "Wed"
+msgstr "Mi"
+
+msgid "Thu"
+msgstr "Do"
+
+msgid "Fri"
+msgstr "Fr"
+
+msgid "Sat"
+msgstr "Sa"
+
+msgid "Sun"
+msgstr "So"
+
+# Certifications / Trainings Management
+msgid "certifications.title"
+msgstr "Zertifikate"
+
+msgid "certifications.create.title"
+msgstr "Zertifikat erstellen"
+
+msgid "certifications.create.first"
+msgstr "Erstes Zertifikat erstellen"
+
+msgid "certifications.edit.title"
+msgstr "Zertifikat bearbeiten"
+
+msgid "certifications.filter.title"
+msgstr "Filtern & Suchen"
+
+msgid "certifications.filter.status"
+msgstr "Status"
+
+msgid "certifications.filter.validity"
+msgstr "Gültigkeitstyp"
+
+msgid "certifications.filter.self_confirmation"
+msgstr "Selbstbestätigung"
+
+msgid "certifications.search.placeholder"
+msgstr "Suche nach Name, Beschreibung oder Ansprechpartner..."
+
+msgid "certifications.active"
+msgstr "Aktiv"
+
+msgid "certifications.inactive"
+msgstr "Inaktiv"
+
+msgid "certifications.perpetual"
+msgstr "Dauerhaft"
+
+msgid "certifications.timed"
+msgstr "Zeitlich begrenzt"
+
+msgid "certifications.self_confirmable"
+msgstr "Selbstbestätigbar"
+
+msgid "certifications.not_self_confirmable"
+msgstr "Nicht selbstbestätigbar"
+
+msgid "certifications.results.showing"
+msgstr "Zeige %d Zertifikaten"
+
+msgid "certifications.results.filtered"
+msgstr "Gefilterte Ergebnisse angezeigt"
+
+msgid "certifications.title_field"
+msgstr "Titel"
+
+msgid "certifications.contact_person"
+msgstr "Ansprechpartner"
+
+msgid "certifications.contact_email"
+msgstr "Kontakt-E-Mail"
+
+msgid "certifications.validity"
+msgstr "Gültigkeit"
+
+msgid "certifications.status"
+msgstr "Status"
+
+msgid "certifications.critters_count"
+msgstr "Critter"
+
+msgid "certifications.created_at"
+msgstr "Erstellt"
+
+msgid "certifications.updated_at"
+msgstr "Aktualisiert"
+
+msgid "certifications.details"
+msgstr "Zertifikat-Details"
+
+msgid "certifications.description"
+msgstr "Beschreibung"
+
+msgid "certifications.location"
+msgstr "Ort"
+
+msgid "certifications.self_confirmation"
+msgstr "Selbstbestätigung"
+
+msgid "certifications.valid_for_days"
+msgstr "%d Tage"
+
+msgid "certifications.back_to_list"
+msgstr "Zurück zu Zertifikaten"
+
+msgid "certifications.deactivate"
+msgstr "Deaktivieren"
+
+msgid "certifications.reactivate"
+msgstr "Reaktivieren"
+
+msgid "certifications.deactivate.confirm"
+msgstr "Sind Sie sicher, dass Sie das Zertifikat '%s' deaktivieren möchten?"
+
+msgid "certifications.more_actions"
+msgstr "Weitere Aktionen"
+
+msgid "certifications.mass_revoke"
+msgstr "Massenwiderruf"
+
+msgid "certifications.mass_revoke.confirm"
+msgstr "Sind Sie sicher, dass Sie das Zertifikat '%s' von allen Benutzern widerrufen möchten?"
+
+msgid "certifications.delete.confirm"
+msgstr "Sind Sie sicher, dass Sie das Zertifikat '%s' löschen möchten? Dies kann nicht rückgängig gemacht werden."
+
+msgid "certifications.no_results.title"
+msgstr "Keine Zertifikate gefunden"
+
+msgid "certifications.no_results.filtered"
+msgstr "Keine Zertifikate entsprechen Ihren aktuellen Filtern. Versuchen Sie, Ihre Suchkriterien anzupassen."
+
+msgid "certifications.no_results.empty"
+msgstr "Es wurden noch keine Zertifikate erstellt."
+
+# User Certifications
+msgid "user_certifications.title"
+msgstr "Meine Zertifikate"
+
+msgid "user_certifications.manage"
+msgstr "Benutzer-Zertifikate verwalten"
+
+msgid "user_certifications.status.pending"
+msgstr "Ausstehend"
+
+msgid "user_certifications.status.approved"
+msgstr "Genehmigt"
+
+msgid "user_certifications.status.self_confirmed"
+msgstr "Selbstbestätigt"
+
+msgid "user_certifications.status.revoked"
+msgstr "Widerrufen"
+
+msgid "user_certifications.status.expired"
+msgstr "Abgelaufen"
+
+msgid "user_certifications.self_confirm"
+msgstr "Selbstbestätigen"
+
+msgid "user_certifications.date_completed"
+msgstr "Abschlussdatum"
+
+msgid "user_certifications.date_expires"
+msgstr "Läuft ab"
+
+msgid "user_certifications.expires_in"
+msgstr "Läuft in %d Tagen ab"
+
+msgid "user_certifications.expired_since"
+msgstr "Vor %d Tagen abgelaufen"
+
+msgid "user_certifications.never_expires"
+msgstr "Läuft nie ab"
+
+msgid "user_certifications.notes"
+msgstr "Notizen"
+
+msgid "user_certifications.certified_by"
+msgstr "Zertifiziert von"
+
+msgid "user_certifications.assign"
+msgstr "Zertifikat zuweisen"
+
+msgid "user_certifications.remove"
+msgstr "Zertifikat entfernen"
+
+msgid "user_certifications.bulk_actions"
+msgstr "Massenaktionen"
+
+# Form fields
+msgid "form.certification"
+msgstr "Zertifikat"
+
+msgid "form.certifications"
+msgstr "Zertifikate"
+
+msgid "form.validity_days"
+msgstr "Gültigkeitsdauer (Tage)"
+
+msgid "form.validity_months"
+msgstr "Gültigkeitsdauer (Monate)"
+
+msgid "form.allow_self_confirmation"
+msgstr "Selbstbestätigung erlauben"
+
+msgid "form.is_perpetual"
+msgstr "Dauerhaft (läuft nie ab)"
+
+msgid "form.is_active"
+msgstr "Aktiv"
+
+msgid "form.not_specified"
+msgstr "Nicht angegeben"
+
+# Pagination
+msgid "pagination.navigation"
+msgstr "Zertifikat-Seitennummerierung"
+
+msgid "pagination.previous"
+msgstr "Vorherige"
+
+msgid "pagination.next"
+msgstr "Nächste"
+
+# Notifications and messages
+msgid "certifications.created.success"
+msgstr "Zertifikat erfolgreich erstellt"
+
+msgid "certifications.updated.success"
+msgstr "Zertifikat erfolgreich aktualisiert"
+
+msgid "certifications.deleted.success"
+msgstr "Zertifikat erfolgreich gelöscht"
+
+msgid "certifications.assigned.success"
+msgstr "Zertifikat erfolgreich zugewiesen"
+
+msgid "certifications.removed.success"
+msgstr "Zertifikat erfolgreich entfernt"
+
+msgid "certifications.self_confirmed.success"
+msgstr "Zertifikat erfolgreich selbstbestätigt"
+
+msgid "certifications.mass_revoked.success"
+msgstr "Zertifikat von %d Benutzern widerrufen"
+
+msgid "certifications.error.not_found"
+msgstr "Zertifikat nicht gefunden"
+
+msgid "certifications.error.already_assigned"
+msgstr "Benutzer hat dieses Zertifikat bereits"
+
+msgid "certifications.error.cannot_delete"
+msgstr "Zertifikat kann nicht gelöscht werden, da es Benutzern zugewiesen ist"
+
+msgid "certifications.error.self_confirmation_disabled"
+msgstr "Selbstbestätigung ist für dieses Zertifikat nicht erlaubt"
+
+msgid "certifications.error.permission_denied"
+msgstr "Sie haben keine Berechtigung, diese Aktion durchzuführen"
+
+# Additional certification keys
+msgid "certifications.allow_self_confirmation"
+msgstr "Selbstbestätigung erlauben"
+
+msgid "certifications.allow_self_confirmation.help"
+msgstr "Wenn aktiviert, können Benutzer ihr eigenes Zertifikat ohne Administrator-Genehmigung bestätigen"
+
+msgid "certifications.approve"
+msgstr "Genehmigen"
+
+msgid "certifications.approved_critters"
+msgstr "Genehmigte Critter"
+
+msgid "certifications.basic_information"
+msgstr "Grundinformationen"
+
+msgid "certifications.common_periods"
+msgstr "Häufige Gültigkeitszeiträume"
+
+msgid "certifications.contact_email.help"
+msgstr "E-Mail-Adresse für Fragen zu diesem Zertifikat"
+
+msgid "certifications.contact_information"
+msgstr "Kontaktinformationen"
+
+msgid "certifications.contact_person.help"
+msgstr "Name der für dieses Zertifikat verantwortlichen Person"
+
+msgid "certifications.create.description"
+msgstr "Erstellen Sie ein neues Zertifikat zur Verfolgung von Schulungen und Qualifikationen"
+
+msgid "certifications.create.submit"
+msgstr "Zertifikat erstellen"
+
+msgid "certifications.created"
+msgstr "Erstellt"
+
+msgid "certifications.critters"
+msgstr "Critter"
+
+msgid "certifications.current_status"
+msgstr "Aktueller Status"
+
+msgid "certifications.custom_validity_days"
+msgstr "Benutzerdefinierte Gültigkeitstage"
+
+msgid "certifications.custom_validity_days.help"
+msgstr "Geben Sie eine benutzerdefinierte Anzahl von Tagen ein, für die dieses Zertifikat gültig ist"
+
+msgid "certifications.date_certified"
+msgstr "Zertifizierungsdatum"
+
+msgid "certifications.description.help"
+msgstr "Detaillierte Beschreibung dessen, was dieses Zertifikat abdeckt"
+
+msgid "certifications.edit.description"
+msgstr "Bearbeiten Sie die Details dieses Zertifikats"
+
+msgid "certifications.expires_at"
+msgstr "Läuft ab am"
+
+msgid "certifications.help.contact_section"
+msgstr "Kontaktinformationen"
+
+msgid "certifications.help.contact_text"
+msgstr "Geben Sie Kontaktdaten für Benutzer an, die Fragen zu diesem Zertifikat haben"
+
+msgid "certifications.help.description_section"
+msgstr "Beschreibung"
+
+msgid "certifications.help.description_text"
+msgstr "Geben Sie eine klare Beschreibung dessen an, was dieses Zertifikat abdeckt und welche Anforderungen gelten"
+
+msgid "certifications.help.perpetual_text"
+msgstr "Dauerhafte Zertifikate laufen nie ab und bleiben unbegrenzt gültig"
+
+msgid "certifications.help.self_confirmation_text"
+msgstr "Wenn aktiviert, können Benutzer ihr eigenes Zertifikat ohne Administrator-Genehmigung bestätigen"
+
+msgid "certifications.help.timed_text"
+msgstr "Zeitlich begrenzte Zertifikate laufen nach einem bestimmten Zeitraum ab und müssen erneuert werden"
+
+msgid "certifications.help.title_section"
+msgstr "Titel"
+
+msgid "certifications.help.title_text"
+msgstr "Wählen Sie einen klaren, beschreibenden Namen für dieses Zertifikat"
+
+msgid "certifications.help.validity_section"
+msgstr "Gültigkeitseinstellungen"
+
+msgid "certifications.is_active"
+msgstr "Aktiv"
+
+msgid "certifications.is_active.help"
+msgstr "Nur aktive Zertifikate können Benutzern zugewiesen werden"
+
+msgid "certifications.is_perpetual"
+msgstr "Dauerhaft (läuft nie ab)"
+
+msgid "certifications.is_perpetual.help"
+msgstr "Dauerhafte Zertifikate laufen nie ab und bleiben unbegrenzt gültig"
+
+msgid "certifications.location.help"
+msgstr "Physischer Ort, an dem diese Zertifikatschulung stattfindet"
+
+msgid "certifications.no_critters_with_status"
+msgstr "Keine Critter mit diesem Status"
+
+msgid "certifications.no_expiry"
+msgstr "Kein Ablaufdatum"
+
+msgid "certifications.notes"
+msgstr "Notizen"
+
+msgid "certifications.quick_reference"
+msgstr "Schnellreferenz"
+
+msgid "certifications.remove"
+msgstr "Entfernen"
+
+msgid "certifications.remove.confirm"
+msgstr "Sind Sie sicher, dass Sie dieses Zertifikat entfernen möchten?"
+
+msgid "certifications.restore"
+msgstr "Wiederherstellen"
+
+msgid "certifications.revoke"
+msgstr "Widerrufen"
+
+msgid "certifications.revoke.confirm"
+msgstr "Sind Sie sicher, dass Sie dieses Zertifikat widerrufen möchten?"
+
+msgid "certifications.statistics"
+msgstr "Statistiken"
+
+msgid "certifications.status.approved"
+msgstr "Genehmigt"
+
+msgid "certifications.status.expired"
+msgstr "Abgelaufen"
+
+msgid "certifications.status.pending"
+msgstr "Ausstehend"
+
+msgid "certifications.status.revoked"
+msgstr "Widerrufen"
+
+msgid "certifications.status.self_confirmed"
+msgstr "Selbstbestätigt"
+
+msgid "certifications.title.help"
+msgstr "Wählen Sie einen klaren, beschreibenden Namen für dieses Zertifikat"
+
+msgid "certifications.total_critters"
+msgstr "Gesamte Critter"
+
+msgid "certifications.validity_period_days"
+msgstr "Gültigkeitsdauer (Tage)"
+
+msgid "certifications.validity_period_days.help"
+msgstr "Anzahl der Tage, für die dieses Zertifikat gültig bleibt"
+
+msgid "certifications.validity_period.30_days"
+msgstr "30 Tage (1 Monat)"
+
+msgid "certifications.validity_period.90_days"
+msgstr "90 Tage (3 Monate)"
+
+msgid "certifications.validity_period.180_days"
+msgstr "180 Tage (6 Monate)"
+
+msgid "certifications.validity_period.365_days"
+msgstr "365 Tage (1 Jahr)"
+
+msgid "certifications.validity_period.730_days"
+msgstr "730 Tage (2 Jahre)"
+
+msgid "certifications.validity_period.1095_days"
+msgstr "1095 Tage (3 Jahre)"
+
+msgid "certifications.validity_period.custom"
+msgstr "Benutzerdefinierter Zeitraum"
+
+msgid "certifications.validity_period.select"
+msgstr "Gültigkeitszeitraum auswählen"
+
+msgid "certifications.validity_settings"
+msgstr "Gültigkeitseinstellungen"
+
+msgid "certifications.view_details"
+msgstr "Details anzeigen"
+
+msgid "certifications.view_user_certs"
+msgstr "Benutzerzertifikate anzeigen"
+
+msgid "certifications.examples.annual"
+msgstr "Jährlich (365 Tage)"
+
+msgid "certifications.examples.biennial"
+msgstr "Zweijährlich (730 Tage)"
+
+msgid "certifications.examples.permanent"
+msgstr "Dauerhaft (läuft nie ab)"
+
+msgid "certifications.examples.short_term"
+msgstr "Kurzfristig (30-180 Tage)"
+
+# User Certifications - Extended
+msgid "user_certifications.active_filters"
+msgstr "Aktive Filter"
+
+msgid "user_certifications.add_certification"
+msgstr "Zertifikat hinzufügen"
+
+msgid "user_certifications.add_certifications"
+msgstr "Zertifikate hinzufügen"
+
+msgid "user_certifications.add_note_title"
+msgstr "Notiz hinzufügen"
+
+msgid "user_certifications.add_note"
+msgstr "Notiz hinzufügen"
+
+msgid "user_certifications.admin.description"
+msgstr "Benutzer-Zertifikate verwalten, ausstehende Anfragen genehmigen und Compliance verfolgen."
+
+msgid "user_certifications.admin.title"
+msgstr "Benutzer-Zertifikatsverwaltung"
+
+msgid "user_certifications.all_certifications"
+msgstr "Alle Zertifikate"
+
+msgid "user_certifications.all_departments"
+msgstr "Alle Abteilungen"
+
+msgid "user_certifications.all_statuses"
+msgstr "Alle Status"
+
+msgid "user_certifications.and_more"
+msgstr "und %d weitere"
+
+msgid "user_certifications.approve"
+msgstr "Genehmigen"
+
+msgid "user_certifications.available_certifications"
+msgstr "Verfügbare Zertifikate"
+
+msgid "user_certifications.bulk_add_title"
+msgstr "Zertifikate massenweise hinzufügen"
+
+msgid "user_certifications.bulk_add.certification_help"
+msgstr "Wählen Sie das Zertifikat aus, das den ausgewählten Benutzern zugewiesen werden soll"
+
+msgid "user_certifications.bulk_add.instruction_1"
+msgstr "1. Benutzer aus der Liste unten auswählen"
+
+msgid "user_certifications.bulk_add.instruction_2"
+msgstr "2. Ein zuzuweisendes Zertifikat auswählen"
+
+msgid "user_certifications.bulk_add.instruction_3"
+msgstr "3. Den anfänglichen Status für das Zertifikat festlegen"
+
+msgid "user_certifications.bulk_add.instruction_4"
+msgstr "4. Optional Notizen hinzufügen und 'Zertifikate hinzufügen' klicken"
+
+msgid "user_certifications.bulk_add.instructions_title"
+msgstr "Anweisungen"
+
+msgid "user_certifications.bulk_add.notes_help"
+msgstr "Optionale Notizen zu dieser Zertifikatszuweisung"
+
+msgid "user_certifications.bulk_add.notes_placeholder"
+msgstr "Optionale Notizen zu diesem Zertifikat eingeben..."
+
+msgid "user_certifications.bulk_add.status_help"
+msgstr "Der anfängliche Status für das Zertifikat"
+
+msgid "user_certifications.bulk_add.user_selection_help"
+msgstr "Einen oder mehrere Benutzer auswählen, denen dieses Zertifikat zugewiesen werden soll"
+
+msgid "user_certifications.bulk_add.user_selection_placeholder"
+msgstr "Beginnen Sie mit der Eingabe, um nach Benutzern zu suchen..."
+
+msgid "user_certifications.bulk_add"
+msgstr "Massenweise hinzufügen"
+
+msgid "user_certifications.bulk_approve"
+msgstr "Massenweise genehmigen"
+
+msgid "user_certifications.bulk_revoke"
+msgstr "Massenweise widerrufen"
+
+msgid "user_certifications.by"
+msgstr "von"
+
+msgid "user_certifications.certification_filter"
+msgstr "Zertifikatsfilter"
+
+msgid "user_certifications.certification"
+msgstr "Zertifikat"
+
+msgid "user_certifications.certifications_found"
+msgstr "%d Zertifikate gefunden"
+
+msgid "user_certifications.change_reason_placeholder"
+msgstr "Grund für diese Änderung eingeben..."
+
+msgid "user_certifications.change_reason.help"
+msgstr "Bitte geben Sie einen Grund für diese Statusänderung an"
+
+msgid "user_certifications.change_reason"
+msgstr "Änderungsgrund"
+
+msgid "user_certifications.confirm_bulk_action"
+msgstr "Massenaktion bestätigen"
+
+msgid "user_certifications.confirm_certification"
+msgstr "Zertifikat bestätigen"
+
+msgid "user_certifications.confirm_delete"
+msgstr "Löschen bestätigen"
+
+msgid "user_certifications.confirm_status_change"
+msgstr "Statusänderung bestätigen"
+
+msgid "user_certifications.confirm"
+msgstr "Bestätigen"
+
+msgid "user_certifications.contact_description"
+msgstr "Falls Sie Hilfe mit Zertifikaten benötigen oder Fragen zum Prozess haben, wenden Sie sich bitte an den Zertifikatskoordinator."
+
+msgid "user_certifications.contact_support"
+msgstr "Support kontaktieren"
+
+msgid "user_certifications.contact"
+msgstr "Kontakt"
+
+msgid "user_certifications.critter_id"
+msgstr "Critter-ID"
+
+msgid "user_certifications.critter_name"
+msgstr "Critter-Name"
+
+msgid "user_certifications.date_certified"
+msgstr "Zertifizierungsdatum"
+
+msgid "user_certifications.department_filter"
+msgstr "Abteilungsfilter"
+
+msgid "user_certifications.department"
+msgstr "Abteilung"
+
+msgid "user_certifications.departments"
+msgstr "Abteilungen"
+
+msgid "user_certifications.edit_expiry_title"
+msgstr "Ablaufdatum bearbeiten"
+
+msgid "user_certifications.edit_expiry.help"
+msgstr "Ein neues Ablaufdatum für dieses Zertifikat eingeben"
+
+msgid "user_certifications.edit_expiry.warning"
+msgstr "Die Änderung des Ablaufdatums wirkt sich auf die Gültigkeit dieses Zertifikats aus"
+
+msgid "user_certifications.edit_expiry"
+msgstr "Ablauf bearbeiten"
+
+msgid "user_certifications.enter_new_expiry"
+msgstr "Neues Ablaufdatum eingeben"
+
+msgid "user_certifications.enter_note"
+msgstr "Notiz eingeben"
+
+msgid "user_certifications.entries"
+msgstr "Einträge"
+
+msgid "user_certifications.expired"
+msgstr "Abgelaufen"
+
+msgid "user_certifications.expires"
+msgstr "Läuft ab"
+
+msgid "user_certifications.expiring_soon"
+msgstr "Läuft bald ab"
+
+msgid "user_certifications.expiry_date"
+msgstr "Ablaufdatum"
+
+msgid "user_certifications.export"
+msgstr "Export"
+
+msgid "user_certifications.help"
+msgstr "Hilfe"
+
+msgid "user_certifications.initial_status"
+msgstr "Anfangsstatus"
+
+msgid "user_certifications.internal_note.help"
+msgstr "Interne Notizen nur für Administratoren sichtbar"
+
+msgid "user_certifications.internal_note"
+msgstr "Interne Notiz"
+
+msgid "user_certifications.items"
+msgstr "Elemente"
+
+msgid "user_certifications.last_updated"
+msgstr "Zuletzt aktualisiert"
+
+msgid "user_certifications.list_title"
+msgstr "Benutzer-Zertifikate"
+
+msgid "user_certifications.location"
+msgstr "Ort"
+
+msgid "user_certifications.my_certifications"
+msgstr "Meine Zertifikate"
+
+msgid "user_certifications.need_help"
+msgstr "Hilfe benötigt?"
+
+msgid "user_certifications.never"
+msgstr "Niemals"
+
+msgid "user_certifications.no_active_description"
+msgstr "Keine aktiven Zertifikate gefunden. Versuchen Sie, Ihre Filter anzupassen oder prüfen Sie den 'Alle'-Tab."
+
+msgid "user_certifications.no_active"
+msgstr "Keine aktiven Zertifikate"
+
+msgid "user_certifications.no_certifications_description"
+msgstr "Es wurden noch keine Zertifikate zugewiesen. Wenden Sie sich an Ihren Koordinator, um zu beginnen."
+
+msgid "user_certifications.no_certifications"
+msgstr "Keine Zertifikate"
+
+msgid "user_certifications.no_department"
+msgstr "Keine Abteilung"
+
+msgid "user_certifications.no_expiring_description"
+msgstr "Keine Zertifikate laufen bald ab."
+
+msgid "user_certifications.no_expiring"
+msgstr "Keine ablaufenden Zertifikate"
+
+msgid "user_certifications.no_pending_description"
+msgstr "Keine Zertifikate sind zur Genehmigung ausstehend."
+
+msgid "user_certifications.no_pending"
+msgstr "Keine ausstehenden Zertifikate"
+
+msgid "user_certifications.no_recent_activity"
+msgstr "Keine aktuellen Aktivitäten"
+
+msgid "user_certifications.no_results_description"
+msgstr "Keine Zertifikate entsprechen Ihren aktuellen Filtern."
+
+msgid "user_certifications.no_results"
+msgstr "Keine Ergebnisse"
+
+msgid "user_certifications.note_placeholder"
+msgstr "Eine Notiz eingeben..."
+
+msgid "user_certifications.note.help"
+msgstr "Optionale Notiz zu diesem Zertifikat"
+
+msgid "user_certifications.note"
+msgstr "Notiz"
+
+msgid "user_certifications.notes_placeholder"
+msgstr "Optionale Notizen eingeben..."
+
+msgid "user_certifications.obtained"
+msgstr "Erhalten"
+
+msgid "user_certifications.optional_notes"
+msgstr "Optionale Notizen"
+
+msgid "user_certifications.perpetual"
+msgstr "Dauerhaft"
+
+msgid "user_certifications.print"
+msgstr "Drucken"
+
+msgid "user_certifications.quick_add"
+msgstr "Schnell hinzufügen"
+
+msgid "user_certifications.quick_info"
+msgstr "Schnellinfo"
+
+msgid "user_certifications.recent_activity"
+msgstr "Aktuelle Aktivitäten"
+
+msgid "user_certifications.renew"
+msgstr "Erneuern"
+
+msgid "user_certifications.renewal_available"
+msgstr "Erneuerung verfügbar"
+
+msgid "user_certifications.restore"
+msgstr "Wiederherstellen"
+
+msgid "user_certifications.revoke"
+msgstr "Widerrufen"
+
+msgid "user_certifications.search_placeholder"
+msgstr "Zertifikate suchen..."
+
+msgid "user_certifications.search_user.placeholder"
+msgstr "Benutzer suchen..."
+
+msgid "user_certifications.search_user"
+msgstr "Benutzer suchen"
+
+msgid "user_certifications.select_certification_placeholder"
+msgstr "Ein Zertifikat auswählen..."
+
+msgid "user_certifications.select_certification"
+msgstr "Zertifikat auswählen"
+
+msgid "user_certifications.select_items_first"
+msgstr "Bitte wählen Sie zuerst ein oder mehrere Elemente aus"
+
+msgid "user_certifications.select_user_placeholder"
+msgstr "Einen Benutzer auswählen..."
+
+msgid "user_certifications.select_user"
+msgstr "Benutzer auswählen"
+
+msgid "user_certifications.self_confirm_acknowledgment"
+msgstr "Ich bestätige, dass ich dieses Zertifikat abgeschlossen habe"
+
+msgid "user_certifications.self_confirm_agreement"
+msgstr "Ich stimme zu, dass die von mir bereitgestellten Informationen korrekt sind"
+
+msgid "user_certifications.self_confirm_available"
+msgstr "Selbstbestätigung verfügbar"
+
+msgid "user_certifications.self_confirm_description"
+msgstr "Sie können dieses Zertifikat selbst bestätigen, wenn Sie es bereits abgeschlossen haben"
+
+msgid "user_certifications.self_confirm_for"
+msgstr "Selbstbestätigen für"
+
+msgid "user_certifications.self_confirm_instructions"
+msgstr "Bitte bestätigen Sie, dass Sie dieses Zertifikat abgeschlossen haben, indem Sie die untenstehenden Kästchen ankreuzen"
+
+msgid "user_certifications.self_confirm_notes_placeholder"
+msgstr "Optional Notizen hinzufügen, wann/wo Sie dieses Zertifikat abgeschlossen haben..."
+
+msgid "user_certifications.self_confirm_success"
+msgstr "Zertifikat erfolgreich selbstbestätigt"
+
+msgid "user_certifications.self_confirm_title"
+msgstr "Zertifikat selbstbestätigen"
+
+msgid "user_certifications.self_confirmable"
+msgstr "Selbstbestätigbar"
+
+msgid "user_certifications.stats.active"
+msgstr "Aktiv"
+
+msgid "user_certifications.stats.approved"
+msgstr "Genehmigt"
+
+msgid "user_certifications.stats.expired"
+msgstr "Abgelaufen"
+
+msgid "user_certifications.stats.expiring_soon"
+msgstr "Läuft bald ab"
+
+msgid "user_certifications.stats.pending"
+msgstr "Ausstehend"
+
+msgid "user_certifications.stats.total_users"
+msgstr "Gesamte Benutzer"
+
+msgid "user_certifications.stats.total"
+msgstr "Gesamt"
+
+msgid "user_certifications.status_filter"
+msgstr "Statusfilter"
+
+msgid "user_certifications.status_help.approved"
+msgstr "Zertifikat wurde von einem Administrator genehmigt"
+
+msgid "user_certifications.status_help.expired"
+msgstr "Zertifikat ist abgelaufen und muss erneuert werden"
+
+msgid "user_certifications.status_help.pending"
+msgstr "Zertifikat wartet auf Genehmigung durch einen Administrator"
+
+msgid "user_certifications.status_help.revoked"
+msgstr "Zertifikat wurde widerrufen"
+
+msgid "user_certifications.status_help.self_confirmed"
+msgstr "Zertifikat wurde vom Benutzer selbstbestätigt"
+
+msgid "user_certifications.status_legend"
+msgstr "Statuslegende"
+
+msgid "user_certifications.status"
+msgstr "Status"
+
+msgid "user_certifications.tabs.active"
+msgstr "Aktiv"
+
+msgid "user_certifications.tabs.all"
+msgstr "Alle"
+
+msgid "user_certifications.tabs.expiring"
+msgstr "Läuft ab"
+
+msgid "user_certifications.tabs.pending"
+msgstr "Ausstehend"
+
+msgid "user_certifications.user_selection"
+msgstr "Benutzerauswahl"
+
+msgid "user_certifications.user.description"
+msgstr "Zertifikate für diesen Benutzer verwalten"
+
+msgid "user_certifications.user"
+msgstr "Benutzer"
+
+msgid "user_certifications.view_history"
+msgstr "Verlauf anzeigen"
+
+# Additional form keys
+msgid "form.actions"
+msgstr "Aktionen"
+
+msgid "form.clear"
+msgstr "Löschen"
+
+msgid "form.create"
+msgstr "Erstellen"
+
+msgid "form.days"
+msgstr "Tage"
+
+msgid "form.help"
+msgstr "Hilfe"
+
+msgid "form.save_changes"
+msgstr "Änderungen speichern"
+
+msgid "form.select_all"
+msgstr "Alle auswählen"
+
+msgid "form.view"
+msgstr "Anzeigen"
+
+# Additional pagination keys
+msgid "pagination.showing"
+msgstr "Zeige"
+
+msgid "angel"
+msgstr "Critter"
+
+msgid "auth.login.admin_only"
+msgstr "Anmeldung nur für Admins"
+
+msgid "auth.login.staff_only"
+msgstr "Das System ist nicht für die Öffentlichkeit verfügbar"
+
+msgid "departments.title"
+msgstr "Abteilung"
+
+msgid "departments.title.plural"
+msgstr "Abteilungen"
+
+msgid "login.use_username_password"
+msgstr "Mit Benutzername/Passwort anmelden"

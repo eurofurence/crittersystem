@@ -181,11 +181,61 @@ function load_types()
 {
     $user = auth()->user();
     $isShico = auth()->can('admin_shifts');
+    $isStaff = auth()->can('user.type.staff');
 
     if (!AngelType::count()) {
         error(__('The administration has not configured any critter types yet - or you are not subscribed to any critter type.'));
         throw_redirect(url('/'));
     }
+
+    $QueryConstruct = '';
+    if (!$isStaff) {
+        $QueryConstruct = 'angel_types.staff_only = 0';
+    }
+
+    if ($isShico) {
+        if ($QueryConstruct != '') {
+            $QueryConstruct .= ' AND ';
+        }
+        $QueryConstruct .= 'angel_types.hide_on_shift_view = 0
+        OR (
+            user_angel_type.user_id IS NOT NULL
+            AND
+            NOT `user_angel_type`.`confirm_user_id` IS NULL
+        )';
+    }
+
+//    $types = Db::select(
+//        '
+//            SELECT
+//                `angel_types`.`id`,
+//                `angel_types`.`name`,
+//                (
+//                    `angel_types`.`restricted`=0
+//                    OR (
+//                        NOT `user_angel_type`.`confirm_user_id` IS NULL
+//                        OR `user_angel_type`.`id` IS NULL
+//                    )
+//                ) AS `enabled`
+//            FROM `angel_types`
+//            LEFT JOIN `user_angel_type`
+//                ON (
+//                    `user_angel_type`.`angel_type_id`=`angel_types`.`id`
+//                    AND `user_angel_type`.`user_id`=?
+//                )'
+//            . ($isShico ? '' :
+//            'WHERE angel_types.hide_on_shift_view = 0
+//                OR (
+//                    user_angel_type.user_id IS NOT NULL
+//                        AND
+//                    NOT `user_angel_type`.`confirm_user_id` IS NULL
+//                ) ') .
+//            'ORDER BY `angel_types`.`name`
+//        ',
+//        [
+//            $user->id,
+//        ]
+//    );
 
     $types = Db::select(
         '
@@ -204,14 +254,8 @@ function load_types()
                 ON (
                     `user_angel_type`.`angel_type_id`=`angel_types`.`id`
                     AND `user_angel_type`.`user_id`=?
-                )'
-            . ($isShico ? '' :
-            'WHERE angel_types.hide_on_shift_view = 0
-                OR (
-                    user_angel_type.user_id IS NOT NULL
-                        AND
-                    NOT `user_angel_type`.`confirm_user_id` IS NULL
-                ) ') .
+                ) '
+            . ($QueryConstruct ? 'WHERE ' . $QueryConstruct . ' ' : '') .
             'ORDER BY `angel_types`.`name`
         ',
         [
@@ -389,7 +433,8 @@ function ical_hint()
         return '';
     }
 
-    return heading(__('iCal export and API') . ' ' . button_help('user/ical'), 2)
+//    return heading(__('iCal export and API') . ' ' . button_help('user/ical'), 2)
+    return heading(__('iCal export and API'), 2)
         . '<p>' . sprintf(
             __('Export your own shifts formatted as <a href="%s" target="_blank">iCal</a> or <a href="%s" target="_blank">JSON</a> (please keep the link secret, otherwise you have to reset the api key <a href="%s">in your settings</a>).'),
             url('/ical', ['key' => $user->api_key]),

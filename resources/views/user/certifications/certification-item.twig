@@ -1,0 +1,182 @@
+{% import 'macros/base.twig' as m %}
+
+{# Individual Certification Item Component
+   Usage: {% include 'user/certifications/certification-item.twig' with {'user_cert': user_cert} %}
+#}
+
+{% set is_expired = user_cert.pivot.date_expires and user_cert.pivot.date_expires < date() %}
+{% set is_expiring_soon = user_cert.pivot.date_expires and user_cert.pivot.date_expires|date('Y-m-d') <= 'now'|date_modify('+30 days')|date('Y-m-d') %}
+{% set can_self_confirm = user_cert.pivot.status == 'pending' and user_cert.certification.allow_self_confirmation %}
+
+<div class="list-group-item certification-item"
+     role="article"
+     aria-labelledby="cert-title-{{ user_cert.certification.uuid }}"
+     aria-describedby="cert-status-{{ user_cert.certification.uuid }}"
+     data-certification-uuid="{{ user_cert.certification.uuid }}"
+     data-certification-title="{{ user_cert.certification.title }}"
+     data-certification-status="{{ user_cert.pivot.status }}"
+     data-certification-type="{{ user_cert.certification.is_perpetual ? 'perpetual' : 'time_limited' }}"
+     data-self-confirmable="{{ user_cert.certification.allow_self_confirmation ? 'yes' : 'no' }}"
+     data-status="{{ user_cert.pivot.status }}"
+     data-title="{{ user_cert.certification.title|lower }}"
+     data-description="{{ user_cert.certification.description|lower }}"
+     data-type="{{ user_cert.certification.is_perpetual ? 'perpetual' : 'time_limited' }}"
+     data-availability="{{ is_expired ? 'expired' : (user_cert.pivot.status == 'available' ? 'available' : 'unavailable') }}">
+    <div class="d-flex w-100 justify-content-between align-items-start">
+        <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <h6 class="mb-1" id="cert-title-{{ user_cert.certification.uuid }}">
+                    {{ user_cert.certification.title }}
+                    {% if user_cert.certification.is_perpetual %}
+                        <small class="badge bg-info ms-1">{{ __('user_certifications.perpetual') }}</small>
+                    {% endif %}
+                </h6>
+
+                <div class="d-flex align-items-center gap-2" id="cert-status-{{ user_cert.certification.uuid }}">
+                    {% include 'components/certification-status-badge.twig' with {'status': user_cert.pivot.status} %}
+
+                    {% if can_self_confirm %}
+                        <a href="{{ url('/user/certifications/self-confirm/' ~ user_cert.certification.uuid) }}"
+                           class="btn btn-sm btn-info"
+                           data-action="self-confirm"
+                           data-certification-uuid="{{ user_cert.certification.uuid }}"
+                           data-certification-title="{{ user_cert.certification.title }}"
+                           aria-label="{{ __('user_certifications.self_confirm_aria', {'title': user_cert.certification.title}) }}"
+                           title="{{ __('user_certifications.self_confirm_tooltip') }}">
+                            {{ m.icon('person-check') }}
+                            {{ __('user_certifications.self_confirm') }}
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if user_cert.certification.description %}
+                <p class="mb-2 text-muted small">{{ user_cert.certification.description }}</p>
+            {% endif %}
+
+            <div class="row small text-muted">
+                <div class="col-md-6">
+                    <div class="mb-1">
+                        <strong>{{ __('user_certifications.obtained') }}:</strong>
+                        {% if user_cert.pivot.date_certified %}
+                            {{ user_cert.pivot.date_certified|date('M j, Y') }}
+                        {% else %}
+                            {{ user_cert.pivot.created_at|date('M j, Y') }}
+                        {% endif %}
+                    </div>
+
+                    {% if user_cert.pivot.date_expires %}
+                        <div class="mb-1">
+                            <strong>{{ __('user_certifications.expires') }}:</strong>
+                            <span class="{{ is_expiring_soon ? 'text-warning' : (is_expired ? 'text-danger' : '') }}">
+                                {{ user_cert.pivot.date_expires|date('M j, Y') }}
+                                {% if is_expired %}
+                                    {{ m.icon('exclamation-triangle', 'text-danger') }}
+                                    <strong>({{ __('user_certifications.expired') }})</strong>
+                                {% elseif is_expiring_soon %}
+                                    {{ m.icon('exclamation-triangle', 'text-warning') }}
+                                    <strong>({{ __('user_certifications.expiring_soon') }})</strong>
+                                {% endif %}
+                            </span>
+                        </div>
+                    {% else %}
+                        <div class="mb-1">
+                            <strong>{{ __('user_certifications.expires') }}:</strong>
+                            <span class="text-success">{{ __('user_certifications.never') }}</span>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="col-md-6">
+                    {% if user_cert.certification.contact_person or user_cert.certification.contact_email %}
+                        <div class="mb-1">
+                            <strong>{{ __('user_certifications.contact') }}:</strong>
+                            {% if user_cert.certification.contact_person %}
+                                {{ user_cert.certification.contact_person }}
+                            {% endif %}
+                            {% if user_cert.certification.contact_email %}
+                                {% if user_cert.certification.contact_person %}<br>{% endif %}
+                                <a href="mailto:{{ user_cert.certification.contact_email }}" class="text-decoration-none">
+                                    {{ user_cert.certification.contact_email }}
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if user_cert.certification.location %}
+                        <div class="mb-1">
+                            <strong>{{ __('user_certifications.location') }}:</strong>
+                            {{ user_cert.certification.location }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if user_cert.pivot.notes %}
+                <div class="mt-2">
+                    <div class="alert alert-light small mb-0">
+                        <strong>{{ m.icon('note-sticky') }} {{ __('user_certifications.notes') }}:</strong>
+                        {{ user_cert.pivot.notes }}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {# Action History (if any) #}
+    {% if user_cert.certification_logs|length > 0 %}
+        <div class="mt-3 pt-3 border-top">
+            <button class="btn btn-link btn-sm p-0 text-muted" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#history-{{ user_cert.id }}"
+                    aria-expanded="false">
+                {{ m.icon('clock-history') }}
+                {{ __('user_certifications.view_history') }}
+                <small>({{ user_cert.certification_logs|length }} {{ __('user_certifications.entries') }})</small>
+            </button>
+
+            <div class="collapse mt-2" id="history-{{ user_cert.id }}">
+                <div class="timeline small">
+                    {% for log in user_cert.certification_logs|slice(0, 5) %}
+                        <div class="timeline-item mb-2">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <strong>{{ log.action|title }}</strong>
+                                    {% if log.notes %}
+                                        - {{ log.notes }}
+                                    {% endif %}
+                                </div>
+                                <div class="text-muted">{{ log.created_at|date('M j, H:i') }}</div>
+                            </div>
+                            {% if log.performed_by %}
+                                <div class="text-muted small">{{ __('user_certifications.by') }} {{ log.performed_by.name }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    {% if user_cert.certification_logs|length > 5 %}
+                        <div class="text-muted small">
+                            {{ __('user_certifications.and_more', {'count': user_cert.certification_logs|length - 5}) }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {# Quick Actions for Special Cases #}
+    {% if user_cert.pivot.status == 'expired' and user_cert.certification.is_active %}
+        <div class="mt-3 pt-3 border-top">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="small text-muted">
+                    {{ m.icon('info-circle') }}
+                    {{ __('user_certifications.renewal_available') }}
+                </div>
+                <a href="{{ url('/user/certifications/renew/' ~ user_cert.certification.uuid) }}"
+                   class="btn btn-sm btn-info">
+                    {{ m.icon('arrow-clockwise') }}
+                    {{ __('user_certifications.renew') }}
+                </a>
+            </div>
+        </div>
+    {% endif %}
+</div>

@@ -168,7 +168,18 @@ class OAuthController extends BaseController
             );
         }
 
+        // Enforce access-mode restrictions before any side effects
+        $accessCheck = $this->authController->checkAccessMode($oauth->user);
+        if ($accessCheck instanceof Response) {
+            return $accessCheck;
+        }
+
         if (isset($config['mark_arrived']) && $config['mark_arrived']) {
+            $this->handleArrive($providerName, $oauth, $resourceOwner);
+        }
+
+        // Handle arrive if staff with user.type.staff
+        if ($oauth->user->hasPermission('user.type.staff')) {
             $this->handleArrive($providerName, $oauth, $resourceOwner);
         }
 

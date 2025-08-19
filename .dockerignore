@@ -21,3 +21,36 @@ deployment.tpl.yaml
 storage/cache/
 !storage/cache/.gitignore
 !storage/cache/views/.gitignore
+
+project_control_docs/
+
+# NO SYNC Files/Folders
+_NOSYNC
+.NOSYNC
+*_NOSYNC
+*.NOSYNC
+_NOSYNC/
+.NOSYNC/
+*_NOSYNC/
+*.NOSYNC/
+
+# Generic cache files
+*~
+.~*
+*.tmp
+*.temp
+*.DS_Store
+.*.swp
+*.out
+*.cache
+Thumbs.db
+.project
+.buildpath
+.settings
+_vimrc_local.vim
+.sass-cache
+
+# PHPstorm files
+/.idea/
+/.phpstorm.meta.php
+.junie/

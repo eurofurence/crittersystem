@@ -14,11 +14,10 @@ use Psr\Log\LoggerInterface;
 
 class DepartmentController extends BaseController
 {
-//    /** @var string[] */
-//    protected array $permissions = [
-//        'faq.view',
-//        'faq.viewx',
-//    ];
+    /** @var string[] */
+    protected array $permissions = [
+        'angeltypes',
+    ];
 
     public function __construct(
         protected LoggerInterface $log,
@@ -30,6 +29,11 @@ class DepartmentController extends BaseController
     public function index(): Response
     {
         $user = auth()->user();
+
+        if (!$user) {
+            return $this->response->redirectTo('/')->setStatusCode(403, 'Not allowed');
+        }
+
         $query = Department::query();
 
         if (!$user->isStaff()) {
@@ -55,9 +59,10 @@ class DepartmentController extends BaseController
         $user = auth()->user();
 
         if ($department->staff_only && !$user->isStaff()) {
-            dd('not allowed - DepartmentController.php:52');
-            //            throw new HttpForbidden();
-//            return $this->response->redirectTo('/departments');
+//            dd('not allowed - DepartmentController.php:52');
+//              throw new HttpForbidden();
+//            return $this->response->redirectTo('/');
+            return $this->response->redirectTo('/')->setStatusCode(403, 'Not allowed');
         }
 
         $data = [
@@ -78,7 +83,8 @@ class DepartmentController extends BaseController
     {
         if (!$this->canCreateDepartment(auth()->user())) {
 //            throw new HttpForbidden();
-            dd('not allowed - DepartmentController.php:74');
+//            dd('not allowed - DepartmentController.php:74');
+            return $this->response->redirectTo('/')->setStatusCode(403, 'Not allowed');
         }
 
         return $this->response->withView('pages/departments/create.twig');
@@ -88,7 +94,8 @@ class DepartmentController extends BaseController
     {
         if (!$this->canCreateDepartment(auth()->user())) {
 //            throw new HttpForbidden();
-            dd('not allowed - DepartmentController.php:84');
+//            dd('not allowed - DepartmentController.php:84');
+            return $this->response->redirectTo('/')->setStatusCode(403, 'Not allowed');
         }
 
         $data = $this->validate($this->request, [
@@ -134,7 +141,8 @@ class DepartmentController extends BaseController
 
         if (!auth()->user()->canManageDepartment($department)) {
 //            throw new HttpForbidden();
-            dd('not allowed - DepartmentController.php:110');
+//            dd('not allowed - DepartmentController.php:110');
+            return $this->response->redirectTo('/')->setStatusCode(403, 'Not allowed');
         }
 
         return $this->response->withView('pages/departments/edit.twig', [
@@ -149,7 +157,8 @@ class DepartmentController extends BaseController
 
         if (!auth()->user()->canManageDepartment($department)) {
 //            throw new HttpForbidden();
-            dd('not allowed - DepartmentController.php:124');
+            return $this->response->redirectTo('/')->setStatusCode(403, 'Not allowed');
+//            dd('not allowed - DepartmentController.php:124');
         }
 
         $data = $this->validate($this->request, [
@@ -194,7 +203,8 @@ class DepartmentController extends BaseController
 
         if (!auth()->user()->canManageDepartment($department)) {
 //            throw new HttpForbidden();
-            dd('not allowed - DepartmentController.php:149');
+//            dd('not allowed - DepartmentController.php:149');
+            return $this->response->redirectTo('/')->setStatusCode(403, 'Not allowed');
         }
 
         $name = $department->name;

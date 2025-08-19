@@ -145,7 +145,7 @@ class ShiftCalendarRenderer
             div('shift-calendar table-responsive', [
                 $this->renderTimeLane(),
                 $this->renderShiftLanes(),
-            ]) . $this->renderLegend();
+            ]);
     }
 
     /**
@@ -255,14 +255,18 @@ class ShiftCalendarRenderer
                 return div($class . ' day');
             }
             return div($class . ' day', [
-                $time->format(__('m-d')) . '<br>' . $time->format(__('H:i')),
+                __($time->format('D')) . ', '
+                . $time->format(__('m-d')) . '<br>'
+                . $time->format(__('H:i')),
             ]);
         } elseif ($time->isStartOfHour()) {
             if (!$label) {
                 return div($class . ' hour');
             }
             return div($class . ' hour', [
-                $time->format(__('m-d')) . '<br>' . $time->format(__('H:i')),
+                __($time->format('D')) . ', '
+                . $time->format(__('m-d')) . '<br>'
+                . $time->format(__('H:i')),
             ]);
         }
         return div($class);
@@ -344,7 +348,7 @@ class ShiftCalendarRenderer
      */
     private function renderLegend()
     {
-        return div('legend mt-3', [
+        return div('legend sticky-legend mt-3', [
             badge(__('Your shift'), 'primary'),
             badge(__('Help needed'), 'danger'),
             badge(__('Other critter type needed / collides with my shifts'), 'warning'),

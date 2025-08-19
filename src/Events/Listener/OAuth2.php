@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Engelsystem\Events\Listener;
 
 use Engelsystem\Config\Config;
+use Engelsystem\Database\Db;
 use Engelsystem\Helpers\Authenticator;
 use Engelsystem\Models\Department\Department;
 use Engelsystem\Models\Group;
@@ -252,7 +253,7 @@ class OAuth2
 
                 // Add user to group if not already a member
                 if (!$user->groups->contains($group->id)) {
-                    $user->groups()->attach($group);
+                    $user->groups()->syncWithoutDetaching($group);
                     $this->log->info(
                         'OAuth {provider}: Added user {user} to group {group}',
                         [
@@ -273,6 +274,49 @@ class OAuth2
                     ]
                 );
             }
+        }
+
+        // Final cleanup: ensure no duplicate group assignments for this user
+        try {
+            $connection = Db::connection();
+
+            $duplicates = $connection->table('users_groups')
+                ->select('group_id')
+                ->selectRaw('MIN(id) as keep_id')
+                ->where('user_id', $user->id)
+                ->groupBy('group_id')
+                ->havingRaw('COUNT(*) > 1')
+                ->get();
+
+            foreach ($duplicates as $dup) {
+                $deleted = $connection->table('users_groups')
+                    ->where('user_id', $user->id)
+                    ->where('group_id', $dup->group_id)
+                    ->where('id', '<>', $dup->keep_id)
+                    ->delete();
+
+                if ($deleted > 0) {
+                    $this->log->info(
+                        'OAuth {provider}: Removed {count} duplicate group rows' .
+                        ' for user {user} in group {groupId}',
+                        [
+                            'provider' => $provider,
+                            'count' => $deleted,
+                            'user' => $user->name,
+                            'groupId' => $dup->group_id,
+                        ]
+                    );
+                }
+            }
+        } catch (\Exception $e) {
+            $this->log->error(
+                'OAuth {provider}: Error during duplicate group assignment cleanup for user {user}: {error}',
+                [
+                    'provider' => $provider,
+                    'user' => $user->name,
+                    'error' => $e->getMessage(),
+                ]
+            );
         }
     }
 

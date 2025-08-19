@@ -62,6 +62,7 @@
         "symfony/mailer": "^6.4",
         "symfony/psr-http-message-bridge": "^2.3",
         "symfony/yaml": "^7.3",
+        "twig/string-extra": "^3.21",
         "twig/twig": "^3.8 <3.21.0",
         "vlucas/phpdotenv": "^5.6"
     },

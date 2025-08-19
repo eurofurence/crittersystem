@@ -5,3 +5,4 @@ import './countdown';
 import './dashboard';
 import './dashboards';
 import './design';
+import './lock';

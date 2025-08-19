@@ -1,0 +1,198 @@
+{% extends "layouts/app.twig" %}
+{% import 'macros/base.twig' as m %}
+
+{% block title %}{{ __('Team %s') | format(angeltype.name) }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <a class="btn btn-sm btn-secondary" href="{{ url('/crittertypes') }}">{{ m.icon('chevron-left') }} {{ __('general.back') }}</a>
+        </div>
+    </div>
+
+    <h1 class="text-break">{{ block('title') }}</h1>
+
+    <div class="mb-3">
+        <div class="d-flex flex-wrap gap-2">
+            {% if userAngelType is null %}
+                <a class="btn btn-success" href="{{ url('/user-angeltypes', {'action':'add', 'angeltype_id': angeltype.id}) }}">
+                    {{ m.icon('box-arrow-in-right') }} {{ __('Join') }}
+                </a>
+            {% else %}
+                <a class="btn btn-warning" href="{{ url('/user-angeltypes', {'action':'delete', 'user_angeltype_id': userAngelType.id}) }}">
+                    {{ m.icon('box-arrow-right') }} {{ __('Leave') }}
+                </a>
+            {% endif %}
+
+            {% if isAdminAngelTypes or isSupporter %}
+                <a class="btn btn-primary" href="{{ url('/crittertypes/edit/' ~ angeltype.id) }}">
+                    {{ m.icon('pencil') }} {{ __('form.edit') }}
+                </a>
+            {% endif %}
+            {% if isAdminAngelTypes %}
+                <a class="btn btn-danger" href="{{ url('/crittertypes/' ~ angeltype.id ~ '/delete') }}">
+                    {{ m.icon('trash') }} {{ __('form.delete') }}
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if angeltype.restricted and userAngelType and not userAngelType.confirm_user_id %}
+        <div class="alert alert-warning">
+            {{ __('You are unconfirmed for this critter type. Please go to the introduction for %s to get confirmed.') | format(angeltype.name) }}
+        </div>
+    {% endif %}
+
+    <ul class="nav nav-tabs flex-nowrap overflow-auto" id="crittertypeTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {{ tab == 0 ? 'active' : '' }}" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab">{{ __('Info') }}</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {{ tab == 1 ? 'active' : '' }}" id="shifts-tab" data-bs-toggle="tab" data-bs-target="#shifts" type="button" role="tab">{{ __('general.shifts') }}</button>
+        </li>
+    </ul>
+
+    <div class="tab-content mt-3" id="crittertypeTabContent">
+        <div class="tab-pane fade {{ tab == 0 ? 'show active' : '' }}" id="info" role="tabpanel">
+            {% if angeltype.hasContactInfo() %}
+                <h3>{{ __('Contact') }}</h3>
+                <dl class="row">
+                    {% if angeltype.contact_name %}
+                        <dt class="col-sm-3">{{ __('general.name') }}</dt>
+                        <dd class="col-sm-9">{{ angeltype.contact_name }}</dd>
+                    {% endif %}
+                    {% if config('enable_dect') and angeltype.contact_dect %}
+                        <dt class="col-sm-3">{{ __('general.dect') }}</dt>
+                        <dd class="col-sm-9"><a href="https://t.me/{{ angeltype.contact_dect | replace({'@':''}) }}">{{ config('policy')['telegram_visual_prefix'] }}{{ angeltype.contact_dect }}</a></dd>
+                    {% endif %}
+                    {% if angeltype.contact_email %}
+                        <dt class="col-sm-3">{{ __('general.email') }}</dt>
+                        <dd class="col-sm-9"><a href="mailto:{{ angeltype.contact_email }}">{{ angeltype.contact_email }}</a></dd>
+                    {% endif %}
+                </dl>
+            {% endif %}
+
+            <h3>{{ __('general.description') }}</h3>
+            <div class="card card-body mb-3">{{ angeltype.description | default('') | md }}</div>
+
+            {% set required_certs = angeltype.requiredCertifications %}
+            {% if required_certs is not empty %}
+                <h3>{{ __('Required Certifications') }}</h3>
+                <ul class="list-group list-group-flush mb-3">
+                    {% for cert in required_certs %}
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">{{ cert.title }}</div>
+                                {% if cert.description %}
+                                    <small class="text-muted">{{ cert.description }}</small>
+                                {% endif %}
+                            </div>
+                            {% if cert.is_perpetual %}
+                                <span class="badge bg-info rounded-pill">Perpetual</span>
+                            {% elseif cert.validity_period_days %}
+                                <span class="badge bg-secondary rounded-pill">{{ cert.validity_period_days }} days</span>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+                <div class="alert alert-info">{{ __('angeltypes.certification_requirements.user_info') }}</div>
+            {% endif %}
+
+            <h3>{{ __('Members') }}</h3>
+            <div class="table-responsive mb-4">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>{{ __('general.nick') }}</th>
+                            {% if config('enable_dect') %}<th>{{ __('general.dect') }}</th>{% endif %}
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for member in membersConfirmed %}
+                            <tr>
+                                <td>{{ member.name | raw }}</td>
+                                {% if config('enable_dect') %}<td>{{ member.dect | raw }}</td>{% endif %}
+                                <td></td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="3">{{ __('No entries.') }}</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% if isAdminUserAngelTypes and angeltype.restricted and membersUnconfirmed|length > 0 %}
+                <h3>{{ __('Unconfirmed') }}</h3>
+                <div class="d-flex flex-wrap gap-2 mb-2">
+                    <a class="btn btn-sm btn-success" href="{{ url('/user-angeltypes', {'action':'confirm_all', 'angeltype_id': angeltype.id}) }}">{{ m.icon('check-lg') }} {{ __('Confirm all') }}</a>
+                    <a class="btn btn-sm btn-danger" href="{{ url('/user-angeltypes', {'action':'delete_all', 'angeltype_id': angeltype.id}) }}">{{ m.icon('trash') }} {{ __('Deny all') }}</a>
+                </div>
+                <div class="table-responsive mb-4">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>{{ __('general.nick') }}</th>
+                                {% if config('enable_dect') %}<th>{{ __('general.dect') }}</th>{% endif %}
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for member in membersUnconfirmed %}
+                                <tr>
+                                    <td>{{ member.name | raw }}</td>
+                                    {% if config('enable_dect') %}<td>{{ member.dect | raw }}</td>{% endif %}
+                                    <td>
+                                        {% if isAdminUserAngelTypes %}
+                                            <div class="d-flex flex-wrap gap-2">
+                                                <a class="btn btn-sm btn-success" href="{{ url('/user-angeltypes', {'action':'confirm', 'user_angeltype_id': member.pivot.id}) }}">
+                                                    {{ m.icon('check-lg') }} {{ __('Confirm') }}
+                                                </a>
+                                                <a class="btn btn-sm btn-danger" href="{{ url('/user-angeltypes', {'action':'delete', 'user_angeltype_id': member.pivot.id}) }}">
+                                                    {{ m.icon('trash') }} {{ __('Deny') }}
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+            {% if supporters|length > 0 %}
+                <h3>{{ __('Supporters') }}</h3>
+                <div class="table-responsive mb-4">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>{{ __('general.nick') }}</th>
+                                {% if config('enable_dect') %}<th>{{ __('general.dect') }}</th>{% endif %}
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for member in supporters %}
+                                <tr>
+                                    <td>{{ member.name | raw }}</td>
+                                    {% if config('enable_dect') %}<td>{{ member.dect | raw }}</td>{% endif %}
+                                    <td></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="tab-pane fade {{ tab == 1 ? 'show active' : '' }}" id="shifts" role="tabpanel">
+            <div class="first">
+                {{ shiftsFilterControls | raw }}
+                {{ shiftCalendarHtml | raw }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

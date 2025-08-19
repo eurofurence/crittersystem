@@ -49,6 +49,7 @@
                 <div class="col-md-6">
                     {{ f.checkbox('is_meeting', __('news.edit.is_meeting'), {
                         'checked': is_meeting,
+                        'hidden': true,
                     }) }}
                     {{ f.checkbox('is_pinned', __('news.edit.is_pinned'), {
                         'checked': is_pinned,

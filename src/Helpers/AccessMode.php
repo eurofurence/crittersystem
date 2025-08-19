@@ -22,8 +22,11 @@ use Engelsystem\Models\EventConfig;
 // ```
 class AccessMode
 {
+    // Public Access
     public const MODE_PUBLIC = 'public';
+    // Staff and Admins only
     public const MODE_STAFF = 'staff';
+    // Admins only
     public const MODE_ADMIN = 'admin';
 
     public function __construct(

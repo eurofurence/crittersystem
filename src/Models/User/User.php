@@ -7,6 +7,8 @@ namespace Engelsystem\Models\User;
 use Carbon\Carbon;
 use Engelsystem\Models\AngelType;
 use Engelsystem\Models\BaseModel;
+use Engelsystem\Models\Certification;
+use Engelsystem\Models\CertificationUser;
 use Engelsystem\Models\Department\Department;
 use Engelsystem\Models\Department\DepartmentApplicationLog;
 use Engelsystem\Models\Group;
@@ -54,6 +56,7 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property-read SupportCollection|Privilege[] $privileges
  * @property-read Collection|AngelType[]        $userAngelTypes
  * @property-read UserAngelType                 $pivot
+ * @property-read Collection|Certification[]    $certifications
  * @property-read Collection|ShiftEntry[]       $shiftEntries
  * @property-read Collection|Session[]          $sessions
  * @property-read Collection|Worklog[]          $worklogs
@@ -187,6 +190,15 @@ class User extends BaseModel
             ->belongsToMany(AngelType::class, 'user_angel_type')
             ->using(UserAngelType::class)
             ->withPivot(UserAngelType::getPivotAttributes());
+    }
+
+    public function certifications(): BelongsToMany
+    {
+        return $this
+            ->belongsToMany(Certification::class, 'certifications_user')
+            ->using(CertificationUser::class)
+            ->withPivot(CertificationUser::getPivotAttributes())
+            ->withTimestamps();
     }
 
     public function isAngelTypeSupporter(AngelType $angelType): bool
@@ -348,5 +360,21 @@ class User extends BaseModel
                 'user.type.admin',
             ]
         );
+    }
+
+    /**
+     * Check if user has a specific permission.
+     */
+    public function hasPermission(string $permission): bool
+    {
+        return $this->privileges()->where('name', $permission)->exists();
+    }
+
+    /**
+     * Check if user has any of the given permissions.
+     */
+    public function hasAnyPermission(array $permissions): bool
+    {
+        return $this->privileges()->whereIn('name', $permissions)->exists();
     }
 }

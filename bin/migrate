@@ -14,7 +14,7 @@ require_once __DIR__ . '/../includes/application.php';
 
 // Base directory to save the migration flags
 // To disable the flags function, set $migrationBaseDir = ''
-$migrationFlagBaseDir = __DIR__ . '/../config/';
+$migrationFlagBaseDir = __DIR__ . '/../storage/';
 
 /** @var $loader ClassLoader */
 $baseDir = __DIR__ . '/../db/migrations';
