@@ -601,7 +601,7 @@ function AngelType_view(
     ShiftCalendarRenderer $shiftCalendarRenderer,
     $tab
 ) {
-    $back = button(url('/angeltypes'), icon('chevron-left'), 'btn-sm', '', __('general.back'));
+    $back = button(url('/crittertypes'), icon('chevron-left'), 'btn-sm', '', __('general.back'));
     $add = (($admin_angeltypes || $admin_user_angeltypes) ? button(
         url('/user-angeltypes', ['action' => 'add', 'angeltype_id' => $angeltype->id]),
         icon('plus-lg'),

@@ -157,7 +157,7 @@ Also adds buttons to increment / decrement the value.
                 {{ _self.info(opt.info) }}
             {% endif %}
         {%- endif %}
-        <textarea class="form-control" id="{{ name }}" name="{{ name }}"
+        <textarea class="form-control" id="{{ name }}" name="{{ name }}" autocomplete="off"
                     {%- if opt.required|default(false) %} required{%- endif -%}
             {%- if opt.rows|default(0) %} rows="{{ opt.rows }}"{%- endif -%}
                 >{{ opt.value|default('') }}</textarea>
