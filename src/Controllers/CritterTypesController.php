@@ -215,6 +215,11 @@ class CritterTypesController extends BaseController
                     )
                     : '',
                 'pivot' => $member->pivot,
+                'isStaff' => $member->hasAnyPermission([
+                    'user.type.internal_staff',
+                    'user.type.staff',
+                    'user.type.admin',
+                ]),
             ];
 
             if ($angeltype->restricted && empty($member->pivot->confirm_user_id)) {
