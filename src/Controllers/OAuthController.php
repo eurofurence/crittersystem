@@ -72,22 +72,36 @@ class OAuthController extends BaseController
 
         // Attempt cookie-based refresh prior to redirecting to provider
         $cookies = $request->getCookieParams();
-        $refreshCookieKey = 'oauth2_refresh_token_' . $providerName;
+        // Hardened cookie name with __Host- prefix (requires Secure, path=/, no Domain)
+        $refreshCookieKey = '__Host-oauth2_rt_' . $providerName;
         $accessToken = null;
         $resourceOwner = null;
         $resumedFromCookie = false;
 
-        if (!$request->has('code') && isset($cookies[$refreshCookieKey]) && $cookies[$refreshCookieKey]) {
+        if (!$request->has('code') && !empty($cookies[$refreshCookieKey])) {
             try {
                 $accessToken = $provider->getAccessToken('refresh_token', [
                     'refresh_token' => $cookies[$refreshCookieKey],
                 ]);
 
+                // Rotate refresh token cookie on every successful refresh
+                $newRefresh = $accessToken->getRefreshToken();
+                if ($newRefresh) {
+                    $expires = $accessToken->getExpires();
+                    $cookieExpire = $expires ?: 0;
+                    @setcookie($refreshCookieKey, $newRefresh, [
+                        'expires'  => $cookieExpire,
+                        'path'     => '/',
+                        'secure'   => true,
+                        'httponly' => true,
+                        'samesite' => 'Strict',
+                    ]);
+                }
+
                 // Try to load resource owner to continue normal flow
                 $resourceOwner = $provider->getResourceOwner($accessToken);
                 $resumedFromCookie = true;
             } catch (IdentityProviderException $e) {
-                // Refresh failed, fall back to normal OAuth workflow
                 $this->log->warning(
                     'OAuth cookie-based refresh failed for {provider}: {error}',
                     ['provider' => $providerName, 'error' => $e->getMessage()]
@@ -95,6 +109,15 @@ class OAuthController extends BaseController
                 $accessToken = null;
                 $resourceOwner = null;
                 $resumedFromCookie = false;
+
+                // Optionally clear a bad/expired refresh cookie
+                @setcookie($refreshCookieKey, '', [
+                    'expires'  => time() - 3600,
+                    'path'     => '/',
+                    'secure'   => true,
+                    'httponly' => true,
+                    'samesite' => 'Lax',
+                ]);
             }
         }
 
@@ -172,31 +195,16 @@ class OAuthController extends BaseController
             $oauth->save();
         }
 
-        // Persist tokens in cookies for seamless refresh on next request
-        // Note: secure/httponly recommended; SameSite=Lax suitable for typical web apps.
-        if ($accessToken) {
-            $accessCookieKey = 'oauth2_access_token_' . $providerName;
-            $expires = $accessToken->getExpires();
-            $cookieExpire = $expires ? $expires : 0; // session cookie if no expiry
-            // Access token cookie (optional but handy for diagnostics; still use refresh for renewals)
-            @setcookie($accessCookieKey, $accessToken->getToken(), [
-                'expires' => $cookieExpire,
-                'path' => '/',
-                'secure' => true,
+        // Persist only refresh token in a hardened cookie; do NOT store access tokens client-side
+        if ($accessToken && $accessToken->getRefreshToken()) {
+            $cookieExpire = $accessToken->getExpires() ?: 0;
+            @setcookie($refreshCookieKey, $accessToken->getRefreshToken(), [
+                'expires'  => $cookieExpire,
+                'path'     => '/',
+                'secure'   => true,
                 'httponly' => true,
-                'samesite' => 'Lax',
+                'samesite' => 'Strict',
             ]);
-            // Refresh token cookie (primary for silent re-login)
-            $refreshVal = $accessToken->getRefreshToken();
-            if ($refreshVal) {
-                @setcookie($refreshCookieKey, $refreshVal, [
-                    'expires' => $cookieExpire,
-                    'path' => '/',
-                    'secure' => true,
-                    'httponly' => true,
-                    'samesite' => 'Lax',
-                ]);
-            }
         }
 
         // Load user
