@@ -39,6 +39,8 @@ class OAuth2
             return;
         }
 
+        $this->log->info('User ({user}) login via OAuth: {provider}', ['provider' => $provider, 'user' => $user->name]);
+
         // Get departments configuration
         $departments = $this->config[$provider]['departments'] ?? [];
         if (empty($departments)) {

@@ -40,6 +40,24 @@ class OAuthController extends BaseController
     ) {
     }
 
+    public function connect(Request $request): Response
+    {
+        $providerName = $request->getAttribute('provider');
+
+        $this->requireProvider($providerName);
+
+        $this->session->set('oauth2_connect_provider', $providerName);
+
+        return $this->index($request);
+    }
+
+    protected function requireProvider(string $provider): void
+    {
+        if (!$this->oauthHelper->isValidProvider($provider)) {
+            throw new HttpNotFound('oauth.provider-not-found');
+        }
+    }
+
     public function index(Request $request): Response
     {
         $providerName = $request->getAttribute('provider');
@@ -52,8 +70,36 @@ class OAuthController extends BaseController
             throw new HttpNotFound('oauth.' . $request->get('error'));
         }
 
-        // Initial request redirects to provider
-        if (!$request->has('code')) {
+        // Attempt cookie-based refresh prior to redirecting to provider
+        $cookies = $request->getCookieParams();
+        $refreshCookieKey = 'oauth2_refresh_token_' . $providerName;
+        $accessToken = null;
+        $resourceOwner = null;
+        $resumedFromCookie = false;
+
+        if (!$request->has('code') && isset($cookies[$refreshCookieKey]) && $cookies[$refreshCookieKey]) {
+            try {
+                $accessToken = $provider->getAccessToken('refresh_token', [
+                    'refresh_token' => $cookies[$refreshCookieKey],
+                ]);
+
+                // Try to load resource owner to continue normal flow
+                $resourceOwner = $provider->getResourceOwner($accessToken);
+                $resumedFromCookie = true;
+            } catch (IdentityProviderException $e) {
+                // Refresh failed, fall back to normal OAuth workflow
+                $this->log->warning(
+                    'OAuth cookie-based refresh failed for {provider}: {error}',
+                    ['provider' => $providerName, 'error' => $e->getMessage()]
+                );
+                $accessToken = null;
+                $resourceOwner = null;
+                $resumedFromCookie = false;
+            }
+        }
+
+        // Initial request redirects to provider if we did not resume from cookie
+        if (!$resumedFromCookie && !$request->has('code')) {
             $authorizationUrl = $provider->getAuthorizationUrl(
                 [
                     // League oauth separates scopes by comma, which is wrong, so we do it
@@ -66,10 +112,12 @@ class OAuthController extends BaseController
             return $this->redirect->to($authorizationUrl);
         }
 
-        // Redirected URL got called a second time
+        // Redirected URL got called a second time (only validate state for auth_code flow)
         if (
-            !$this->session->get('oauth2_state')
-            || $request->get('state') !== $this->session->get('oauth2_state')
+            !$resumedFromCookie && (
+                !$this->session->get('oauth2_state')
+                || $request->get('state') !== $this->session->get('oauth2_state')
+            )
         ) {
             $this->session->remove('oauth2_state');
 
@@ -78,25 +126,27 @@ class OAuthController extends BaseController
             throw new HttpNotFound('oauth.invalid-state');
         }
 
-        // Fetch access token
-        $accessToken = null;
-        try {
-            $accessToken = $provider->getAccessToken(
-                'authorization_code',
-                [
-                    'code' => $request->get('code'),
-                ]
-            );
-        } catch (IdentityProviderException $e) {
-            $this->handleOAuthError($e, $providerName);
+        // Fetch access token (authorization_code flow)
+        if (!$resumedFromCookie) {
+            try {
+                $accessToken = $provider->getAccessToken(
+                    'authorization_code',
+                    [
+                        'code' => $request->get('code'),
+                    ]
+                );
+            } catch (IdentityProviderException $e) {
+                $this->handleOAuthError($e, $providerName);
+            }
         }
 
         // Load resource identifier
-        $resourceOwner = null;
-        try {
-            $resourceOwner = $provider->getResourceOwner($accessToken);
-        } catch (IdentityProviderException $e) {
-            $this->handleOAuthError($e, $providerName);
+        if (!$resumedFromCookie) {
+            try {
+                $resourceOwner = $provider->getResourceOwner($accessToken);
+            } catch (IdentityProviderException $e) {
+                $this->handleOAuthError($e, $providerName);
+            }
         }
         $resourceId = $this->getId($providerName, $resourceOwner);
 
@@ -122,6 +172,33 @@ class OAuthController extends BaseController
             $oauth->save();
         }
 
+        // Persist tokens in cookies for seamless refresh on next request
+        // Note: secure/httponly recommended; SameSite=Lax suitable for typical web apps.
+        if ($accessToken) {
+            $accessCookieKey = 'oauth2_access_token_' . $providerName;
+            $expires = $accessToken->getExpires();
+            $cookieExpire = $expires ? $expires : 0; // session cookie if no expiry
+            // Access token cookie (optional but handy for diagnostics; still use refresh for renewals)
+            @setcookie($accessCookieKey, $accessToken->getToken(), [
+                'expires' => $cookieExpire,
+                'path' => '/',
+                'secure' => true,
+                'httponly' => true,
+                'samesite' => 'Lax',
+            ]);
+            // Refresh token cookie (primary for silent re-login)
+            $refreshVal = $accessToken->getRefreshToken();
+            if ($refreshVal) {
+                @setcookie($refreshCookieKey, $refreshVal, [
+                    'expires' => $cookieExpire,
+                    'path' => '/',
+                    'secure' => true,
+                    'httponly' => true,
+                    'samesite' => 'Lax',
+                ]);
+            }
+        }
+
         // Load user
         $user = $this->auth->user();
         if ($oauth && $user && $user->id != $oauth->user_id) {
@@ -133,11 +210,11 @@ class OAuthController extends BaseController
         // Connect user with oauth
         if (!$oauth && $user && $connectProvider && $connectProvider == $providerName) {
             $oauth = new OAuth([
-                'provider'      => $providerName,
-                'identifier'    => $resourceId,
-                'access_token'  => $accessToken->getToken(),
+                'provider' => $providerName,
+                'identifier' => $resourceId,
+                'access_token' => $accessToken->getToken(),
                 'refresh_token' => $accessToken->getRefreshToken(),
-                'expires_at'    => $expirationTime,
+                'expires_at' => $expirationTime,
             ]);
             $oauth->user()
                 ->associate($user)
@@ -174,6 +251,9 @@ class OAuthController extends BaseController
             return $accessCheck;
         }
 
+        // Log the user in first to ensure permissions resolve correctly in this request
+        $response = $this->authController->loginUser($oauth->user);
+
         if (isset($config['mark_arrived']) && $config['mark_arrived']) {
             $this->handleArrive($providerName, $oauth, $resourceOwner);
         }
@@ -183,36 +263,9 @@ class OAuthController extends BaseController
             $this->handleArrive($providerName, $oauth, $resourceOwner);
         }
 
-        $response = $this->authController->loginUser($oauth->user);
         event('oauth2.login', ['provider' => $providerName, 'data' => $userdata]);
 
         return $response;
-    }
-
-    public function connect(Request $request): Response
-    {
-        $providerName = $request->getAttribute('provider');
-
-        $this->requireProvider($providerName);
-
-        $this->session->set('oauth2_connect_provider', $providerName);
-
-        return $this->index($request);
-    }
-
-    public function disconnect(Request $request): Response
-    {
-        $providerName = $request->getAttribute('provider');
-
-        $this->oauth
-            ->whereUserId($this->auth->user()->id)
-            ->where('provider', $providerName)
-            ->delete();
-
-        $this->log->info('Disconnected OAuth from {provider}', ['provider' => $providerName]);
-        $this->addNotification('oauth.disconnected');
-
-        return $this->redirect->back();
     }
 
     protected function getProvider(string $name): AbstractProvider
@@ -220,51 +273,6 @@ class OAuthController extends BaseController
         $this->requireProvider($name);
 
         return $this->oauthHelper->getProvider($name);
-    }
-
-    protected function getId(string $providerName, ResourceOwner $resourceOwner): mixed
-    {
-        $config = $this->config->get('oauth')[$providerName];
-        if (empty($config['nested_info'])) {
-            return $resourceOwner->getId();
-        }
-
-        $data = Arr::dot($resourceOwner->toArray());
-        return $data[$config['id']];
-    }
-
-    protected function requireProvider(string $provider): void
-    {
-        if (!$this->oauthHelper->isValidProvider($provider)) {
-            throw new HttpNotFound('oauth.provider-not-found');
-        }
-    }
-
-    protected function handleArrive(
-        string $providerName,
-        OAuth $auth,
-        ResourceOwner $resourceOwner
-    ): void {
-        $user = $auth->user;
-        $userState = $user->state;
-
-        if ($userState->arrived) {
-            return;
-        }
-
-        $userState->arrived = true;
-        $userState->arrival_date = new Carbon();
-        $userState->save();
-
-        $this->log->info(
-            'Set user {name} ({id}) as arrived via {provider} user {user}',
-            [
-                'provider' => $providerName,
-                'user'     => $this->getId($providerName, $resourceOwner),
-                'name'     => $user->name,
-                'id'       => $user->id,
-            ]
-        );
     }
 
     /**
@@ -278,13 +286,24 @@ class OAuthController extends BaseController
         $this->log->error(
             '{provider} identity provider error: {error} {description}',
             [
-                'provider'    => $providerName,
-                'error'       => $e->getMessage(),
+                'provider' => $providerName,
+                'error' => $e->getMessage(),
                 'description' => $response,
             ]
         );
 
         throw new HttpNotFound('oauth.provider-error');
+    }
+
+    protected function getId(string $providerName, ResourceOwner $resourceOwner): mixed
+    {
+        $config = $this->config->get('oauth')[$providerName];
+        if (empty($config['nested_info'])) {
+            return $resourceOwner->getId();
+        }
+
+        $data = Arr::dot($resourceOwner->toArray());
+        return $data[$config['id']];
     }
 
     protected function redirectRegister(
@@ -296,13 +315,13 @@ class OAuthController extends BaseController
     ): Response {
         $config = array_merge(
             [
-                'username'           => null,
-                'email'              => null,
-                'first_name'         => null,
-                'last_name'          => null,
-                'enable_password'    => false,
+                'username' => null,
+                'email' => null,
+                'first_name' => null,
+                'last_name' => null,
+                'enable_password' => false,
                 'allow_registration' => null,
-                'groups'             => null,
+                'groups' => null,
             ],
             $config
         );
@@ -331,5 +350,47 @@ class OAuthController extends BaseController
         $this->session->set('oauth2_allow_registration', $config['allow_registration']);
 
         return $this->redirect->to('/register');
+    }
+
+    protected function handleArrive(
+        string $providerName,
+        OAuth $auth,
+        ResourceOwner $resourceOwner
+    ): void {
+        $user = $auth->user;
+        $userState = $user->state;
+
+        if ($userState->arrived) {
+            return;
+        }
+
+        $userState->arrived = true;
+        $userState->arrival_date = new Carbon();
+        $userState->save();
+
+        $this->log->info(
+            'Set user {name} ({id}) as arrived via {provider} user {user}',
+            [
+                'provider' => $providerName,
+                'user' => $this->getId($providerName, $resourceOwner),
+                'name' => $user->name,
+                'id' => $user->id,
+            ]
+        );
+    }
+
+    public function disconnect(Request $request): Response
+    {
+        $providerName = $request->getAttribute('provider');
+
+        $this->oauth
+            ->whereUserId($this->auth->user()->id)
+            ->where('provider', $providerName)
+            ->delete();
+
+        $this->log->info('Disconnected OAuth from {provider}', ['provider' => $providerName]);
+        $this->addNotification('oauth.disconnected');
+
+        return $this->redirect->back();
     }
 }
