@@ -155,14 +155,20 @@ function menu_is_allowed($permissions)
  * @param string[] $menu Rendered menu
  * @return string[]
  */
-function make_location_navigation($menu)
+function make_location_navigation(array $menu): array
 {
     if (!auth()->can('view_locations')) {
         return $menu;
     }
 
     // Get a list of all locations
-    $locations = Location::orderBy('name')->get();
+    $query = Location::query();
+
+    if (!auth()->can('user.type.staff')) {
+        $query->whereNot('staff_only', true);
+    }
+    $locations = $query->orderBy('name')->get();
+
     $location_menu = [];
     if (auth()->can('admin_locations')) {
         $location_menu[] = toolbar_dropdown_item(

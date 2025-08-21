@@ -31,10 +31,14 @@ function cleanZalgoText(string $text): string
  *
  * @param string $text The input string to be cleaned.
  * @param bool $agressive Optional. Determines if aggressive cleaning should be applied. Default is false.
- * @return string The cleaned text.
+ * @return ?string The cleaned text.
  */
-function globalCleanText(string $text, bool $agressive = false): string
+function globalCleanText(?string $text, bool $agressive = false): ?string
 {
+    if (is_null($text)) {
+        return null;
+    }
+
     $text = cleanZalgoText($text);
     $text = strip_tags($text);
     $text = html_entity_decode($text, ENT_QUOTES, 'UTF-8');

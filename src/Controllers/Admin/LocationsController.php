@@ -82,6 +82,7 @@ class LocationsController extends BaseController
                 'name'        => 'required|max:35',
                 'description' => 'optional',
                 'dect'        => 'optional',
+                'staff_only'  => 'optional',
                 'map_url'     => 'optional|url',
             ] + $validation
         );
@@ -94,6 +95,7 @@ class LocationsController extends BaseController
         $location->description = globalCleanText($data['description']);
         $location->dect = array_key_exists('dect', $data) && !empty($data['dect']) ? ltrim($data['dect'], '@') : null;
         $location->map_url = $data['map_url'];
+        $location->staff_only = (bool) $data['staff_only'];
 
         $location->save();
         $location->neededAngelTypes()->getQuery()->delete();

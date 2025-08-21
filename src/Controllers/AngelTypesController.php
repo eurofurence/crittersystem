@@ -18,8 +18,10 @@ class AngelTypesController extends BaseController
         $query = AngelType::query();
         if (!auth()->can('user.type.staff')) {
             $query->where('staff_only', false);
-            $query->whereNot('description', '');
         }
+        // Keep it clean if there is no text
+        $query->whereNot('description', '');
+
         $angeltypes = $query->get();
 
         return $this->response->withView(

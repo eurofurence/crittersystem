@@ -53,6 +53,11 @@ function location_view(Location $location, ShiftsFilterRenderer $shiftsFilterRen
             )]);
     }
 
+    $staff_badge = '';
+    if ($location->staff_only) {
+        $staff_badge = '<span class="badge bg-primary">Staff Only</span>';
+    }
+
     $tabs = [];
     if ($location->map_url) {
         $tabs[__('location.map_url')] = sprintf(
@@ -80,7 +85,7 @@ function location_view(Location $location, ShiftsFilterRenderer $shiftsFilterRen
     $link = button(url('/admin/locations'), icon('chevron-left'), 'btn-sm', '', __('general.back'));
     return page_with_title(
         (auth()->can('admin_locations') ? $link . ' ' : '') .
-        icon('pin-map-fill') . htmlspecialchars($location->name),
+        icon('pin-map-fill') . htmlspecialchars($location->name) . ' ' . $staff_badge,
         [
         $assignNotice,
         auth()->can('admin_locations') ? buttons([
