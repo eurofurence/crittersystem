@@ -17,7 +17,24 @@ function location_view(Location $location, ShiftsFilterRenderer $shiftsFilterRen
 
     $assignNotice = '';
     if (config('signup_requires_arrival') && !$user->state->arrived) {
-        $assignNotice = info(render_user_arrived_hint(), true);
+        // Suppress arrival hint during allowed pre-/post-event signup windows
+        $now = \Engelsystem\Helpers\Carbon::now();
+        $buildupStart = config('buildup_start');
+        $eventStart = config('event_start');
+        $eventEnd = config('event_end');
+        $teardownEnd = config('teardown_end');
+
+        $withinPreEventWindow = !empty($buildupStart) && !empty($eventStart)
+            && $now->greaterThanOrEqualTo($buildupStart)
+            && $now->lessThan($eventStart);
+
+        $withinPostEventWindow = !empty($eventEnd) && !empty($teardownEnd)
+            && $now->greaterThan($eventEnd)
+            && $now->lessThanOrEqualTo($teardownEnd);
+
+        if (!($withinPreEventWindow || $withinPostEventWindow)) {
+            $assignNotice = info(render_user_arrived_hint(), true);
+        }
     }
 
     $description = '';

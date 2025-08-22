@@ -486,7 +486,24 @@ function Shift_signup_allowed_angel(
     }
 
     if (config('signup_requires_arrival') && !$user->state->arrived) {
-        return new ShiftSignupState(ShiftSignupStatus::NOT_ARRIVED, $free_entries);
+        // Allow signups for non-arrived users when the SHIFT itself lies in pre-/post-event windows
+        $shiftStart = $shift->start; // Carbon instance
+        $buildupStart = config('buildup_start');
+        $eventStart = config('event_start');
+        $eventEnd = config('event_end');
+        $teardownEnd = config('teardown_end');
+
+        $withinPreEventWindow = !empty($buildupStart) && !empty($eventStart)
+            && $shiftStart->greaterThanOrEqualTo($buildupStart)
+            && $shiftStart->lessThan($eventStart);
+
+        $withinPostEventWindow = !empty($eventEnd) && !empty($teardownEnd)
+            && $shiftStart->greaterThan($eventEnd)
+            && $shiftStart->lessThanOrEqualTo($teardownEnd);
+
+        if (!($withinPreEventWindow || $withinPostEventWindow)) {
+            return new ShiftSignupState(ShiftSignupStatus::NOT_ARRIVED, $free_entries);
+        }
     }
 
     // Hooray, shift is free for you!

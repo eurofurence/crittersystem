@@ -97,7 +97,6 @@ class ShiftCalendarShiftRenderer
         foreach ($shift_entries as $shift_entry) {
             $shift_entries_filtered[$shift_entry->angel_type_id][] = $shift_entry;
         }
-
         $html = '';
         /** @var ShiftSignupState $shift_signup_state */
         $shift_signup_state = null;
@@ -210,8 +209,10 @@ class ShiftCalendarShiftRenderer
                     sprintf(__('Become %s'), htmlspecialchars($angeltype->name)),
                     'btn-sm'
                 ),
-            // Shift collides or user is already signed up: No signup allowed
-            ShiftSignupStatus::COLLIDES, ShiftSignupStatus::SIGNED_UP => $inner_text,
+            // Shift collides: No signup allowed but show info
+            ShiftSignupStatus::COLLIDES => $inner_text,
+            // User is already signed up: Only show the names already added, no extra text
+            ShiftSignupStatus::SIGNED_UP => null,
             // Shift is full
             ShiftSignupStatus::OCCUPIED => null,
             default => null,
@@ -219,7 +220,6 @@ class ShiftCalendarShiftRenderer
         if (!is_null($entry)) {
             $entry_list[] = $entry;
         }
-
         $shifts_row = '<li class="list-group-item d-flex flex-wrap align-items-center ' . $this->classBg() . '">';
         $shifts_row .= '<strong class="me-1">' . AngelType_name_render($angeltype) . ':</strong> ';
         $shifts_row .= join(', ', $entry_list);

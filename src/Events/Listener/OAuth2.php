@@ -7,6 +7,7 @@ namespace Engelsystem\Events\Listener;
 use Engelsystem\Config\Config;
 use Engelsystem\Database\Db;
 use Engelsystem\Helpers\Authenticator;
+use Engelsystem\Models\AngelType;
 use Engelsystem\Models\Department\Department;
 use Engelsystem\Models\Group;
 use Engelsystem\Models\User\User;
@@ -66,6 +67,9 @@ class OAuth2
 
             $departmentConfig = $departments[$groupName];
             $this->processDepartment($provider, $user, $groupName, $departmentConfig);
+
+            // Process critter types (AngelTypes) if configured for this department
+            $this->processCritterTypes($provider, $user, $departmentConfig['critter_type'] ?? []);
         }
 
         // Process user promotion
@@ -377,6 +381,107 @@ class OAuth2
                     'error' => $e->getMessage(),
                 ]
             );
+        }
+    }
+
+    /**
+     * Process critter types (AngelTypes) for a user based on department config
+     *
+     * @param string $provider OAuth provider name
+     * @param User   $user     User to process
+     * @param array  $critterTypes Array of AngelType names
+     */
+    protected function processCritterTypes(string $provider, User $user, array $critterTypes): void
+    {
+        if (!$user) {
+            $this->log->warning(
+                'OAuth {provider}: Cannot process critter types for null user',
+                [
+                    'provider' => $provider,
+                ]
+            );
+            return;
+        }
+
+        if (empty($critterTypes)) {
+            return;
+        }
+
+        foreach ($critterTypes as $typeName) {
+            $typeName = is_string($typeName) ? trim($typeName) : '';
+            if ($typeName === '') {
+                continue;
+            }
+
+            try {
+                $angelType = AngelType::where('name', $typeName)->first();
+
+                if (!$angelType) {
+                    // Skip silently if not found
+                    $this->log->info(
+                        'OAuth {provider}: Critter type {type} not found, skipping',
+                        [
+                            'provider' => $provider,
+                            'type' => $typeName,
+                        ]
+                    );
+                    continue;
+                }
+
+                // Check if already attached
+                $exists = $user->userAngelTypes()->where('angel_type_id', $angelType->id)->exists();
+
+                if (!$exists) {
+                    $pivot = ['supporter' => false];
+                    if ($angelType->restricted) {
+                        // Auto-confirm if needed
+                        $pivot['confirm_user_id'] = $user->id;
+                    }
+
+                    $user->userAngelTypes()->attach($angelType, $pivot);
+
+                    $this->log->info(
+                        'OAuth {provider}: Added user {user} to critter type {type}' .
+                        ($angelType->restricted ? ' and confirmed' : ''),
+                        [
+                            'provider' => $provider,
+                            'user' => $user->name,
+                            'type' => $angelType->name,
+                        ]
+                    );
+                } else {
+                    // If already attached but restricted and not confirmed, confirm now
+                    if ($angelType->restricted) {
+                        $pivotRow = $user->userAngelTypes()
+                            ->where('angel_type_id', $angelType->id)
+                            ->first()?->pivot;
+
+                        if ($pivotRow && empty($pivotRow->confirm_user_id)) {
+                            $user->userAngelTypes()
+                                ->updateExistingPivot($angelType->id, ['confirm_user_id' => $user->id]);
+
+                            $this->log->info(
+                                'OAuth {provider}: Confirmed user {user} for critter type {type}',
+                                [
+                                    'provider' => $provider,
+                                    'user' => $user->name,
+                                    'type' => $angelType->name,
+                                ]
+                            );
+                        }
+                    }
+                }
+            } catch (\Exception $e) {
+                $this->log->error(
+                    'OAuth {provider}: Error processing critter type {type} for user {user}: {error}',
+                    [
+                        'provider' => $provider,
+                        'type' => $typeName,
+                        'user' => $user->name,
+                        'error' => $e->getMessage(),
+                    ]
+                );
+            }
         }
     }
 }
