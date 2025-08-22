@@ -1,0 +1,42 @@
+{# Public/Visitor-specific Top Bar - simplified #}
+<div class="smv2-topbar card border rounded p-3 mb-3">
+  <div class="row g-3 align-items-end">
+    {# Date Selector #}
+    <div class="col-12 col-md-4">
+      <label class="form-label">{{ __('Date') }}</label>
+      <div class="smv2-date-selector d-flex align-items-center">
+        <button type="button" class="btn btn-secondary btn-sm me-2" id="smv2-date-prev" aria-label="{{ __('Previous day') }}">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+        <div class="smv2-date-boxes d-flex overflow-auto flex-nowrap" role="group" aria-label="{{ __('Date selection') }}">
+          {# Date boxes will be populated by JavaScript #}
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm ms-2" id="smv2-date-next" aria-label="{{ __('Next day') }}">
+          <i class="bi bi-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+
+    {# Location Filter #}
+    <div class="col-12 col-md-3">
+      <label class="form-label">{{ __('Locations') }}</label>
+      <select class="form-select" id="smv2-filter-locations" multiple aria-label="{{ __('Filter by locations') }}">
+        {# Options populated by JavaScript #}
+      </select>
+    </div>
+
+    {# Search #}
+    <div class="col-12 col-md-4">
+      <label class="form-label">{{ __('Search') }}</label>
+      <input type="text" class="form-control" id="smv2-search" placeholder="{{ __('Search shifts...') }}" aria-label="{{ __('Search shifts') }}">
+    </div>
+
+    {# Refresh Button #}
+    <div class="col-12 col-md-1">
+      <button type="button" class="btn btn-primary w-100" id="smv2-refresh" aria-label="{{ __('Refresh view') }}">
+        <i class="bi bi-arrow-clockwise"></i>
+        <span class="d-md-none ms-1">{{ __('Refresh') }}</span>
+      </button>
+    </div>
+  </div>
+</div>

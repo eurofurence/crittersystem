@@ -1,0 +1,97 @@
+{# Top Bar with Date Selector, Time Window, and Filters #}
+<div class="smv2-topbar card border rounded p-3 mb-3">
+  <div class="row g-3 align-items-end">
+    {# Date Selector #}
+    <div class="col-12 col-md-3">
+      <label class="form-label">{{ __('Date') }}</label>
+      <div class="smv2-date-selector d-flex align-items-center" style="height: 50px;">
+        <button type="button" class="btn btn-secondary btn-sm me-2 h-100" id="smv2-date-prev" aria-label="{{ __('Previous day') }}">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+        <div class="smv2-date-boxes d-flex overflow-auto flex-nowrap h-100" role="group" aria-label="{{ __('Date selection') }}">
+          {# Date boxes will be populated by JavaScript #}
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm ms-2 h-100" id="smv2-date-next" aria-label="{{ __('Next day') }}">
+          <i class="bi bi-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+
+    {# Time Window #}
+    <div class="col-6 col-md-2">
+      <label class="form-label">{{ __('Start Time') }}</label>
+      <select class="form-select" id="smv2-time-start" aria-label="{{ __('Start time') }}">
+        {% for hour in range(0, 23) %}
+          {% for minute in [0, 30] %}
+            {% set time = '%02d:%02d'|format(hour, minute) %}
+            <option value="{{ time }}"{% if time == '00:00' %} selected{% endif %}>{{ time }}</option>
+          {% endfor %}
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-6 col-md-2">
+      <label class="form-label">{{ __('End Time') }}</label>
+      <select class="form-select" id="smv2-time-end" aria-label="{{ __('End time') }}">
+        {% for hour in range(0, 23) %}
+          {% for minute in [0, 30] %}
+            {% set time = '%02d:%02d'|format(hour, minute) %}
+            <option value="{{ time }}"{% if time == '23:30' %} selected{% endif %}>{{ time }}</option>
+          {% endfor %}
+        {% endfor %}
+      </select>
+    </div>
+
+    {# Filters #}
+    <div class="col-6 col-md-2">
+      <label class="form-label">{{ __('Locations') }}</label>
+      <select class="form-select" id="smv2-filter-locations" multiple aria-label="{{ __('Filter by locations') }}">
+        {# Options populated by JavaScript #}
+      </select>
+    </div>
+
+    <div class="col-6 col-md-2">
+      <label class="form-label">{{ __('Shift Types') }}</label>
+      <select class="form-select" id="smv2-filter-shift-types" multiple aria-label="{{ __('Filter by shift types') }}">
+        {# Options populated by JavaScript #}
+      </select>
+    </div>
+
+    {# Refresh Button #}
+    <div class="col-12 col-md-1">
+      <button type="button" class="btn btn-primary w-100" id="smv2-refresh" aria-label="{{ __('Refresh view') }}">
+        <i class="bi bi-arrow-clockwise"></i>
+        <span class="d-md-none ms-1">{{ __('Refresh') }}</span>
+      </button>
+    </div>
+  </div>
+
+  {# Additional filters row #}
+  <div class="row g-3 mt-2">
+    <div class="col-12 col-md-4">
+      <label class="form-label">{{ __('Critter Types') }}</label>
+      <select class="form-select" id="smv2-filter-critter-types" multiple aria-label="{{ __('Filter by critter types') }}">
+        {# Options populated by JavaScript #}
+      </select>
+    </div>
+
+    <div class="col-12 col-md-4">
+      <label class="form-label">{{ __('Search') }}</label>
+      <input type="text" class="form-control" id="smv2-search" placeholder="{{ __('Search shifts...') }}" aria-label="{{ __('Search shifts') }}">
+    </div>
+
+    <div class="col-12 col-md-4 d-flex align-items-end">
+      {# View Toggle #}
+      <div class="btn-group w-100" role="group" aria-label="{{ __('View mode') }}">
+        <input type="radio" class="btn-check" name="smv2-view-mode" id="smv2-view-timeline" value="timeline" checked>
+        <label class="btn btn-info" for="smv2-view-timeline">
+          <i class="bi bi-calendar3"></i> {{ __('Timeline') }}
+        </label>
+        <input type="radio" class="btn-check" name="smv2-view-mode" id="smv2-view-list" value="list">
+        <label class="btn btn-secondary" for="smv2-view-list">
+          <i class="bi bi-list-ul"></i> {{ __('List') }}
+        </label>
+      </div>
+    </div>
+  </div>
+</div>

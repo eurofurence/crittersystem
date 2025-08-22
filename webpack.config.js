@@ -45,6 +45,7 @@ const themeEntries = fs
 module.exports = {
   mode: __DEV__ ? 'development' : 'production',
   context: __dirname,
+  stats: 'detailed',
   resolve: {
     extensions: ['.js'],
   },
@@ -52,7 +53,9 @@ module.exports = {
     ...themeEntries,
     vendor: './resources/assets/js/vendor.js',
     purge: './resources/assets/js/admin/purge.js',
+    dumpmanager: './resources/assets/js/admin/dumpmanager.js',
     certifications: './resources/assets/js/certifications.js',
+    shiftManagerV2: './resources/assets/js/ShiftManagerV2.js',
   },
   output: {
     path: path.resolve('public/assets'),

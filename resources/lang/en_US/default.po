@@ -2094,7 +2094,7 @@ msgid "Become %s"
 msgstr "Become a %s"
 
 msgid "Become a %s"
-msgstr "Become a %s"
+msgstr "Join as: %s"
 
 msgid "Changes were saved."
 msgstr "Changes were saved."
@@ -3319,9 +3319,12 @@ msgstr "Error creating the certification"
 msgid "validation.description.min"
 msgstr "Error: Description needs to be longer"
 
-msgid "settings.certificates.success"
-msgstr "Successfully applied"
-
 msgid "certification.self_confirm.success"
 msgstr "Successfully self confirmed"
+
+msgid "certification.apply.success"
+msgstr "Successfully applied"
+
+msgid "certification.user.update.success"
+msgstr "Successfully updated user certification"
 
