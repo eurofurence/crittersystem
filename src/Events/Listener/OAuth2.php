@@ -60,16 +60,23 @@ class OAuth2
         }
 
         // Process departments
+        $matchedAny = false;
         foreach ($userGroups as $groupName) {
             if (!isset($departments[$groupName])) {
                 continue;
             }
 
+            $matchedAny = true;
             $departmentConfig = $departments[$groupName];
             $this->processDepartment($provider, $user, $groupName, $departmentConfig);
 
             // Process critter types (AngelTypes) if configured for this department
             $this->processCritterTypes($provider, $user, $departmentConfig['critter_type'] ?? []);
+        }
+
+        // If no IDP group matched any configured department, add default critter type
+        if (!$matchedAny) {
+            $this->addAllroundCritterIfNoMatch($provider, $user);
         }
 
         // Process user promotion
@@ -375,6 +382,73 @@ class OAuth2
         } catch (\Exception $e) {
             $this->log->error(
                 'OAuth {provider}: Error promoting user {user}: {error}',
+                [
+                    'provider' => $provider,
+                    'user' => $user->name,
+                    'error' => $e->getMessage(),
+                ]
+            );
+        }
+    }
+
+    /**
+     * Add user to default critter type "Allround Critter" when no IDP groups matched
+     *
+     * - Silently ignores if the critter type does not exist
+     * - Confirms membership automatically if the critter type is restricted
+     */
+    protected function addAllroundCritterIfNoMatch(string $provider, User $user): void
+    {
+        try {
+            $angelType = AngelType::where('name', 'Allround Critter')->first();
+            if (!$angelType) {
+                // silently ignore if not found
+                return;
+            }
+
+            $exists = $user->userAngelTypes()->where('angel_type_id', $angelType->id)->exists();
+            if (!$exists) {
+                $pivot = ['supporter' => false];
+                if ($angelType->restricted) {
+                    $pivot['confirm_user_id'] = $user->id;
+                }
+
+                $user->userAngelTypes()->attach($angelType, $pivot);
+
+                $this->log->info(
+                    'OAuth {provider}: Added user {user} to critter type {type}' .
+                    ($angelType->restricted ? ' and confirmed' : ''),
+                    [
+                        'provider' => $provider,
+                        'user' => $user->name,
+                        'type' => $angelType->name,
+                    ]
+                );
+            } else {
+                // If already attached but restricted and not confirmed, confirm now
+                if ($angelType->restricted) {
+                    $pivotRow = $user->userAngelTypes()
+                        ->where('angel_type_id', $angelType->id)
+                        ->first()?->pivot;
+
+                    if ($pivotRow && empty($pivotRow->confirm_user_id)) {
+                        $user->userAngelTypes()
+                            ->updateExistingPivot($angelType->id, ['confirm_user_id' => $user->id]);
+
+                        $this->log->info(
+                            'OAuth {provider}: Confirmed user {user} for critter type {type}',
+                            [
+                                'provider' => $provider,
+                                'user' => $user->name,
+                                'type' => $angelType->name,
+                            ]
+                        );
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            $this->log->error(
+                'OAuth {provider}: Error adding default critter type for user {user}: {error}',
                 [
                     'provider' => $provider,
                     'user' => $user->name,

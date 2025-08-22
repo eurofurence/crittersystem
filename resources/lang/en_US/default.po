@@ -3322,3 +3322,6 @@ msgstr "Error: Description needs to be longer"
 msgid "settings.certificates.success"
 msgstr "Successfully applied"
 
+msgid "certification.self_confirm.success"
+msgstr "Successfully self confirmed"
+
