@@ -81,6 +81,9 @@ class OAuth2
 
         // Process user promotion
         $this->processUserPromotion($provider, $user, $departments['PROMOTE'] ?? []);
+
+        // Handle auto-arrival for admin users after permissions are assigned
+        $this->handleAutoArrival($provider, $user);
     }
 
     /**
@@ -556,6 +559,56 @@ class OAuth2
                     ]
                 );
             }
+        }
+    }
+
+    /**
+     * Handle auto-arrival for admin users after OAuth permissions are assigned
+     *
+     * @param string $provider OAuth provider name
+     * @param User   $user     User to process
+     */
+    protected function handleAutoArrival(string $provider, User $user): void
+    {
+        if (!$user) {
+            return;
+        }
+
+        try {
+            // Check if user has admin privileges (same logic as in OAuthHelper)
+            $hasAdminPrivilege = $user->privileges()
+                ->where('name', 'user.type.admin')
+                ->exists();
+
+            if (!$hasAdminPrivilege) {
+                return;
+            }
+
+            // Only auto-arrive if user hasn't arrived yet
+            if ($user->state->arrived) {
+                return;
+            }
+
+            $user->state->arrived = true;
+            $user->state->arrival_date = new Carbon();
+            $user->state->save();
+
+            $this->log->info(
+                'OAuth {provider}: Auto-arrived admin user {user}',
+                [
+                    'provider' => $provider,
+                    'user' => $user->name,
+                ]
+            );
+        } catch (\Exception $e) {
+            $this->log->error(
+                'OAuth {provider}: Error during auto-arrival for user {user}: {error}',
+                [
+                    'provider' => $provider,
+                    'user' => $user->name,
+                    'error' => $e->getMessage(),
+                ]
+            );
         }
     }
 }
