@@ -103,6 +103,7 @@ function make_navigation()
         'admin/purge'            => ['Purge Data', 'user.type.admin'],
         'admin/dumpmanager'      => ['Database Dump Manager', 'user.type.admin'],
         'admin/config'           => ['config.config', 'config.edit'],
+        'admin/digital-id'       => ['Digital ID Config', 'config.edit'],
         'adminv2/export'         => ['V2-Export', 'admin_user'],
     ];
 

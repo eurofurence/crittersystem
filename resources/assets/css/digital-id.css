@@ -1,0 +1,234 @@
+/* Digital ID System Styles */
+
+/* Mobile-first responsive design */
+.digital-id-card, .verification-card {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* Desktop container styling (mobile device simulation) */
+@media (min-width: 768px) {
+    .digital-id-card, .verification-card {
+        max-width: 420px;
+    }
+    
+    .container-fluid {
+        max-width: 500px;
+        margin: 0 auto;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+}
+
+/* QR Code Display Styling */
+.qr-code-display {
+    width: 250px;
+    height: 250px;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+.qr-code-display canvas,
+.qr-code-display img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+}
+
+.qr-code-container {
+    position: relative;
+}
+
+/* Loading spinner for QR code */
+.qr-code-display .spinner-border {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Staff badge styling */
+.badge.bg-danger {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+    letter-spacing: 0.05rem;
+}
+
+/* User info styling */
+.user-info h2 {
+    line-height: 1.2;
+    word-break: break-word;
+}
+
+/* Action buttons */
+.action-buttons .btn {
+    min-width: 120px;
+}
+
+/* Status messages */
+#status-messages .alert {
+    margin-bottom: 0;
+}
+
+/* QR info styling */
+.qr-info {
+    opacity: 0.8;
+}
+
+/* Verification page specific styles */
+.user-identity .avatar-placeholder {
+    background: linear-gradient(135deg, var(--bs-primary), var(--bs-primary-dark, #0056b3));
+}
+
+.info-item {
+    padding: 0.5rem 0;
+}
+
+.info-item label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+/* Shift status styling */
+.current-shift {
+    border-left: 4px solid #198754;
+}
+
+.next-shift .card {
+    transition: all 0.2s ease;
+}
+
+.next-shift .card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Progress bar styling */
+.progress {
+    background-color: rgba(255,255,255,0.3);
+}
+
+/* Security footer */
+.security-footer {
+    background: linear-gradient(to right, rgba(var(--bs-primary-rgb), 0.05), rgba(var(--bs-success-rgb), 0.05));
+    border-radius: 8px;
+    padding: 1rem;
+    margin: -1rem;
+    margin-top: 1rem;
+}
+
+/* Error page styling */
+.verification-card .bi-exclamation-triangle-fill {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Print styles */
+@media print {
+    body {
+        background: white !important;
+    }
+    
+    .container-fluid {
+        box-shadow: none !important;
+        max-width: none !important;
+    }
+    
+    .action-buttons,
+    .qr-info small:last-child,
+    footer {
+        display: none !important;
+    }
+    
+    .qr-code-display {
+        border: 2px solid #000;
+    }
+}
+
+/* Animation for smooth loading */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Success/Error states */
+.alert-success {
+    border-left: 4px solid #198754;
+}
+
+.alert-danger {
+    border-left: 4px solid #dc3545;
+}
+
+.alert-warning {
+    border-left: 4px solid #ffc107;
+}
+
+.alert-info {
+    border-left: 4px solid #0dcaf0;
+}
+
+/* Responsive text sizing */
+@media (max-width: 576px) {
+    .display-6 {
+        font-size: 1.5rem;
+    }
+    
+    .digital-id-card, .verification-card {
+        margin: 0 1rem;
+        max-width: none;
+    }
+    
+    .qr-code-display {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .qr-code-display {
+        border: 3px solid #000;
+    }
+    
+    .badge {
+        border: 2px solid currentColor;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .fade-in,
+    .bi-exclamation-triangle-fill {
+        animation: none;
+    }
+}
+
+/* Focus styles for accessibility */
+.btn:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Loading state styling */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.loading .spinner-border {
+    display: inline-block;
+}

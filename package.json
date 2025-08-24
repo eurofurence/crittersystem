@@ -27,6 +27,7 @@
     "bootstrap-icons": "^1.13.1",
     "choices.js": "^11.1.0",
     "core-js": "^3.42.0",
+    "qrcode": "^1.5.4",
     "schema-utils": "^4.3.2"
   },
   "devDependencies": {
@@ -35,6 +36,7 @@
     "@babel/preset-env": "^7.20.2",
     "autoprefixer": "^10.4.13",
     "babel-loader": "^9.1.2",
+    "copy-webpack-plugin": "^12.0.2",
     "css-loader": "^6.7.3",
     "css-minimizer-webpack-plugin": "^4.2.2",
     "editorconfig-checker": "^5.1.1",

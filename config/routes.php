@@ -126,6 +126,11 @@ $route->addGroup('/api/v2/shift-manager', function (RouteCollector $route): void
     $route->get('/users', 'Api\\ShiftManagerV2Controller@users');
 });
 
+// Digital ID System
+$route->get('/digital-id', 'DigitalIdController@index');
+$route->post('/digital-id/refresh', 'DigitalIdController@refreshToken');
+$route->get('/digital-id/verify/{token}', 'QrController@verifyToken');
+
 // News
 $route->get('/meetings', 'NewsController@meetings');
 $route->addGroup(
@@ -225,6 +230,15 @@ $route->addGroup(
                 $route->get('', 'Admin\\ConfigController@index');
                 $route->get('/{page}', 'Admin\\ConfigController@edit');
                 $route->post('/{page}', 'Admin\\ConfigController@save');
+            }
+        );
+
+        // Digital ID Configuration
+        $route->addGroup(
+            '/digital-id',
+            function (RouteCollector $route): void {
+                $route->get('', 'Admin\\DigitalIdConfigController@index');
+                $route->post('', 'Admin\\DigitalIdConfigController@store');
             }
         );
 
