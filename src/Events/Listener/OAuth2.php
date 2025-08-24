@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Engelsystem\Events\Listener;
 
+use Carbon\Carbon;
 use Engelsystem\Config\Config;
 use Engelsystem\Database\Db;
 use Engelsystem\Helpers\Authenticator;
