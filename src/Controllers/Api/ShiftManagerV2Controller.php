@@ -19,7 +19,7 @@ use Engelsystem\Services\CertificationService;
 use Illuminate\Support\Carbon;
 use Engelsystem\Models\Worklog;
 use Engelsystem\Models\User\User;
-use Engelsystem\Models\User\UserAngelType;
+use Engelsystem\Models\UserAngelType;
 
 class ShiftManagerV2Controller extends BaseController
 {
@@ -79,7 +79,7 @@ class ShiftManagerV2Controller extends BaseController
 
         // Overlap guard with user's other assignments
         $overlap = $user->shiftEntries()
-            ->whereHas('shift', function ($q) use ($shift) {
+            ->whereHas('shift', function ($q) use ($shift): void {
                 $q->where('end', '>', $shift->start)->where('start', '<', $shift->end);
             })
             ->exists();
@@ -262,7 +262,7 @@ class ShiftManagerV2Controller extends BaseController
             // Overlap guard — skip users that would conflict
             $overlap = ShiftEntry::query()
                 ->where('user_id', $uid)
-                ->whereHas('shift', function ($q) use ($shift) {
+                ->whereHas('shift', function ($q) use ($shift): void {
                     $q->where('end', '>', $shift->start)->where('start', '<', $shift->end);
                 })
                 ->exists();
@@ -281,7 +281,8 @@ class ShiftManagerV2Controller extends BaseController
             $addedCount++;
         }
 
-        // Adjust NeededAngelType record as requested: if missing, create with count = added; if exists, increase count by added
+        // Adjust NeededAngelType record as requested:
+        // if missing, create with count = added; if exists, increase count by added
         if ($addedCount > 0) {
             if ($needed) {
                 $needed->count = (int) $needed->count + $addedCount;
@@ -387,7 +388,13 @@ class ShiftManagerV2Controller extends BaseController
         $new = is_null($flag) ? !$entry->freeloaded : (bool) $flag;
         $entry->freeloaded = $new;
         $entry->save();
-        return $this->response->withJson(['ok' => true, 'shift_entry_id' => (int) $entry->id, 'freeloaded' => (bool) $new]);
+        return $this->response->withJson(
+            [
+            'ok' => true,
+            'shift_entry_id' => (int) $entry->id,
+            'freeloaded' => (bool) $new,
+            ],
+        );
     }
 
     public function shift(Request $request): Response
@@ -412,7 +419,9 @@ class ShiftManagerV2Controller extends BaseController
                 'start_ts' => $shift->start->getTimestamp(),
                 'end_ts' => $shift->end->getTimestamp(),
             ],
-            'needed' => $needed->map(fn($n) => ['angel_type_id' => (int) $n->angel_type_id, 'count' => (int) $n->count])->values(),
+            'needed' => $needed->map(fn($n) => [
+                'angel_type_id' => (int) $n->angel_type_id,
+                'count' => (int) $n->count])->values(),
             'assignments' => $shift->shiftEntries->map(function (ShiftEntry $e) {
                 return [
                     'entry_id' => (int) $e->id,
@@ -432,7 +441,7 @@ class ShiftManagerV2Controller extends BaseController
         }
         $q = (string) $request->query->get('q', '');
         $users = User::query()
-            ->when($q !== '', function ($qb) use ($q) {
+            ->when($q !== '', function ($qb) use ($q): void {
                 $qb->where('name', 'like', '%' . $q . '%');
             })
             ->orderBy('name')
@@ -652,14 +661,22 @@ class ShiftManagerV2Controller extends BaseController
                         $angelTypes = AngelType::query()->whereIn('id', $neededIds)->get(['id', 'name']);
                         foreach ($angelTypes as $angelType) {
                             $taken = $s->shiftEntries->where('angel_type_id', (int) $angelType->id)->count();
-                            $requiredForType = (int) ($neededRows->firstWhere('angel_type_id', (int) $angelType->id)?->count ?? 0);
+                            $requiredForType = (int) (
+                                $neededRows->firstWhere(
+                                    'angel_type_id',
+                                    (int) $angelType->id
+                                )?->count ?? 0)
+                            ;
                             $typeCapacityFull = $requiredForType > 0 && $taken >= $requiredForType;
                             if ($typeCapacityFull) {
                                 continue;
                             }
                             $req = $this->certifications->checkUserCertificationRequirements($user, $angelType);
                             if ($req['meets_requirements'] === true) {
-                                $eligibleAngelTypes[] = ['id' => (int) $angelType->id, 'name' => (string) $angelType->name];
+                                $eligibleAngelTypes[] = [
+                                    'id' => (int) $angelType->id,
+                                    'name' => (string) $angelType->name,
+                                ];
                             }
                         }
                         $needsCert = empty($eligibleAngelTypes);
@@ -744,7 +761,7 @@ class ShiftManagerV2Controller extends BaseController
     public function applications(Request $request, int $shiftId): Response
     {
         $user = $this->auth->user();
-        
+
         // Only managers and supporters can view applications
         $isManager = $this->auth->can('admin_shifts');
         if (!$isManager && !$this->auth->can('user.type.staff')) {
@@ -794,7 +811,7 @@ class ShiftManagerV2Controller extends BaseController
                 ->whereNotNull('supporter')
                 ->pluck('angel_type_id')
                 ->toArray();
-            
+
             if (empty($supportedTypes)) {
                 return $this->response->withJson([
                     'ok' => true,
@@ -802,7 +819,7 @@ class ShiftManagerV2Controller extends BaseController
                     'angel_types' => [],
                 ]);
             }
-            
+
             $neededTypes = $supportedTypes;
             $angelTypes = $angelTypes->whereIn('id', $neededTypes);
         }
@@ -841,7 +858,7 @@ class ShiftManagerV2Controller extends BaseController
     public function approveApplications(Request $request): Response
     {
         $user = $this->auth->user();
-        
+
         // Only managers and supporters can approve applications
         $isManager = $this->auth->can('admin_shifts');
         if (!$isManager && !$this->auth->can('user.type.staff')) {
@@ -881,7 +898,7 @@ class ShiftManagerV2Controller extends BaseController
                     ->exists();
 
                 if (!$isSupporter) {
-                    $errors[] = "Not authorized to approve for angel type {$angelTypeId}";
+                    $errors[] = 'Not authorized to approve for angel type ' . $angelTypeId;
                     continue;
                 }
             }
@@ -895,19 +912,15 @@ class ShiftManagerV2Controller extends BaseController
 
             if ($updated > 0) {
                 $approved++;
-                
+
                 // Log the approval
-                $approvedUser = User::find($userId);
-                $angelType = AngelType::find($angelTypeId);
-                activity()
-                    ->causedBy($user)
-                    ->performedOn($approvedUser)
-                    ->withProperties([
-                        'angel_type_id' => $angelTypeId,
-                        'angel_type_name' => $angelType->name ?? 'Unknown',
-                        'shift_id' => $shiftId,
-                    ])
-                    ->log('Approved user for angel type via ShiftManagerV2');
+                error_log(sprintf(
+                    'ShiftManagerV2: User %d approved user %d for angel type %d in shift %d',
+                    $user->id,
+                    $userId,
+                    $angelTypeId,
+                    $shiftId
+                ));
             }
         }
 

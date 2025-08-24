@@ -143,7 +143,7 @@ class DumpManagerController extends BaseController
     {
         try {
             $files = $request->getUploadedFiles();
-            
+
             // Handle both named and indexed file uploads
             $uploadedFile = null;
             if (isset($files['dump_file'])) {
@@ -153,7 +153,7 @@ class DumpManagerController extends BaseController
             } elseif (!empty($files)) {
                 $uploadedFile = reset($files); // Get first file regardless of key
             }
-            
+
             if (!$uploadedFile) {
                 return $this->response
                     ->withStatus(400)
@@ -161,8 +161,8 @@ class DumpManagerController extends BaseController
                         'error' => 'No dump file uploaded',
                         'debug' => [
                             'received_files' => array_keys($files),
-                            'files_count' => count($files)
-                        ]
+                            'files_count' => count($files),
+                        ],
                     ]);
             }
 
@@ -182,7 +182,7 @@ class DumpManagerController extends BaseController
 
             // Extract and validate the dump
             $validation = $this->validateDumpFile($uploadPath);
-            
+
             if (!$validation['valid']) {
                 unlink($uploadPath);
                 return $this->response
@@ -196,7 +196,6 @@ class DumpManagerController extends BaseController
                 'upload_path' => $uploadPath,
                 'validation' => $validation,
             ]);
-
         } catch (Exception $e) {
             return $this->response
                 ->withStatus(500)
@@ -213,12 +212,12 @@ class DumpManagerController extends BaseController
             // Get JSON data from request
             $data = $request->getParsedBody();
             $jsonData = json_decode($request->getContent(), true);
-            
+
             // Use JSON data if available, fallback to parsed body
             if (!empty($jsonData)) {
                 $data = $jsonData;
             }
-            
+
             // Require double confirmation
             if (!isset($data['confirmation']) || $data['confirmation'] !== 'RESTORE_DATABASE') {
                 return $this->response
@@ -266,22 +265,20 @@ class DumpManagerController extends BaseController
                     'restored_tables' => count($dumpData['metadata']['tables']),
                     'timestamp' => $dumpData['metadata']['timestamp'],
                 ]);
-
             } catch (Exception $e) {
                 throw $e;
             }
-
         } catch (Exception $e) {
             // Log the full error for debugging
             error_log('Restore failed: ' . $e->getMessage());
             error_log('Stack trace: ' . $e->getTraceAsString());
-            
+
             return $this->response
                 ->withStatus(500)
                 ->withJson([
                     'error' => 'Restore failed: ' . $e->getMessage(),
                     'file' => $e->getFile(),
-                    'line' => $e->getLine()
+                    'line' => $e->getLine(),
                 ]);
         }
     }
@@ -395,8 +392,8 @@ class DumpManagerController extends BaseController
             $missingTables = array_diff($dumpTables, $currentTables);
             if (!empty($missingTables)) {
                 return [
-                    'valid' => false, 
-                    'error' => 'Database version mismatch. Missing tables: ' . implode(', ', $missingTables)
+                    'valid' => false,
+                    'error' => 'Database version mismatch. Missing tables: ' . implode(', ', $missingTables),
                 ];
             }
 
@@ -406,7 +403,6 @@ class DumpManagerController extends BaseController
                 'table_count' => count($dumpTables),
                 'dump_timestamp' => $dumpData['metadata']['timestamp'],
             ];
-
         } catch (Exception $e) {
             return ['valid' => false, 'error' => 'Validation error: ' . $e->getMessage()];
         }
@@ -420,6 +416,7 @@ class DumpManagerController extends BaseController
         $zip = new ZipArchive();
         $zip->open($zipPath);
 
+        $jsonContent = null;
         for ($i = 0; $i < $zip->numFiles; $i++) {
             $filename = $zip->getNameIndex($i);
             if (str_ends_with($filename, '.json')) {
@@ -430,7 +427,16 @@ class DumpManagerController extends BaseController
 
         $zip->close();
 
-        return json_decode($jsonContent, true);
+        if ($jsonContent === null) {
+            throw new Exception('No JSON dump file found in archive');
+        }
+
+        $decodedData = json_decode($jsonContent, true);
+        if ($decodedData === null) {
+            throw new Exception('Invalid JSON format in dump file');
+        }
+
+        return $decodedData;
     }
 
     /**
@@ -449,7 +455,7 @@ class DumpManagerController extends BaseController
                     // Use DELETE instead of TRUNCATE
                     $connection->table($table)->delete();
                 } catch (Exception $e) {
-                    error_log("Failed to clear table {$table}: " . $e->getMessage());
+                    error_log('Failed to clear table ' . $table . ': ' . $e->getMessage());
                     throw $e;
                 }
             }
@@ -483,7 +489,7 @@ class DumpManagerController extends BaseController
                     try {
                         $connection->table($table)->insert($rows);
                     } catch (Exception $e) {
-                        error_log("Failed to restore data to table {$table}: " . $e->getMessage());
+                        error_log('Failed to restore data to table ' . $table . ': ' . $e->getMessage());
                         throw $e;
                     }
                 }
