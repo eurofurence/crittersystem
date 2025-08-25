@@ -3328,3 +3328,6 @@ msgstr "Successfully applied"
 msgid "certification.user.update.success"
 msgstr "Successfully updated user certification"
 
+msgid "certification.withdraw.success"
+msgstr "Successfully withdraw"
+
