@@ -42,9 +42,17 @@
                     <div class="user-info mb-4">
                         <h2 class="display-6 fw-bold text-primary mb-2">{{ user.displayName }}</h2>
 
-                        {% if isStaff %}
-                            <span class="badge bg-danger fs-6 mb-2">
+                        {% if isDirector %}
+                            <span class="badge bg-danger fs-6 mt-2">
+                                <i class="bi bi-shield-check"></i> DIRECTOR
+                            </span>
+                        {% elseif isStaff %}
+                            <span class="badge bg-primary fs-6 mt-2">
                                 <i class="bi bi-shield-check"></i> STAFF
+                            </span>
+                        {% else %}
+                            <span class="badge bg-secondary fs-6 mt-2">
+                                <i class="bi bi-person"></i> VOLUNTEER
                             </span>
                         {% endif %}
 

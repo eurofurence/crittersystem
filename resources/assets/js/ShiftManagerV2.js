@@ -17,6 +17,27 @@
   // Global state for current filters and date
   let currentState = { date: undefined, start: '00:00', end: '23:30', locations: [], shift_types: [], critter_types: [] };
 
+  // Event dates for countdown functionality - read from script tag data attributes
+  function getEventDates() {
+    const scriptTag = document.querySelector('script[src*="shiftManagerV2.js"]');
+    if (scriptTag) {
+      return {
+        buildup_start: scriptTag.getAttribute('data-buildup-start') || null,
+        event_start: scriptTag.getAttribute('data-event-start') || null,
+        event_end: scriptTag.getAttribute('data-event-end') || null,
+        teardown_end: scriptTag.getAttribute('data-teardown-end') || null
+      };
+    }
+    return {
+      buildup_start: null,
+      event_start: null,
+      event_end: null,
+      teardown_end: null
+    };
+  }
+  
+  const eventDates = getEventDates();
+
   // Note: Choices.js instances are accessed directly via element.choices property
 
   function fetchJSON(url, options = {}) {
@@ -36,6 +57,95 @@
   function formatTime(ts) {
     const d = new Date(ts * 1000);
     return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  // Countdown functionality
+  function calculateCountdown(selectedDate) {
+    if (!selectedDate) return '';
+    
+    const selected = new Date(selectedDate + 'T00:00:00');
+    const now = new Date();
+    
+    // Convert event dates to Date objects if available
+    const dates = {
+      buildup_start: eventDates.buildup_start ? new Date(eventDates.buildup_start) : null,
+      event_start: eventDates.event_start ? new Date(eventDates.event_start) : null,
+      event_end: eventDates.event_end ? new Date(eventDates.event_end) : null,
+      teardown_end: eventDates.teardown_end ? new Date(eventDates.teardown_end) : null
+    };
+
+    // Determine which phase the selected date is in
+    let phase = '';
+    let targetDate = null;
+    let isCountingDown = true;
+
+    if (dates.teardown_end && selected > dates.teardown_end) {
+      phase = 'After Event';
+      return phase;
+    } else if (dates.event_end && selected >= dates.event_end) {
+      phase = 'Teardown';
+      if (dates.teardown_end) {
+        targetDate = dates.teardown_end;
+        isCountingDown = false; // counting up to teardown end
+      }
+    } else if (dates.event_start && selected >= dates.event_start) {
+      phase = 'Event Days';
+      if (dates.event_end) {
+        targetDate = dates.event_end;
+        isCountingDown = false; // counting up to event end
+      }
+    } else if (dates.buildup_start && selected >= dates.buildup_start) {
+      phase = 'Buildup';
+      if (dates.event_start) {
+        targetDate = dates.event_start;
+        isCountingDown = false; // counting up to event start
+      }
+    } else if (dates.buildup_start && selected < dates.buildup_start) {
+      phase = 'Pre-Event';
+      targetDate = dates.buildup_start;
+      isCountingDown = true; // counting down to buildup
+    } else {
+      return ''; // No event dates configured
+    }
+
+    if (!targetDate) return phase;
+
+    // Calculate days difference
+    const timeDiff = targetDate.getTime() - selected.getTime();
+    const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+    let countdownText = '';
+    if (daysDiff === 0) {
+      countdownText = 'Today!';
+    } else if (daysDiff === 1) {
+      countdownText = isCountingDown ? '1 day to go' : 'Tomorrow';
+    } else if (daysDiff === -1) {
+      countdownText = 'Yesterday';
+    } else if (daysDiff > 0) {
+      countdownText = isCountingDown ? `${daysDiff} days to go` : `${daysDiff} days ahead`;
+    } else {
+      countdownText = `${Math.abs(daysDiff)} days ago`;
+    }
+
+    return `${phase} • ${countdownText}`;
+  }
+
+  function updateCountdownDisplay(selectedDate) {
+    const countdownEl = el('smv2-countdown');
+    if (countdownEl) {
+      const countdownText = calculateCountdown(selectedDate);
+      countdownEl.textContent = countdownText;
+      
+      // Add some visual styling based on phase
+      countdownEl.className = 'text-muted small';
+      if (countdownText.includes('Today')) {
+        countdownEl.className = 'text-warning fw-semibold small';
+      } else if (countdownText.includes('Event Days')) {
+        countdownEl.className = 'text-success small';
+      } else if (countdownText.includes('Buildup') || countdownText.includes('Teardown')) {
+        countdownEl.className = 'text-info small';
+      }
+    }
   }
 
   function minutesFromMidnight(ts) {
@@ -191,11 +301,25 @@
           const required = item.required ?? 1;
           const capacityText = `${assigned}/${required}`;
           
+          // Get assigned users grouped by critter type
+          const assignments = item.assignments || [];
+          
           // Build tooltip content with more information
           let tooltipContent = `${item.title || 'Shift'}
 Time: ${formatTime(item.start_ts)}–${formatTime(item.end_ts)}
 Location: ${item.location || 'Unknown'}
 Capacity: ${capacityText}`;
+
+          if (assignments.length > 0) {
+            tooltipContent += '\n\nAssigned:';
+            assignments.forEach(group => {
+              tooltipContent += `\n${group.angel_type_name}:`;
+              group.users.forEach(user => {
+                const staffBadge = user.is_staff ? ' 👤' : '';
+                tooltipContent += `\n  • ${user.user_name}${staffBadge}`;
+              });
+            });
+          }
           
           if (!canApply && item.eligibility) {
             if (item.eligibility.capacity_full) {
@@ -211,6 +335,30 @@ Capacity: ${capacityText}`;
           
           const aria = `aria-label="${(item.title || 'Shift').replace(/"/g, '')} ${formatTime(item.start_ts)}–${formatTime(item.end_ts)} at ${(item.location || '').replace(/"/g, '')}, capacity ${capacityText}"`;
           
+          // Build user names display for the block - show all users grouped by type
+          let usersDisplay = '';
+          if (assignments.length > 0 && duration > 45) {
+            const usersByType = assignments.map(group => {
+              const users = group.users.map(user => {
+                const staffBadge = user.is_staff ? '👤' : '';
+                return `${user.user_name}${staffBadge}`;
+              });
+              return `${group.angel_type_name}: ${users.join(', ')}`;
+            });
+            
+            // For very tall blocks, show multiple lines; for shorter ones, show condensed
+            if (duration > 80) {
+              // Multi-line display for tall blocks
+              usersDisplay = usersByType.map(line => 
+                `<div class="text-truncate" style="font-size:0.6rem;line-height:1.2;color:rgba(0,0,0,0.8);">${line}</div>`
+              ).join('');
+            } else {
+              // Single line condensed display
+              const condensed = usersByType.join(' | ');
+              usersDisplay = `<div class="text-truncate" style="font-size:0.6rem;line-height:1;color:rgba(0,0,0,0.7);">${condensed}</div>`;
+            }
+          }
+
           return (
             `<div class="position-absolute small smv2-open-modal ${isGrayedOut ? 'smv2-shift-grayed' : ''}" data-shift-id="${item.id}" role="gridcell" tabindex="0" ${aria} 
               title="${tooltipContent.replace(/"/g, '&quot;')}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" 
@@ -218,6 +366,7 @@ Capacity: ${capacityText}`;
               style="top:${top}px;left:${leftPct}%;width:${widthPct}%;height:${duration}px;padding:2px;background:${bg};border:1px solid ${color};border-radius:4px;overflow:hidden;cursor:pointer;">` +
             `<div class="text-truncate fw-semibold" style="font-size:0.75rem;line-height:1.1;">${item.title || 'Shift'}</div>` +
             (duration > 30 ? `<div class="text-truncate text-muted" style="font-size:0.65rem;line-height:1;">${capacityText}</div>` : '') +
+            usersDisplay +
             `</div>`
           );
         })
@@ -353,6 +502,8 @@ Capacity: ${capacityText}`;
           // Update active state
           dateBoxes.querySelectorAll('button').forEach(b => b.classList.remove('active'));
           e.target.classList.add('active');
+          // Update countdown display
+          updateCountdownDisplay(newDate);
           loadData(currentState).then((resp) => {
             updateUI(resp);
           });
@@ -365,6 +516,9 @@ Capacity: ${capacityText}`;
     const timeEnd = el('smv2-time-end');
     if (timeStart) timeStart.value = state?.start || '00:00';
     if (timeEnd) timeEnd.value = state?.end || '23:30';
+
+    // Update countdown display for the selected date
+    updateCountdownDisplay(selectedDate);
 
     // Update filter dropdowns with Choices.js
     const locSelect = el('smv2-filter-locations');
@@ -616,25 +770,14 @@ Capacity: ${capacityText}`;
   }
 
   function currentStateFromDom() {
-    const dateEl = el('smv2-date');
-    const startEl = el('smv2-start');
-    const endEl = el('smv2-end');
-    const locEl = el('smv2-locations');
-    const stEl = el('smv2-shift-types');
-    const ctEl = el('smv2-critter-types');
-    if (!(dateEl && locEl)) return null;
-    return {
-      date: dateEl.value,
-      start: startEl?.value || '00:00',
-      end: endEl?.value || '23:59',
-      locations: Array.from(locEl.selectedOptions).map((o) => o.value),
-      shift_types: stEl ? Array.from(stEl.selectedOptions).map((o) => o.value) : [],
-      critter_types: ctEl ? Array.from(ctEl.selectedOptions).map((o) => o.value) : [],
-    };
+    // Return the current global state instead of trying to read from non-existent DOM elements
+    // This ensures consistency with the user's current selections
+    return { ...currentState };
   }
 
   function refreshOnce() {
-    const state = currentStateFromDom() || initialState();
+    // Use the current global state instead of trying to read from DOM
+    const state = currentState.date ? { ...currentState } : initialState();
     return loadData(state).then((resp) => {
       // Do not touch topbar on immediate refresh to avoid flicker
       updateUI(resp);
@@ -812,26 +955,49 @@ Capacity: ${capacityText}`;
   function startPolling() {
     clearInterval(timer);
     timer = setInterval(() => {
-      // Re-read current state from DOM if available
-      const dateEl = el('smv2-date');
-      const startEl = el('smv2-start');
-      const endEl = el('smv2-end');
-      const locEl = el('smv2-locations');
-      const stEl = el('smv2-shift-types');
-      const ctEl = el('smv2-critter-types');
-      let state;
-      if (dateEl && locEl) {
-        state = {
-          date: dateEl.value,
-          start: startEl?.value || '00:00',
-          end: endEl?.value || '23:59',
-          locations: Array.from(locEl.selectedOptions).map((o) => o.value),
-          shift_types: stEl ? Array.from(stEl.selectedOptions).map((o) => o.value) : [],
-          critter_types: ctEl ? Array.from(ctEl.selectedOptions).map((o) => o.value) : [],
-        };
-      } else {
-        state = initialState();
+      // Use the current global state instead of reading from DOM elements
+      // This ensures the polling respects user's selected date and filters
+      let state = { ...currentState };
+      
+      // Only update from DOM elements if they exist and currentState is incomplete
+      if (!state.date) {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        state.date = `${yyyy}-${mm}-${dd}`;
       }
+      
+      // Update time selectors if they have changed
+      const timeStart = el('smv2-time-start');
+      const timeEnd = el('smv2-time-end');
+      if (timeStart && timeStart.value !== state.start) {
+        state.start = timeStart.value;
+        currentState.start = timeStart.value; // Keep global state in sync
+      }
+      if (timeEnd && timeEnd.value !== state.end) {
+        state.end = timeEnd.value;
+        currentState.end = timeEnd.value; // Keep global state in sync
+      }
+      
+      // Get current selections from Choices.js if they exist
+      const locEl = el('smv2-filter-locations');
+      const stEl = el('smv2-filter-shift-types');
+      const ctEl = el('smv2-filter-critter-types');
+      
+      if (locEl?.choices) {
+        const selectedLocs = locEl.choices.getValue(true);
+        state.locations = Array.isArray(selectedLocs) ? selectedLocs : [selectedLocs].filter(Boolean);
+      }
+      if (stEl?.choices) {
+        const selectedSts = stEl.choices.getValue(true);
+        state.shift_types = Array.isArray(selectedSts) ? selectedSts : [selectedSts].filter(Boolean);
+      }
+      if (ctEl?.choices) {
+        const selectedCts = ctEl.choices.getValue(true);
+        state.critter_types = Array.isArray(selectedCts) ? selectedCts : [selectedCts].filter(Boolean);
+      }
+      
       loadData(state).then((resp) => {
         // Do not re-render the topbar during polling to avoid interrupting user input
         updateUI(resp);
@@ -848,14 +1014,20 @@ Capacity: ${capacityText}`;
     }
     container.innerHTML = assignments.map((a) => {
       const checked = a.freeloaded ? 'checked' : '';
-      return `<div class="d-flex justify-content-between align-items-center border rounded p-1 mb-1">
-        <div>${a.user_name || (`#${a.user_id}`)} <small class="text-muted">(type ${a.angel_type_id})</small></div>
+      const angelTypeName = a.angel_type_name || 'Unknown';
+      return `<div class="d-flex justify-content-between align-items-center border rounded p-2 mb-2">
+        <div class="flex-grow-1">
+          <div class="fw-semibold">${a.user_name || (`#${a.user_id}`)}</div>
+          <small class="text-muted">${angelTypeName}</small>
+        </div>
         <div class="d-flex align-items-center gap-2">
           <div class="form-check form-switch me-2">
             <input class="form-check-input smv2-noshow" type="checkbox" role="switch" id="noshow-${a.entry_id}" data-entry-id="${a.entry_id}" ${checked}>
             <label class="form-check-label small" for="noshow-${a.entry_id}">No‑show</label>
           </div>
-          <button class="btn btn-sm btn-danger smv2-unassign" data-entry-id="${a.entry_id}">Remove</button>
+          <button class="btn btn-sm btn-outline-danger smv2-unassign" data-entry-id="${a.entry_id}">
+            <i class="bi bi-person-dash"></i> Remove
+          </button>
         </div>
       </div>`;
     }).join('');
@@ -864,16 +1036,51 @@ Capacity: ${capacityText}`;
   function openManagerModal(shiftId) {
     const persona = document.getElementById('shift-manager-v2')?.dataset?.persona || 'public';
     if (persona !== 'manager') return;
+    
     fetchJSON(`/api/v2/shift-manager/shift/${shiftId}`)
       .then((resp) => {
         if (!resp || !resp.ok) {
-          showToast('Failed to load shift', 'error');
+          showToast(`Failed to load shift: ${resp?.error || 'Unknown error'}`, 'error');
           return;
         }
+        
         const title = `${resp.shift?.title || 'Shift'} @ ${resp.shift?.location || ''}`;
         const h = document.getElementById('smv2ModalLabel');
         if (h) h.textContent = title;
         renderAssignments(document.getElementById('smv2-assignments'), resp.assignments || []);
+        
+        // Populate critter type dropdown with the shift's needed types
+        const angelTypeSelect = document.getElementById('smv2-assign-angeltype');
+        
+        if (angelTypeSelect) {
+          // If Choices.js is already initialized, destroy it first
+          if (angelTypeSelect.choices) {
+            angelTypeSelect.choices.destroy();
+          }
+          
+          if (resp.needed && Array.isArray(resp.needed) && resp.needed.length > 0) {
+            const options = resp.needed.map(n => 
+              `<option value="${n.angel_type_id}">${n.angel_type_name || 'Unknown'} (${n.count} needed)</option>`
+            ).join('');
+            angelTypeSelect.innerHTML = '<option value="">Select critter type…</option>' + options;
+          } else {
+            angelTypeSelect.innerHTML = '<option value="">No critter types needed</option>';
+          }
+          
+          // Reinitialize Choices.js if available
+          if (typeof Choices !== 'undefined') {
+            try {
+              angelTypeSelect.choices = new Choices(angelTypeSelect, {
+                searchEnabled: false,
+                itemSelectText: '',
+                shouldSort: false
+              });
+            } catch (error) {
+              console.error('Error initializing Choices.js:', error);
+              // Fall back to regular select if Choices.js fails
+            }
+          }
+        }
         // Wire actions
         const modalEl = document.getElementById('smv2-modal');
         if (modalEl) {
@@ -884,23 +1091,64 @@ Capacity: ${capacityText}`;
         // Candidate search
         const search = document.getElementById('smv2-assign-search');
         const candidates = document.getElementById('smv2-assign-candidates');
-        if (search && candidates) {
+        const assignBtn = document.getElementById('smv2-assign-selected');
+        
+        if (search && candidates && assignBtn) {
           let t;
           const run = () => {
-            const q = search.value || '';
+            const q = search.value.trim();
+            if (q.length < 2) {
+              candidates.innerHTML = '<div class="text-muted small">Enter at least 2 characters to search</div>';
+              assignBtn.disabled = true;
+              return;
+            }
+            
             fetchJSON(`/api/v2/shift-manager/users?q=${encodeURIComponent(q)}`)
               .then((r) => {
-                if (!r || !r.ok) { candidates.innerHTML = '<div class="text-muted small">No candidates</div>'; return; }
-                const list = (r.users || []).map((u) => `<div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="cand-${u.id}" value="${u.id}">
-                  <label class="form-check-label" for="cand-${u.id}">${u.name} <span class="text-muted small">(#${u.id})</span></label>
-                </div>`).join('');
-                candidates.innerHTML = list || '<div class="text-muted small">No candidates</div>';
+                if (!r || !r.ok) { 
+                  candidates.innerHTML = '<div class="text-muted small">No candidates found</div>'; 
+                  assignBtn.disabled = true;
+                  return; 
+                }
+                const list = (r.users || []).map((u) => `
+                  <div class="form-check">
+                    <input class="form-check-input candidate-checkbox" type="checkbox" id="cand-${u.id}" value="${u.id}">
+                    <label class="form-check-label" for="cand-${u.id}">
+                      <strong>${u.name}</strong> <span class="text-muted small">(ID: ${u.id})</span>
+                    </label>
+                  </div>`).join('');
+                candidates.innerHTML = list || '<div class="text-muted small">No candidates found</div>';
+                
+                // Update button state when checkboxes change
+                const checkboxes = candidates.querySelectorAll('.candidate-checkbox');
+                checkboxes.forEach(cb => {
+                  cb.addEventListener('change', updateAssignButtonState);
+                });
+                updateAssignButtonState();
               })
-              .catch(() => { candidates.innerHTML = '<div class="text-muted small">No candidates</div>'; });
+              .catch(() => { 
+                candidates.innerHTML = '<div class="text-muted small">Search failed</div>'; 
+                assignBtn.disabled = true;
+              });
           };
-          search.oninput = () => { clearTimeout(t); t = setTimeout(run, 200); };
-          run();
+          
+          const updateAssignButtonState = () => {
+            const selected = candidates.querySelectorAll('.candidate-checkbox:checked');
+            const angelTypeSelected = document.getElementById('smv2-assign-angeltype').value;
+            assignBtn.disabled = selected.length === 0 || !angelTypeSelected;
+          };
+          
+          // Listen for angel type changes
+          document.getElementById('smv2-assign-angeltype').addEventListener('change', updateAssignButtonState);
+          
+          search.oninput = () => { 
+            clearTimeout(t); 
+            t = setTimeout(run, 300); 
+          };
+          
+          // Initial state
+          candidates.innerHTML = '<div class="text-muted small">Search for people to assign to this shift</div>';
+          assignBtn.disabled = true;
         }
         // Unassign handler (delegated)
         const assignWrap = document.getElementById('smv2-assignments');
@@ -945,12 +1193,22 @@ Capacity: ${capacityText}`;
           assignSelectedBtn.onclick = (e) => {
             e.preventDefault();
             const angelTypeId = document.getElementById('smv2-assign-angeltype')?.value || '';
-            const checks = document.querySelectorAll('#smv2-assign-candidates input[type="checkbox"]:checked');
+            const checks = document.querySelectorAll('#smv2-assign-candidates .candidate-checkbox:checked');
             const ids = Array.from(checks).map((c) => c.value);
-            if (!angelTypeId || ids.length === 0) {
-              showToast('Select people and set angel type id', 'error');
+            
+            if (!angelTypeId) {
+              showToast('Please select a critter type', 'error');
               return false;
             }
+            if (ids.length === 0) {
+              showToast('Please select people to assign', 'error');
+              return false;
+            }
+            
+            // Show loading state
+            assignSelectedBtn.disabled = true;
+            assignSelectedBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Adding...';
+            
             const data = new URLSearchParams();
             data.append('shift_id', String(shiftId));
             data.append('angel_type_id', String(angelTypeId));
@@ -958,50 +1216,35 @@ Capacity: ${capacityText}`;
             const headers = new Headers();
             headers.set('Accept', 'application/json');
             if (csrfToken) headers.set('X-CSRF-TOKEN', csrfToken);
+            
             fetch('/api/v2/shift-manager/assign', { method: 'POST', credentials: 'same-origin', headers, body: data })
               .then((r) => r.json())
               .then((r) => {
                 if (r && r.ok) {
-                  showToast('Assigned successfully', 'success');
-                  return fetchJSON(`/api/v2/shift-manager/shift/${shiftId}`).then((r2) => renderAssignments(document.getElementById('smv2-assignments'), r2.assignments || []));
+                  showToast(`Successfully assigned ${ids.length} person(s)`, 'success');
+                  // Clear selections and search
+                  document.getElementById('smv2-assign-search').value = '';
+                  document.getElementById('smv2-assign-candidates').innerHTML = '<div class="text-muted small">Search for people to assign to this shift</div>';
+                  // Refresh assignments
+                  return fetchJSON(`/api/v2/shift-manager/shift/${shiftId}`).then((r2) => {
+                    renderAssignments(document.getElementById('smv2-assignments'), r2.assignments || []);
+                    // Restore button state
+                    assignSelectedBtn.innerHTML = '<i class="bi bi-person-plus"></i> Add Selected';
+                    assignSelectedBtn.disabled = true;
+                  });
                 }
-                showToast(errorMessage(r?.error, 'Assign failed'), 'error');
+                showToast(errorMessage(r?.error, 'Assignment failed'), 'error');
+                // Restore button state
+                assignSelectedBtn.innerHTML = '<i class="bi bi-person-plus"></i> Add Selected';
+                assignSelectedBtn.disabled = false;
                 return undefined;
               })
-              .catch(() => showToast('Assign request failed', 'error'));
-            return false;
-          };
-        }
-        // Assign form (comma-separated fallback)
-        const form = document.getElementById('smv2-assign-form');
-        if (form) {
-          form.onsubmit = (e) => {
-            e.preventDefault();
-            const usersStr = document.getElementById('smv2-assign-user-ids')?.value || '';
-            const angelTypeId = document.getElementById('smv2-assign-angeltype')?.value || '';
-            const user_ids = usersStr.split(/[,\s]+/).filter(Boolean);
-            if (!angelTypeId || user_ids.length === 0) {
-              showToast('Enter user IDs and angel type id', 'error');
-              return false;
-            }
-            const data = new URLSearchParams();
-            data.append('shift_id', String(shiftId));
-            data.append('angel_type_id', String(angelTypeId));
-            user_ids.forEach((id) => data.append('user_ids[]', id));
-            const headers = new Headers();
-            headers.set('Accept', 'application/json');
-            if (csrfToken) headers.set('X-CSRF-TOKEN', csrfToken);
-            fetch('/api/v2/shift-manager/assign', { method: 'POST', credentials: 'same-origin', headers, body: data })
-              .then((r) => r.json())
-              .then((r) => {
-                if (r && r.ok) {
-                  showToast('Assigned successfully', 'success');
-                  return fetchJSON(`/api/v2/shift-manager/shift/${shiftId}`).then((r2) => renderAssignments(document.getElementById('smv2-assignments'), r2.assignments || []));
-                }
-                showToast(errorMessage(r?.error, 'Assign failed'), 'error');
-                return undefined;
-              })
-              .catch(() => showToast('Assign request failed', 'error'));
+              .catch(() => {
+                showToast('Assignment request failed', 'error');
+                // Restore button state
+                assignSelectedBtn.innerHTML = '<i class="bi bi-person-plus"></i> Add Selected';
+                assignSelectedBtn.disabled = false;
+              });
             return false;
           };
         }
@@ -1027,7 +1270,7 @@ Capacity: ${capacityText}`;
           };
         }
       })
-      .catch(() => showToast('Failed to load shift', 'error'));
+      .catch(() => showToast('Failed to load shift: Network or server error', 'error'));
   }
 
   // Show modal explaining why user can't apply for a shift
@@ -1139,6 +1382,8 @@ Capacity: ${capacityText}`;
         current.setDate(current.getDate() - 1);
         const newDate = current.toISOString().split('T')[0];
         currentState.date = newDate;
+        // Update countdown display immediately
+        updateCountdownDisplay(newDate);
         loadData(currentState).then((resp) => {
           renderTopbar(resp, currentState);
           updateUI(resp);
@@ -1152,6 +1397,8 @@ Capacity: ${capacityText}`;
         current.setDate(current.getDate() + 1);
         const newDate = current.toISOString().split('T')[0];
         currentState.date = newDate;
+        // Update countdown display immediately
+        updateCountdownDisplay(newDate);
         loadData(currentState).then((resp) => {
           renderTopbar(resp, currentState);
           updateUI(resp);

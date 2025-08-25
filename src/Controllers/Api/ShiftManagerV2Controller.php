@@ -405,11 +405,18 @@ class ShiftManagerV2Controller extends BaseController
         }
         $id = (int) $request->getAttribute('id');
         /** @var Shift|null $shift */
-        $shift = Shift::query()->with(['shiftEntries.user', 'location', 'shiftType'])->find($id);
+        $shift = Shift::query()->with(['shiftEntries.user',
+            'shiftEntries.angelType',
+            'location',
+            'shiftType',
+        ])->find($id);
         if (!$shift) {
             return $this->response->withJson(['ok' => false, 'error' => 'shift_not_found']);
         }
-        $needed = NeededAngelType::query()->where('shift_id', $shift->id)->get(['angel_type_id', 'count']);
+        $needed = NeededAngelType::query()
+            ->where('shift_id', $shift->id)
+            ->with('angelType')
+            ->get();
         return $this->response->withJson([
             'ok' => true,
             'shift' => [
@@ -421,6 +428,7 @@ class ShiftManagerV2Controller extends BaseController
             ],
             'needed' => $needed->map(fn($n) => [
                 'angel_type_id' => (int) $n->angel_type_id,
+                'angel_type_name' => (string) ($n->angelType?->name ?: 'Unknown'),
                 'count' => (int) $n->count])->values(),
             'assignments' => $shift->shiftEntries->map(function (ShiftEntry $e) {
                 return [
@@ -428,6 +436,7 @@ class ShiftManagerV2Controller extends BaseController
                     'user_id' => (int) $e->user_id,
                     'user_name' => (string) ($e->user?->name ?: ''),
                     'angel_type_id' => (int) $e->angel_type_id,
+                    'angel_type_name' => (string) ($e->angelType?->name ?: 'Unknown'),
                     'freeloaded' => (bool) $e->freeloaded,
                 ];
             })->values(),
@@ -479,7 +488,7 @@ class ShiftManagerV2Controller extends BaseController
         $critterTypes = AngelType::query()->orderBy('name')->get(['id', 'name']);
 
         $shiftsQuery = Shift::query()
-            ->with(['location', 'shiftType', 'shiftEntries'])
+            ->with(['location', 'shiftType', 'shiftEntries.user', 'shiftEntries.angelType'])
             ->whereDate('start', $day->toDateString())
             ->where(function ($q2) use ($start, $end): void {
                 // Include shifts that intersect the time window
@@ -704,6 +713,28 @@ class ShiftManagerV2Controller extends BaseController
                     'eligible_angel_types' => $eligibleAngelTypes,
                     'is_assigned' => array_key_exists((int) $s->id, $myEntriesByShift),
                     'my_entry_id' => $myEntriesByShift[(int) $s->id] ?? null,
+                    'assignments' => $s->shiftEntries->groupBy('angel_type_id')->map(function ($entries, $angelTypeId) {
+                        $angelType = $entries->first()?->angelType;
+                        return [
+                            'angel_type_id' => (int) $angelTypeId,
+                            'angel_type_name' => (string) ($angelType?->name ?? 'Unknown'),
+                            'users' => $entries->map(function ($entry) {
+                                $user = $entry->user;
+                                $isStaff = false;
+                                if ($user) {
+                                    // Check if user has staff privilege (can be determined by permissions or groups)
+                                    $isStaff = $user->hasPermission('admin_user') ||
+                                        $user->hasPermission('user.type.staff');
+                                }
+                                return [
+                                    'user_id' => (int) $entry->user_id,
+                                    'user_name' => (string) ($user?->name ?? 'Unknown'),
+                                    'is_staff' => (bool) $isStaff,
+                                    'entry_id' => (int) $entry->id,
+                                ];
+                            })->values(),
+                        ];
+                    })->values(),
                     'can_cancel' => (function () use ($s) {
                         $limitHours = (int) (config('last_unsubscribe') ?? 0);
                         if ($limitHours <= 0) {

@@ -98,6 +98,7 @@ module.exports = {
     dumpmanager: './resources/assets/js/admin/dumpmanager.js',
     certifications: './resources/assets/js/certifications.js',
     shiftManagerV2: './resources/assets/js/ShiftManagerV2.js',
+    'shiftManagerV2-css': './resources/assets/css/ShiftManagerV2.css',
     digitalid: './resources/assets/js/digital-id.js',
     'digital-id-css': './resources/assets/css/digital-id.css',
   },

@@ -4,98 +4,7 @@
 
 {% block head %}
 {{ parent() }}
-<style>
-/* ShiftManagerV2 Z-Index Fixes */
-.smv2-topbar {
-  position: relative;
-  z-index: 100;
-}
-
-.smv2-topbar .choices {
-  position: relative;
-  z-index: 101;
-}
-
-.smv2-topbar .choices.is-open {
-  z-index: 1050 !important;
-}
-
-.choices__list--dropdown {
-  z-index: 1051 !important;
-  position: absolute !important;
-  background-color: var(--bs-body-bg, #fff) !important;
-  border: 1px solid #ced4da;
-  border-top: 0;
-  border-radius: 0 0 0.375rem 0.375rem;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-.choices__inner {
-  position: relative;
-  z-index: 102;
-}
-
-/* Ensure dropdowns appear above other content */
-#smv2-filter-locations,
-#smv2-filter-shift-types, 
-#smv2-filter-critter-types {
-  position: relative;
-  z-index: 100;
-}
-
-/* Dark theme support */
-[data-theme_type="dark"] .choices__list--dropdown {
-  background-color: var(--bs-dark, #212529) !important;
-  border-color: #495057;
-  color: var(--bs-body-color, #fff);
-}
-
-/* Override any parent z-index issues */
-.smv2-topbar .row,
-.smv2-topbar .col,
-.smv2-topbar .col-md-1,
-.smv2-topbar .col-md-2, 
-.smv2-topbar .col-md-3,
-.smv2-topbar .col-md-4 {
-  position: relative;
-  z-index: auto;
-}
-
-/* Fix the specific issue mentioned in the system reminder */
-.smv2-topbar [style*="z-index: -1"] {
-  z-index: auto !important;
-}
-
-/* Timeline grid cell improvements */
-.smv2-shift-grayed {
-  opacity: 0.6;
-  filter: grayscale(0.3);
-}
-
-.smv2-shift-grayed:hover {
-  opacity: 0.8;
-}
-
-/* Enhanced tooltips for better visibility */
-.tooltip {
-  font-size: 0.875rem;
-}
-
-.tooltip .tooltip-inner {
-  max-width: 300px;
-  text-align: left;
-  background-color: rgba(0, 0, 0, 0.9);
-  border-radius: 6px;
-  padding: 8px 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.tooltip.bs-tooltip-top .tooltip-arrow::before {
-  border-top-color: rgba(0, 0, 0, 0.9);
-}
-</style>
+<link rel="stylesheet" href="{{ asset('assets/shiftManagerV2-css.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -106,5 +15,11 @@
 
 {% block scripts %}
   {{ parent() }}
-  <script src="{{ asset('assets/shiftManagerV2.js') }}"></script>
+  <script src="{{ asset('assets/shiftManagerV2.js') }}" 
+    {% if event_dates %}
+      data-buildup-start="{{ event_dates.buildup_start ? event_dates.buildup_start.toISOString() : '' }}"
+      data-event-start="{{ event_dates.event_start ? event_dates.event_start.toISOString() : '' }}"
+      data-event-end="{{ event_dates.event_end ? event_dates.event_end.toISOString() : '' }}"
+      data-teardown-end="{{ event_dates.teardown_end ? event_dates.teardown_end.toISOString() : '' }}"
+    {% endif %}></script>
 {% endblock %}

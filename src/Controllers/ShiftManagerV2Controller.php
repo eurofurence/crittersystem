@@ -6,6 +6,7 @@ namespace Engelsystem\Controllers;
 
 use Engelsystem\Helpers\Authenticator;
 use Engelsystem\Http\Response;
+use Engelsystem\Config\Config;
 
 class ShiftManagerV2Controller extends BaseController
 {
@@ -22,6 +23,7 @@ class ShiftManagerV2Controller extends BaseController
     public function __construct(
         protected Authenticator $auth,
         protected Response $response,
+        protected Config $config,
     ) {
     }
 
@@ -48,12 +50,21 @@ class ShiftManagerV2Controller extends BaseController
             $persona = 'public';
         }
 
+        // Get event dates for countdown functionality
+        $eventDates = [
+            'buildup_start' => $this->config->get('buildup_start'),
+            'event_start' => $this->config->get('event_start'),
+            'event_end' => $this->config->get('event_end'),
+            'teardown_end' => $this->config->get('teardown_end'),
+        ];
+
         return $this->response->withView($view, [
             'persona' => $persona,
             'page_title' => 'Shift Manager',
             // Defaults per requirements
             'default_time_start' => '00:00',
             'default_time_end' => '23:59',
+            'event_dates' => $eventDates,
         ]);
     }
 }

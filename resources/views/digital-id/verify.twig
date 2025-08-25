@@ -37,7 +37,11 @@
                         <h2 class="display-6 fw-bold text-primary mb-2">{{ user.displayName }}</h2>
 
                         <div class="badges mb-3">
-                            {% if isStaff %}
+                            {% if isDirector %}
+                                <span class="badge bg-danger fs-6 me-2">
+                                    <i class="bi bi-shield-check"></i> {{ __('STAFF') }}
+                                </span>
+                            {% elseif isStaff %}
                                 <span class="badge bg-danger fs-6 me-2">
                                     <i class="bi bi-shield-check"></i> {{ __('STAFF') }}
                                 </span>
