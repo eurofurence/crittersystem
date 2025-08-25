@@ -61,14 +61,15 @@ class QrController extends BaseController
         $nextShift = $this->getNextShift($user->id);
 
         return $this->response->withView('digital-id/verify', [
-            'user' => $user,
-            'token' => $token,
-            'isDirector' => $user->hasPermission('user.type.director'),
-            'isStaff' => $user->hasPermission('user.type.staff'),
-            'badgeNumber' => $user->personalData->badge_number ?? null,
+            'user'         => $user,
+            'token'        => $token,
+            'isBoD'        => $user->hasPermission('user.type.bod'),
+            'isDirector'   => $user->hasPermission('user.type.director'),
+            'isStaff'      => $user->hasPermission('user.type.staff'),
+            'badgeNumber'  => $user->personalData->badge_number ?? null,
             'currentShift' => $currentShift,
-            'nextShift' => $nextShift,
-            'verifiedAt' => Carbon::now(),
+            'nextShift'    => $nextShift,
+            'verifiedAt'   => Carbon::now(),
         ]);
     }
 

@@ -56,6 +56,7 @@ class DigitalIdController extends BaseController
             'token' => $token,
             'verificationUrl' => $verificationUrl,
             'refreshInterval' => $refreshInterval,
+            'isBoD'           => $user->hasPermission('user.type.bod'),
             'isDirector'      => $user->hasPermission('user.type.director'),
             'isStaff'         => $user->hasPermission('user.type.staff'),
             'badgeNumber'     => $user->personalData->badge_number ?? null,

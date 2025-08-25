@@ -630,11 +630,8 @@
             </div>
         </div>
     </div>
-
-    {# Placeholder for application/self-confirmation modals - to be implemented in next tasks #}
 {% endblock %}
 
 {% block javascript %}
-    {# JavaScript functionality now handled by resources/assets/js/certifications.js #}
-    {# All inline JavaScript has been migrated for CSP compliance and better maintainability #}
+    <script src="{{ asset('assets/certifications.js') }}"></script>
 {% endblock %}
