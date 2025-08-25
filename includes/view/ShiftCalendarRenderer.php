@@ -190,7 +190,7 @@ class ShiftCalendarRenderer
             foreach (
                 $shift->shiftEntries
                     ->groupBy('angel_type_id')
-                    ->filter(function($entries, $angel_type_id) use ($existing_angeltype_ids) {
+                    ->filter(function ($entries, $angel_type_id) use ($existing_angeltype_ids) {
                         return !in_array($angel_type_id, $existing_angeltype_ids);
                     }) as $angel_type_id => $shiftEntriesOfAngelType
             ) {
