@@ -168,7 +168,7 @@ function showQuickSelfConfirmModal(certificationUuid, certificationTitle) {
            data-dynamic="true"
            tabindex="-1" aria-labelledby="${modalId}Label" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
+              <div class="modal-content {{ m.type_bg_class() }}">
                   <div class="modal-header">
                       <h5 class="modal-title" id="${modalId}Label">
                           <i class="fa fa-check-circle text-success me-2"></i>
@@ -423,9 +423,9 @@ function showWithdrawalConfirmDialog(certificationUuid, certificationTitle, orig
 
   // Create modal HTML
   const modalHtml = `
-      <div class="modal fade card" id="${modalId}" tabindex="-1" aria-labelledby="${modalId}Label" aria-hidden="true">
+      <div class="modal fade" id="${modalId}" tabindex="-1" aria-labelledby="${modalId}Label" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content card">
+              <div class="modal-content {{ m.type_bg_class() }}">
                   <div class="modal-header">
                       <h5 class="modal-title" id="${modalId}Label">
                           <i class="fa fa-exclamation-triangle text-warning me-2"></i>
@@ -2904,7 +2904,7 @@ function updateBulkActionButtons(status) {
     button.disabled = checkedCheckboxes.length === 0;
 
     // Update button text with count
-    const action = button.dataset.action;
+    const action = button.dataset.bulkAction;
     const baseText = action === 'approve' ? 'Bulk Approve' : 'Bulk Revoke';
     const icon = action === 'approve' ?
       '<i class="bi bi-check"></i>' :
@@ -2925,19 +2925,26 @@ function handleBulkAction(event) {
   event.preventDefault();
 
   const button = event.currentTarget;
-  const action = button.dataset.action;
+  const action = button.dataset.bulkAction;
   const status = button.dataset.status;
   const certificationId = button.dataset.certificationId;
 
   const checkedCheckboxes = document.querySelectorAll(`.bulk-select[data-status="${status}"]:checked`);
 
   if (checkedCheckboxes.length === 0) {
-    showAlert(`Please select at least one certification to ${  action  }.`, 'warning');
+    showAlert('error', `Please select at least one certification to ${action}.`);
     return;
   }
 
   const certificationIds = Array.from(checkedCheckboxes).map(cb => parseInt(cb.value));
   const count = certificationIds.length;
+
+  console.log(`Bulk ${action} operation:`, {
+    status,
+    certificationIds,
+    count,
+    certificationId
+  });
 
   // Show confirmation dialog
   const actionText = action === 'approve' ? 'approve' : 'revoke';
@@ -2981,24 +2988,33 @@ function handleBulkAction(event) {
     method: 'POST',
     body: formData,
     headers: {
-      'X-Requested-With': 'XMLHttpRequest'
+      'X-Requested-With': 'XMLHttpRequest',
+      'Accept': 'application/json'
     }
   })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      return response.json().catch(err => {
+        console.error('JSON parsing error:', err);
+        throw new Error('Invalid JSON response from server');
+      });
+    })
     .then(data => {
       // Restore button
       button.disabled = false;
       button.innerHTML = originalText;
 
       if (data.success) {
-        showAlert(data.message, 'success');
+        showAlert('success', data.message);
 
         // Refresh the page to show updated data
         setTimeout(() => {
           location.reload();
         }, 1500);
       } else {
-        showAlert(data.message || 'An error occurred during bulk operation.', 'danger');
+        showAlert('error', data.message || 'An error occurred during bulk operation.');
 
         // Show error details if provided
         if (data.error_details && data.error_details.length > 0) {
@@ -3013,7 +3029,7 @@ function handleBulkAction(event) {
       button.disabled = false;
       button.innerHTML = originalText;
 
-      showAlert('An error occurred during bulk operation.', 'danger');
+      showAlert('error', 'Network error during bulk operation: ' + error.message);
     });
 }
 

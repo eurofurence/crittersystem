@@ -1,0 +1,274 @@
+{% extends 'layouts/app.twig' %}
+{% import 'macros/base.twig' as m %}
+{% import 'macros/form.twig' as f %}
+
+{% block title %}{{ __('backstage.users.search.title') }}{% endblock %}
+
+{% block content %}
+    <meta name="base-url" content="{{ url('') }}">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1>
+                        {{ m.icon('person-search') }}
+                        {{ block('title') }}
+                    </h1>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group" role="group">
+                            <a href="{{ url('/admin/backstage') }}" class="btn btn-secondary btn-sm">
+                                {{ m.icon('arrow-left') }}
+                                {{ __('backstage.back_to_dashboard') }}
+                            </a>
+                            {% if can_qualify %}
+                                <a href="{{ url('/admin/backstage/goodies/distributions') }}" class="btn btn-success btn-sm">
+                                    {{ m.icon('gift') }}
+                                    {{ __('backstage.distribution.title') }}
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {% include 'layouts/parts/messages.twig' %}
+
+                {# Search Form #}
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    {{ m.icon('funnel') }}
+                                    {{ __('backstage.users.search.filter.title') }}
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <form method="post" action="{{ url('/admin/backstage/users/search') }}" class="row g-3" id="user-search-form">
+                                    {{ csrf() }}
+
+                                    <div class="col-md-8">
+                                        {{ f.input('search', __('backstage.users.search.query'), {
+                                            'value': search_term|default(''),
+                                            'placeholder': __('backstage.users.search.placeholder'),
+                                            'help': __('backstage.users.search.help')
+                                        }) }}
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="d-grid gap-2">
+                                            {{ f.submit(__('backstage.users.search.submit'), {
+                                                'icon_left': 'search',
+                                                'size': 'sm',
+                                                'class': 'btn-primary'
+                                            }) }}
+                                            <a href="{{ url('/admin/backstage/users/search') }}" class="btn btn-secondary btn-sm">
+                                                {{ m.icon('x-circle') }}
+                                                {{ __('form.clear') }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# Search Results #}
+                {% if results is defined %}
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-muted">
+                                    {% if results|length > 0 %}
+                                        {{ __('backstage.users.search.results.found', [results|length]) }}
+                                    {% else %}
+                                        {{ __('backstage.users.search.results.none') }}
+                                    {% endif %}
+                                </span>
+                                {% if search_term is defined and search_term != '' %}
+                                    <small class="text-info">
+                                        {{ m.icon('info-circle') }}
+                                        {{ __('backstage.users.search.results.filtered') }}
+                                    </small>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            {% if results|length > 0 %}
+                                <div class="row" id="user-results">
+                                    {% for user in results %}
+                                        <div class="col-xl-4 col-lg-6 mb-4">
+                                            <div class="card h-100 user-result-card" data-user-id="{{ user.id }}">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                                        <div class="flex-grow-1">
+                                                            <h5 class="card-title mb-1">
+                                                                {{ user.display_name }}
+                                                                {% if user.name != user.display_name %}
+                                                                    <small class="text-muted">({{ user.name }})</small>
+                                                                {% endif %}
+                                                            </h5>
+                                                            {% if user.badge_number %}
+                                                                <p class="text-muted small mb-2">
+                                                                    {{ m.icon('person-badge') }}
+                                                                    {{ __('backstage.users.badge') }}: {{ user.badge_number }}
+                                                                </p>
+                                                            {% endif %}
+                                                        </div>
+                                                        {% if user.arrived %}
+                                                            <span class="badge bg-success">
+                                                                {{ m.icon('check-circle') }}
+                                                                {{ __('backstage.users.status.arrived') }}
+                                                            </span>
+                                                        {% else %}
+                                                            <span class="badge bg-secondary">
+                                                                {{ m.icon('clock') }}
+                                                                {{ __('backstage.users.status.not_arrived') }}
+                                                            </span>
+                                                        {% endif %}
+                                                    </div>
+
+                                                    {# User Basic Information #}
+                                                    <div class="mb-3">
+                                                        <div class="row text-center">
+                                                            <div class="col-6">
+                                                                <div class="border rounded p-2">
+                                                                    <h6 class="text-muted mb-1">{{ __('backstage.users.id') }}</h6>
+                                                                    <strong>{{ user.id }}</strong>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="border rounded p-2">
+                                                                    <h6 class="text-muted mb-1">{{ __('backstage.users.status') }}</h6>
+                                                                    {% if user.active %}
+                                                                        <span class="badge bg-success">{{ __('backstage.users.active') }}</span>
+                                                                    {% else %}
+                                                                        <span class="badge bg-secondary">{{ __('backstage.users.inactive') }}</span>
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    {# Additional User Info #}
+                                                    <div class="mb-3">
+                                                        <div class="d-flex flex-wrap gap-2">
+                                                            {% if user.first_name or user.last_name %}
+                                                                <small class="text-muted">
+                                                                    {{ m.icon('person') }}
+                                                                    {{ [user.first_name, user.last_name]|join(' ')|trim }}
+                                                                </small>
+                                                            {% endif %}
+                                                            {% if user.created_at %}
+                                                                <small class="text-muted">
+                                                                    {{ m.icon('calendar-plus') }}
+                                                                    {{ __('backstage.users.registered') }}: {{ user.created_at|date('Y-m-d') }}
+                                                                </small>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {# Action Buttons #}
+                                                <div class="card-footer bg-transparent">
+                                                    <div class="d-grid gap-2">
+                                                        {% if can_qualify %}
+                                                            <a href="{{ url('/admin/backstage/users/qualify/' ~ user.id) }}"
+                                                               class="btn btn-primary btn-sm">
+                                                                {{ m.icon('person-check') }}
+                                                                {{ __('backstage.users.qualify.title') }}
+                                                            </a>
+                                                        {% endif %}
+
+                                                        <div class="btn-group" role="group">
+                                                            <button type="button"
+                                                                    class="btn btn-info btn-sm"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#userDetailsModal"
+                                                                    data-user-id="{{ user.id }}">
+                                                                {{ m.icon('eye') }}
+                                                                {{ __('backstage.users.view_details') }}
+                                                            </button>
+                                                            {% if can_admin %}
+                                                                <a href="{{ url('/admin/user/' ~ user.id ~ '/worklog') }}"
+                                                                   class="btn btn-secondary btn-sm">
+                                                                    {{ m.icon('clock-history') }}
+                                                                    {{ __('backstage.users.view_hours') }}
+                                                                </a>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {# No Results Found #}
+                                <div class="text-center py-5">
+                                    <div class="mb-3">
+                                        {{ m.icon('person-slash', 64) }}
+                                    </div>
+                                    <h4 class="text-muted">{{ __('backstage.users.search.no_results.title') }}</h4>
+                                    <p class="text-muted">
+                                        {% if search_term is defined and search_term != '' %}
+                                            {{ __('backstage.users.search.no_results.filtered') }}
+                                        {% else %}
+                                            {{ __('backstage.users.search.no_results.empty') }}
+                                        {% endif %}
+                                    </p>
+                                    <div class="mt-3">
+                                        <button type="button" class="btn btn-primary" id="clear-search-btn">
+                                            {{ m.icon('arrow-clockwise') }}
+                                            {{ __('backstage.users.search.clear_filters') }}
+                                        </button>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {# User Details Modal #}
+    <div class="modal fade" id="userDetailsModal" tabindex="-1" aria-labelledby="userDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="userDetailsModalLabel">
+                        {{ m.icon('person') }}
+                        {{ __('backstage.users.details.title') }}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="userDetailsContent">
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">{{ __('backstage.loading') }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        {{ __('form.close') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{{ parent() }}
+<script src="{{ asset('assets/backstage-user-search.js') }}"></script>
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+{{ asset('backstage-user-search.css') }}
+{% endblock %}

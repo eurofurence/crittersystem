@@ -125,12 +125,15 @@ class Migrate
             // Create fail flag
             $this->createFile(file: $this->fileMigrationFlagFail);
 
+            $error_text = print_r($e, true);
+            $error_text = substr($error_text, 0, 2000);
+
             printf(PHP_EOL);
             printf(str_repeat('*', 100) . PHP_EOL);
             printf('!! ERROR !!' . PHP_EOL);
             printf(str_repeat('*', 100) . PHP_EOL . PHP_EOL);
             // dump($e);
-            print_r($e);
+            print_r($error_text);
             printf(PHP_EOL . str_repeat('*', 100) . PHP_EOL . PHP_EOL);
 
             if (PHP_SAPI === 'cli') {

@@ -1,0 +1,143 @@
+{% extends 'layouts/app.twig' %}
+{% import 'macros/base.twig' as m %}
+{% import 'macros/form.twig' as f %}
+
+{% block title %}{{ __('Database Dump Manager') }}{% endblock %}
+
+{% block content %}
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1>{{ block('title') }}</h1>
+        </div>
+
+        <div class="alert alert-warning">
+            <strong>{{ __('Notice:') }}</strong>
+            {{ __('This feature is restricted to administrators only. Database operations can be irreversible.') }}
+        </div>
+
+        <div class="row">
+            <!-- Database Dump Section -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-download"></i> {{ __('Create Database Dump') }}
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            {{ __('Create a complete backup of the database including all data and structure. The dump preserves all IDs and references.') }}
+                        </p>
+                        
+                        <div id="dump-status" class="alert d-none"></div>
+                        <div id="dump-progress" class="progress d-none mb-3">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        
+                        <button type="button" class="btn btn-primary" id="create-dump-btn">
+                            <i class="fa fa-download"></i> {{ __('Create Dump') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Database Restore Section -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-upload"></i> {{ __('Restore Database') }}
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            {{ __('Upload and restore a database dump. This will completely replace all current data.') }}
+                        </p>
+                        
+                        <div class="alert alert-danger">
+                            <i class="fa fa-exclamation-triangle"></i>
+                            <strong>{{ __('Warning!') }}</strong>
+                            {{ __('This operation will replace ALL data in the database and cannot be reversed.') }}
+                        </div>
+
+                        <div id="restore-status" class="alert d-none"></div>
+                        
+                        <form id="restore-form" enctype="multipart/form-data">
+                            {{ csrf() }}
+                            <div class="mb-3">
+                                <label for="dump-file" class="form-label">{{ __('Select Dump File') }}</label>
+                                <input type="file" class="form-control" id="dump-file" name="dump_file" accept=".zip" required>
+                                <div class="form-text">{{ __('Only ZIP files containing database dumps are accepted.') }}</div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-warning" id="validate-dump-btn">
+                                <i class="fa fa-check-circle"></i> {{ __('Validate & Upload') }}
+                            </button>
+                        </form>
+
+                        <div id="validation-results" class="d-none mt-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title">{{ __('Validation Results') }}</h6>
+                                    <div id="validation-details"></div>
+                                    
+                                    <div class="alert alert-danger mt-3">
+                                        <i class="fa fa-exclamation-triangle"></i>
+                                        <strong>{{ __('FINAL WARNING:') }}</strong>
+                                        {{ __('This will permanently replace ALL database content. Type "RESTORE_DATABASE" below to confirm.') }}
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="restore-confirmation" class="form-label">{{ __('Type "RESTORE_DATABASE" to confirm') }}</label>
+                                        <input type="text" id="restore-confirmation" class="form-control" placeholder="RESTORE_DATABASE" autocomplete="off">
+                                    </div>
+                                    
+                                    <button type="button" class="btn btn-danger" id="execute-restore-btn" disabled>
+                                        <i class="fa fa-database"></i> {{ __('RESTORE DATABASE') }}
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" id="cancel-restore-btn">
+                                        <i class="fa fa-times"></i> {{ __('Cancel') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Information Section -->
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-info-circle"></i> {{ __('How it Works') }}
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>{{ __('Database Dump') }}</h6>
+                                <ul>
+                                    <li>{{ __('Creates a complete backup of all database tables') }}</li>
+                                    <li>{{ __('Preserves all IDs, relationships, and data integrity') }}</li>
+                                    <li>{{ __('Includes database schema information') }}</li>
+                                    <li>{{ __('Output format: ZIP file with JSON data') }}</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>{{ __('Database Restore') }}</h6>
+                                <ul>
+                                    <li>{{ __('Validates dump file compatibility with current database version') }}</li>
+                                    <li>{{ __('Checks that all required tables exist') }}</li>
+                                    <li>{{ __('Clears all current data before restoring') }}</li>
+                                    <li>{{ __('Maintains referential integrity during restore') }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{{ parent() }}
+<script src="{{ asset('assets/dumpmanager.js') }}"></script>
+{% endblock %}

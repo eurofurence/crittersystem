@@ -1,0 +1,229 @@
+{% extends 'layouts/app.twig' %}
+{% import 'macros/base.twig' as m %}
+{% import 'macros/form.twig' as f %}
+
+{% block title %}{{ __('form.edit') }}: {{ item.name }}{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <!-- Breadcrumb Navigation -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0">
+                                <li class="breadcrumb-item">
+                                    <a href="{{ url('/admin/backstage') }}">
+                                        {{ m.icon('house-door') }}
+                                        {{ __('backstage.dashboard.title') }}
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="{{ url('/admin/backstage/goodies/items') }}">
+                                        {{ __('backstage.goodies.items.title') }}
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item active">{{ __('form.edit') }}</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+
+                {% include 'layouts/parts/messages.twig' %}
+
+                <!-- Main Content Card -->
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title mb-0">
+                            {{ m.icon('pencil') }}
+                            {{ __('form.edit') }}: {{ item.name }}
+                        </h4>
+                        <a href="{{ url('/admin/backstage/goodies/items') }}" class="btn btn-secondary btn-sm">
+                            {{ m.icon('arrow-left') }}
+                            {{ __('form.back') }}
+                        </a>
+                    </div>
+
+                    <div class="card-body">
+                        <form method="post" action="{{ url('/admin/backstage/goodies/items/' ~ item.uuid ~ '/update') }}">
+                            {{ csrf() }}
+
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <!-- Basic Information -->
+                                    <div class="mb-4">
+                                        <h6 class="text-muted mb-3">{{ __('backstage.goodies.items.basic_info') }}</h6>
+
+                                        {{ f.input('name', __('backstage.goodies.items.name'), {
+                                            'required': true,
+                                            'placeholder': __('backstage.goodies.items.name_placeholder'),
+                                            'help': __('backstage.goodies.items.name_help'),
+                                            'value': item.name
+                                        }) }}
+
+                                        {{ f.textarea('description', __('backstage.goodies.items.description'), {
+                                            'placeholder': __('backstage.goodies.items.description_placeholder'),
+                                            'help': __('backstage.goodies.items.description_help'),
+                                            'rows': 4,
+                                            'value': item.description
+                                        }) }}
+                                    </div>
+
+                                    <!-- Requirements & Configuration -->
+                                    <div class="mb-4">
+                                        <h6 class="text-muted mb-3">{{ __('backstage.goodies.items.requirements') }}</h6>
+
+                                        {{ f.select('category_uuid', __('backstage.goodies.items.category'),
+                                            ({'': __('backstage.goodies.items.select_category')})|merge(
+                                                categories|reduce((carry, category) => carry|merge({(category['uuid']): category['name']}), {})
+                                            ), {
+                                                'required': false,
+                                                'help': __('backstage.goodies.items.category_help'),
+                                                'selected': item.category ? item.category.uuid : ''
+                                            }
+                                        ) }}
+
+                                        {{ f.input('required_hours', __('backstage.goodies.items.required_hours'), {
+                                            'type': 'number',
+                                            'min': 0,
+                                            'help': __('backstage.goodies.items.required_hours_help'),
+                                            'value': item.required_hours
+                                        }) }}
+
+                                        {{ f.input('max_per_person', __('backstage.goodies.items.max_per_person'), {
+                                            'type': 'number',
+                                            'min': 1,
+                                            'help': __('backstage.goodies.items.max_per_person_help'),
+                                            'value': item.max_per_person,
+                                            'placeholder': __('backstage.goodies.items.no_limit')
+                                        }) }}
+                                    </div>
+
+                                    <!-- Certifications -->
+                                    {% if certifications is defined and certifications|length > 0 %}
+                                    <div class="mb-4">
+                                        <h6 class="text-muted mb-3">{{ __('backstage.goodies.items.certifications') }}</h6>
+                                        
+                                        <div class="form-group">
+                                            <label for="certifications" class="form-label">
+                                                {{ __('backstage.goodies.items.required_certifications') }}
+                                                <small class="text-muted">({{ __('backstage.goodies.items.optional') }})</small>
+                                            </label>
+                                            <div class="form-text mb-2">{{ __('backstage.goodies.items.required_certifications_help') }}</div>
+                                            
+                                            {% set selectedCertificationIds = item.certifications|map(cert => cert.id) %}
+                                            
+                                            <div class="row">
+                                                {% for certification in certifications %}
+                                                    <div class="col-md-6 mb-2">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" 
+                                                                   type="checkbox" 
+                                                                   name="certifications[]" 
+                                                                   value="{{ certification.id }}" 
+                                                                   id="cert_{{ certification.id }}"
+                                                                   {% if certification.id in selectedCertificationIds %}checked{% endif %}>
+                                                            <label class="form-check-label" for="cert_{{ certification.id }}">
+                                                                {{ certification.title }}
+                                                                {% if certification.description %}
+                                                                    <small class="text-muted d-block">{{ certification.description|slice(0, 80) }}{% if certification.description|length > 80 %}...{% endif %}</small>
+                                                                {% endif %}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+
+                                    <!-- Status & Visibility -->
+                                    <div class="mb-4">
+                                        <h6 class="text-muted mb-3">{{ __('backstage.goodies.items.status_settings') }}</h6>
+
+                                        {{ f.checkbox('is_active', __('backstage.goodies.items.is_active'), {
+                                            'checked': item.is_active,
+                                            'help': __('backstage.goodies.items.is_active_help')
+                                        }) }}
+
+                                        {{ f.input('display_order', __('backstage.goodies.items.display_order'), {
+                                            'type': 'number',
+                                            'min': 0,
+                                            'help': __('backstage.goodies.items.display_order_help'),
+                                            'value': item.display_order
+                                        }) }}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <!-- Item Information -->
+                                    <div class="card bg-light mb-3">
+                                        <div class="card-header">
+                                            <h6 class="card-title mb-0">{{ __('backstage.goodies.items.details') }}</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <dl class="row small">
+                                                <dt class="col-sm-5">{{ __('backstage.goodies.items.uuid') }}:</dt>
+                                                <dd class="col-sm-7">
+                                                    <code class="small">{{ item.uuid }}</code>
+                                                </dd>
+                                                
+                                                <dt class="col-sm-5">{{ __('backstage.created_at') }}:</dt>
+                                                <dd class="col-sm-7">
+                                                    <span class="text-muted small">{{ item.created_at|date('Y-m-d H:i') }}</span>
+                                                </dd>
+                                                
+                                                <dt class="col-sm-5">{{ __('backstage.updated_at') }}:</dt>
+                                                <dd class="col-sm-7">
+                                                    <span class="text-muted small">{{ item.updated_at|date('Y-m-d H:i') }}</span>
+                                                </dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+
+                                    <!-- Quick Actions -->
+                                    <div class="card bg-light">
+                                        <div class="card-header">
+                                            <h6 class="card-title mb-0">{{ __('backstage.goodies.items.quick_actions') }}</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-grid gap-2">
+                                                {{ f.submit(__('form.save_changes'), {
+                                                    'icon_left': 'check-circle',
+                                                    'class': 'btn-primary'
+                                                }) }}
+
+                                                <a href="{{ url('/admin/backstage/goodies/items/' ~ item.uuid) }}" class="btn btn-secondary">
+                                                    {{ m.icon('x-circle') }}
+                                                    {{ __('form.cancel') }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Help Information -->
+                                    {% if categories is empty %}
+                                    <div class="card bg-warning bg-opacity-10 border-warning mt-3">
+                                        <div class="card-body">
+                                            <h6 class="text-warning">
+                                                {{ m.icon('exclamation-triangle') }}
+                                                {{ __('backstage.goodies.items.no_categories') }}
+                                            </h6>
+                                            <p class="small mb-2">{{ __('backstage.goodies.items.no_categories_help') }}</p>
+                                            <a href="{{ url('/admin/backstage/goodies/categories/create') }}"
+                                               class="btn btn-warning btn-sm">
+                                                {{ __('backstage.goodies.categories.create.title') }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

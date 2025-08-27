@@ -14,7 +14,7 @@
             <div class="card h-100">
                 <div class="card-body">
                     <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="staff_only" name="staff_only" {{ f.formData('staff_only', location.staff_only ? 'checked' : '') }}>
+                        <input class="form-check-input" type="checkbox" id="staff_only" name="staff_only" {{ f.formData('staff_only', location and location.staff_only ? 'checked' : '') }}>
                         <label class="form-check-label" for="staff_only">
                             {{ __('Staff Only') }}
                             <span class="bi bi-info-circle-fill text-info" data-bs-toggle="tooltip" title="{{ __('Restrict to STAFF ONLY') }}"></span>

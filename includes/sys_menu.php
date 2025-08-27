@@ -63,6 +63,7 @@ function make_navigation()
         'user/certifications'      => [__('certifications.title'), 'certificates.view'],
         'questions'                => [__('Ask the Info Desk'), 'question.add'],
         'crittertypes'             => [__('angeltypes.angeltypes'), 'angeltypes'],
+        'digital-id'               => [__('Critter-ID'), 'logout'],
         'departments'              => [__('departments.title.plural'), 'dept.view'],
     ];
 
@@ -99,6 +100,7 @@ function make_navigation()
         'admin/locations'        => ['location.locations', 'admin_locations'],
         'admin_groups'           => ['Grouprights', 'admin_groups'],
         'admin/schedule'         => ['schedule.import', 'schedule.import'],
+        'admin/backstage'        => ['Backstage', 'backstage.view'],
         'admin/logs'             => ['log.log', 'admin_log'],
         'admin/purge'            => ['Purge Data', 'user.type.admin'],
         'admin/dumpmanager'      => ['Database Dump Manager', 'user.type.admin'],

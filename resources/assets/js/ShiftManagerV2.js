@@ -56,7 +56,48 @@
 
   function formatTime(ts) {
     const d = new Date(ts * 1000);
-    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false });
+  }
+
+  function formatTimeRange(startTs, endTs) {
+    return `${formatTime(startTs)} – ${formatTime(endTs)}`;
+  }
+
+  function getHourGroup(ts) {
+    const d = new Date(ts * 1000);
+    const hour = d.getHours();
+    const nextHour = (hour + 1) % 24;
+    return {
+      key: hour,
+      label: `${String(hour).padStart(2, '0')}:00 - ${String(nextHour).padStart(2, '0')}:00`
+    };
+  }
+
+  function escapeHtml(text) {
+    if (typeof text !== 'string') return text || '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  function groupShiftsByHour(shifts) {
+    const groups = new Map();
+    
+    shifts.forEach(shift => {
+      const group = getHourGroup(shift.start_ts);
+      if (!groups.has(group.key)) {
+        groups.set(group.key, {
+          label: group.label,
+          shifts: []
+        });
+      }
+      groups.get(group.key).shifts.push(shift);
+    });
+    
+    // Convert to array and sort by hour
+    return Array.from(groups.entries())
+      .sort((a, b) => a[0] - b[0])
+      .map(([key, value]) => value);
   }
 
   // Countdown functionality
@@ -157,6 +198,9 @@
     const tl = el('smv2-timeline');
     if (!tl) return;
     
+    // Get persona for priority logic
+    const persona = document.getElementById('shift-manager-v2')?.dataset?.persona || 'public';
+    
     // Clean up existing tooltips before re-rendering
     cleanupTooltips();
     
@@ -176,8 +220,8 @@
       durationMinutes = 24 * 60; // Show full day if invalid range
     }
     
-    // Calculate height: 60px per hour
-    const heightPx = Math.max(120, (durationMinutes / 60) * 60); // minimum 2 hours display
+    // Calculate height: 120px per hour (doubled for better fitting)
+    const heightPx = Math.max(240, (durationMinutes / 60) * 120); // minimum 2 hours display
     const apiLocations = data && Array.isArray(data.locations) ? data.locations : [];
     const shifts = data && Array.isArray(data.shifts) ? data.shifts : [];
 
@@ -233,14 +277,14 @@
     if (durationMinutes >= 24 * 60) {
       for (let i = 0; i <= 24; i++) {
         const hh = String(i).padStart(2, '0');
-        timeLabels.push(`<div style="height:60px;line-height:60px;">${hh}:00</div>`);
+        timeLabels.push(`<div style="height:120px;line-height:120px;">${hh}:00</div>`);
       }
     } else {
       // Generate labels for selected time range
       while (currentMinutes <= endMinutes) {
         const hours = Math.floor(currentMinutes / 60) % 24; // Handle day overflow
         const hh = String(hours).padStart(2, '0');
-        timeLabels.push(`<div style="height:60px;line-height:60px;">${hh}:00</div>`);
+        timeLabels.push(`<div style="height:120px;line-height:120px;">${hh}:00</div>`);
         currentMinutes += 60;
       }
     }
@@ -267,33 +311,59 @@
           const shiftEndMinutes = minutesFromMidnight(item.end_ts);
           
           // Calculate position relative to the selected time window (convert minutes to pixels)
+          // Double the scaling: 2px per minute instead of 1px per minute
           const topMinutes = Math.max(0, shiftStartMinutes - startMinutes);
-          const top = topMinutes; // Keep in minutes for now - will convert to pixels below
+          const top = topMinutes * 2; // Convert to pixels with 2x scaling
           
           // Calculate duration, clipped to the visible window
           const visibleStart = Math.max(shiftStartMinutes, startMinutes);
           const visibleEnd = Math.min(shiftEndMinutes, endMinutes);
           const durationMinutes = Math.max(15, visibleEnd - visibleStart); // min 15m
-          const duration = durationMinutes; // Keep in minutes for now - will convert to pixels below
+          const duration = durationMinutes * 2; // Convert to pixels with 2x scaling
           const widthPct = 100 / Math.max(1, laneCount);
           const leftPct = lane * widthPct;
           // Determine if user can apply (check eligibility)
           const canApply = item.eligibility?.can_apply === true;
-          const isGrayedOut = !canApply && item.eligibility?.needs_cert; // Gray if user lacks critter type certification
+          // Check if user is a member of this shift (multiple possible indicators)
+          const isUserMember = item.user_is_member || item.is_assigned || (item.my_entry_id && item.my_entry_id > 0);
+          // Only gray out if user lacks certification AND is not already a member
+          const isGrayedOut = !canApply && item.eligibility?.needs_cert && !isUserMember;
           
-          let color, bg;
+          // Determine shift status class based on conditions and view priority
+          let statusClass = '';
+          let fallbackBg = 'rgba(40,167,69,0.15)'; // Default green
+          let fallbackColor = '#28a745';
+          
           if (isGrayedOut) {
-            bg = 'rgba(128,128,128,0.3)'; // Gray background for non-applicable shifts
-            color = '#6c757d'; // Gray border
-          } else if (item.status === 'red') {
-            bg = 'rgba(220,53,69,0.15)';
-            color = '#dc3545';
-          } else if (item.status === 'yellow') {
-            bg = 'rgba(255,193,7,0.20)';
-            color = '#ffc107';
+            statusClass = 'smv2-shift-ended'; // Gray for unavailable shifts
+            fallbackBg = 'rgba(128,128,128,0.3)';
+            fallbackColor = '#6c757d';
+          } else if (persona === 'manager') {
+            // Manager view priority: Full -> Needs Critters -> Collision -> User Member -> Ended
+            if (item.assigned >= item.required && !item.eligibility?.overlaps && item.status !== 'red' && item.status !== 'yellow') {
+              statusClass = 'smv2-shift-full'; // Shift is full/complete
+            } else if (item.status === 'red' || (item.assigned < item.required)) {
+              statusClass = 'smv2-shift-needs-critters'; // Needs more critters
+            } else if (item.eligibility?.overlaps || item.status === 'yellow') {
+              statusClass = 'smv2-shift-collision'; // Overlaps or other issues
+            } else if (isUserMember) {
+              statusClass = 'smv2-shift-user-member'; // User is part of this shift
+            } else {
+              statusClass = 'smv2-shift-full'; // Default to complete
+            }
           } else {
-            bg = 'rgba(40,167,69,0.15)';
-            color = '#28a745';
+            // Staff/Public view priority: User Member -> Full -> Collision -> Needs Critters -> Ended
+            if (isUserMember) {
+              statusClass = 'smv2-shift-user-member'; // User is part of this shift
+            } else if (item.assigned >= item.required && !item.eligibility?.overlaps && item.status !== 'red' && item.status !== 'yellow') {
+              statusClass = 'smv2-shift-full'; // Shift is full/complete
+            } else if (item.eligibility?.overlaps || item.status === 'yellow') {
+              statusClass = 'smv2-shift-collision'; // Overlaps or other issues
+            } else if (item.status === 'red' || (item.assigned < item.required)) {
+              statusClass = 'smv2-shift-needs-critters'; // Needs more critters
+            } else {
+              statusClass = 'smv2-shift-full'; // Default to complete
+            }
           }
           
           // Build capacity display
@@ -360,10 +430,10 @@ Capacity: ${capacityText}`;
           }
 
           return (
-            `<div class="position-absolute small smv2-open-modal ${isGrayedOut ? 'smv2-shift-grayed' : ''}" data-shift-id="${item.id}" role="gridcell" tabindex="0" ${aria} 
+            `<div class="position-absolute small smv2-open-modal ${statusClass} ${isGrayedOut ? 'smv2-shift-grayed' : ''}" data-shift-id="${item.id}" role="gridcell" tabindex="0" ${aria} 
               title="${tooltipContent.replace(/"/g, '&quot;')}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" 
               data-bs-title="${tooltipContent.replace(/\n/g, '<br>').replace(/"/g, '&quot;')}"
-              style="top:${top}px;left:${leftPct}%;width:${widthPct}%;height:${duration}px;padding:2px;background:${bg};border:1px solid ${color};border-radius:4px;overflow:hidden;cursor:pointer;">` +
+              style="top:${top}px;left:${leftPct}%;width:${widthPct}%;height:${duration}px;padding:2px;border:1px solid ${fallbackColor};border-radius:4px;overflow:hidden;cursor:pointer;">` +
             `<div class="text-truncate fw-semibold" style="font-size:0.75rem;line-height:1.1;">${item.title || 'Shift'}</div>` +
             (duration > 30 ? `<div class="text-truncate text-muted" style="font-size:0.65rem;line-height:1;">${capacityText}</div>` : '') +
             usersDisplay +
@@ -415,24 +485,133 @@ Capacity: ${capacityText}`;
         list.innerHTML = '<div class="text-muted">No data</div>';
         return;
       }
+      
       const persona = document.getElementById('shift-manager-v2')?.dataset?.persona || 'public';
-      const items = data.shifts
-        .slice(0, 50)
-        .map((s) => {
-          const time = `${formatTime(s.start_ts)} – ${formatTime(s.end_ts)}`;
-          const capacity = `${s.assigned ?? '—'}/${s.required ?? '—'}`;
-          const color = s.status === 'red' ? '#dc3545' : s.status === 'yellow' ? '#ffc107' : '#28a745';
-          const statusDot = `<span class="ms-2 align-middle rounded-circle d-inline-block" style="width:10px;height:10px;background:${color}"></span>`;
-          let cta = '';
+      const groupedShifts = groupShiftsByHour(data.shifts.slice(0, 50));
+      
+      if (groupedShifts.length === 0) {
+        list.innerHTML = '<div class="text-muted">No shifts in this window.</div>';
+        return;
+      }
+      
+      // Clear existing content and use DOM creation to avoid CSP violations
+      list.innerHTML = '';
+      
+      groupedShifts.forEach(group => {
+        // Create group container
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'mb-4';
+        
+        // Create group header
+        const groupHeader = document.createElement('h6');
+        groupHeader.className = 'text-muted fw-bold mb-3';
+        
+        const clockIcon = document.createElement('i');
+        clockIcon.className = 'bi bi-clock me-2';
+        groupHeader.appendChild(clockIcon);
+        groupHeader.appendChild(document.createTextNode(group.label));
+        
+        // Create shifts container
+        const shiftsContainer = document.createElement('div');
+        shiftsContainer.className = 'ps-3';
+        
+        group.shifts.forEach(s => {
+          const time = formatTimeRange(s.start_ts, s.end_ts);
+          const capacity = (s.assigned ?? '—') + '/' + (s.required ?? '—');
+          
+          // Determine shift status class for list view with view priority
+          const canApply = s.eligibility?.can_apply === true;
+          // Check if user is a member of this shift (multiple possible indicators)
+          const isUserMember = s.user_is_member || s.is_assigned || (s.my_entry_id && s.my_entry_id > 0);
+          // Only gray out if user lacks certification AND is not already a member
+          const isGrayedOut = !canApply && s.eligibility?.needs_cert && !isUserMember;
+          let statusClass = '';
+          let fallbackColor = '#28a745'; // Default green
+          
+          if (isGrayedOut) {
+            statusClass = 'smv2-shift-ended';
+            fallbackColor = '#6c757d';
+          } else if (persona === 'manager') {
+            // Manager view priority: Full -> Needs Critters -> Collision -> User Member -> Ended
+            if (s.assigned >= s.required && !s.eligibility?.overlaps && s.status !== 'red' && s.status !== 'yellow') {
+              statusClass = 'smv2-shift-full'; // Shift is full/complete
+            } else if (s.status === 'red' || (s.assigned < s.required)) {
+              statusClass = 'smv2-shift-needs-critters'; // Needs more critters
+            } else if (s.eligibility?.overlaps || s.status === 'yellow') {
+              statusClass = 'smv2-shift-collision'; // Overlaps or other issues
+            } else if (isUserMember) {
+              statusClass = 'smv2-shift-user-member'; // User is part of this shift
+            } else {
+              statusClass = 'smv2-shift-full'; // Default to complete
+            }
+          } else {
+            // Staff/Public view priority: User Member -> Full -> Collision -> Needs Critters -> Ended
+            if (isUserMember) {
+              statusClass = 'smv2-shift-user-member'; // User is part of this shift
+            } else if (s.assigned >= s.required && !s.eligibility?.overlaps && s.status !== 'red' && s.status !== 'yellow') {
+              statusClass = 'smv2-shift-full'; // Shift is full/complete
+            } else if (s.eligibility?.overlaps || s.status === 'yellow') {
+              statusClass = 'smv2-shift-collision'; // Overlaps or other issues
+            } else if (s.status === 'red' || (s.assigned < s.required)) {
+              statusClass = 'smv2-shift-needs-critters'; // Needs more critters
+            } else {
+              statusClass = 'smv2-shift-full'; // Default to complete
+            }
+          }
+          
+          // Create shift card
+          const shiftCard = document.createElement('div');
+          shiftCard.className = `card mb-2 smv2-open-modal ${statusClass} ${isGrayedOut ? 'smv2-shift-grayed' : ''}`;
+          shiftCard.setAttribute('role', 'listitem');
+          shiftCard.setAttribute('data-shift-id', String(s.id));
+          shiftCard.setAttribute('aria-label', (s.title || 'Shift') + ' at ' + (s.location || '') + ', ' + time + ', capacity ' + capacity);
+          
+          const cardBody = document.createElement('div');
+          cardBody.className = 'card-body p-2';
+          
+          const mainRow = document.createElement('div');
+          mainRow.className = 'd-flex justify-content-between align-items-center';
+          
+          // Left side - title and CTA
+          const leftSide = document.createElement('div');
+          leftSide.className = 'd-flex align-items-center';
+          
+          const titleDiv = document.createElement('div');
+          titleDiv.className = 'fw-semibold me-2';
+          titleDiv.appendChild(document.createTextNode(s.title || 'Shift'));
+          
+          const locationSmall = document.createElement('small');
+          locationSmall.className = 'text-muted';
+          locationSmall.textContent = '@ ' + (s.location || '');
+          titleDiv.appendChild(document.createTextNode(' '));
+          titleDiv.appendChild(locationSmall);
+          
+          leftSide.appendChild(titleDiv);
+          
+          // Add CTA buttons if needed
           if (persona === 'staff' || persona === 'public') {
+            const ctaDiv = document.createElement('div');
+            ctaDiv.className = 'ms-3';
+            
             if (s.is_assigned) {
               const canCancel = s.can_cancel !== false;
-              const disabled = canCancel ? '' : ' disabled';
-              const title = canCancel ? '' : ' title="You can no longer cancel this shift (unsubscribe window closed)."';
-              cta = `<div class="ms-3"><button class="btn btn-sm btn-danger smv2-cancel${disabled}" data-action="cancel" data-entry-id="${s.my_entry_id}"${title}>Cancel</button></div>`;
+              const cancelBtn = document.createElement('button');
+              cancelBtn.className = 'btn btn-sm btn-danger smv2-cancel' + (canCancel ? '' : ' disabled');
+              cancelBtn.setAttribute('data-action', 'cancel');
+              cancelBtn.setAttribute('data-entry-id', String(s.my_entry_id || ''));
+              if (!canCancel) {
+                cancelBtn.title = 'You can no longer cancel this shift (unsubscribe window closed).';
+              }
+              cancelBtn.textContent = 'Cancel';
+              ctaDiv.appendChild(cancelBtn);
             } else {
               const canApply = s.eligibility?.can_apply === true;
-              const disabled = canApply ? '' : ' disabled';
+              const applyBtn = document.createElement('button');
+              applyBtn.className = 'btn btn-sm btn-primary smv2-apply' + (canApply ? '' : ' disabled');
+              applyBtn.setAttribute('data-action', 'apply');
+              applyBtn.setAttribute('data-shift-id', String(s.id));
+              applyBtn.setAttribute('aria-disabled', canApply ? 'false' : 'true');
+              
               let reason = '';
               if (s.eligibility?.capacity_full) {
                 reason = 'Shift is full';
@@ -441,32 +620,53 @@ Capacity: ${capacityText}`;
               } else if (s.eligibility?.needs_cert) {
                 reason = 'Missing certification';
               }
-              const title = reason ? ` title="${reason}"` : '';
-              const ariaDisabled = ` aria-disabled="${canApply ? 'false' : 'true'}"`;
-              const ariaLabel = reason ? ` aria-label="Apply${canApply ? '' : ` (disabled: ${reason})`}"` : '';
-              cta = `<div class="ms-3"><button class="btn btn-sm btn-primary smv2-apply${disabled}"${title}${ariaDisabled}${ariaLabel} data-action="apply" data-shift-id="${s.id}">Apply</button></div>`;
+              
+              if (reason) {
+                applyBtn.title = reason;
+                applyBtn.setAttribute('aria-label', 'Apply (disabled: ' + reason + ')');
+              }
+              
+              applyBtn.textContent = 'Apply';
+              ctaDiv.appendChild(applyBtn);
             }
+            
+            leftSide.appendChild(ctaDiv);
           }
-          const itemAria = `aria-label="${(s.title || 'Shift').replace(/"/g, '')} at ${(s.location || '').replace(/"/g, '')}, ${time}, capacity ${capacity}"`;
-          return `<div class="card mb-2 smv2-open-modal" role="listitem" data-shift-id="${s.id}" ${itemAria}>
-          <div class="card-body p-2">
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="d-flex align-items-center">
-                <div class="fw-semibold me-2">${s.title || 'Shift'}
-                  <small class="text-muted">@ ${s.location || ''}</small>
-                </div>
-                ${cta}
-              </div>
-              <div class="text-end small">
-                <div>${time}${statusDot}</div>
-                <div class="text-muted">${capacity}</div>
-              </div>
-            </div>
-          </div>
-        </div>`;
-        })
-        .join('');
-      list.innerHTML = items || '<div class="text-muted">No shifts in this window.</div>';
+          
+          // Right side - time and capacity
+          const rightSide = document.createElement('div');
+          rightSide.className = 'text-end small';
+          
+          const timeDiv = document.createElement('div');
+          timeDiv.appendChild(document.createTextNode(time));
+          
+          const statusDot = document.createElement('span');
+          statusDot.className = `ms-2 align-middle rounded-circle d-inline-block ${statusClass}`;
+          statusDot.style.width = '10px';
+          statusDot.style.height = '10px';
+          if (!statusClass) {
+            statusDot.style.background = fallbackColor;
+          }
+          timeDiv.appendChild(statusDot);
+          
+          const capacityDiv = document.createElement('div');
+          capacityDiv.className = 'text-muted';
+          capacityDiv.textContent = capacity;
+          
+          rightSide.appendChild(timeDiv);
+          rightSide.appendChild(capacityDiv);
+          
+          mainRow.appendChild(leftSide);
+          mainRow.appendChild(rightSide);
+          cardBody.appendChild(mainRow);
+          shiftCard.appendChild(cardBody);
+          shiftsContainer.appendChild(shiftCard);
+        });
+        
+        groupDiv.appendChild(groupHeader);
+        groupDiv.appendChild(shiftsContainer);
+        list.appendChild(groupDiv);
+      });
     }
     renderTimeline(data, currentState);
   }
@@ -487,21 +687,48 @@ Capacity: ${capacityText}`;
     // Update date boxes if available
     const dateBoxes = document.querySelector('.smv2-date-boxes');
     if (dateBoxes && data && data.dates) {
-      dateBoxes.innerHTML = data.dates.map(d => `
-        <button type="button" class="btn btn-secondary btn-sm me-1 ${d.date === selectedDate ? 'active' : ''}"
-                data-date="${d.date}">
-          ${d.display}
-        </button>
-      `).join('');
+      // Clear existing content and use DOM creation to avoid CSP violations
+      dateBoxes.innerHTML = '';
+      
+      data.dates.forEach(d => {
+        const isSelected = d.date === selectedDate;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `smv2-date-btn me-1 btn ${
+          isSelected ? 'btn-primary' : 'btn-outline-secondary'
+        }`;
+        btn.setAttribute('data-date', d.date);
+        btn.textContent = d.display;
+        
+        // Add selected styling
+        if (isSelected) {
+          btn.style.boxShadow = '0 0 0 2px rgba(13, 110, 253, 0.25)';
+          btn.setAttribute('aria-pressed', 'true');
+        } else {
+          btn.setAttribute('aria-pressed', 'false');
+        }
+        
+        dateBoxes.appendChild(btn);
+      });
 
       // Add click handlers for date buttons
       dateBoxes.addEventListener('click', (e) => {
-        if (e.target.matches('[data-date]')) {
+        if (e.target.matches('.smv2-date-btn[data-date]')) {
           const newDate = e.target.getAttribute('data-date');
           currentState.date = newDate;
-          // Update active state
-          dateBoxes.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-          e.target.classList.add('active');
+          
+          // Update button states
+          dateBoxes.querySelectorAll('.smv2-date-btn').forEach(btn => {
+            btn.className = 'smv2-date-btn me-1 btn btn-outline-secondary';
+            btn.style.boxShadow = '';
+            btn.setAttribute('aria-pressed', 'false');
+          });
+          
+          // Set selected state
+          e.target.className = 'smv2-date-btn me-1 btn btn-primary';
+          e.target.style.boxShadow = '0 0 0 2px rgba(13, 110, 253, 0.25)';
+          e.target.setAttribute('aria-pressed', 'true');
+          
           // Update countdown display
           updateCountdownDisplay(newDate);
           loadData(currentState).then((resp) => {
@@ -682,23 +909,113 @@ Capacity: ${capacityText}`;
     });
   }
 
+  function getRoundedCurrentTime() {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    
+    // Round down to the nearest 30-minute interval
+    const roundedMinutes = minutes < 30 ? 0 : 30;
+    
+    return {
+      start: `${String(hours).padStart(2, '0')}:${String(roundedMinutes).padStart(2, '0')}`,
+      end: '24:00' // End time now goes to 24:00 (end of day)
+    };
+  }
+
   function initialState() {
     const today = new Date();
     const yyyy = today.getFullYear();
     const mm = String(today.getMonth() + 1).padStart(2, '0');
     const dd = String(today.getDate()).padStart(2, '0');
-    return { date: `${yyyy}-${mm}-${dd}`, start: '00:00', end: '23:30', locations: [], shift_types: [], critter_types: [] };
+    const smartTimes = getRoundedCurrentTime();
+    return { 
+      date: `${yyyy}-${mm}-${dd}`, 
+      start: smartTimes.start, 
+      end: smartTimes.end, 
+      locations: [], 
+      shift_types: [], 
+      critter_types: [] 
+    };
+  }
+
+  function selectBestDate(availableDates, eventDates) {
+    const today = new Date();
+    const todayStr = today.toISOString().split('T')[0];
+    
+    // If no available dates, fall back to today
+    if (!Array.isArray(availableDates) || availableDates.length === 0) {
+      return todayStr;
+    }
+    
+    // Extract just the date strings from available dates
+    const dateStrings = availableDates.map(d => typeof d === 'string' ? d : d.date).filter(Boolean);
+    
+    if (dateStrings.length === 0) {
+      return todayStr;
+    }
+    
+    // If today is in available dates, use today
+    if (dateStrings.includes(todayStr)) {
+      return todayStr;
+    }
+    
+    // Try to find the closest future date to today
+    const futureDates = dateStrings
+      .filter(d => d >= todayStr)
+      .sort();
+    
+    if (futureDates.length > 0) {
+      return futureDates[0]; // Closest future date
+    }
+    
+    // If no future dates, find the closest past date (most recent)
+    const pastDates = dateStrings
+      .filter(d => d < todayStr)
+      .sort()
+      .reverse(); // Most recent first
+    
+    if (pastDates.length > 0) {
+      return pastDates[0]; // Most recent past date
+    }
+    
+    // Fallback to first available date
+    return dateStrings[0];
   }
 
   function loadOnce() {
-    const s = initialState();
-    currentState = { ...currentState, ...s }; // Initialize global state
-    return loadData(s)
-      .then((resp) => {
-        renderTopbar(resp, s);
-        updateUI(resp);
+    // First, get available dates to make a smart date selection
+    return fetchJSON('/api/v2/shift-manager/dates')
+      .then((datesData) => {
+        const availableDates = datesData.ok ? datesData.dates : [];
+        const bestDate = selectBestDate(availableDates, eventDates);
+        
+        // Create initial state with the smart date selection
+        const s = {
+          ...initialState(),
+          date: bestDate
+        };
+        
+        currentState = { ...currentState, ...s }; // Initialize global state
+        
+        // Now load data with the selected date
+        return loadData(s)
+          .then((resp) => {
+            renderTopbar(resp, s);
+            updateUI(resp);
+          });
       })
-      .catch((e) => console.warn('SMV2 fetch failed', e));
+      .catch((e) => {
+        console.warn('SMV2 fetch failed', e);
+        // Fallback to original behavior if dates fetch fails
+        const s = initialState();
+        currentState = { ...currentState, ...s };
+        return loadData(s)
+          .then((resp) => {
+            renderTopbar(resp, s);
+            updateUI(resp);
+          });
+      });
   }
 
   function postForm(url, data) {
@@ -1432,9 +1749,87 @@ Capacity: ${capacityText}`;
         }
       });
     });
+    
+    // Debug view switcher for managers
+    const debugViewButtons = document.querySelectorAll('input[name="smv2-debug-view"]');
+    debugViewButtons.forEach(btn => {
+      btn.addEventListener('change', () => {
+        if (btn.checked) {
+          // Reload page with debug_view parameter
+          const url = new URL(window.location);
+          url.searchParams.set('debug_view', btn.value);
+          window.location.href = url.toString();
+        }
+      });
+    });
   }
 
+  // Set smart default times based on current time
+  function setDefaultTimes() {
+    const smartTimes = getRoundedCurrentTime();
+    const startTimeSelect = el('smv2-time-start');
+    const endTimeSelect = el('smv2-time-end');
+    
+    if (startTimeSelect) {
+      startTimeSelect.value = smartTimes.start;
+    }
+    
+    if (endTimeSelect) {
+      endTimeSelect.value = smartTimes.end;
+    }
+    
+    console.log('Smart time defaults set:', smartTimes);
+  }
+
+  // Set default view mode based on screen size and persona
+  function setDefaultViewMode() {
+    const persona = document.getElementById('shift-manager-v2')?.dataset?.persona || 'public';
+    const isSmallScreen = window.innerWidth < 768; // Bootstrap md breakpoint
+    const timeline = el('smv2-timeline');
+    const list = el('smv2-list');
+    const viewModeButtons = document.querySelectorAll('input[name="smv2-view-mode"]');
+    
+    let defaultView = 'timeline';
+    
+    // Set default based on persona and screen size
+    if (persona === 'manager') {
+      defaultView = 'timeline'; // Manager defaults to timeline
+    } else if (persona === 'staff') {
+      defaultView = 'list'; // Staff defaults to list
+    } else if (persona === 'public') {
+      defaultView = isSmallScreen ? 'list' : 'timeline'; // Public: list on small, timeline on large
+    }
+    
+    // Set the radio button
+    viewModeButtons.forEach(btn => {
+      if (btn.value === defaultView) {
+        btn.checked = true;
+      }
+    });
+    
+    // Set the view visibility
+    if (defaultView === 'timeline') {
+      timeline?.classList.remove('d-none');
+      list?.classList.add('d-none');
+    } else {
+      timeline?.classList.add('d-none');
+      list?.classList.remove('d-none');
+    }
+  }
+  
   renderInitial();
   initializeTopBarHandlers();
+  setDefaultViewMode();
+  setDefaultTimes();
+  
+  // Handle window resize for responsive default view
+  window.addEventListener('resize', () => {
+    const persona = document.getElementById('shift-manager-v2')?.dataset?.persona || 'public';
+    if (persona === 'public') {
+      // Re-evaluate default view for public users on resize
+      setDefaultViewMode();
+    }
+  });
+  
   startPolling();
 })();

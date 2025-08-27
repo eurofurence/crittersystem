@@ -6,6 +6,7 @@ namespace Engelsystem\Controllers;
 
 use Engelsystem\Helpers\Authenticator;
 use Engelsystem\Http\Response;
+use Engelsystem\Http\Request;
 use Engelsystem\Config\Config;
 
 class ShiftManagerV2Controller extends BaseController
@@ -23,6 +24,7 @@ class ShiftManagerV2Controller extends BaseController
     public function __construct(
         protected Authenticator $auth,
         protected Response $response,
+        protected Request $request,
         protected Config $config,
     ) {
     }
@@ -38,16 +40,41 @@ class ShiftManagerV2Controller extends BaseController
 
         $view = 'ShiftManagerV2/Public/index.twig';
         $persona = 'public';
+        $actualPersona = 'public';
 
-        if ($isManager) {
-            $view = 'ShiftManagerV2/Manager/index.twig';
-            $persona = 'manager';
-        } elseif ($isStaff) {
-            $view = 'ShiftManagerV2/Staff/index.twig';
-            $persona = 'staff';
-        } elseif ($isPublic) {
-            $view = 'ShiftManagerV2/Public/index.twig';
-            $persona = 'public';
+        // Check if manager wants to override the view for testing/debugging
+        $debugView = $this->request->query->get('debug_view');
+        if ($isManager && in_array($debugView, ['manager', 'staff', 'public'], true)) {
+            // Manager can switch to any view for testing
+            $persona = $debugView;
+            $actualPersona = 'manager'; // Keep track of actual permissions
+
+            switch ($debugView) {
+                case 'manager':
+                    $view = 'ShiftManagerV2/Manager/index.twig';
+                    break;
+                case 'staff':
+                    $view = 'ShiftManagerV2/Staff/index.twig';
+                    break;
+                case 'public':
+                    $view = 'ShiftManagerV2/Public/index.twig';
+                    break;
+            }
+        } else {
+            // Normal persona determination
+            if ($isManager) {
+                $view = 'ShiftManagerV2/Manager/index.twig';
+                $persona = 'manager';
+                $actualPersona = 'manager';
+            } elseif ($isStaff) {
+                $view = 'ShiftManagerV2/Staff/index.twig';
+                $persona = 'staff';
+                $actualPersona = 'staff';
+            } elseif ($isPublic) {
+                $view = 'ShiftManagerV2/Public/index.twig';
+                $persona = 'public';
+                $actualPersona = 'public';
+            }
         }
 
         // Get event dates for countdown functionality
@@ -60,6 +87,8 @@ class ShiftManagerV2Controller extends BaseController
 
         return $this->response->withView($view, [
             'persona' => $persona,
+            'actual_persona' => $actualPersona,
+            'is_debug_mode' => $isManager && $debugView,
             'page_title' => 'Shift Manager',
             // Defaults per requirements
             'default_time_start' => '00:00',

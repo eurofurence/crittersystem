@@ -594,6 +594,86 @@ class CertificationsController extends BaseController
     }
 
     /**
+     * Display QR code for certification confirmation.
+     */
+    public function qr(Request $request): Response
+    {
+        $certification = $this->resolveCertification($request, 'certification_uuid');
+
+        if (!$certification->is_active) {
+            $this->addNotification('Certification is not active', NotificationType::ERROR);
+            return $this->redirect->to('/admin/certifications');
+        }
+
+        if ($certification->allow_self_confirmation) {
+            $this->addNotification(
+                'This certification allows self-confirmation and does not need QR scanning',
+                NotificationType::WARNING
+            );
+            return $this->redirect->to('/admin/certifications/' . $certification->uuid);
+        }
+
+        // Get refresh configuration similar to Digital ID
+        $refreshInterval = \Engelsystem\Models\DigitalIdConfig::getRefreshInterval();
+
+        // Generate initial token
+        $token = $this->createCertificationToken($certification->id);
+
+        return $this->response->withView(
+            'admin/certifications/qr',
+            [
+                'certification' => $certification,
+                'token' => $token,
+                'refreshInterval' => $refreshInterval,
+                'verificationUrl' => url('/certification-scan/verify/' . $token->token),
+            ]
+        );
+    }
+
+    /**
+     * Generate a new QR token for certification (API method).
+     */
+    public function generateQrToken(Request $request): Response
+    {
+        $certification = $this->resolveCertification($request, 'certification_uuid');
+
+        if (!$certification->is_active || $certification->allow_self_confirmation) {
+            return $this->response->withJson(['error' => 'Invalid certification for QR scanning'], 400);
+        }
+
+        try {
+            $token = $this->createCertificationToken($certification->id);
+
+            return $this->response->withJson([
+                'success' => true,
+                'token' => $token->token,
+                'expires_at' => $token->expires_at->toISOString(),
+                'verification_url' => url('/certification-scan/verify/' . $token->token),
+            ]);
+        } catch (\Exception $e) {
+            return $this->response->withJson(['error' => 'Failed to generate token'], 500);
+        }
+    }
+
+    /**
+     * Create a new certification confirmation token.
+     */
+    protected function createCertificationToken(int $certificationId): \Engelsystem\Models\CertificationToken
+    {
+        $refreshInterval = \Engelsystem\Models\DigitalIdConfig::getRefreshInterval();
+        $overlapPeriod = \Engelsystem\Models\DigitalIdConfig::getTokenOverlap();
+
+        // Token expires after refresh interval + overlap period
+        $expiresAt = \Carbon\Carbon::now()->addSeconds($refreshInterval + $overlapPeriod);
+
+        return \Engelsystem\Models\CertificationToken::create([
+            'certification_id' => $certificationId,
+            'token' => \Engelsystem\Models\CertificationToken::generateToken(),
+            'expires_at' => $expiresAt,
+        ]);
+    }
+
+    /**
      * Show the edit form.
      */
     protected function showEdit(?Certification $certification): Response

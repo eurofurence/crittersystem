@@ -9,6 +9,8 @@ use Engelsystem\Http\Request;
 use Engelsystem\Http\Response;
 use Engelsystem\Models\DigitalIdToken;
 use Engelsystem\Models\Shifts\ShiftEntry;
+use Engelsystem\Models\CertificationToken;
+use Engelsystem\Models\CertificationUser;
 
 class QrController extends BaseController
 {
@@ -205,6 +207,93 @@ class QrController extends BaseController
             'user_id' => $userId,
             'token' => DigitalIdToken::generateToken(),
             'expires_at' => $expiresAt,
+        ]);
+    }
+
+    /**
+     * Verify certification token and handle confirmation
+     */
+    public function verifyCertificationToken(Request $request): Response
+    {
+        $tokenString = $request->getAttribute('token');
+
+        if (!$tokenString) {
+            return $this->response->withView('digital-id/verify-error', [
+                'error' => __('No token provided'),
+                'message' => __('The QR code appears to be invalid or incomplete.'),
+            ]);
+        }
+
+        // Clean up expired tokens first
+        CertificationToken::cleanupExpiredTokens();
+
+        // Find active token
+        $token = CertificationToken::findActiveToken($tokenString);
+
+        if (!$token) {
+            return $this->response->withView('digital-id/verify-error', [
+                'error' => __('Invalid or expired token'),
+                'message' => __(
+                    'This QR code has expired or is not valid. '
+                    . 'Please ask the administrator to refresh the certification QR code.'
+                ),
+            ]);
+        }
+
+        $certification = $token->certification;
+
+        if (!$certification || !$certification->is_active) {
+            return $this->response->withView('digital-id/verify-error', [
+                'error' => __('Certification not available'),
+                'message' => __('The certification associated with this token is not available.'),
+            ]);
+        }
+
+        // Check if user is authenticated
+        $user = auth()->user();
+        if (!$user) {
+            // Redirect to login with return URL
+            $returnUrl = url('/certification-scan/verify/' . $tokenString);
+            session()->set('url.intended', $returnUrl);
+            return $this->response->redirectTo('/login');
+        }
+
+        // Check if user has applied for this certification
+        $certificationUser = CertificationUser::where('user_id', $user->id)
+            ->where('certification_id', $certification->id)
+            ->first();
+
+        if (!$certificationUser) {
+            return $this->response->withView('digital-id/verify-error', [
+                'error' => __('Not applied for this certification'),
+                'message' => __('You have not applied for this certification. Please apply first before scanning the QR code.'), // phpcs:ignore
+            ]);
+        }
+
+        // Check if already approved or self-confirmed
+        if (in_array($certificationUser->status, [CertificationUser::STATUS_APPROVED, CertificationUser::STATUS_SELF_CONFIRMED])) { // phpcs:ignore
+            return $this->response->withView('digital-id/verify-error', [
+                'error' => __('Already confirmed'),
+                'message' => __('Your certification has already been confirmed.'),
+            ]);
+        }
+
+        // Approve the certification
+        $certificationUser->status = CertificationUser::STATUS_APPROVED;
+        $certificationUser->date_certified = Carbon::now();
+        $certificationUser->certified_by = null; // QR-based confirmation - no specific admin
+
+        // Calculate expiry date if not perpetual
+        if (!$certification->is_perpetual && $certification->validity_period_days) {
+            $certificationUser->date_expires = Carbon::now()->addDays($certification->validity_period_days);
+        }
+
+        $certificationUser->save();
+
+        return $this->response->withView('certification-scan/success', [
+            'certification' => $certification,
+            'user' => $user,
+            'certificationUser' => $certificationUser,
         ]);
     }
 }

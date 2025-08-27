@@ -1,5 +1,7 @@
 {% extends "layouts/app.twig" %}
 
+{% import 'macros/base.twig' as m %}
+
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
@@ -8,8 +10,8 @@
 
         <div class="row">
             <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
+                <div class="card border-secondary {{ m.type_bg_class() }}">
+                    <div class="card-header bg-secondary">
                         <h4>{{ __('Export Data') }}</h4>
                     </div>
                     <div class="card-body">
@@ -30,8 +32,8 @@
             </div>
 
             <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
+                <div class="card  border-secondary {{ m.type_bg_class() }}">
+                    <div class="card-header bg-secondary">
                         <h4>{{ __('Import Data') }}</h4>
                     </div>
                     <div class="card-body">

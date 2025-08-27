@@ -1,4 +1,5 @@
 {% extends 'layouts/app.twig' %}
+{% import 'macros/base.twig' as m %}
 {% import 'macros/form.twig' as f %}
 
 {% block title %}
@@ -21,8 +22,8 @@
                 <div class="row">
                     <div class="col-lg-8">
                         <!-- Configuration Form -->
-                        <div class="card">
-                            <div class="card-header">
+                        <div class="card border-secondary {{ m.type_bg_class() }}">
+                            <div class="card-header bg-secondary">
                                 <h5 class="card-title mb-0">
                                     <i class="bi bi-gear"></i> {{ __('System Settings') }}
                                 </h5>
@@ -89,8 +90,8 @@
 
                     <div class="col-lg-4">
                         <!-- Information Panel -->
-                        <div class="card">
-                            <div class="card-header">
+                        <div class="card border-secondary {{ m.type_bg_class() }}">
+                            <div class="card-header bg-secondary">
                                 <h5 class="card-title mb-0">
                                     <i class="bi bi-info-circle"></i> {{ __('System Information') }}
                                 </h5>
@@ -127,8 +128,8 @@
                         </div>
 
                         <!-- Security Notes -->
-                        <div class="card mt-3">
-                            <div class="card-header">
+                        <div class="card mt-3 border-secondary {{ m.type_bg_class() }}">
+                            <div class="card-header bg-secondary">
                                 <h5 class="card-title mb-0">
                                     <i class="bi bi-shield-check"></i> {{ __('Security Notes') }}
                                 </h5>

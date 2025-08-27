@@ -131,6 +131,9 @@ $route->get('/digital-id', 'DigitalIdController@index');
 $route->post('/digital-id/refresh', 'DigitalIdController@refreshToken');
 $route->get('/digital-id/verify/{token}', 'QrController@verifyToken');
 
+// Certification QR System
+$route->get('/certification-scan/verify/{token}', 'QrController@verifyCertificationToken');
+
 // News
 $route->get('/meetings', 'NewsController@meetings');
 $route->addGroup(
@@ -175,6 +178,29 @@ $route->addGroup(
     function (RouteCollector $route): void {
         $route->get('', 'Api\IndexController@index');
 
+        // Backstage API Routes (must be before catch-all route)
+        $route->addGroup(
+            '/v1/backstage',
+            function (RouteCollector $route): void {
+                // Dashboard KPIs
+                $route->get('/kpis', 'Api\\BackstageController@kpis');
+                $route->get('/stats', 'Api\\BackstageController@stats');
+
+                // User Search API
+                $route->get('/users/search', 'Api\\BackstageController@searchUsers');
+                $route->get('/users/{user_id:\d+}/hours', 'Api\\BackstageController@userHours');
+                $route->get('/users/{user_id:\d+}/eligibility', 'Api\\BackstageController@userEligibility');
+
+                // Goodies API
+                $route->get('/goodies/categories', 'Api\\BackstageController@goodiesCategories');
+                $route->get('/goodies/items', 'Api\\BackstageController@goodiesItems');
+                $route->get('/goodies/distributions', 'Api\\BackstageController@distributions');
+
+                // Real-time updates
+                $route->get('/live-stats', 'Api\\BackstageController@liveStats');
+            }
+        );
+
         $route->addGroup(
             '/v0-beta',
             function (RouteCollector $route): void {
@@ -206,7 +232,8 @@ $route->addGroup(
                 $route->get('/[{resource:.+}]', 'Api\IndexController@notFound');
             }
         );
-        $route->get('/[{resource:.+}]', 'Api\IndexController@notFound');
+        // Catch-all for undefined API routes (excluding v1 and v0-beta)
+        $route->get('/[{resource:(?!v1|v0-beta).+}]', 'Api\IndexController@notFound');
     }
 );
 
@@ -373,6 +400,15 @@ $route->addGroup(
                     '/{certification_uuid:[0-9a-f-]+}/reactivate',
                     'Admin\\CertificationsController@reactivate'
                 );
+                // QR Code functionality
+                $route->get(
+                    '/{certification_uuid:[0-9a-f-]+}/qr',
+                    'Admin\\CertificationsController@qr'
+                );
+                $route->post(
+                    '/{certification_uuid:[0-9a-f-]+}/qr/refresh',
+                    'Admin\\CertificationsController@generateQrToken'
+                );
             }
         );
 
@@ -453,6 +489,71 @@ $route->addGroup(
             function (RouteCollector $route): void {
                 $route->get('[/{news_id:\d+}]', 'Admin\\NewsController@edit');
                 $route->post('[/{news_id:\d+}]', 'Admin\\NewsController@save');
+            }
+        );
+
+        // Backstage System
+        $route->addGroup(
+            '/backstage',
+            function (RouteCollector $route): void {
+                // Main Backstage Dashboard
+                $route->get('', 'BackstageController@dashboard');
+
+                // User Search & Management
+                $route->addGroup(
+                    '/users',
+                    function (RouteCollector $route): void {
+                        $route->get('/search', 'BackstageController@userSearch');
+                        $route->post('/search', 'BackstageController@processUserSearch');
+                        $route->get('/qualify/{user_id:\d+}', 'BackstageController@qualifyUser');
+                        $route->post('/qualify/{user_id:\d+}', 'BackstageController@processUserQualification');
+                    }
+                );
+
+                // Goodies Management (Admin Only)
+                $route->addGroup(
+                    '/goodies',
+                    function (RouteCollector $route): void {
+                        // Categories Management
+                        $route->addGroup(
+                            '/categories',
+                            function (RouteCollector $route): void {
+                                $route->get('', 'BackstageGoodiesController@categoriesIndex');
+                                $route->get('/create', 'BackstageGoodiesController@createCategory');
+                                $route->post('', 'BackstageGoodiesController@storeCategory');
+                                $route->get('/{uuid:[0-9a-f-]+}', 'BackstageGoodiesController@showCategory');
+                                $route->get('/{uuid:[0-9a-f-]+}/edit', 'BackstageGoodiesController@editCategory');
+                                $route->put('/{uuid:[0-9a-f-]+}', 'BackstageGoodiesController@updateCategory');
+                                $route->delete('/{uuid:[0-9a-f-]+}', 'BackstageGoodiesController@destroyCategory');
+                                // Fallback for environments without method override
+                                $route->post('/{uuid:[0-9a-f-]+}/update', 'BackstageGoodiesController@updateCategory');
+                                $route->post('/{uuid:[0-9a-f-]+}/delete', 'BackstageGoodiesController@destroyCategory');
+                            }
+                        );
+
+                        // Items Management
+                        $route->addGroup(
+                            '/items',
+                            function (RouteCollector $route): void {
+                                $route->get('', 'BackstageGoodiesController@itemsIndex');
+                                $route->get('/create', 'BackstageGoodiesController@createItem');
+                                $route->post('', 'BackstageGoodiesController@storeItem');
+                                $route->get('/{uuid:[0-9a-f-]+}', 'BackstageGoodiesController@showItem');
+                                $route->get('/{uuid:[0-9a-f-]+}/edit', 'BackstageGoodiesController@editItem');
+                                $route->put('/{uuid:[0-9a-f-]+}', 'BackstageGoodiesController@updateItem');
+                                $route->delete('/{uuid:[0-9a-f-]+}', 'BackstageGoodiesController@destroyItem');
+                                // Fallback for environments without method override
+                                $route->post('/{uuid:[0-9a-f-]+}/update', 'BackstageGoodiesController@updateItem');
+                                $route->post('/{uuid:[0-9a-f-]+}/delete', 'BackstageGoodiesController@destroyItem');
+                            }
+                        );
+
+                        // Distribution Management
+                        $route->get('/distributions', 'BackstageGoodiesController@distributionsIndex');
+                        $route->post('/distribute', 'BackstageGoodiesController@distribute');
+                        $route->get('/reports', 'BackstageGoodiesController@reports');
+                    }
+                );
             }
         );
     }

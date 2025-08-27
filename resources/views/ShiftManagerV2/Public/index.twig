@@ -6,16 +6,21 @@
   {# Public Top Bar with basic filters #}
   {% include "ShiftManagerV2/partials/public_top_bar.twig" %}
 
-  {# Shift List (simple cards for public) #}
-  <div id="smv2-list" class="smv2-list" role="list" aria-label="{{ __('Available shifts') }}">
+  {# Timeline View (default for Public on large screens) #}
+  <div id="smv2-timeline" class="smv2-timeline d-md-block d-none" role="grid" aria-label="{{ __('Shifts timeline') }}">
+    <div class="text-center text-muted p-4">
+      <div class="spinner-border" role="status" aria-hidden="true"></div>
+      <div class="mt-2">{{ __('Loading timeline...') }}</div>
+    </div>
+  </div>
+
+  {# List View (default for Public on small screens) #}
+  <div id="smv2-list" class="smv2-list d-md-none" role="list" aria-label="{{ __('Available shifts') }}">
     <div class="text-center text-muted p-4">
       <div class="spinner-border" role="status" aria-hidden="true"></div>
       <div class="mt-2">{{ __('Loading available shifts...') }}</div>
     </div>
   </div>
-
-  {# Optional mini timeline #}
-  <div id="smv2-timeline" class="smv2-timeline d-none" role="grid" aria-label="{{ __('Shifts timeline') }}"></div>
 
   {# Staff/Public Modal #}
   <div class="modal fade" id="smv2-sp-modal" tabindex="-1" aria-labelledby="smv2SpModalLabel" aria-hidden="true">

@@ -1,0 +1,83 @@
+{% extends "layouts/app.twig" %}
+
+{% block title %}{{ __('Certification Confirmed') }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white text-center">
+                    <h4 class="mb-0">
+                        <i class="bi bi-check-circle-fill"></i> {{ __('Certification Confirmed') }}
+                    </h4>
+                </div>
+                <div class="card-body text-center p-4">
+                    <div class="mb-4">
+                        <i class="bi bi-award-fill text-success" style="font-size: 4rem;"></i>
+                    </div>
+
+                    <h3 class="text-success mb-3">{{ certification.title }}</h3>
+                    
+                    <p class="lead">
+                        {{ __('Congratulations! Your certification has been successfully confirmed.') }}
+                    </p>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card border-success">
+                                <div class="card-body">
+                                    <h6 class="card-title text-success">
+                                        <i class="bi bi-person"></i> {{ __('Certified User') }}
+                                    </h6>
+                                    <p class="card-text">{{ user.displayName }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card border-success">
+                                <div class="card-body">
+                                    <h6 class="card-title text-success">
+                                        <i class="bi bi-calendar-check"></i> {{ __('Certified On') }}
+                                    </h6>
+                                    <p class="card-text">{{ certificationUser.date_certified.format('d.m.Y H:i') }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if certificationUser.date_expires %}
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                <i class="bi bi-clock"></i>
+                                {{ __('This certification is valid until') }}: 
+                                <strong>{{ certificationUser.date_expires.format('d.m.Y') }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <div class="alert alert-success">
+                                <i class="bi bi-infinity"></i>
+                                {{ __('This is a perpetual certification and does not expire.') }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="mt-4">
+                        <a href="{{ url('/') }}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-house"></i> {{ __('Return to Dashboard') }}
+                        </a>
+                        <a href="{{ url('/user/certifications') }}" class="btn btn-outline-secondary btn-lg ms-2">
+                            <i class="bi bi-award"></i> {{ __('View My Certifications') }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

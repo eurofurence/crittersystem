@@ -21,8 +21,8 @@ function getConfigFromMeta() {
   const pageTypeMeta = document.querySelector('meta[name="digital-id:page-type"]');
   config.pageType = pageTypeMeta ? pageTypeMeta.content : 'main';
   
-  // Get main page configuration
-  if (config.pageType === 'main') {
+  // Get configuration for main and certification pages
+  if (config.pageType === 'main' || config.pageType === 'certification') {
     const refreshIntervalMeta = document.querySelector('meta[name="digital-id:refresh-interval"]');
     const verificationUrlMeta = document.querySelector('meta[name="digital-id:verification-url"]');
     const refreshEndpointMeta = document.querySelector('meta[name="digital-id:refresh-endpoint"]');
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeErrorPage();
   } else if (config.pageType === 'verify') {
     initializeVerifyPage();
-  } else if (config.pageType === 'main') {
+  } else if (config.pageType === 'main' || config.pageType === 'certification') {
     initializeMainPage(config);
   } else {
     console.warn('Unknown or missing digital ID page type');
