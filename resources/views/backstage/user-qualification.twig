@@ -1,0 +1,304 @@
+{% extends 'layouts/app.twig' %}
+{% import 'macros/base.twig' as m %}
+{% import 'macros/form.twig' as f %}
+
+{% block title %}{{ __('backstage.qualification.title') }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1>
+                        {{ m.icon('person-check') }}
+                        {{ block('title') }}
+                    </h1>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group" role="group">
+                            <a href="{{ url('/admin/backstage/users/search') }}" class="btn btn-secondary btn-sm">
+                                {{ m.icon('arrow-left') }}
+                                {{ __('backstage.back_to_search') }}
+                            </a>
+                            <a href="{{ url('/admin/backstage') }}" class="btn btn-secondary btn-sm">
+                                {{ m.icon('speedometer2') }}
+                                {{ __('backstage.dashboard.title') }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                {% include 'layouts/parts/messages.twig' %}
+
+                {% if target_user is defined %}
+                    <div class="row">
+                        {# User Information Panel #}
+                        <div class="col-lg-4 mb-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">
+                                        {{ m.icon('person') }}
+                                        {{ __('backstage.qualification.user_info') }}
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="text-center mb-3">
+                                        <div class="avatar-placeholder bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center"
+                                             style="width: 80px; height: 80px; font-size: 2rem;">
+                                            {{ target_user.name|first|upper }}
+                                        </div>
+                                    </div>
+
+                                    <h4 class="text-center mb-3">
+                                        {{ target_user.name }}
+                                        {% if target_user.nick %}
+                                            <br><small class="text-muted">({{ target_user.nick }})</small>
+                                        {% endif %}
+                                    </h4>
+
+                                    <div class="list-group list-group-flush">
+                                        {% if target_user.contact and target_user.contact.mobile %}
+                                            <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                                <span>{{ __('backstage.qualification.mobile') }}</span>
+                                                <span class="text-muted">{{ target_user.contact.mobile }}</span>
+                                            </div>
+                                        {% endif %}
+
+                                        <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                            <span>{{ __('backstage.qualification.status') }}</span>
+                                            {% if target_user.state.arrived %}
+                                                <span class="badge bg-success">
+                                                    {{ m.icon('check-circle') }}
+                                                    {{ __('backstage.users.status.arrived') }}
+                                                </span>
+                                            {% else %}
+                                                <span class="badge bg-warning">
+                                                    {{ m.icon('clock') }}
+                                                    {{ __('backstage.users.status.not_arrived') }}
+                                                </span>
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                            <span>{{ __('backstage.qualification.total_hours') }}</span>
+                                            <span class="badge bg-primary fs-6">{{ user_hours|default(0) }}h</span>
+                                        </div>
+                                    </div>
+
+                                    {# User Certifications #}
+                                    {% if target_user.certifications is defined and target_user.certifications|length > 0 %}
+                                        <div class="mt-3">
+                                            <h6 class="text-muted mb-2">
+                                                {{ m.icon('award') }}
+                                                {{ __('backstage.qualification.certifications') }}
+                                            </h6>
+                                            <div class="d-flex flex-wrap gap-1">
+                                                {% for cert in target_user.certifications %}
+                                                    <span class="badge bg-secondary">{{ cert.title }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                    {# Previous Distributions #}
+                                    {% if past_distributions is defined and past_distributions|length > 0 %}
+                                        <div class="mt-3">
+                                            <h6 class="text-muted mb-2">
+                                                {{ m.icon('gift') }}
+                                                {{ __('backstage.qualification.previous_distributions') }}
+                                            </h6>
+                                            <div class="list-group list-group-flush">
+                                                {% for distribution in past_distributions|slice(0, 5) %}
+                                                    <div class="list-group-item d-flex justify-content-between align-items-center px-0 py-1">
+                                                        <span class="small">{{ distribution.item_name }}</span>
+                                                        <span class="badge bg-success small">{{ distribution.distributed_at }}</span>
+                                                    </div>
+                                                {% endfor %}
+                                                {% if past_distributions|length > 5 %}
+                                                    <div class="list-group-item px-0 py-1">
+                                                        <small class="text-muted">{{ __('backstage.qualification.and_more', [past_distributions|length - 5]) }}</small>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        {# Qualification Form Panel #}
+                        <div class="col-lg-8 mb-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">
+                                        {{ m.icon('gift') }}
+                                        {{ __('backstage.qualification.available_goodies') }}
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    {% if can_distribute %}
+                                        <form method="post" action="{{ url('/admin/backstage/users/qualify/' ~ target_user.id) }}" id="qualification-form">
+                                            {{ csrf() }}
+
+                                            {% if available_goodies|length > 0 %}
+                                                <div class="row" id="goodies-selection">
+                                                    {% for goodie in available_goodies %}
+                                                        <div class="col-md-6 col-xl-4 mb-3">
+                                                            <div class="card goodie-card h-100" data-goodie-id="{{ goodie.uuid }}">
+                                                                <div class="card-body">
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input goodie-checkbox"
+                                                                               type="checkbox"
+                                                                               name="goodies[]"
+                                                                               value="{{ goodie.uuid }}"
+                                                                               id="goodie-{{ goodie.uuid }}"
+                                                                               {% if not goodie.user_eligible %}disabled{% endif %}>
+                                                                        <label class="form-check-label w-100" for="goodie-{{ goodie.uuid }}">
+                                                                            <div class="d-flex justify-content-between align-items-start">
+                                                                                <div class="flex-grow-1">
+                                                                                    <h6 class="card-title mb-1">{{ goodie.name }}</h6>
+                                                                                    {% if goodie.description %}
+                                                                                        <p class="card-text small text-muted mb-2">{{ goodie.description }}</p>
+                                                                                    {% endif %}
+                                                                                </div>
+                                                                                {% if goodie.user_eligible %}
+                                                                                    <span class="badge bg-success ms-2">
+                                                                                        {{ m.icon('check') }}
+                                                                                        {{ __('backstage.qualification.eligible') }}
+                                                                                    </span>
+                                                                                {% else %}
+                                                                                    <span class="badge bg-danger ms-2">
+                                                                                        {{ m.icon('x') }}
+                                                                                        {{ __('backstage.qualification.not_eligible') }}
+                                                                                    </span>
+                                                                                {% endif %}
+                                                                            </div>
+                                                                            <div class="mt-2">
+                                                                                <small class="text-muted">
+                                                                                    {{ m.icon('clock') }}
+                                                                                    {{ __('backstage.qualification.required_hours', [goodie.required_hours]) }}
+                                                                                </small>
+                                                                            </div>
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+
+                                                <div class="row mt-4">
+                                                    <div class="col-12">
+                                                        {{ f.textarea('notes', __('backstage.qualification.notes'), {
+                                                            'rows': 3,
+                                                            'placeholder': __('backstage.qualification.notes_placeholder'),
+                                                            'help': __('backstage.qualification.notes_help')
+                                                        }) }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mt-3">
+                                                    <div class="col-12">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <div>
+                                                                <span class="text-muted small" id="selection-summary">
+                                                                    {{ __('backstage.qualification.no_selection') }}
+                                                                </span>
+                                                            </div>
+                                                            <div>
+                                                                <button type="button" class="btn btn-secondary me-2" id="clear-selection">
+                                                                    {{ m.icon('x-circle') }}
+                                                                    {{ __('backstage.qualification.clear_selection') }}
+                                                                </button>
+                                                                <button type="submit" class="btn btn-success" id="submit-qualification" disabled>
+                                                                    {{ m.icon('check-circle') }}
+                                                                    {{ __('backstage.qualification.submit') }}
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% else %}
+                                                <div class="text-center py-5">
+                                                    <div class="mb-3">
+                                                        {{ m.icon('gift', 64) }}
+                                                    </div>
+                                                    <h4 class="text-muted">{{ __('backstage.qualification.no_goodies.title') }}</h4>
+                                                    <p class="text-muted">
+                                                        {% if user_hours < 1 %}
+                                                            {{ __('backstage.qualification.no_goodies.no_hours') }}
+                                                        {% else %}
+                                                            {{ __('backstage.qualification.no_goodies.all_received') }}
+                                                        {% endif %}
+                                                    </p>
+                                                </div>
+                                            {% endif %}
+                                        </form>
+                                    {% else %}
+                                        <div class="alert alert-warning">
+                                            <h6>{{ __('backstage.qualification.insufficient_permissions.title') }}</h6>
+                                            <p class="mb-0">{{ __('backstage.qualification.insufficient_permissions.message') }}</p>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Hours Breakdown Panel #}
+                    {% if user_hours > 0 %}
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5 class="mb-0">
+                                            {{ m.icon('bar-chart') }}
+                                            {{ __('backstage.qualification.hours_breakdown') }}
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h6>{{ __('backstage.qualification.hours_summary') }}</h6>
+                                                <div class="progress mb-3">
+                                                    <div class="progress-bar bg-success" role="progressbar"
+                                                         style="width: 100%"
+                                                         aria-valuenow="{{ user_hours }}" aria-valuemin="0" aria-valuemax="{{ user_hours }}">
+                                                        {{ user_hours }}h {{ __('backstage.qualification.total') }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h6>{{ __('backstage.qualification.calculation_note') }}</h6>
+                                                <p class="small text-muted">
+                                                    {{ __('backstage.qualification.calculation_help') }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="alert alert-danger">
+                        <h5 class="alert-heading">
+                            {{ m.icon('exclamation-triangle') }}
+                            {{ __('backstage.qualification.user_not_found.title') }}
+                        </h5>
+                        <p class="mb-0">{{ __('backstage.qualification.user_not_found.message') }}</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{{ parent() }}
+<script src="{{ asset('assets/backstage-user-qualification.js') }}"></script>
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+{{ asset('backstage-user-qualification.css') }}
+{% endblock %>

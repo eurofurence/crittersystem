@@ -19,7 +19,7 @@
             </div>
 
             <div class="dropdown">
-                <button class="btn btn-dark btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
                     {{ m.icon('three-dots') }}
                     {{ __('form.actions') }}
                 </button>
@@ -53,8 +53,8 @@
 
         {# My Applications Section #}
         {% if pendingApplications|length > 0 %}
-            <div class="card mb-4">
-                <div class="card-header">
+            <div class="card mb-4 border-secondary {{ m.type_bg_class() }}">
+                <div class="card-header bg-secondary">
                     <div class="d-flex align-items-center justify-content-between">
                         <h5 class="card-title mb-0">
                             {{ m.icon('clock') }}
@@ -68,7 +68,7 @@
                     <div class="row g-3">
                         {% for application in pendingApplications %}
                             <div class="col-lg-6">
-                                <div class="card border-warning bg-warning-subtle">
+                                <div class="card border-warning bg-warning-subtle {{ m.type_bg_class() }}">
                                     <div class="card-body p-3">
                                         <div class="d-flex align-items-start justify-content-between">
                                             <div class="flex-grow-1">
@@ -563,8 +563,8 @@
 {#                 </div> #}
 
                 {# Comprehensive Certification Catalog #}
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="card border-secondary {{ m.type_bg_class() }}">
+                    <div class="card-header d-flex justify-content-between align-items-center bg-secondary">
                         <h5 class="mb-0">{{ __('user_certifications.certification_catalog') }}</h5>
                         <small class="text-muted">
                             {{ availableCertifications|length }} {{ __('user_certifications.certifications_available') }}

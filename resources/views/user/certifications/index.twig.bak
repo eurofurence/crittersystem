@@ -1,0 +1,637 @@
+{% extends 'layouts/app.twig' %}
+{% import 'macros/base.twig' as m %}
+{% import 'macros/form.twig' as f %}
+
+{% set title = __('user_certifications.my_certifications') %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {# Header #}
+        <div class="d-flex justify-content-between align-items-start mb-4">
+            <div>
+                <h1>
+                    {{ m.icon('award') }}
+                    {{ title }}
+                </h1>
+                <p class="text-muted">{{ __('user_certifications.user.description') }}</p>
+            </div>
+
+            <div class="dropdown">
+                <button class="btn btn-dark btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    {{ m.icon('three-dots') }}
+                    {{ __('form.actions') }}
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item" href="#" data-action="print-certifications">
+                            {{ m.icon('printer') }}
+                            {{ __('user_certifications.print') }}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ url('/user/certifications/export') }}">
+                            {{ m.icon('download') }}
+                            {{ __('user_certifications.export') }}
+                        </a>
+                    </li>
+                    {% if can('certification.help') %}
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="{{ url('/help/certifications') }}">
+                                {{ m.icon('question-circle') }}
+                                {{ __('user_certifications.help') }}
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        {% include 'layouts/parts/messages.twig' %}
+
+        {# My Applications Section #}
+        {% if pendingApplications|length > 0 %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <h5 class="card-title mb-0">
+                            {{ m.icon('clock') }}
+                            {{ __('user_certifications.my_applications') }}
+                            <span class="badge bg-warning-subtle text-warning ms-2">{{ pendingApplications|length }}</span>
+                        </h5>
+                        <small class="text-muted">{{ __('user_certifications.applications_pending_review') }}</small>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        {% for application in pendingApplications %}
+                            <div class="col-lg-6">
+                                <div class="card border-warning bg-warning-subtle">
+                                    <div class="card-body p-3">
+                                        <div class="d-flex align-items-start justify-content-between">
+                                            <div class="flex-grow-1">
+                                                <h6 class="card-title mb-2">
+                                                    {{ application.certification.title }}
+                                                </h6>
+                                                {% if application.certification.description %}
+                                                    <p class="card-text small text-muted mb-2">
+                                                        {{ application.certification.description|u.truncate(100) }}
+                                                    </p>
+                                                {% endif %}
+                                                <div class="small">
+                                                    <div class="mb-1">
+                                                        <strong>{{ __('user_certifications.applied_on') }}:</strong>
+                                                        {{ application.created_at|date('M d, Y') }}
+                                                    </div>
+                                                    <div class="mb-1">
+                                                        <strong>{{ __('user_certifications.status') }}:</strong>
+                                                        <span class="badge bg-warning">
+                                                            {{ m.icon('clock') }}
+                                                            {{ __('user_certifications.status.pending') }}
+                                                        </span>
+                                                    </div>
+                                                    {% if application.certification.contact_person %}
+                                                        <div class="mb-1">
+                                                            <strong>{{ __('user_certifications.contact') }}:</strong>
+                                                            {{ application.certification.contact_person }}
+                                                            {% if application.certification.contact_email %}
+                                                                <a href="mailto:{{ application.certification.contact_email }}" class="text-decoration-none ms-1">
+                                                                    {{ m.icon('envelope', 'small') }}
+                                                                </a>
+                                                            {% endif %}
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="ms-2">
+                                                {% if application.certification.allow_self_confirmation %}
+                                                    <a href="{{ url('/user/certifications/self-confirm/' ~ application.certification.uuid) }}"
+                                                       class="btn btn-success btn-sm mb-1"
+                                                       title="{{ __('user_certifications.self_confirm_tooltip') }}">
+                                                        {{ m.icon('check-circle') }}
+                                                        {{ __('user_certifications.self_confirm') }}
+                                                    </a>
+                                                {% endif %}
+                                                <button type="button"
+                                                        class="btn btn-secondary btn-sm withdraw-application-btn"
+                                                        data-certification-uuid="{{ application.certification.uuid }}"
+                                                        data-certification-title="{{ application.certification.title }}"
+                                                        title="{{ __('user_certifications.withdraw_application_tooltip') }}">
+                                                    {{ m.icon('x-circle') }}
+                                                    {{ __('user_certifications.withdraw') }}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="mt-3">
+                        <div class="alert alert-info d-flex align-items-center mb-0">
+                            {{ m.icon('info-circle', 'me-2') }}
+                            <div>
+                                <strong>{{ __('user_certifications.applications_info_title') }}:</strong>
+                                {{ __('user_certifications.applications_info_description') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+{#          #}{# Application History and Status Tracking #}
+{#         {% if applicationHistory|length > 0 %} #}
+{#             <div class="card mb-4"> #}
+{#                 <div class="card-header"> #}
+{#                     <div class="d-flex align-items-center justify-content-between"> #}
+{#                         <h5 class="card-title mb-0"> #}
+{#                             {{ m.icon('list-ul') }} #}
+{#                             {{ __('user_certifications.application_history') }} #}
+{#                         </h5> #}
+{#                         <div class="small text-muted"> #}
+{#                             {{ __('user_certifications.recent_applications') }} #}
+{#                         </div> #}
+{#                     </div> #}
+{#                 </div> #}
+{#                 <div class="card-body"> #}
+{#                      #}{# Application Statistics #}
+{#                     <div class="row g-2 mb-4"> #}
+{#                         <div class="col-lg-2 col-md-4 col-6"> #}
+{#                             <div class="card bg-light text-center"> #}
+{#                                 <div class="card-body py-2"> #}
+{#                                     <div class="fw-bold text-primary">{{ applicationStats.total_applications }}</div> #}
+{#                                     <small class="text-muted">{{ __('user_certifications.total_applications') }}</small> #}
+{#                                 </div> #}
+{#                             </div> #}
+{#                         </div> #}
+{#                         <div class="col-lg-2 col-md-4 col-6"> #}
+{#                             <div class="card bg-warning-subtle text-center"> #}
+{#                                 <div class="card-body py-2"> #}
+{#                                     <div class="fw-bold text-warning">{{ applicationStats.pending }}</div> #}
+{#                                     <small class="text-muted">{{ __('user_certifications.pending') }}</small> #}
+{#                                 </div> #}
+{#                             </div> #}
+{#                         </div> #}
+{#                         <div class="col-lg-2 col-md-4 col-6"> #}
+{#                             <div class="card bg-success-subtle text-center"> #}
+{#                                 <div class="card-body py-2"> #}
+{#                                     <div class="fw-bold text-success">{{ applicationStats.approved + applicationStats.self_confirmed }}</div> #}
+{#                                     <small class="text-muted">{{ __('user_certifications.approved') }}</small> #}
+{#                                 </div> #}
+{#                             </div> #}
+{#                         </div> #}
+{#                         <div class="col-lg-2 col-md-4 col-6"> #}
+{#                             <div class="card bg-danger-subtle text-center"> #}
+{#                                 <div class="card-body py-2"> #}
+{#                                     <div class="fw-bold text-danger">{{ applicationStats.rejected }}</div> #}
+{#                                     <small class="text-muted">{{ __('user_certifications.rejected') }}</small> #}
+{#                                 </div> #}
+{#                             </div> #}
+{#                         </div> #}
+{#                         <div class="col-lg-2 col-md-4 col-6"> #}
+{#                             <div class="card bg-secondary-subtle text-center"> #}
+{#                                 <div class="card-body py-2"> #}
+{#                                     <div class="fw-bold text-secondary">{{ applicationStats.cancelled }}</div> #}
+{#                                     <small class="text-muted">{{ __('user_certifications.cancelled') }}</small> #}
+{#                                 </div> #}
+{#                             </div> #}
+{#                         </div> #}
+{#                     </div> #}
+
+{#                      #}{# Application History Timeline #}
+{#                     <div class="row"> #}
+{#                         <div class="col-12"> #}
+{#                             <h6 class="mb-3"> #}
+{#                                 {{ m.icon('clock-history') }} #}
+{#                                 {{ __('user_certifications.recent_activity') }} #}
+{#                             </h6> #}
+{#                             <div class="list-group"> #}
+{#                                 {% for application in applicationHistory %} #}
+{#                                     {% set status_class = application.status == 'approved' or application.status == 'self_confirmed' ? 'success' : #}
+{#                                                         (application.status == 'pending' ? 'warning' : #}
+{#                                                         (application.status == 'rejected' ? 'danger' : 'secondary')) %} #}
+{#                                     {% set status_icon = application.status == 'approved' or application.status == 'self_confirmed' ? 'check-circle-fill' : #}
+{#                                                         (application.status == 'pending' ? 'clock-fill' : #}
+{#                                                         (application.status == 'rejected' ? 'x-circle-fill' : 'dash-circle-fill')) %} #}
+
+{#                                     <div class="list-group-item d-flex align-items-start"> #}
+{#                                         <div class="me-3 mt-1"> #}
+{#                                             {{ m.icon(status_icon, 'text-' ~ status_class) }} #}
+{#                                         </div> #}
+{#                                         <div class="flex-grow-1"> #}
+{#                                             <div class="d-flex justify-content-between align-items-start"> #}
+{#                                                 <div> #}
+{#                                                     <h6 class="mb-1">{{ application.certification.title }}</h6> #}
+{#                                                     <p class="mb-1 text-muted"> #}
+{#                                                         {% if application.status == 'approved' %} #}
+{#                                                             {{ __('user_certifications.application_approved_on', {'date': application.updated_at|date('M d, Y')}) }} #}
+{#                                                         {% elseif application.status == 'self_confirmed' %} #}
+{#                                                             {{ __('user_certifications.self_confirmed_on', {'date': application.updated_at|date('M d, Y')}) }} #}
+{#                                                         {% elseif application.status == 'pending' %} #}
+{#                                                             {{ __('user_certifications.application_submitted_on', {'date': application.created_at|date('M d, Y')}) }} #}
+{#                                                         {% elseif application.status == 'rejected' %} #}
+{#                                                             {{ __('user_certifications.application_rejected_on', {'date': application.updated_at|date('M d, Y')}) }} #}
+{#                                                         {% elseif application.status == 'cancelled' %} #}
+{#                                                             {{ __('user_certifications.application_cancelled_on', {'date': application.updated_at|date('M d, Y')}) }} #}
+{#                                                         {% endif %} #}
+{#                                                     </p> #}
+{#                                                     {% if application.status == 'pending' %} #}
+{#                                                         {% set days_pending = (('now'|date('U')) - (application.created_at|date('U'))) // 86400 %} #}
+{#                                                         <small class="text-muted"> #}
+{#                                                             {{ __('user_certifications.pending_for_days', {'days': days_pending}) }} #}
+{#                                                         </small> #}
+{#                                                     {% endif %} #}
+{#                                                     {% if application.date_expires %} #}
+{#                                                         <small class="text-muted d-block"> #}
+{#                                                             {{ __('user_certifications.expires_on', {'date': application.date_expires|date('M d, Y')}) }} #}
+{#                                                         </small> #}
+{#                                                     {% endif %} #}
+{#                                                 </div> #}
+{#                                                 <div> #}
+{#                                                     <span class="badge bg-{{ status_class }}-subtle text-{{ status_class }}"> #}
+{#                                                         {{ m.icon(status_icon, 'me-1') }} #}
+{#                                                         {{ __('user_certifications.status.' ~ application.status) }} #}
+{#                                                     </span> #}
+{#                                                 </div> #}
+{#                                             </div> #}
+{#                                         </div> #}
+{#                                     </div> #}
+{#                                 {% endfor %} #}
+{#                             </div> #}
+
+{#                             {% if applicationStats.total_applications > 10 %} #}
+{#                                 <div class="text-center mt-3"> #}
+{#                                     <a href="{{ url('/user/certifications/history') }}" class="btn btn-primary"> #}
+{#                                         {{ m.icon('list-ul') }} #}
+{#                                         {{ __('user_certifications.view_full_history') }} #}
+{#                                         <span class="badge bg-primary-subtle text-primary ms-2">{{ applicationStats.total_applications - 10 }}</span> #}
+{#                                     </a> #}
+{#                                 </div> #}
+{#                             {% endif %} #}
+{#                         </div> #}
+{#                     </div> #}
+{#                 </div> #}
+{#             </div> #}
+{#         {% endif %} #}
+
+        {# Certification Overview Dashboard #}
+        {% set active_count = 0 %}
+        {% set pending_count = 0 %}
+        {% set self_confirmed_count = 0 %}
+        {% set expired_count = 0 %}
+        {% set total_user_certifications = certifications|length %}
+        {% set expiring_count = 0 %}
+        {% set available_count = 0 %}
+        {% set self_confirmable_count = 0 %}
+
+        {# Count user certifications by status #}
+        {% for certification in certifications %}
+            {% set status = certification.pivot.status %}
+            {% if status == 'approved' %}
+                {% set active_count = active_count + 1 %}
+            {% elseif status == 'pending' %}
+                {% set pending_count = pending_count + 1 %}
+            {% elseif status == 'self_confirmed' %}
+                {% set self_confirmed_count = self_confirmed_count + 1 %}
+            {% endif %}
+
+            {% if certification.pivot.date_expires %}
+                {% set expire_date = certification.pivot.date_expires|date('Y-m-d') %}
+                {% set current_date = 'now'|date('Y-m-d') %}
+                {% set thirty_days_from_now = '+30 days'|date('Y-m-d') %}
+                {% if expire_date < current_date %}
+                    {% set expired_count = expired_count + 1 %}
+                {% elseif expire_date < thirty_days_from_now %}
+                    {% set expiring_count = expiring_count + 1 %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+
+        {# Count available certifications #}
+        {% for certification in availableCertifications %}
+            {% if certification.is_active %}
+                {% set available_count = available_count + 1 %}
+                {% if certification.allow_self_confirmation %}
+                    {% set self_confirmable_count = self_confirmable_count + 1 %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+
+{#         <div class="row mb-4"> #}
+{#             <div class="col-lg-2 col-md-4 col-sm-6 mb-3"> #}
+{#                 <div class="card text-center"> #}
+{#                     <div class="card-body"> #}
+{#                         <div class="h3 text-success mb-1">{{ active_count + self_confirmed_count }}</div> #}
+{#                         <div class="text-muted small">{{ __('user_certifications.stats.my_active') }}</div> #}
+{#                     </div> #}
+{#                 </div> #}
+{#             </div> #}
+{#             <div class="col-lg-2 col-md-4 col-sm-6 mb-3"> #}
+{#                 <div class="card text-center"> #}
+{#                     <div class="card-body"> #}
+{#                         <div class="h3 text-warning mb-1">{{ pending_count }}</div> #}
+{#                         <div class="text-muted small">{{ __('user_certifications.stats.pending') }}</div> #}
+{#                     </div> #}
+{#                 </div> #}
+{#             </div> #}
+{#             <div class="col-lg-2 col-md-4 col-sm-6 mb-3"> #}
+{#                 <div class="card text-center"> #}
+{#                     <div class="card-body"> #}
+{#                         <div class="h3 text-danger mb-1">{{ expired_count }}</div> #}
+{#                         <div class="text-muted small">{{ __('user_certifications.stats.expired') }}</div> #}
+{#                     </div> #}
+{#                 </div> #}
+{#             </div> #}
+{#             <div class="col-lg-2 col-md-4 col-sm-6 mb-3"> #}
+{#                 <div class="card text-center"> #}
+{#                     <div class="card-body"> #}
+{#                         <div class="h3 text-info mb-1">{{ expiring_count }}</div> #}
+{#                         <div class="text-muted small">{{ __('user_certifications.stats.expiring_soon') }}</div> #}
+{#                     </div> #}
+{#                 </div> #}
+{#             </div> #}
+{#             <div class="col-lg-2 col-md-4 col-sm-6 mb-3"> #}
+{#                 <div class="card text-center"> #}
+{#                     <div class="card-body"> #}
+{#                         <div class="h3 text-primary mb-1">{{ available_count }}</div> #}
+{#                         <div class="text-muted small">{{ __('user_certifications.stats.available') }}</div> #}
+{#                     </div> #}
+{#                 </div> #}
+{#             </div> #}
+{#             <div class="col-lg-2 col-md-4 col-sm-6 mb-3"> #}
+{#                 <div class="card text-center"> #}
+{#                     <div class="card-body"> #}
+{#                         <div class="h3 text-success mb-1">{{ self_confirmable_count }}</div> #}
+{#                         <div class="text-muted small">{{ __('user_certifications.stats.self_confirmable') }}</div> #}
+{#                     </div> #}
+{#                 </div> #}
+{#             </div> #}
+{#         </div> #}
+
+        {# Comprehensive Certification Catalog #}
+        <div class="row">
+            <div class="col-12">
+{#                  #}{# Enhanced Search and Filters #}
+{#                 <div class="card mb-3"> #}
+{#                     <div class="card-header"> #}
+{#                         <div class="d-flex justify-content-between align-items-center"> #}
+{#                             <h6 class="mb-0">{{ __('user_certifications.filters') }}</h6> #}
+{#                             <button type="button" class="btn btn-sm btn-secondary" id="clear-filters" style="display: none;"> #}
+{#                                 {{ m.icon('x-circle') }} #}
+{#                                 {{ __('user_certifications.clear_filters') }} #}
+{#                             </button> #}
+{#                         </div> #}
+{#                     </div> #}
+{#                     <div class="card-body"> #}
+{#                          #}{# Active Filters Display #}
+{#                         <div id="active-filters" class="mb-3" style="display: none;"> #}
+{#                             <div class="d-flex flex-wrap gap-2 align-items-center"> #}
+{#                                 <small class="text-muted">{{ __('user_certifications.active_filters') }}:</small> #}
+{#                                 <div id="filter-badges"></div> #}
+{#                             </div> #}
+{#                         </div> #}
+
+{#                         <form method="GET" action="{{ url('/user/certifications') }}" class="row g-3" id="certification-filters" #}
+{#                               role="search" #}
+{#                               aria-label="{{ __('user_certifications.filter_form_aria_label') }}"> #}
+{#                             <div class="col-md-4"> #}
+{#                                 <label for="search" class="form-label"> #}
+{#                                     {{ m.icon('search') }} #}
+{#                                     {{ __('form.search') }} #}
+{#                                 </label> #}
+{#                                 <input type="search" #}
+{#                                        class="form-control" #}
+{#                                        id="search" #}
+{#                                        name="search" #}
+{#                                        value="{{ search }}" #}
+{#                                        placeholder="{{ __('user_certifications.search_placeholder') }}" #}
+{#                                        autocomplete="off" #}
+{#                                        aria-describedby="search-help"> #}
+{#                                 <div class="form-text" id="search-help">{{ __('user_certifications.search_help') }}</div> #}
+{#                             </div> #}
+{#                             <div class="col-md-2"> #}
+{#                                 <label for="status" class="form-label"> #}
+{#                                     {{ m.icon('person-badge') }} #}
+{#                                     {{ __('user_certifications.my_status') }} #}
+{#                                 </label> #}
+{#                                 <select class="form-select" id="status" name="status"> #}
+{#                                     <option value="">{{ __('user_certifications.all_statuses') }}</option> #}
+{#                                     <option value="approved"{{ currentStatus == 'approved' ? ' selected' : '' }}> #}
+{#                                         {{ __('user_certifications.status.approved') }} #}
+{#                                     </option> #}
+{#                                     <option value="pending"{{ currentStatus == 'pending' ? ' selected' : '' }}> #}
+{#                                         {{ __('user_certifications.status.pending') }} #}
+{#                                     </option> #}
+{#                                     <option value="self_confirmed"{{ currentStatus == 'self_confirmed' ? ' selected' : '' }}> #}
+{#                                         {{ __('user_certifications.status.self_confirmed') }} #}
+{#                                     </option> #}
+{#                                     <option value="expired"{{ currentStatus == 'expired' ? ' selected' : '' }}> #}
+{#                                         {{ __('user_certifications.status.expired') }} #}
+{#                                     </option> #}
+{#                                     <option value="revoked"{{ currentStatus == 'revoked' ? ' selected' : '' }}> #}
+{#                                         {{ __('user_certifications.status.revoked') }} #}
+{#                                     </option> #}
+{#                                     <option value="not_applied"{{ currentStatus == 'not_applied' ? ' selected' : '' }}> #}
+{#                                         {{ __('user_certifications.status.not_applied') }} #}
+{#                                     </option> #}
+{#                                 </select> #}
+{#                             </div> #}
+{#                             <div class="col-md-2"> #}
+{#                                 <label for="type-filter" class="form-label"> #}
+{#                                     {{ m.icon('tags') }} #}
+{#                                     {{ __('user_certifications.type') }} #}
+{#                                 </label> #}
+{#                                 <select class="form-select" id="type-filter" name="type"> #}
+{#                                     <option value="">{{ __('user_certifications.all_types') }}</option> #}
+{#                                     <option value="self_confirmable"{{ request.get('type') == 'self_confirmable' ? ' selected' : '' }}> #}
+{#                                         {{ m.icon('check-circle') }} {{ __('user_certifications.self_confirmable') }} #}
+{#                                     </option> #}
+{#                                     <option value="perpetual"{{ request.get('type') == 'perpetual' ? ' selected' : '' }}> #}
+{#                                         {{ m.icon('infinity') }} {{ __('user_certifications.perpetual') }} #}
+{#                                     </option> #}
+{#                                     <option value="time_limited"{{ request.get('type') == 'time_limited' ? ' selected' : '' }}> #}
+{#                                         {{ m.icon('clock') }} {{ __('user_certifications.time_limited') }} #}
+{#                                     </option> #}
+{#                                 </select> #}
+{#                             </div> #}
+{#                             <div class="col-md-2"> #}
+{#                                 <label for="availability-filter" class="form-label"> #}
+{#                                     {{ m.icon('funnel') }} #}
+{#                                     {{ __('user_certifications.availability') }} #}
+{#                                 </label> #}
+{#                                 <select class="form-select" id="availability-filter" name="availability"> #}
+{#                                     <option value="">{{ __('user_certifications.all_available') }}</option> #}
+{#                                     <option value="available"{{ request.get('availability') == 'available' ? ' selected' : '' }}> #}
+{#                                         {{ __('user_certifications.available_to_apply') }} #}
+{#                                     </option> #}
+{#                                     <option value="have"{{ request.get('availability') == 'have' ? ' selected' : '' }}> #}
+{#                                         {{ __('user_certifications.i_have') }} #}
+{#                                     </option> #}
+{#                                 </select> #}
+{#                             </div> #}
+{#                             <div class="col-md-1"> #}
+{#                                 <label for="sort-filter" class="form-label"> #}
+{#                                     {{ m.icon('sort-alpha-down') }} #}
+{#                                     {{ __('user_certifications.sort') }} #}
+{#                                 </label> #}
+{#                                 <select class="form-select" id="sort-filter" name="sort"> #}
+{#                                     <option value="title"{{ request.get('sort') == 'title' ? ' selected' : '' }}> #}
+{#                                         {{ __('user_certifications.sort.title') }} #}
+{#                                     </option> #}
+{#                                     <option value="status"{{ request.get('sort') == 'status' ? ' selected' : '' }}> #}
+{#                                         {{ __('user_certifications.sort.status') }} #}
+{#                                     </option> #}
+{#                                     <option value="type"{{ request.get('sort') == 'type' ? ' selected' : '' }}> #}
+{#                                         {{ __('user_certifications.sort.type') }} #}
+{#                                     </option> #}
+{#                                 </select> #}
+{#                             </div> #}
+{#                             <div class="col-md-1"> #}
+{#                                 <label class="form-label">&nbsp;</label> #}
+{#                                 <button type="submit" class="btn btn-primary d-block w-100" title="{{ __('user_certifications.apply_server_filters') }}"> #}
+{#                                     {{ m.icon('search') }} #}
+{#                                     <span class="d-none d-lg-inline">{{ __('form.search') }}</span> #}
+{#                                 </button> #}
+{#                             </div> #}
+{#                         </form> #}
+
+{#                          #}{# Quick Filter Buttons - Enhanced with server-side fallback #}
+{#                         <div class="row mt-3"> #}
+{#                             <div class="col-12"> #}
+{#                                 <div class="d-flex flex-wrap gap-2"> #}
+{#                                     <small class="text-muted align-self-center me-2">{{ __('user_certifications.quick_filters') }}:</small> #}
+
+{#                                      #}{# Self-Confirmable Quick Filter #}
+{#                                     <form method="GET" action="{{ url('/user/certifications') }}" class="d-inline-block"> #}
+{#                                         <input type="hidden" name="type" value="self_confirmable"> #}
+{#                                         <input type="hidden" name="availability" value="available"> #}
+{#                                         <button type="submit" class="btn btn-sm btn-success quick-filter" #}
+{#                                                 data-filter="self_confirmable" #}
+{#                                                 data-filter-type="self_confirmable" #}
+{#                                                 aria-label="{{ __('user_certifications.filter_by_self_confirmable') }}" #}
+{#                                                 title="{{ __('user_certifications.quick_filter_tooltip', {'type': __('user_certifications.self_confirmable_only')}) }}"> #}
+{#                                             {{ m.icon('check-circle') }} #}
+{#                                             {{ __('user_certifications.self_confirmable_only') }} #}
+{#                                         </button> #}
+{#                                     </form> #}
+
+{#                                      #}{# Available Quick Filter #}
+{#                                     <form method="GET" action="{{ url('/user/certifications') }}" class="d-inline-block"> #}
+{#                                         <input type="hidden" name="availability" value="available"> #}
+{#                                         <button type="submit" class="btn btn-sm btn-primary quick-filter" #}
+{#                                                 data-filter="available" #}
+{#                                                 data-filter-type="available" #}
+{#                                                 aria-label="{{ __('user_certifications.filter_by_available') }}" #}
+{#                                                 title="{{ __('user_certifications.quick_filter_tooltip', {'type': __('user_certifications.available_only')}) }}"> #}
+{#                                             {{ m.icon('plus-circle') }} #}
+{#                                             {{ __('user_certifications.available_only') }} #}
+{#                                         </button> #}
+{#                                     </form> #}
+
+{#                                      #}{# Expiring Quick Filter #}
+{#                                     <form method="GET" action="{{ url('/user/certifications') }}" class="d-inline-block"> #}
+{#                                         <input type="hidden" name="status" value="approved"> #}
+{#                                         <button type="submit" class="btn btn-sm btn-warning quick-filter" #}
+{#                                                 data-filter="expiring" #}
+{#                                                 data-filter-type="expiring" #}
+{#                                                 aria-label="{{ __('user_certifications.filter_by_expiring') }}" #}
+{#                                                 title="{{ __('user_certifications.quick_filter_tooltip', {'type': __('user_certifications.expiring_only')}) }}"> #}
+{#                                             {{ m.icon('exclamation-triangle') }} #}
+{#                                             {{ __('user_certifications.expiring_only') }} #}
+{#                                         </button> #}
+{#                                     </form> #}
+
+{#                                      #}{# Expired Quick Filter #}
+{#                                     <form method="GET" action="{{ url('/user/certifications') }}" class="d-inline-block"> #}
+{#                                         <input type="hidden" name="status" value="expired"> #}
+{#                                         <button type="submit" class="btn btn-sm btn-danger quick-filter" #}
+{#                                                 data-filter="expired" #}
+{#                                                 data-filter-type="expired" #}
+{#                                                 aria-label="{{ __('user_certifications.filter_by_expired') }}" #}
+{#                                                 title="{{ __('user_certifications.quick_filter_tooltip', {'type': __('user_certifications.expired_only')}) }}"> #}
+{#                                             {{ m.icon('x-circle') }} #}
+{#                                             {{ __('user_certifications.expired_only') }} #}
+{#                                         </button> #}
+{#                                     </form> #}
+{#                                 </div> #}
+{#                             </div> #}
+{#                         </div> #}
+{#                     </div> #}
+{#                 </div> #}
+
+                {# Comprehensive Certification Catalog #}
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">{{ __('user_certifications.certification_catalog') }}</h5>
+                        <small class="text-muted">
+                            {{ availableCertifications|length }} {{ __('user_certifications.certifications_available') }}
+                        </small>
+                    </div>
+
+                    {% if availableCertifications|length > 0 %}
+                        <div class="list-group list-group-flush" id="certification-catalog"
+                             role="region"
+                             aria-label="{{ __('user_certifications.certification_list') }}"
+                             aria-live="polite"
+                             aria-relevant="additions removals">
+                            {% for certification in availableCertifications %}
+                                {% if certification.is_active %}
+                                    {# Find user's status for this certification #}
+                                    {% set user_certification = null %}
+                                    {% set user_status = 'not_applied' %}
+                                    {% set is_expired = false %}
+                                    {% set is_expiring_soon = false %}
+
+                                    {% for user_cert in certifications %}
+                                        {% if user_cert.id == certification.id %}
+                                            {% set user_certification = user_cert.pivot %}
+                                            {% set user_status = user_cert.pivot.status %}
+
+                                            {# Check expiry status #}
+                                            {% if user_cert.pivot.date_expires %}
+                                                {% set expire_date = user_cert.pivot.date_expires|date('Y-m-d') %}
+                                                {% set current_date = 'now'|date('Y-m-d') %}
+                                                {% set thirty_days_from_now = '+30 days'|date('Y-m-d') %}
+                                                {% if expire_date < current_date %}
+                                                    {% set is_expired = true %}
+                                                    {% set user_status = 'expired' %}
+                                                {% elseif expire_date < thirty_days_from_now %}
+                                                    {% set is_expiring_soon = true %}
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {# Use the certification card component #}
+                                    {% include 'components/certification-card.twig' with {
+                                        'certification': certification,
+                                        'user_certification': user_certification,
+                                        'user_status': user_status,
+                                        'is_expired': is_expired,
+                                        'is_expiring_soon': is_expiring_soon,
+                                        'show_actions': true
+                                    } %}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="card-body text-center py-5">
+                            <div class="text-muted">
+                                {{ m.icon('award', 'display-6 mb-3') }}
+                                <h5>{{ __('user_certifications.no_certifications_available') }}</h5>
+                                <p>{{ __('user_certifications.no_certifications_available_description') }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ asset('assets/certifications.js') }}"></script>
+{% endblock %}

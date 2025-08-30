@@ -41,9 +41,20 @@
                         {{ __('form.edit') }}
                     </a>
 
+                    {% if certification.is_active and not certification.allow_self_confirmation %}
+                        <a href="{{ url('/admin/certifications/' ~ certification.uuid ~ '/qr') }}"
+                           class="btn btn-info"
+                           title="{{ __('Show QR code for certification confirmation') }}">
+                            {{ m.icon('qr-code') }}
+                            {{ __('QR Code') }}
+                        </a>
+                    {% endif %}
+
                     {% if certification.is_active %}
                         <form method="post" action="{{ url('/admin/certifications/' ~ certification.uuid ~ '/deactivate') }}" class="d-inline">
                             {{ csrf() }}
+                            {{ f.hidden('uuid', certification.uuid) }}
+                            {{ f.hidden('deactivate', 'on') }}
                             <button type="submit"
                                     class="btn btn-warning"
                                     onclick="return confirm('{{ __('certifications.deactivate.confirm', [certification.title|e]) }}')">
@@ -54,6 +65,8 @@
                     {% else %}
                         <form method="post" action="{{ url('/admin/certifications/' ~ certification.uuid ~ '/reactivate') }}" class="d-inline">
                             {{ csrf() }}
+                            {{ f.hidden('uuid', certification.uuid) }}
+                            {{ f.hidden('reactivate', 'on') }}
                             <button type="submit" class="btn btn-success">
                                 {{ m.icon('play-circle') }}
                                 {{ __('certifications.reactivate') }}
@@ -71,6 +84,8 @@
                             <li>
                                 <form method="post" action="{{ url('/admin/certifications/' ~ certification.uuid ~ '/mass-revoke') }}" class="d-inline w-100">
                                     {{ csrf() }}
+                                    {{ f.hidden('uuid', certification.uuid) }}
+                                    {{ f.hidden('mass_revoke', 'on') }}
                                     <button type="submit"
                                             class="dropdown-item text-warning"
                                             onclick="return confirm('{{ __('certifications.mass_revoke.confirm', [certification.title|e]) }}')">
@@ -104,8 +119,8 @@
         <div class="row">
             {# Certification Details #}
             <div class="col-lg-4 mb-4">
-                <div class="card">
-                    <div class="card-header">
+                <div class="card border-secondary {{ m.type_bg_class() }}">
+                    <div class="card-header bg-secondary">
                         <h5 class="mb-0">
                             {{ m.icon('info-circle') }}
                             {{ __('certifications.details') }}
@@ -188,8 +203,8 @@
                 </div>
 
                 {# Statistics Card #}
-                <div class="card mt-4">
-                    <div class="card-header">
+                <div class="card mt-4 border-secondary {{ m.type_bg_class() }}">
+                    <div class="card-header bg-secondary">
                         <h5 class="mb-0">
                             {{ m.icon('bar-chart') }}
                             {{ __('certifications.statistics') }}
@@ -322,8 +337,8 @@
     {% import 'macros/base.twig' as m %}
     {% import 'macros/form.twig' as f %}
 
-    <div class="card mt-3">
-        <div class="card-header d-flex justify-content-between align-items-center">
+    <div class="card mt-3 border-secondary {{ m.type_bg_class() }}">
+        <div class="card-header d-flex justify-content-between align-items-center bg-secondary">
             <h6 class="mb-0">
                 {% set statusIcons = {
                     'approved': 'check-circle',
@@ -386,7 +401,7 @@
                             <button type="button"
                                     class="btn btn-success btn-sm"
                                     id="bulk-approve-{{ status }}"
-                                    data-action="approve"
+                                    data-bulk-action="approve"
                                     data-status="{{ status }}"
                                     data-certification-id="{{ certification.id }}"
                                     disabled>
@@ -409,7 +424,7 @@
                             <button type="button"
                                     class="btn btn-warning btn-sm"
                                     id="bulk-revoke-{{ status }}"
-                                    data-action="revoke"
+                                    data-bulk-action="revoke"
                                     data-status="{{ status }}"
                                     data-certification-id="{{ certification.id }}"
                                     disabled>

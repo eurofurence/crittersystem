@@ -3339,3 +3339,735 @@ msgstr "Successfully updated user certification"
 
 msgid "certification.withdraw.success"
 msgstr "Successfully withdraw"
+
+# Backstage translations
+msgid "backstage.activity.by"
+msgstr "by"
+
+msgid "backstage.back_to_dashboard"
+msgstr "Back to Dashboard"
+
+msgid "backstage.back_to_search"
+msgstr "Back to Search"
+
+msgid "backstage.charts.loading"
+msgstr "Loading chart data..."
+
+msgid "backstage.coming_soon"
+msgstr "Coming Soon"
+
+msgid "backstage.created_at"
+msgstr "Created At"
+
+msgid "backstage.dashboard.error.message"
+msgstr "An error occurred while loading the dashboard."
+
+msgid "backstage.dashboard.error.title"
+msgstr "Dashboard Error"
+
+msgid "backstage.dashboard.title"
+msgstr "Backstage Dashboard"
+
+msgid "backstage.distribution.filter.date_from"
+msgstr "From Date"
+
+msgid "backstage.distribution.filter.date_to"
+msgstr "To Date"
+
+msgid "backstage.distribution.filter.distributor"
+msgstr "Distributor"
+
+msgid "backstage.distribution.filter.my_distributions"
+msgstr "Only My Distributions"
+
+msgid "backstage.distribution.filter.title"
+msgstr "Filter Distributions"
+
+msgid "backstage.distribution.filter.user"
+msgstr "User"
+
+msgid "backstage.distribution.filter.user_placeholder"
+msgstr "Search by name or email..."
+
+msgid "backstage.distribution.history.date"
+msgstr "Date"
+
+msgid "backstage.distribution.history.distributor"
+msgstr "Distributor"
+
+msgid "backstage.distribution.history.empty.filtered"
+msgstr "No distributions found matching your filters."
+
+msgid "backstage.distribution.history.empty.message"
+msgstr "No distributions have been made yet."
+
+msgid "backstage.distribution.history.empty.title"
+msgstr "No Distributions Found"
+
+msgid "backstage.distribution.history.hours"
+msgstr "Hours"
+
+msgid "backstage.distribution.history.item"
+msgstr "Item"
+
+msgid "backstage.distribution.history.notes"
+msgstr "Notes"
+
+msgid "backstage.distribution.history.title"
+msgstr "Distribution History"
+
+msgid "backstage.distribution.history.user"
+msgstr "User"
+
+msgid "backstage.distribution.history.you"
+msgstr "You"
+
+msgid "backstage.distribution.reports"
+msgstr "Reports"
+
+msgid "backstage.distribution.start_distributing"
+msgstr "Start Distribution"
+
+msgid "backstage.distribution.stats.today"
+msgstr "Today"
+
+msgid "backstage.distribution.stats.total"
+msgstr "Total"
+
+msgid "backstage.distribution.stats.unique_users"
+msgstr "Unique Users"
+
+msgid "backstage.distribution.stats.week"
+msgstr "This Week"
+
+msgid "backstage.distribution.title"
+msgstr "Distribution Center"
+
+msgid "backstage.distribution_stats.title"
+msgstr "Distribution Statistics"
+
+msgid "backstage.goodies.categories.back_to_list"
+msgstr "Back to Categories"
+
+msgid "backstage.goodies.categories.basic_info"
+msgstr "Basic Information"
+
+msgid "backstage.goodies.categories.create.first"
+msgstr "Create First Category"
+
+msgid "backstage.goodies.categories.create.submit"
+msgstr "Create Category"
+
+msgid "backstage.goodies.categories.create.title"
+msgstr "Create Category"
+
+msgid "backstage.goodies.categories.description"
+msgstr "Description"
+
+msgid "backstage.goodies.categories.description_help"
+msgstr "Optional description of this category"
+
+msgid "backstage.goodies.categories.description_placeholder"
+msgstr "Enter category description..."
+
+msgid "backstage.goodies.categories.details"
+msgstr "Category Details"
+
+msgid "backstage.goodies.categories.display_order"
+msgstr "Display Order"
+
+msgid "backstage.goodies.categories.display_order_help"
+msgstr "Lower numbers are displayed first"
+
+msgid "backstage.goodies.categories.empty.message"
+msgstr "No categories have been created yet."
+
+msgid "backstage.goodies.categories.empty.title"
+msgstr "No Categories Found"
+
+msgid "backstage.goodies.categories.help.display_order"
+msgstr "Categories with lower display order values appear first in lists."
+
+msgid "backstage.goodies.categories.help.organization"
+msgstr "Categories help organize your goodies into logical groups."
+
+msgid "backstage.goodies.categories.help.status"
+msgstr "Inactive categories and their items are hidden from distribution."
+
+msgid "backstage.goodies.categories.help.title"
+msgstr "Categories help organize your goodies"
+
+msgid "backstage.goodies.categories.is_active"
+msgstr "Active"
+
+msgid "backstage.goodies.categories.is_active_help"
+msgstr "Inactive categories are hidden from distribution"
+
+msgid "backstage.goodies.categories.items"
+msgstr "Items"
+
+msgid "backstage.goodies.categories.items_count"
+msgstr "Items Count"
+
+msgid "backstage.goodies.categories.more_actions"
+msgstr "More Actions"
+
+msgid "backstage.goodies.categories.name"
+msgstr "Category Name"
+
+msgid "backstage.goodies.categories.name_help"
+msgstr "A clear, descriptive name for this category"
+
+msgid "backstage.goodies.categories.name_placeholder"
+msgstr "Enter category name..."
+
+msgid "backstage.goodies.categories.order"
+msgstr "Order"
+
+msgid "backstage.goodies.categories.settings"
+msgstr "Category Settings"
+
+msgid "backstage.goodies.categories.show.title"
+msgstr "Category Details"
+
+msgid "backstage.goodies.categories.status"
+msgstr "Status"
+
+msgid "backstage.goodies.categories.title"
+msgstr "Goodies Categories"
+
+msgid "backstage.goodies.distributions.date"
+msgstr "Distribution Date"
+
+msgid "backstage.goodies.distributions.distributed_by"
+msgstr "Distributed By"
+
+msgid "backstage.goodies.distributions.empty.help"
+msgstr "Distributions will appear here once items are given out."
+
+msgid "backstage.goodies.distributions.empty.title"
+msgstr "No Distributions Yet"
+
+msgid "backstage.goodies.distributions.empty.message_for_item"
+msgstr "No distributions have been made for %s yet."
+
+msgid "backstage.goodies.distributions.notes"
+msgstr "Notes"
+
+msgid "backstage.goodies.distributions.system"
+msgstr "System"
+
+msgid "backstage.goodies.distributions.user"
+msgstr "Recipient"
+
+msgid "backstage.goodies.items.add_distribution"
+msgstr "Add Distribution"
+
+msgid "backstage.goodies.items.back_to_list"
+msgstr "Back to Items"
+
+msgid "backstage.goodies.items.basic_info"
+msgstr "Basic Information"
+
+msgid "backstage.goodies.items.category"
+msgstr "Category"
+
+msgid "backstage.goodies.items.category_help"
+msgstr "Select a category for organization"
+
+msgid "backstage.goodies.items.create.first"
+msgstr "Create First Item"
+
+msgid "backstage.goodies.items.create.submit"
+msgstr "Create Item"
+
+msgid "backstage.goodies.items.create.title"
+msgstr "Create Item"
+
+msgid "backstage.goodies.items.description"
+msgstr "Description"
+
+msgid "backstage.goodies.items.description_help"
+msgstr "Optional description of this item"
+
+msgid "backstage.goodies.items.description_placeholder"
+msgstr "Enter item description..."
+
+msgid "backstage.goodies.items.details"
+msgstr "Item Details"
+
+msgid "backstage.goodies.items.display_order"
+msgstr "Display Order"
+
+msgid "backstage.goodies.items.display_order_help"
+msgstr "Lower numbers are displayed first"
+
+msgid "backstage.goodies.items.distributed"
+msgstr "Distributed"
+
+msgid "backstage.goodies.items.distributions"
+msgstr "Distribution History"
+
+msgid "backstage.goodies.items.empty.filtered"
+msgstr "No items found matching your filters."
+
+msgid "backstage.goodies.items.empty.message"
+msgstr "No items have been created yet."
+
+msgid "backstage.goodies.items.empty.title"
+msgstr "No Items Found"
+
+msgid "backstage.goodies.items.filter.title"
+msgstr "Filter Items"
+
+msgid "backstage.goodies.items.is_active"
+msgstr "Active"
+
+msgid "backstage.goodies.items.is_active_help"
+msgstr "Inactive items are hidden from distribution"
+
+msgid "backstage.goodies.items.more_actions"
+msgstr "More Actions"
+
+msgid "backstage.goodies.items.name"
+msgstr "Item Name"
+
+msgid "backstage.goodies.items.name_help"
+msgstr "A clear, descriptive name for this item"
+
+msgid "backstage.goodies.items.name_placeholder"
+msgstr "Enter item name..."
+
+msgid "backstage.goodies.items.no_categories"
+msgstr "No categories available"
+
+msgid "backstage.goodies.items.no_categories_help"
+msgstr "Create a category first before adding items"
+
+msgid "backstage.goodies.items.no_category"
+msgstr "No Category"
+
+msgid "backstage.goodies.items.order"
+msgstr "Order"
+
+msgid "backstage.goodies.items.quick_actions"
+msgstr "Quick Actions"
+
+msgid "backstage.goodies.items.required_hours"
+msgstr "Required Hours"
+
+msgid "backstage.goodies.items.required_hours_help"
+msgstr "Minimum volunteer hours required to receive this item"
+
+msgid "backstage.goodies.items.max_per_person"
+msgstr "Maximum per Person"
+
+msgid "backstage.goodies.items.max_per_person_help"
+msgstr "Maximum quantity one person can receive. Leave empty for no limit."
+
+msgid "backstage.goodies.items.no_limit"
+msgstr "No limit"
+
+msgid "backstage.goodies.items.certifications"
+msgstr "Certification Requirements"
+
+msgid "backstage.goodies.items.required_certifications"
+msgstr "Required Certifications"
+
+msgid "backstage.goodies.items.required_certifications_help"
+msgstr "Select certifications that users must have completed to receive this item"
+
+msgid "backstage.goodies.items.optional"
+msgstr "optional"
+
+msgid "backstage.goodies.items.max_limit"
+msgstr "max"
+
+msgid "backstage.goodies.items.certifications_required"
+msgstr "Certifications Required"
+
+msgid "backstage.goodies.items.certifications_required_help"
+msgstr "Users must have all of the following certifications to receive this item:"
+
+msgid "backstage.goodies.items.required_hours_min"
+msgstr "Minimum Required Hours"
+
+msgid "backstage.goodies.items.requirements"
+msgstr "Requirements"
+
+msgid "backstage.goodies.items.select_category"
+msgstr "Select Category"
+
+msgid "backstage.goodies.items.show.title"
+msgstr "Item Details"
+
+msgid "backstage.goodies.items.status"
+msgstr "Status"
+
+msgid "backstage.goodies.items.status_settings"
+msgstr "Status Settings"
+
+msgid "backstage.goodies.items.title"
+msgstr "Goodies Items"
+
+msgid "backstage.goodies.items.uuid"
+msgstr "UUID"
+
+msgid "backstage.goodies.status.active"
+msgstr "Active"
+
+msgid "backstage.goodies.status.inactive"
+msgstr "Inactive"
+
+msgid "backstage.hours_stats.title"
+msgstr "Hours Statistics"
+
+msgid "backstage.kpi.distributions_today"
+msgstr "Distributions Today"
+
+msgid "backstage.kpi.distributions_week"
+msgstr "Distributions This Week"
+
+msgid "backstage.kpi.eligible_users"
+msgstr "Eligible Users"
+
+msgid "backstage.kpi.pending_recalc"
+msgstr "Pending Recalculation"
+
+msgid "backstage.kpi.qualified_users"
+msgstr "Qualified Users"
+
+msgid "backstage.kpi.total_hours"
+msgstr "Total Hours"
+
+msgid "backstage.loading"
+msgstr "Loading..."
+
+msgid "backstage.qualification.available_goodies"
+msgstr "Available Goodies"
+
+msgid "backstage.qualification.calculation_help"
+msgstr "Hours are calculated from completed shifts and may take time to update."
+
+msgid "backstage.qualification.calculation_note"
+msgstr "Hour Calculation"
+
+msgid "backstage.qualification.certifications"
+msgstr "Certifications"
+
+msgid "backstage.qualification.clear_selection"
+msgstr "Clear Selection"
+
+msgid "backstage.qualification.confirm.items"
+msgstr "Selected Items"
+
+msgid "backstage.qualification.confirm.message"
+msgstr "Please confirm you want to distribute the following items:"
+
+msgid "backstage.qualification.confirm.user"
+msgstr "User"
+
+msgid "backstage.qualification.eligible"
+msgstr "Eligible"
+
+msgid "backstage.qualification.email"
+msgstr "Email"
+
+msgid "backstage.qualification.hours_breakdown"
+msgstr "Hours Breakdown"
+
+msgid "backstage.qualification.hours_summary"
+msgstr "Hours Summary"
+
+msgid "backstage.qualification.insufficient_permissions.message"
+msgstr "You don't have permission to distribute goodies."
+
+msgid "backstage.qualification.insufficient_permissions.title"
+msgstr "Insufficient Permissions"
+
+msgid "backstage.qualification.mobile"
+msgstr "Mobile"
+
+msgid "backstage.qualification.no_goodies.all_received"
+msgstr "This user has already received all available goodies."
+
+msgid "backstage.qualification.no_goodies.no_hours"
+msgstr "This user doesn't have enough volunteer hours for any goodies."
+
+msgid "backstage.qualification.no_goodies.title"
+msgstr "No Available Goodies"
+
+msgid "backstage.qualification.no_selection"
+msgstr "No items selected"
+
+msgid "backstage.qualification.not_eligible"
+msgstr "Not Eligible"
+
+msgid "backstage.qualification.notes"
+msgstr "Distribution Notes"
+
+msgid "backstage.qualification.notes_help"
+msgstr "Optional notes about this distribution"
+
+msgid "backstage.qualification.notes_placeholder"
+msgstr "Add any relevant notes..."
+
+msgid "backstage.qualification.previous_distributions"
+msgstr "Previous Distributions"
+
+msgid "backstage.qualification.selected_single"
+msgstr "Selected"
+
+msgid "backstage.qualification.status"
+msgstr "Status"
+
+msgid "backstage.qualification.submit"
+msgstr "Distribute Selected Items"
+
+msgid "backstage.qualification.title"
+msgstr "User Qualification"
+
+msgid "backstage.qualification.total"
+msgstr "Total"
+
+msgid "backstage.qualification.total_hours"
+msgstr "Total Hours"
+
+msgid "backstage.qualification.user_info"
+msgstr "User Information"
+
+msgid "backstage.qualification.user_not_found.message"
+msgstr "The requested user could not be found."
+
+msgid "backstage.qualification.user_not_found.title"
+msgstr "User Not Found"
+
+msgid "backstage.qualification.validation.no_selection"
+msgstr "Please select at least one item to distribute."
+
+msgid "backstage.recent_activity.empty"
+msgstr "No recent distributions"
+
+msgid "backstage.recent_activity.title"
+msgstr "Recent Activity"
+
+msgid "backstage.recent_activity.view_all"
+msgstr "View All"
+
+msgid "backstage.services."
+msgstr "Service"
+
+msgid "backstage.status."
+msgstr "Status"
+
+msgid "backstage.system_status.error"
+msgstr "Error loading status"
+
+msgid "backstage.system_status.loading"
+msgstr "Loading system status..."
+
+msgid "backstage.system_status.title"
+msgstr "System Status"
+
+msgid "backstage.updated_at"
+msgstr "Updated At"
+
+msgid "backstage.users.certifications"
+msgstr "Certifications"
+
+msgid "backstage.users.details.basic_info"
+msgstr "Basic Information"
+
+msgid "backstage.users.details.breakdown"
+msgstr "Hours Breakdown"
+
+msgid "backstage.users.details.error.message"
+msgstr "Could not load user details."
+
+msgid "backstage.users.details.error.network"
+msgstr "Network error occurred while loading user details."
+
+msgid "backstage.users.details.error.title"
+msgstr "Error Loading Details"
+
+msgid "backstage.users.details.no_breakdown"
+msgstr "No detailed breakdown available."
+
+msgid "backstage.users.details.title"
+msgstr "User Details"
+
+msgid "backstage.users.eligible_hours"
+msgstr "Eligible Hours"
+
+msgid "backstage.users.last_calculated"
+msgstr "Last Calculated"
+
+msgid "backstage.users.previous_distributions"
+msgstr "Previous Distributions"
+
+msgid "backstage.users.qualify.title"
+msgstr "Qualification Check"
+
+msgid "backstage.users.search.clear_filters"
+msgstr "Clear Filters"
+
+msgid "backstage.users.search.filter.title"
+msgstr "Filter Options"
+
+msgid "backstage.users.search.help"
+msgstr "Search by name, email, nickname, badge number, or digital-id URL"
+
+msgid "backstage.users.search.hours_max"
+msgstr "Maximum Hours"
+
+msgid "backstage.users.search.hours_max_help"
+msgstr "Show users with less than this many hours"
+
+msgid "backstage.users.search.hours_min"
+msgstr "Minimum Hours"
+
+msgid "backstage.users.search.hours_min_help"
+msgstr "Show users with at least this many hours"
+
+msgid "backstage.users.search.no_results.empty"
+msgstr "Try adjusting your search terms or filters."
+
+msgid "backstage.users.search.no_results.filtered"
+msgstr "No users match your current filters."
+
+msgid "backstage.users.search.no_results.title"
+msgstr "No Users Found"
+
+msgid "backstage.users.search.placeholder"
+msgstr "Search users..."
+
+msgid "backstage.users.search.query"
+msgstr "Search Query"
+
+msgid "backstage.users.search.results.filtered"
+msgstr "Showing filtered results"
+
+msgid "backstage.users.search.results.none"
+msgstr "No results"
+
+msgid "backstage.users.search.submit"
+msgstr "Search Users"
+
+msgid "backstage.users.search.title"
+msgstr "User Search"
+
+msgid "backstage.users.status.arrived"
+msgstr "Arrived"
+
+msgid "backstage.users.status.not_arrived"
+msgstr "Not Arrived"
+
+msgid "backstage.users.total_hours"
+msgstr "Total Hours"
+
+msgid "backstage.users.view_details"
+msgstr "View Details"
+
+msgid "backstage.users.view_hours"
+msgstr "View Hours"
+
+# Additional form translations used in backstage
+msgid "form.back"
+msgstr "Back"
+
+msgid "form.close"
+msgstr "Close"
+
+msgid "form.filter"
+msgstr "Filter"
+
+msgid "form.never"
+msgstr "Never"
+
+msgid "form.no_description"
+msgstr "No description"
+
+msgid "form.no_notes"
+msgstr "No notes"
+
+msgid "form.print"
+msgstr "Print"
+
+# Additional backstage translations
+msgid "backstage.goodies.items.updated"
+msgstr "Item updated successfully"
+
+msgid "backstage.goodies.items.update_error"
+msgstr "Error updating item"
+
+msgid "backstage.goodies.items.deleted"
+msgstr "Item deleted successfully"
+
+msgid "backstage.goodies.items.delete_failed"
+msgstr "Failed to delete item"
+
+msgid "backstage.goodies.items.delete_error"
+msgstr "Error deleting item"
+
+msgid "backstage.goodies.items.not_found"
+msgstr "Item not found"
+
+msgid "backstage.goodies.categories.updated"
+msgstr "Category updated successfully"
+
+msgid "backstage.goodies.categories.update_error"
+msgstr "Error updating category"
+
+msgid "backstage.goodies.categories.deleted"
+msgstr "Category deleted successfully"
+
+msgid "backstage.goodies.categories.delete_failed"
+msgstr "Failed to delete category"
+
+msgid "backstage.goodies.categories.delete_error"
+msgstr "Error deleting category"
+
+msgid "backstage.goodies.categories.not_found"
+msgstr "Category not found"
+
+msgid "backstage.goodies.categories.uuid"
+msgstr "UUID"
+
+msgid "backstage.goodies.categories.created"
+msgstr "Category created successfully"
+
+msgid "backstage.goodies.categories.create_error"
+msgstr "Error creating category"
+
+msgid "backstage.goodies.items.created"
+msgstr "Item created successfully"
+
+msgid "backstage.goodies.items.create_error"
+msgstr "Error creating item"
+
+msgid "backstage.users.badge"
+msgstr "Badge"
+
+msgid "backstage.users.id"
+msgstr "User ID"
+
+msgid "backstage.users.status"
+msgstr "Status"
+
+msgid "backstage.users.active"
+msgstr "Active"
+
+msgid "backstage.users.inactive"
+msgstr "Inactive"
+
+msgid "backstage.users.registered"
+msgstr "Registered"
+
+msgid "backstage.users.search.results.found"
+msgstr "Found %s user(s)"
+
+msgid "backstage.search.empty_criteria"
+msgstr "Please enter search criteria"
+
+msgid "backstage.search.error"
+msgstr "An error occurred during search"

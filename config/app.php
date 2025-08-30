@@ -37,6 +37,7 @@ return [
         \Engelsystem\Http\HttpClientServiceProvider::class,
         \Engelsystem\Helpers\DumpServerServiceProvider::class,
         \Engelsystem\Helpers\UuidServiceProvider::class,
+        \Engelsystem\Helpers\UserSearchServiceProvider::class,
         \Engelsystem\Controllers\Api\UsesAuthServiceProvider::class,
 
         // V2 - Import/Export
@@ -68,6 +69,7 @@ return [
 
         // Handle request
         \Engelsystem\Middleware\CertificationPermissions::class,
+        \Engelsystem\Middleware\BackstagePermissions::class,
         \Engelsystem\Middleware\RequestHandler::class,
     ],
 

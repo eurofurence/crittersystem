@@ -1,0 +1,243 @@
+{% extends 'layouts/app.twig' %}
+{% import 'macros/base.twig' as m %}
+{% import 'macros/form.twig' as f %}
+
+{% block title %}{{ __('backstage.goodies.items.title') }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>
+            {{ m.icon('box') }}
+            {{ block('title') }}
+            {% if can_edit %}
+                {{ m.add(url('/admin/backstage/goodies/items/create'), __('backstage.goodies.items.create.title')) }}
+            {% endif %}
+        </h1>
+
+        {% include 'layouts/parts/messages.twig' %}
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="btn-toolbar justify-content-between" role="toolbar">
+                    <div class="btn-group" role="group">
+                        <a href="{{ url('/admin/backstage') }}" class="btn btn-secondary btn-sm">
+                            {{ m.icon('arrow-left') }}
+                            {{ __('backstage.back_to_dashboard') }}
+                        </a>
+                        <a href="{{ url('/admin/backstage/goodies/categories') }}" class="btn btn-primary btn-sm">
+                            {{ m.icon('grid-3x3-gap') }}
+                            {{ __('backstage.goodies.categories.title') }}
+                        </a>
+                    </div>
+                    {% if can_edit %}
+                        <div class="btn-group" role="group">
+                            <a href="{{ url('/admin/backstage/goodies/items/create') }}" class="btn btn-primary btn-sm">
+                                {{ m.icon('plus-circle') }}
+                                {{ __('backstage.goodies.items.create.title') }}
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {# Filter Form #}
+        {% if categories|length > 0 %}
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                {{ m.icon('funnel') }}
+                                {{ __('backstage.goodies.items.filter.title') }}
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <form method="get" action="{{ url('/admin/backstage/goodies/items') }}" class="row g-3">
+                                <div class="col-md-4">
+                                    {{ f.select('category', __('backstage.goodies.items.category'),
+                                        ({'': __('form.select_all')})|merge(
+                                            categories|reduce((carry, cat) => carry|merge({(cat.uuid): cat.name}), {})
+                                        ), {
+                                            'selected': filters.category|default('')
+                                        })
+                                    }}
+                                </div>
+
+                                <div class="col-md-3">
+                                    {{ f.select('status', __('backstage.goodies.items.status'), {
+                                        '': __('form.select_all'),
+                                        '1': __('backstage.goodies.status.active'),
+                                        '0': __('backstage.goodies.status.inactive')
+                                    }, {
+                                        'selected': filters.status|default('')
+                                    }) }}
+                                </div>
+
+                                <div class="col-md-3">
+                                    {{ f.input('hours_min', __('backstage.goodies.items.required_hours_min'), {
+                                        'type': 'number',
+                                        'value': filters.hours_min|default(''),
+                                        'min': 0,
+                                        'placeholder': '0'
+                                    }) }}
+                                </div>
+
+                                <div class="col-md-2">
+                                    <div class="d-grid gap-2">
+                                        {{ f.submit(__('form.filter'), {'icon_left': 'funnel', 'size': 'sm'}) }}
+                                        <a href="{{ url('/admin/backstage/goodies/items') }}" class="btn btn-secondary btn-sm">
+                                            {{ m.icon('x-circle') }}
+                                            {{ __('form.clear') }}
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="col-12">
+                {% if items|length > 0 %}
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>{{ __('backstage.goodies.items.name') }}</th>
+                                    <th>{{ __('backstage.goodies.items.category') }}</th>
+                                    <th>{{ __('backstage.goodies.items.required_hours') }}</th>
+                                    <th>{{ __('backstage.goodies.items.distributions') }}</th>
+                                    <th>{{ __('backstage.goodies.items.status') }}</th>
+                                    <th class="text-end">{{ __('form.actions') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in items %}
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                {% if item.is_active %}
+                                                    <span class="badge bg-success me-2">{{ m.icon('check-circle') }}</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary me-2">{{ m.icon('x-circle') }}</span>
+                                                {% endif %}
+                                                <div>
+                                                    <a href="{{ url('/admin/backstage/goodies/items/' ~ item.uuid) }}"
+                                                       class="fw-bold text-decoration-none">
+                                                        {{ item.name }}
+                                                    </a>
+                                                    {% if item.description %}
+                                                        <br>
+                                                        <small class="text-muted">{{ item.description|slice(0, 100) }}{% if item.description|length > 100 %}...{% endif %}</small>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            {% if item.category %}
+                                                <a href="{{ url('/admin/backstage/goodies/categories/' ~ item.category.uuid) }}"
+                                                   class="badge bg-primary text-decoration-none">
+                                                    {{ item.category.name }}
+                                                </a>
+                                            {% else %}
+                                                <span class="text-muted fst-italic">{{ __('backstage.goodies.items.no_category') }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-info">
+                                                {{ m.icon('clock') }}
+                                                {{ item.required_hours }}h
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-success">
+                                                {{ item.distributions_count|default(0) }}
+                                                {{ __('backstage.goodies.items.distributed') }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if item.is_active %}
+                                                <span class="badge bg-success">{{ __('backstage.goodies.status.active') }}</span>
+                                            {% else %}
+                                                <span class="badge bg-danger">{{ __('backstage.goodies.status.inactive') }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a href="{{ url('/admin/backstage/goodies/items/' ~ item.uuid) }}"
+                                                   class="btn btn-sm btn-info"
+                                                   title="{{ __('form.view') }}">
+                                                    {{ m.icon('eye') }}
+                                                </a>
+
+                                                {% if can_edit %}
+                                                    <a href="{{ url('/admin/backstage/goodies/items/' ~ item.uuid ~ '/edit') }}"
+                                                       class="btn btn-secondary btn-sm"
+                                                       title="{{ __('form.edit') }}">
+                                                        {{ m.icon('pencil') }}
+                                                    </a>
+
+                                                    <div class="btn-group" role="group">
+                                                        <button type="button"
+                                                                class="btn btn-danger btn-sm dropdown-toggle"
+                                                                data-bs-toggle="dropdown"
+                                                                title="{{ __('backstage.goodies.items.more_actions') }}">
+                                                            {{ m.icon('three-dots-vertical') }}
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li>
+                                                                <form method="post"
+                                                                      action="{{ url('/admin/backstage/goodies/items/' ~ item.uuid ~ '/delete') }}"
+                                                                      class="d-inline w-100">
+                                                                    {{ csrf() }}
+                                                                    <button type="submit"
+                                                                            class="dropdown-item text-danger"
+                                                                            data-confirm="{{ __('backstage.goodies.items.delete.confirm', [item.name|e]) }}">
+                                                                        {{ m.icon('trash') }}
+                                                                        {{ __('form.delete') }}
+                                                                    </button>
+                                                                </form>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <div class="mb-3">
+                            {{ m.icon('box', 64) }}
+                        </div>
+                        <h4 class="text-muted">{{ __('backstage.goodies.items.empty.title') }}</h4>
+                        <p class="text-muted">
+                            {% if filters is defined and (filters.category or filters.status or filters.hours_min) %}
+                                {{ __('backstage.goodies.items.empty.filtered') }}
+                            {% else %}
+                                {{ __('backstage.goodies.items.empty.message') }}
+                            {% endif %}
+                        </p>
+                        {% if can_edit %}
+                            <a href="{{ url('/admin/backstage/goodies/items/create') }}" class="btn btn-primary">
+                                {{ m.icon('plus-circle') }}
+                                {{ __('backstage.goodies.items.create.first') }}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{{ parent() }}
+<script src="{{ asset('assets/goodies-items.js') }}"></script>
+{% endblock %}

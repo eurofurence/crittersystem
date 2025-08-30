@@ -52,6 +52,7 @@ class Certification extends BaseModel
     public $incrementing = true; // phpcs:ignore
     public $timestamps = true; // phpcs:ignore
 
+    /** @var string The table associated with the model */
     protected $table = 'certifications'; // phpcs:ignore
 
     /**
@@ -62,11 +63,7 @@ class Certification extends BaseModel
         return ['uuid'];
     }
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<string>
-     */
+    /** @var string[] */
     protected $fillable = [ // phpcs:ignore
         'title',
         'description',

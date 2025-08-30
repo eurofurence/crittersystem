@@ -1,0 +1,32 @@
+/* Backstage User Search Styles */
+
+.user-result-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.user-result-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.border.rounded.p-2 {
+    background-color: #f8f9fa;
+}
+
+.badge {
+    font-size: 0.75em;
+}
+
+#userDetailsModal .table-sm td {
+    padding: 0.25rem 0.5rem;
+}
+
+@media (max-width: 576px) {
+    .user-result-card .card-body .row {
+        text-align: left !important;
+    }
+
+    .user-result-card .card-body .row .col {
+        margin-bottom: 0.5rem;
+    }
+}
