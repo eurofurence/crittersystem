@@ -101,7 +101,9 @@ function make_navigation()
         'admin/schedule'         => ['schedule.import', 'schedule.import'],
         'admin/logs'             => ['log.log', 'admin_log'],
         'admin/purge'            => ['Purge Data', 'user.type.admin'],
+        'admin/dumpmanager'      => ['Database Dump Manager', 'user.type.admin'],
         'admin/config'           => ['config.config', 'config.edit'],
+        'admin/digital-id'       => ['Digital ID Config', 'config.edit'],
         'adminv2/export'         => ['V2-Export', 'admin_user'],
     ];
 
@@ -155,14 +157,20 @@ function menu_is_allowed($permissions)
  * @param string[] $menu Rendered menu
  * @return string[]
  */
-function make_location_navigation($menu)
+function make_location_navigation(array $menu): array
 {
     if (!auth()->can('view_locations')) {
         return $menu;
     }
 
     // Get a list of all locations
-    $locations = Location::orderBy('name')->get();
+    $query = Location::query();
+
+    if (!auth()->can('user.type.staff')) {
+        $query->whereNot('staff_only', true);
+    }
+    $locations = $query->orderBy('name')->get();
+
     $location_menu = [];
     if (auth()->can('admin_locations')) {
         $location_menu[] = toolbar_dropdown_item(

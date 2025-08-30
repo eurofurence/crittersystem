@@ -344,8 +344,25 @@ function view_user_shifts()
 
     $canSignUpForShifts = true;
     if (config('signup_requires_arrival') && !$user->state->arrived) {
-        $canSignUpForShifts = false;
-        info(render_user_arrived_hint());
+        // Allow signups for non-arrived users during buildup->event_start and event_end->teardown_end windows
+        $now = Carbon::now();
+        $buildupStart = config('buildup_start');
+        $eventStart = config('event_start');
+        $eventEnd = config('event_end');
+        $teardownEnd = config('teardown_end');
+
+        $withinPreEventWindow = !empty($buildupStart) && !empty($eventStart)
+            && $now->greaterThanOrEqualTo($buildupStart)
+            && $now->lessThan($eventStart);
+
+        $withinPostEventWindow = !empty($eventEnd) && !empty($teardownEnd)
+            && $now->greaterThan($eventEnd)
+            && $now->lessThanOrEqualTo($teardownEnd);
+
+        if (!($withinPreEventWindow || $withinPostEventWindow)) {
+            $canSignUpForShifts = false;
+            info(render_user_arrived_hint());
+        }
     }
 
     $formattedDays = collect($days)->map(function ($value) {

@@ -59,14 +59,18 @@ class CritterTypesController extends BaseController
 
         if (!$isStaffUser) {
             $angeltypesQuery->where('staff_only', false);
+        } else {
+            $angeltypesQuery->orderBy('staff_only', 'desc');
         }
+
+            $angeltypesQuery->orderBy('name');
 
             $angeltypes = $angeltypesQuery->get();
 
         // Compute simple presentation fields expected by the view
         $items = [];
         foreach ($angeltypes as $type) {
-            $membership = '❌';
+            $membership = '❌ Non-Member';
             if (!empty($type->user_angel_type_id)) {
                 if ($type->restricted && empty($type->confirm_user_id)) {
                     $membership = __('❔ Unconfirmed');
@@ -133,7 +137,6 @@ class CritterTypesController extends BaseController
 
         // Use legacy helper to build calendar renderer
         $shiftCalendarRenderer = \shiftCalendarRendererByShiftFilter($shiftsFilter);
-
         // Determine selected tab
         $tab = ($request->has('shifts_filter_day') || $request->has('showShiftsTab')) ? 1 : 0;
 
@@ -215,6 +218,11 @@ class CritterTypesController extends BaseController
                     )
                     : '',
                 'pivot' => $member->pivot,
+                'isStaff' => $member->hasAnyPermission([
+                    'user.type.internal_staff',
+                    'user.type.staff',
+                    'user.type.admin',
+                ]),
             ];
 
             if ($angeltype->restricted && empty($member->pivot->confirm_user_id)) {

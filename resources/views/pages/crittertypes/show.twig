@@ -99,7 +99,14 @@
                 <div class="alert alert-info">{{ __('angeltypes.certification_requirements.user_info') }}</div>
             {% endif %}
 
-            <h3>{{ __('Members') }}</h3>
+            <h3>
+                {{ __('Members') }}
+                {% if isAdminAngelTypes or isSupporter %}
+                    <a class="btn btn-secondary" href="{{ url('/user-angeltypes', {'action':'add', 'angeltype_id': angeltype.id}) }}">
+                        {{ __('Add member') }}
+                    </a>
+                {% endif %}
+            </h3>
             <div class="table-responsive mb-4">
                 <table class="table table-striped">
                     <thead>
@@ -112,9 +119,27 @@
                     <tbody>
                         {% for member in membersConfirmed %}
                             <tr>
-                                <td>{{ member.name | raw }}</td>
+                                <td>
+                                    {{ member.name | raw }}
+                                    {% if member.isStaff %}
+                                        <span class="badge bg-warning text-dark ms-2">{{ m.icon('shield-lock-fill') }} {{ __('Staff') }}</span>
+                                    {% endif %}
+                                </td>
                                 {% if config('enable_dect') %}<td>{{ member.dect | raw }}</td>{% endif %}
-                                <td></td>
+                                <td>
+                                    {% if isAdminUserAngelTypes %}
+                                        <div class="d-flex flex-wrap gap-2">
+                                            {% if isAdminAngelTypes or config('supporters_can_promote') %}
+                                                <a class="btn btn-sm btn-secondary" href="{{ url('/user-angeltypes', {'action':'update', 'user_angeltype_id': member.pivot.id, 'supporter': 1}) }}">
+                                                    {{ m.icon('person-fill-up') }} {{ __('Add supporter rights') }}
+                                                </a>
+                                            {% endif %}
+                                            <a class="btn btn-sm btn-danger" href="{{ url('/user-angeltypes', {'action':'delete', 'user_angeltype_id': member.pivot.id}) }}">
+                                                {{ m.icon('trash') }} {{ __('Remove') }}
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                </td>
                             </tr>
                         {% else %}
                             <tr><td colspan="3">{{ __('No entries.') }}</td></tr>
@@ -141,7 +166,12 @@
                         <tbody>
                             {% for member in membersUnconfirmed %}
                                 <tr>
-                                    <td>{{ member.name | raw }}</td>
+                                    <td>
+                                        {{ member.name | raw }}
+                                        {% if member.isStaff %}
+                                            <span class="badge bg-warning text-dark ms-2">{{ m.icon('shield-lock-fill') }} {{ __('Staff') }}</span>
+                                        {% endif %}
+                                    </td>
                                     {% if config('enable_dect') %}<td>{{ member.dect | raw }}</td>{% endif %}
                                     <td>
                                         {% if isAdminUserAngelTypes %}
@@ -176,9 +206,22 @@
                         <tbody>
                             {% for member in supporters %}
                                 <tr>
-                                    <td>{{ member.name | raw }}</td>
+                                    <td>
+                                        {{ member.name | raw }}
+                                        {% if member.isStaff %}
+                                            <span class="badge bg-warning text-dark ms-2">{{ m.icon('shield-lock-fill') }} {{ __('Staff') }}</span>
+                                        {% endif %}
+                                    </td>
                                     {% if config('enable_dect') %}<td>{{ member.dect | raw }}</td>{% endif %}
-                                    <td></td>
+                                    <td>
+                                        {% if isAdminAngelTypes or (isAdminUserAngelTypes and config('supporters_can_promote')) %}
+                                            <div class="d-flex flex-wrap gap-2">
+                                                <a class="btn btn-sm btn-secondary" href="{{ url('/user-angeltypes', {'action':'update', 'user_angeltype_id': member.pivot.id, 'supporter': 0}) }}">
+                                                    {{ m.icon('person-fill-down') }} {{ __('Remove supporter rights') }}
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </tbody>

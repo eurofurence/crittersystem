@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="msapplication-TileColor" content="#0d6efd">
+    <meta name="theme-color" content="#0d6efd">
+
+    <!-- Digital ID Configuration -->
+    <meta name="digital-id:refresh-interval" content="{{ refreshInterval }}">
+    <meta name="digital-id:verification-url" content="{{ verificationUrl|raw }}">
+    <meta name="digital-id:refresh-endpoint" content="{{ url('/digital-id/refresh') }}">
+    <meta name="digital-id:token" content="{{ token.token }}">
+    <meta name="digital-id:page-type" content="main">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>Digital ID - Critter System</title>
+
+    <link rel="stylesheet" type="text/css" href="{{ url('assets/special/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url('assets/special/bootstrap-icons/font/bootstrap-icons.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/digital-id-css.css') }}">
+</head>
+
+<body class="bg-light">
+    <div class="container-fluid p-0">
+        <!-- Header with return button -->
+        <div class="bg-primary text-white p-3 d-flex justify-content-between align-items-center">
+            <h1 class="h4 mb-0">
+                <i class="bi bi-qr-code me-2"></i>Digital ID
+            </h1>
+            <button type="button" id="back-btn" class="btn btn-outline-light btn-sm">
+                <i class="bi bi-arrow-left"></i> Back
+            </button>
+        </div>
+
+        <!-- Main digital ID card -->
+        <div class="digital-id-card mx-auto mt-4">
+            <div class="card shadow-lg border-0">
+                <div class="card-body text-center p-4">
+
+                    <!-- User Information -->
+                    <div class="user-info mb-4">
+                        <h2 class="display-6 fw-bold text-primary mb-2">{{ user.displayName }}</h2>
+
+                        {% if isBoD %}
+                            <span class="badge bg-black fs-3 mt-2">
+                                <i class="bi bi-shield-check"></i> BoD
+                            </span>
+                        {% elseif isDirector %}
+                            <span class="badge bg-danger fs-6 mt-2">
+                                <i class="bi bi-shield-check"></i> DIRECTOR
+                            </span>
+                        {% elseif isStaff %}
+                            <span class="badge bg-primary fs-6 mt-2">
+                                <i class="bi bi-shield-check"></i> STAFF
+                            </span>
+                        {% else %}
+                            <span class="badge bg-secondary fs-6 mt-2">
+                                <i class="bi bi-person"></i> VOLUNTEER
+                            </span>
+                        {% endif %}
+
+                        {% if badgeNumber %}
+                            <div class="text-muted">
+                                <i class="bi bi-person-badge"></i> Badge: {{ badgeNumber }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- QR Code Display Area -->
+                    <div class="qr-code-container mb-4">
+                        <div id="qr-code-display" class="qr-code-display mx-auto" style="height: 300px">
+                            <div id="qr-code-placeholder" class="d-flex justify-content-center align-items-center bg-light rounded" style="height: 250px;">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading QR Code...</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- QR Code Info -->
+                        <div class="qr-info mt-3">
+                            <small class="text-muted d-block">
+                                <i class="bi bi-clock"></i> Auto-refresh every <span id="refresh-interval">{{ refreshInterval }}</span> seconds
+                            </small>
+                            <small class="text-muted d-block">
+                                <i class="bi bi-shield-lock"></i> For security verification only
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button type="button" id="refresh-btn" class="btn btn-outline-primary btn-lg me-2">
+                            <i class="bi bi-arrow-clockwise"></i> Refresh
+                        </button>
+
+{#                         <button type="button" id="print-btn" class="btn btn-secondary btn-lg"> #}
+{#                             <i class="bi bi-printer"></i> Print #}
+{#                         </button> #}
+                    </div>
+
+                    <!-- Status Messages -->
+                    <div id="status-messages" class="mt-3"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-4 mb-3">
+            <small class="text-muted">
+                Digital ID System - Critter System
+                <br>
+                Last updated: <span id="last-updated">{{ "now"|date("H:i:s") }}</span>
+            </small>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="{{ url('assets/special/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/digitalid.js') }}"></script>
+</body>
+</html>

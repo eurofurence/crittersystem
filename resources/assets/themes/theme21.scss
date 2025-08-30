@@ -492,22 +492,34 @@ h5 {
 .btn-success {
   background-color: #00aa00 !important;
 }
-.btn-success:hover { background-color: #009600 !important; }
-.btn-success:active { background-color: #008800 !important; }
+.btn-success:hover {
+  background-color: #009600 !important;
+}
+.btn-success:active {
+  background-color: #008800 !important;
+}
 
 .btn-info {
   background-color: #c8c8c8 !important;
   color: #000 !important;
 }
-.btn-info:hover { background-color: #bdbdbd !important; }
-.btn-info:active { background-color: #b3b3b3 !important; }
+.btn-info:hover {
+  background-color: #bdbdbd !important;
+}
+.btn-info:active {
+  background-color: #b3b3b3 !important;
+}
 
 .btn-danger {
   background-color: #aa0000 !important;
   border-color: #aa0000 !important;
 }
-.btn-danger:hover { background-color: #990000 !important; }
-.btn-danger:active { background-color: #8a0000 !important; }
+.btn-danger:hover {
+  background-color: #990000 !important;
+}
+.btn-danger:active {
+  background-color: #8a0000 !important;
+}
 
 /* Dropdowns */
 .dropdown-menu,

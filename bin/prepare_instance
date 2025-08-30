@@ -41,18 +41,18 @@ print_step() {
 execute_command() {
     local cmd="$1"
     local description="$2"
-    
+
     print_info "Executing: $cmd"
     if [ -n "$description" ]; then
         print_info "$description"
     fi
-    
+
     if ! eval "$cmd"; then
         print_error "Command failed: $cmd"
         print_error "Error occurred during: $description"
         exit 1
     fi
-    
+
     print_success "Command completed successfully"
     echo ""
 }
@@ -103,9 +103,9 @@ package_installed() {
 # Check dependencies
 check_dependencies() {
     print_step "Checking dependencies..."
-    
+
     local missing_deps=()
-    
+
     # Check Node.js
     if ! command_exists node; then
         missing_deps+=("node (Node.js)")
@@ -113,7 +113,7 @@ check_dependencies() {
     else
         print_success "Node.js found: $(node --version)"
     fi
-    
+
     # Check Yarn
     if ! command_exists yarn; then
         missing_deps+=("yarn")
@@ -121,7 +121,7 @@ check_dependencies() {
     else
         print_success "Yarn found: $(yarn --version)"
     fi
-    
+
     # Check Composer
     if ! command_exists composer; then
         missing_deps+=("composer")
@@ -129,7 +129,7 @@ check_dependencies() {
     else
         print_success "Composer found: $(composer --version | head -n1)"
     fi
-    
+
     # Check gettext
     if ! package_installed "gettext" && ! command_exists msgfmt; then
         missing_deps+=("gettext")
@@ -137,20 +137,20 @@ check_dependencies() {
     else
         print_success "gettext found"
     fi
-    
+
     if [ ${#missing_deps[@]} -gt 0 ]; then
         print_error "Missing dependencies: ${missing_deps[*]}"
         print_error "Please install the missing dependencies and run this script again."
-        
+
         print_info "Installation suggestions:"
         print_info "Ubuntu/Debian: sudo apt update && sudo apt install nodejs npm yarn composer gettext"
         print_info "CentOS/RHEL: sudo yum install nodejs npm yarn composer gettext"
         print_info "Arch Linux: sudo pacman -S nodejs npm yarn composer gettext"
         print_info "For Yarn: npm install -g yarn (if not available in package manager)"
-        
+
         exit 1
     fi
-    
+
     print_success "All dependencies are installed!"
     echo ""
 }
@@ -158,9 +158,9 @@ check_dependencies() {
 # Create special assets directory
 create_special_directory() {
     print_step "Creating special assets directory..."
-    
+
     local special_dir="public/assets/special"
-    
+
     if [ ! -d "$special_dir" ]; then
         execute_command "mkdir -p '$special_dir'" "Creating special assets directory"
     else
@@ -171,9 +171,9 @@ create_special_directory() {
 # Copy node modules to special directory
 copy_special_assets() {
     print_step "Copying special assets..."
-    
+
     local special_dir='public/assets/special'
-    
+
     # Create subdirectories and copy files
     local copies=(
         "node_modules/@xterm/xterm:$special_dir"
@@ -195,7 +195,7 @@ copy_special_assets() {
                 # Create destination directory if it doesn't exist
                 execute_command "mkdir -p $dest" "Creating directory for $dest"
             fi
-            
+
             if [ -d "$src" ]; then
                 execute_command "cp -r '$src' '$dest'" "Copying directory $src to $dest"
             else
@@ -205,7 +205,7 @@ copy_special_assets() {
             print_warning "Source not found: $src (skipping)"
         fi
     done
-    
+
     print_success "Special assets copied successfully!"
     echo ""
 }
@@ -214,43 +214,43 @@ copy_special_assets() {
 main() {
     print_info "Starting Critter System project preparation..."
     echo ""
-    
+
     # Check if running as root
     check_root_user
-    
+
     # Check dependencies
     check_dependencies
-    
+
     # Install PHP dependencies
     print_step "Installing PHP dependencies with Composer..."
     execute_command "composer install" "Installing PHP packages"
-    
+
     # Install JavaScript dependencies
     print_step "Installing JavaScript dependencies with Yarn..."
     execute_command "yarn install" "Installing Node.js packages"
-    
+
     # Build assets
     print_step "Building frontend assets..."
     execute_command "yarn build" "Compiling and building frontend assets"
-    
+
     # Compile translations
     print_step "Compiling translations..."
     execute_command "bin/translation_compile" "Compiling gettext translations"
-    
+
     # Update browserslist database
     print_step "Updating browserslist database..."
     execute_command "npx update-browserslist-db@latest" "Updating browserslist database for better browser support"
-    
+
     # Run database migrations
     print_step "Running database migrations..."
     execute_command "bin/migrate" "Applying database migrations"
-    
-    # Create special assets directory
-    create_special_directory
-    
-    # Copy special assets
-    copy_special_assets
-    
+
+    # # Create special assets directory
+    # create_special_directory
+
+    # # Copy special assets
+    # copy_special_assets
+
     print_success "=========================================="
     print_success "Project preparation completed successfully!"
     print_success "=========================================="

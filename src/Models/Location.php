@@ -20,6 +20,7 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property string|null                       $map_url
  * @property string|null                       $description
  * @property string|null                       $dect
+ * @property boolean|null                      $staff_only
  * @property Carbon|null                       $created_at
  * @property Carbon|null                       $updated_at
  *
@@ -47,6 +48,7 @@ class Location extends BaseModel
         'map_url'     => null,
         'description' => null,
         'dect'        => null,
+        'staff_only'  => false,
     ];
 
     /** @var array<string> */
@@ -55,6 +57,7 @@ class Location extends BaseModel
         'dect',
         'map_url',
         'description',
+        'staff_only',
     ];
 
     public function activeForSchedules(): BelongsToMany

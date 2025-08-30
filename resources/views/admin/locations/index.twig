@@ -46,6 +46,10 @@
                                         <a href="{{ url('/locations', {'action': 'view', 'location_id': location.id}) }}">
                                             {{ location.name }}
                                         </a>
+                                        {% if location.staff_only %}
+{#                                             <br> #}
+                                            <span class="badge bg-primary">Staff Only</span>
+                                        {% endif %}
                                     </td>
 
                                     <td>{{ m.iconBool(location.dect) }}</td>

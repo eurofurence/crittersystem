@@ -107,8 +107,33 @@ $route->addGroup('/shifts', function (RouteCollector $route): void {
     $route->get('/random', 'ShiftsController@random');
 });
 
+
 // New dashboards (test)
 $route->get('/dashboards', 'DashboardsController@index');
+
+// Shift Manager V2
+$route->get('/shift-manager', 'ShiftManagerV2Controller@index');
+
+// Shift Manager V2 API (v2)
+$route->addGroup('/api/v2/shift-manager', function (RouteCollector $route): void {
+    $route->get('/dates', 'Api\\ShiftManagerV2Controller@dates');
+    $route->get('/shifts', 'Api\\ShiftManagerV2Controller@shifts');
+    $route->get('/shift/{id:\\d+}', 'Api\\ShiftManagerV2Controller@shift');
+    $route->get('/applications/{id:\\d+}', 'Api\\ShiftManagerV2Controller@applications');
+    $route->post('/applications/approve', 'Api\\ShiftManagerV2Controller@approveApplications');
+    $route->post('/apply', 'Api\\ShiftManagerV2Controller@apply');
+    $route->post('/cancel', 'Api\\ShiftManagerV2Controller@cancel');
+    $route->post('/assign', 'Api\\ShiftManagerV2Controller@assign');
+    $route->post('/unassign', 'Api\\ShiftManagerV2Controller@unassign');
+    $route->post('/worklog', 'Api\\ShiftManagerV2Controller@worklog');
+    $route->post('/noshow', 'Api\\ShiftManagerV2Controller@noshow');
+    $route->get('/users', 'Api\\ShiftManagerV2Controller@users');
+});
+
+// Digital ID System
+$route->get('/digital-id', 'DigitalIdController@index');
+$route->post('/digital-id/refresh', 'DigitalIdController@refreshToken');
+$route->get('/digital-id/verify/{token}', 'QrController@verifyToken');
 
 // News
 $route->get('/meetings', 'NewsController@meetings');
@@ -212,6 +237,15 @@ $route->addGroup(
             }
         );
 
+        // Digital ID Configuration
+        $route->addGroup(
+            '/digital-id',
+            function (RouteCollector $route): void {
+                $route->get('', 'Admin\\DigitalIdConfigController@index');
+                $route->post('', 'Admin\\DigitalIdConfigController@store');
+            }
+        );
+
         // FAQ
         $route->addGroup(
             '/faq',
@@ -240,6 +274,18 @@ $route->addGroup(
                 $route->get('/audit-logs', 'Admin\\PurgeController@auditLogs');
                 $route->get('/download-backup/{id:\d+}', 'Admin\\PurgeController@downloadBackup');
                 $route->get('/status/{id:\d+}', 'Admin\\PurgeController@getStatus');
+            }
+        );
+
+        // Database Dump Manager
+        $route->addGroup(
+            '/dumpmanager',
+            function (RouteCollector $route): void {
+                $route->get('', 'Admin\\DumpManagerController@index');
+                $route->post('/create', 'Admin\\DumpManagerController@createDump');
+                $route->get('/download/{filename}', 'Admin\\DumpManagerController@downloadDump');
+                $route->post('/upload', 'Admin\\DumpManagerController@uploadRestore');
+                $route->post('/restore', 'Admin\\DumpManagerController@executeRestore');
             }
         );
 

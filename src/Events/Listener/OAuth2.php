@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Engelsystem\Events\Listener;
 
+use Carbon\Carbon;
 use Engelsystem\Config\Config;
 use Engelsystem\Database\Db;
 use Engelsystem\Helpers\Authenticator;
+use Engelsystem\Models\AngelType;
 use Engelsystem\Models\Department\Department;
 use Engelsystem\Models\Group;
 use Engelsystem\Models\User\User;
@@ -39,6 +41,8 @@ class OAuth2
             return;
         }
 
+        $this->log->info('User ({user}) login via OAuth: {provider}', ['provider' => $provider, 'user' => $user->name]);
+
         // Get departments configuration
         $departments = $this->config[$provider]['departments'] ?? [];
         if (empty($departments)) {
@@ -57,17 +61,30 @@ class OAuth2
         }
 
         // Process departments
+        $matchedAny = false;
         foreach ($userGroups as $groupName) {
             if (!isset($departments[$groupName])) {
                 continue;
             }
 
+            $matchedAny = true;
             $departmentConfig = $departments[$groupName];
             $this->processDepartment($provider, $user, $groupName, $departmentConfig);
+
+            // Process critter types (AngelTypes) if configured for this department
+            $this->processCritterTypes($provider, $user, $departmentConfig['critter_type'] ?? []);
+        }
+
+        // If no IDP group matched any configured department, add default critter type
+        if (!$matchedAny) {
+            $this->addAllroundCritterIfNoMatch($provider, $user);
         }
 
         // Process user promotion
         $this->processUserPromotion($provider, $user, $departments['PROMOTE'] ?? []);
+
+        // Handle auto-arrival for admin users after permissions are assigned
+        $this->handleAutoArrival($provider, $user);
     }
 
     /**
@@ -369,6 +386,224 @@ class OAuth2
         } catch (\Exception $e) {
             $this->log->error(
                 'OAuth {provider}: Error promoting user {user}: {error}',
+                [
+                    'provider' => $provider,
+                    'user' => $user->name,
+                    'error' => $e->getMessage(),
+                ]
+            );
+        }
+    }
+
+    /**
+     * Add user to default critter type "Allround Critter" when no IDP groups matched
+     *
+     * - Silently ignores if the critter type does not exist
+     * - Confirms membership automatically if the critter type is restricted
+     */
+    protected function addAllroundCritterIfNoMatch(string $provider, User $user): void
+    {
+        try {
+            $angelType = AngelType::where('name', 'Allround Critter')->first();
+            if (!$angelType) {
+                // silently ignore if not found
+                return;
+            }
+
+            $exists = $user->userAngelTypes()->where('angel_type_id', $angelType->id)->exists();
+            if (!$exists) {
+                $pivot = ['supporter' => false];
+                if ($angelType->restricted) {
+                    $pivot['confirm_user_id'] = $user->id;
+                }
+
+                $user->userAngelTypes()->attach($angelType, $pivot);
+
+                $this->log->info(
+                    'OAuth {provider}: Added user {user} to critter type {type}' .
+                    ($angelType->restricted ? ' and confirmed' : ''),
+                    [
+                        'provider' => $provider,
+                        'user' => $user->name,
+                        'type' => $angelType->name,
+                    ]
+                );
+            } else {
+                // If already attached but restricted and not confirmed, confirm now
+                if ($angelType->restricted) {
+                    $pivotRow = $user->userAngelTypes()
+                        ->where('angel_type_id', $angelType->id)
+                        ->first()?->pivot;
+
+                    if ($pivotRow && empty($pivotRow->confirm_user_id)) {
+                        $user->userAngelTypes()
+                            ->updateExistingPivot($angelType->id, ['confirm_user_id' => $user->id]);
+
+                        $this->log->info(
+                            'OAuth {provider}: Confirmed user {user} for critter type {type}',
+                            [
+                                'provider' => $provider,
+                                'user' => $user->name,
+                                'type' => $angelType->name,
+                            ]
+                        );
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            $this->log->error(
+                'OAuth {provider}: Error adding default critter type for user {user}: {error}',
+                [
+                    'provider' => $provider,
+                    'user' => $user->name,
+                    'error' => $e->getMessage(),
+                ]
+            );
+        }
+    }
+
+    /**
+     * Process critter types (AngelTypes) for a user based on department config
+     *
+     * @param string $provider OAuth provider name
+     * @param User   $user     User to process
+     * @param array  $critterTypes Array of AngelType names
+     */
+    protected function processCritterTypes(string $provider, User $user, array $critterTypes): void
+    {
+        if (!$user) {
+            $this->log->warning(
+                'OAuth {provider}: Cannot process critter types for null user',
+                [
+                    'provider' => $provider,
+                ]
+            );
+            return;
+        }
+
+        if (empty($critterTypes)) {
+            return;
+        }
+
+        foreach ($critterTypes as $typeName) {
+            $typeName = is_string($typeName) ? trim($typeName) : '';
+            if ($typeName === '') {
+                continue;
+            }
+
+            try {
+                $angelType = AngelType::where('name', $typeName)->first();
+
+                if (!$angelType) {
+                    // Skip silently if not found
+                    $this->log->info(
+                        'OAuth {provider}: Critter type {type} not found, skipping',
+                        [
+                            'provider' => $provider,
+                            'type' => $typeName,
+                        ]
+                    );
+                    continue;
+                }
+
+                // Check if already attached
+                $exists = $user->userAngelTypes()->where('angel_type_id', $angelType->id)->exists();
+
+                if (!$exists) {
+                    $pivot = ['supporter' => false];
+                    if ($angelType->restricted) {
+                        // Auto-confirm if needed
+                        $pivot['confirm_user_id'] = $user->id;
+                    }
+
+                    $user->userAngelTypes()->attach($angelType, $pivot);
+
+                    $this->log->info(
+                        'OAuth {provider}: Added user {user} to critter type {type}' .
+                        ($angelType->restricted ? ' and confirmed' : ''),
+                        [
+                            'provider' => $provider,
+                            'user' => $user->name,
+                            'type' => $angelType->name,
+                        ]
+                    );
+                } else {
+                    // If already attached but restricted and not confirmed, confirm now
+                    if ($angelType->restricted) {
+                        $pivotRow = $user->userAngelTypes()
+                            ->where('angel_type_id', $angelType->id)
+                            ->first()?->pivot;
+
+                        if ($pivotRow && empty($pivotRow->confirm_user_id)) {
+                            $user->userAngelTypes()
+                                ->updateExistingPivot($angelType->id, ['confirm_user_id' => $user->id]);
+
+                            $this->log->info(
+                                'OAuth {provider}: Confirmed user {user} for critter type {type}',
+                                [
+                                    'provider' => $provider,
+                                    'user' => $user->name,
+                                    'type' => $angelType->name,
+                                ]
+                            );
+                        }
+                    }
+                }
+            } catch (\Exception $e) {
+                $this->log->error(
+                    'OAuth {provider}: Error processing critter type {type} for user {user}: {error}',
+                    [
+                        'provider' => $provider,
+                        'type' => $typeName,
+                        'user' => $user->name,
+                        'error' => $e->getMessage(),
+                    ]
+                );
+            }
+        }
+    }
+
+    /**
+     * Handle auto-arrival for admin users after OAuth permissions are assigned
+     *
+     * @param string $provider OAuth provider name
+     * @param User   $user     User to process
+     */
+    protected function handleAutoArrival(string $provider, User $user): void
+    {
+        if (!$user) {
+            return;
+        }
+
+        try {
+            // Check if user has admin privileges (same logic as in OAuthHelper)
+            $hasAdminPrivilege = $user->privileges()
+                ->where('name', 'user.type.admin')
+                ->exists();
+
+            if (!$hasAdminPrivilege) {
+                return;
+            }
+
+            // Only auto-arrive if user hasn't arrived yet
+            if ($user->state->arrived) {
+                return;
+            }
+
+            $user->state->arrived = true;
+            $user->state->arrival_date = new Carbon();
+            $user->state->save();
+
+            $this->log->info(
+                'OAuth {provider}: Auto-arrived admin user {user}',
+                [
+                    'provider' => $provider,
+                    'user' => $user->name,
+                ]
+            );
+        } catch (\Exception $e) {
+            $this->log->error(
+                'OAuth {provider}: Error during auto-arrival for user {user}: {error}',
                 [
                     'provider' => $provider,
                     'user' => $user->name,

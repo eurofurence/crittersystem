@@ -411,10 +411,25 @@ function shiftCalendarRendererByShiftFilter(ShiftsFilter $shiftsFilter)
             $shift_entries[$shift_entry->shift_id][] = $shift_entry;
         }
     }
-
+    // Group needed angeltypes by shift and ensure no duplicates for same angel_type_id
     foreach ($needed_angeltypes_source as $needed_angeltype) {
-        if (isset($needed_angeltypes[$needed_angeltype['shift_id']])) {
-            $needed_angeltypes[$needed_angeltype['shift_id']][] = $needed_angeltype;
+        $shift_id = $needed_angeltype['shift_id'];
+        $angel_type_id = $needed_angeltype['id']; // Use 'id' field not 'angel_type_id'
+
+        if (isset($needed_angeltypes[$shift_id])) {
+            // Check if we already have this angeltype for this shift
+            $duplicate_found = false;
+            foreach ($needed_angeltypes[$shift_id] as $existing) {
+                if ($existing['id'] == $angel_type_id) {
+                    $duplicate_found = true;
+                    break;
+                }
+            }
+
+            // Only add if we haven't seen this angel_type_id for this shift yet
+            if (!$duplicate_found) {
+                $needed_angeltypes[$shift_id][] = $needed_angeltype;
+            }
         }
     }
 

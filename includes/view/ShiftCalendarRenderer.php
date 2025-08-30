@@ -186,10 +186,13 @@ class ShiftCalendarRenderer
             $needed_angeltypes = collect($this->needed_angeltypes[$shift->id]);
 
             // Add angel types from shift entries without reference from needed angel types
+            $existing_angeltype_ids = $needed_angeltypes->pluck('id')->toArray();
             foreach (
                 $shift->shiftEntries
                     ->groupBy('angel_type_id')
-                    ->whereNotIn('angel_type_id', $needed_angeltypes->pluck('id')) as $shiftEntriesOfAngelType
+                    ->filter(function ($entries, $angel_type_id) use ($existing_angeltype_ids) {
+                        return !in_array($angel_type_id, $existing_angeltype_ids);
+                    }) as $angel_type_id => $shiftEntriesOfAngelType
             ) {
                 /** @var Collection|ShiftEntry[] $shiftEntriesOfAngelType */
                 /** @var AngelType $angeltype */

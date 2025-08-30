@@ -104,6 +104,10 @@
                                 {{ _self.dropdown_item(__('settings.settings'), url('/settings/profile'), 'settings/profile', m.icon('person-fill-gear')) }}
                             {% endif %}
 
+                            {% if can('user_myshifts') %}
+                                {{ _self.dropdown_item(__('Digital ID'), url('/digital-id'), 'digital-id', m.icon('qr-code')) }}
+                            {% endif %}
+
                             {% if can('logout') %}
                                 {{ _self.dropdown_item(__('general.logout'), url('/logout'), 'logout', m.icon('box-arrow-left')) }}
                             {% endif %}

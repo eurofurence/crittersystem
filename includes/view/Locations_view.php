@@ -17,7 +17,24 @@ function location_view(Location $location, ShiftsFilterRenderer $shiftsFilterRen
 
     $assignNotice = '';
     if (config('signup_requires_arrival') && !$user->state->arrived) {
-        $assignNotice = info(render_user_arrived_hint(), true);
+        // Suppress arrival hint during allowed pre-/post-event signup windows
+        $now = \Engelsystem\Helpers\Carbon::now();
+        $buildupStart = config('buildup_start');
+        $eventStart = config('event_start');
+        $eventEnd = config('event_end');
+        $teardownEnd = config('teardown_end');
+
+        $withinPreEventWindow = !empty($buildupStart) && !empty($eventStart)
+            && $now->greaterThanOrEqualTo($buildupStart)
+            && $now->lessThan($eventStart);
+
+        $withinPostEventWindow = !empty($eventEnd) && !empty($teardownEnd)
+            && $now->greaterThan($eventEnd)
+            && $now->lessThanOrEqualTo($teardownEnd);
+
+        if (!($withinPreEventWindow || $withinPostEventWindow)) {
+            $assignNotice = info(render_user_arrived_hint(), true);
+        }
     }
 
     $description = '';
@@ -53,6 +70,11 @@ function location_view(Location $location, ShiftsFilterRenderer $shiftsFilterRen
             )]);
     }
 
+    $staff_badge = '';
+    if ($location->staff_only) {
+        $staff_badge = '<span class="badge bg-primary">Staff Only</span>';
+    }
+
     $tabs = [];
     if ($location->map_url) {
         $tabs[__('location.map_url')] = sprintf(
@@ -80,7 +102,7 @@ function location_view(Location $location, ShiftsFilterRenderer $shiftsFilterRen
     $link = button(url('/admin/locations'), icon('chevron-left'), 'btn-sm', '', __('general.back'));
     return page_with_title(
         (auth()->can('admin_locations') ? $link . ' ' : '') .
-        icon('pin-map-fill') . htmlspecialchars($location->name),
+        icon('pin-map-fill') . htmlspecialchars($location->name) . ' ' . $staff_badge,
         [
         $assignNotice,
         auth()->can('admin_locations') ? buttons([
