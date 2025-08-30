@@ -47,19 +47,18 @@ function update_shifts_highlight_hidden(date_now, hide_old) {
 
 // Pull a whole new table from the web server and whack it in place
 function update_shifts_data(date_now, hide_old) {
-  const search_string = get_mod_search_string('rand', Math.floor(Math.random() * 99999999));
-  const request = new Request(document.location.origin + document.location.pathname + '?' + search_string);
-  fetch(request)
+  const request = new Request(document.location.origin + document.location.pathname + '?' + document.location.search);
+  fetch(request, {cache: "no-store"})
     .then(response => response.text())
     .then(text => {
       const parser = new DOMParser();
       const rdoc = parser.parseFromString(text, "text/html");
       document.querySelector('table.dashboard-table')
         .replaceWith(rdoc.querySelector('table.dashboard-table'));
-    })
-    .then(x => {
       update_shifts_highlight_hidden(date_now, hide_old);
-      attach_dtable_listeners(true);
+      // WARNING: This causes a memory leak, therefore no do_tooltips on auto-reload
+      //attach_dtable_listeners(true);
+      attach_dtable_listeners(false);
     });
 }
 
@@ -103,10 +102,9 @@ function attach_dtable_listeners(do_tooltips) {
       // Remove current tooltips
       document.querySelectorAll('div.bs-tooltip-auto').forEach((element) => element.remove());
       // https://getbootstrap.com/docs/5.1/components/tooltips/#example-enable-tooltips-everywhere
-      var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-      var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-      })
+      var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+      // WARNING: This causes a memory leak, therefore no do_tooltips on auto-reload
+      var tooltipList = tooltipTriggerList.forEach((element) => new bootstrap.Tooltip(element));
     }
   });
 }

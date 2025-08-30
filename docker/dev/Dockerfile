@@ -4,7 +4,7 @@ WORKDIR /var/www
 RUN apk add --no-cache icu-dev linux-headers $PHPIZE_DEPS libzip-dev libpng-dev && \
     pecl install pcov xdebug && \
     docker-php-ext-install intl pdo_mysql gd zip && \
-    docker-php-ext-enable pcov xdebug
+    docker-php-ext-enable gd pcov xdebug
 RUN echo -e "xdebug.mode=debug\nxdebug.discover_client_host=1\n" >> /usr/local/etc/php/conf.d/xdebug.ini
 
 FROM es_base AS es_webserver
