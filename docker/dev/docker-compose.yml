@@ -10,10 +10,10 @@ services:
       - ./../..:/var/www
     environment:
       RUN_USER: "${UID}:${GID}"
-      APP_MYSQL_HOST: es_database
-      APP_MYSQL_USER: engelsystem
-      APP_MYSQL_PASSWORD: engelsystem
-      APP_MYSQL_DATABASE: engelsystem
+      MYSQL_HOST: es_database
+      MYSQL_USER: engelsystem
+      MYSQL_PASSWORD: engelsystem
+      MYSQL_DATABASE: engelsystem
       PHP_IDE_CONFIG: serverName=engelsystem
       ENVIRONMENT: development
       MAIL_DRIVER: log
@@ -34,10 +34,10 @@ services:
       - ./../..:/var/www
     environment:
       HOME: /tmp
-      APP_MYSQL_HOST: es_database
-      APP_MYSQL_USER: engelsystem
-      APP_MYSQL_PASSWORD: engelsystem
-      APP_MYSQL_DATABASE: engelsystem
+      MYSQL_HOST: es_database
+      MYSQL_USER: engelsystem
+      MYSQL_PASSWORD: engelsystem
+      MYSQL_DATABASE: engelsystem
       ENVIRONMENT: development
       MAIL_DRIVER: log
       APP_NAME: Engelsystem DEV
