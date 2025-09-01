@@ -77,22 +77,30 @@
                 {% endif %}
 
                 {% if is_user() %}
-                    {{ _self.toolbar_item(menuUserShiftState(user), url('/shifts', {'action': 'next'}), '', 'clock', __('shift.next')) }}
-
+                    {{ _self.toolbar_item('<span class="show-if-small" style="display: none;">' ~ __('nav.shift.info') ~ ': </span>' ~ menuUserShiftState(user), url('/shifts', {'action': 'next'}), '', 'clock', __('shift.next')) }}
                     {% if can('user_messages') %}
                         {{ _self.toolbar_item(
-                            user_messages ? '<span class="badge bg-danger">' ~ user_messages ~ '</span>' : '',
+                            '<span class="show-if-small" style="display: none;">' ~ __('nav.message.info') ~ '<span>' ~ (user_messages ? '<span class="badge bg-danger">' ~ user_messages ~ '</span>' : ''),
                             url('/messages'),
                             'messages',
-                            'envelope'
+                            'envelope',
+							__('nav.message.info')
                         ) }}
                     {% endif %}
 
+					{{ _self.toolbar_item(
+						'<span class="show-if-small" style="display: none;">Critter ID</span>',
+						url('/digital-id'),
+						'digital-id',
+						'qr-code',
+						'Critter ID'
+					) }}
+					
                     {{ menuUserHints() }}
 
                     {% include "layouts/parts/language_dropdown.twig" %}
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="User CP">
                             {{ m.angel() }} {{ user.displayName }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
@@ -105,7 +113,7 @@
                             {% endif %}
 
                             {% if can('user_myshifts') %}
-                                {{ _self.dropdown_item(__('Digital ID'), url('/digital-id'), 'digital-id', m.icon('qr-code')) }}
+                                {{ _self.dropdown_item('Critter ID', url('/digital-id'), 'digital-id', m.icon('qr-code')) }}
                             {% endif %}
 
                             {% if can('logout') %}

@@ -69,15 +69,15 @@ $link-color: #fff;
 }
 
 @font-face {
-  font-family: 'Zhurzh';
-  src: url('theme21/Zhurzh.ttf') format('truetype');
+  font-family: 'Conthrax Sb';
+  src: url('theme21/Conthrax-SB.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
 
 $font-family-sans-serif: 'Roboto', Helvetica Neue, Helvetica, Arial, sans-serif;
-$font-family-serif: 'Zhurzh', Georgia, 'Times New Roman', Times, serif;
+$font-family-serif: 'Conthrax Sb', Georgia, 'Times New Roman', Times, serif;
 $headings-font-family: $font-family-serif;
 
 //== changed Pagination
@@ -571,3 +571,13 @@ h5 {
   background-color: #3a3a3a !important;
 }
 */
+
+.show-if-small {
+	display: none;
+}
+
+@media (max-width: map-get($grid-breakpoints, 'xxl')) {
+	.show-if-small {
+		display: unset !important;
+	}
+}

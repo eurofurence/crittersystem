@@ -1,4 +1,5 @@
 {% extends "layouts/app.twig" %}
+{% import 'macros/base.twig' as m %}
 
 {% block title %}{{ __('Departments') }}{% endblock %}
 
@@ -25,7 +26,7 @@
             <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
                 {% for department in departments %}
                     <div class="col">
-                        <div class="card h-100">
+                        <div class="card h-100 border-secondary {{ m.type_bg_class() }}">
                             <div class="card-body">
                                 <h5 class="card-title">
                                     {% if department.staff_only %}
@@ -37,7 +38,7 @@
                                     <p class="card-text">{{ department.description }}</p>
                                 {% endif %}
                             </div>
-                            <div class="card-footer bg-transparent">
+                            <div class="card-footer bg-secondary">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <a href="{{ url('/departments/' ~ department.uuid) }}" class="btn btn-sm btn-info">
                                         {{ __('View Details') }}

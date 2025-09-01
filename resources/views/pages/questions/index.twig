@@ -58,13 +58,6 @@
                                 {% endif %}
                             {% endif %}
                         {% endblock %}
-                        {%- block info_text %}
-                            {% if config('contact_options') and not is_admin|default(false) %}
-                                <p>
-                                    {{ m.info(__('question.contact_options') ~ block('contact_options'), true) }}
-                                </p>
-                            {% endif %}
-                        {% endblock %}
 
                         {% for question in questions %}
                             <div class="row mb-4">

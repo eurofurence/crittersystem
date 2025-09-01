@@ -3331,6 +3331,15 @@ msgstr "Successfully updated user certification"
 msgid "certification.withdraw.success"
 msgstr "Successfully withdraw"
 
+msgid "nav.shift.info"
+msgstr "Next Shift"
+
+msgid "nav.language.info"
+msgstr "Language"
+
+msgid "nav.message.info"
+msgstr "Private Messages"
+
 # Backstage translations
 msgid "backstage.activity.by"
 msgstr "by"

@@ -226,3 +226,13 @@ hr {
 .bi-telegram {
   color: #24a1de;
 }
+
+.show-if-small {
+	display: none;
+}
+
+@media (max-width: map-get($grid-breakpoints, 'xxl')) {
+	.show-if-small {
+		display: unset !important;
+	}
+}

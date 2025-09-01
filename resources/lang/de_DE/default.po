@@ -3078,3 +3078,12 @@ msgstr "Abteilungen"
 
 msgid "login.use_username_password"
 msgstr "Mit Benutzername/Passwort anmelden"
+
+msgid "nav.shift.info"
+msgstr "Nächste Schicht"
+
+msgid "nav.language.info"
+msgstr "Sprache"
+
+msgid "nav.message.info"
+msgstr "Private Nachrichten"
