@@ -63,7 +63,7 @@ function make_navigation()
         'user/certifications'      => [__('certifications.title'), 'certificates.view'],
         'questions'                => [__('Ask the Info Desk'), 'question.add'],
         'crittertypes'             => [__('angeltypes.angeltypes'), 'angeltypes'],
-        'digital-id'               => [__('Critter-ID'), 'logout'],
+//        'digital-id'               => [__('Critter-ID'), 'logout'],
         'departments'              => [__('departments.title.plural'), 'dept.view'],
     ];
 

@@ -74,7 +74,7 @@
             {% endif %}
 
             <h3>{{ __('general.description') }}</h3>
-            <div class="card card-body mb-3">{{ angeltype.description | default('') | md }}</div>
+            <div class="card card-body mb-3 border-secondary {{ m.type_bg_class() }}">{{ angeltype.description | default('') | md }}</div>
 
             {% set required_certs = angeltype.requiredCertifications %}
             {% if required_certs is not empty %}

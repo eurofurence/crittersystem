@@ -28,7 +28,7 @@
 
             <div class="row g-3 mb-3">
                 <div class="col-12 col-md-6">
-                    <div class="card h-100">
+                    <div class="card h-100 border-secondary {{ m.type_bg_class() }}">
                         <div class="card-body">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="staff_only" name="staff_only" {% if angeltype.staff_only %}checked{% endif %}>
@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="col-12 col-md-6">
-                    <div class="card h-100">
+                    <div class="card h-100 border-secondary {{ m.type_bg_class() }}">
                         <div class="card-body">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="restricted" name="restricted" {% if angeltype.restricted %}checked{% endif %}>
@@ -56,7 +56,7 @@
                 </div>
 
                 <div class="col-12 col-md-6">
-                    <div class="card h-100">
+                    <div class="card h-100 border-secondary {{ m.type_bg_class() }}">
                         <div class="card-body">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="shift_self_signup" name="shift_self_signup" {% if angeltype.shift_self_signup %}checked{% endif %}>
@@ -70,7 +70,7 @@
                 </div>
 
                 <div class="col-12 col-md-6">
-                    <div class="card h-100">
+                    <div class="card h-100 border-secondary {{ m.type_bg_class() }}">
                         <div class="card-body">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="show_on_dashboard" name="show_on_dashboard" {% if angeltype.show_on_dashboard %}checked{% endif %}>
@@ -81,7 +81,7 @@
                 </div>
 
                 <div class="col-12 col-md-6">
-                    <div class="card h-100">
+                    <div class="card h-100 border-secondary {{ m.type_bg_class() }}">
                         <div class="card-body">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="hide_register" name="hide_register" {% if angeltype.hide_register %}checked{% endif %}>
@@ -92,7 +92,7 @@
                 </div>
 
                 <div class="col-12 col-md-6">
-                    <div class="card h-100">
+                    <div class="card h-100 border-secondary {{ m.type_bg_class() }}">
                         <div class="card-body">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="hide_on_shift_view" name="hide_on_shift_view" {% if angeltype.hide_on_shift_view %}checked{% endif %}>
@@ -128,7 +128,7 @@
                 <div class="row g-3">
                     {% for cert in certifications %}
                         <div class="col-12 col-md-6">
-                            <div class="card h-100">
+                            <div class="card h-100 border-secondary {{ m.type_bg_class() }}">
                                 <div class="card-body">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="cert_{{ cert.id }}" name="certification_requirements[]" value="{{ cert.id }}" {% if cert.id in requiredCertificationIds %}checked{% endif %}>
@@ -154,7 +154,7 @@
                     {% for cert in certifications %}
                         {% if cert.id in requiredCertificationIds %}
                         <div class="col-12 col-md-6">
-                            <div class="card h-100">
+                            <div class="card h-100 border-secondary {{ m.type_bg_class() }}">
                                 <div class="card-body">
                                     <div class="fw-semibold">{{ cert.title }}</div>
                                     {% if cert.description %}

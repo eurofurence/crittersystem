@@ -174,3 +174,25 @@ body {
 .bi-telegram {
   color: #24a1de;
 }
+
+.badge.bg-secondary, .badge.bg-dark, .badge.bg-info {
+  color: #fff;
+}
+
+.bg-warning > .card-header,
+.card-header.bg-warning,
+.card-header.bg-primary,
+.card-header.bg-success,
+.card-header.bg-danger {
+  color: $black;
+}
+
+.show-if-small {
+	display: none;
+}
+
+@media (max-width: map-get($grid-breakpoints, 'xxl')) {
+	.show-if-small {
+		display: unset !important;
+	}
+}

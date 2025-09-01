@@ -2,8 +2,8 @@
 
 {% if config('locales')|length > 1 %}
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            {{ m.icon('translate') }}
+        <a class="nav-link dropdown-toggle" href="#" title="{{ __('nav.language.info') }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ m.icon('translate') }} <span class="show-if-small" style="display: none;">{{ __('nav.language.info') }}</span>
         </a>
         <ul class="dropdown-menu dropdown-menu-end">
             {{ menuLanguages()|join(" ")|raw }}
