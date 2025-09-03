@@ -16,6 +16,7 @@ use Carbon\Carbon;
  * @property int                    $user_id
  * @property int                    $item_id
  * @property int                    $quantity
+ * @property int                    $hours_at_distribution
  * @property int                    $distributed_by
  * @property Carbon                 $distributed_at
  * @property string|null            $notes
@@ -55,6 +56,7 @@ class GoodiesV2Distribution extends BaseModel
         'user_id',
         'item_id',
         'quantity',
+        'hours_at_distribution',
         'distributed_by',
         'distributed_at',
         'notes',
@@ -69,6 +71,7 @@ class GoodiesV2Distribution extends BaseModel
         'user_id' => 'integer',
         'item_id' => 'integer',
         'quantity' => 'integer',
+        'hours_at_distribution' => 'integer',
         'distributed_by' => 'integer',
         'distributed_at' => 'datetime',
         'created_at' => 'datetime',

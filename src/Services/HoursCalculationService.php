@@ -399,7 +399,6 @@ class HoursCalculationService
 
     /**
      * Calculate goodies hours for a user using specific goodies rules.
-     * 
      * Formula: SUM(Day Shifts completed) + Worklog hours + SUM(Night shifts completed * 2) - SUM(FREELOAD Shifts * 2)
      * - Day Shifts: 08:01 AM to 01:59 AM (next day) - normal hours
      * - Night Shifts: 02:00 AM to 08:00 AM - 2x bonus (4 hours becomes 8 hours)
@@ -425,7 +424,7 @@ class HoursCalculationService
             $currentTime = Carbon::now();
             $userShifts = $user->shiftEntries()
                 ->with(['shift'])
-                ->whereHas('shift', function ($query) use ($currentTime) {
+                ->whereHas('shift', function ($query) use ($currentTime): void {
                     $query->where('end', '<=', $currentTime);
                 })
                 ->join('shifts', 'shift_entries.shift_id', '=', 'shifts.id')
@@ -559,13 +558,12 @@ class HoursCalculationService
         // Night shifts: 02:00 AM to 08:00 AM get 2x bonus
         $startHour = (int) $shift->start->format('H');
         $endHour = (int) $shift->end->format('H');
-        
         // Check various night shift scenarios:
         // 1. Shift starts in night window (02:00-07:59)
         // 2. Shift ends in night window (02:01-08:00)
         // 3. Shift spans across midnight and overlaps night hours
-        return ($startHour >= 2 && $startHour < 8) || 
-               ($endHour > 2 && $endHour <= 8) || 
+        return ($startHour >= 2 && $startHour < 8) ||
+               ($endHour > 2 && $endHour <= 8) ||
                ($startHour > $endHour); // Crosses midnight
     }
 
@@ -583,7 +581,6 @@ class HoursCalculationService
             // Check if we have fresh cached data
             try {
                 $cacheRecord = \Engelsystem\Models\GoodiesV2UserHoursCache::where('user_id', $user->id)->first();
-                
                 if ($cacheRecord && !$cacheRecord->isStale()) {
                     $this->log->debug('Using cached goodies hours', [
                         'user_id' => $user->id,

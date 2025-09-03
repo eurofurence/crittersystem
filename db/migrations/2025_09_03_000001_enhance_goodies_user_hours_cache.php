@@ -26,19 +26,29 @@ class EnhanceGoodiesUserHoursCache extends Migration
      */
     public function up(): void
     {
+        // Add detailed hours breakdown fields first
         $this->schema->table('goodiesv2_user_hours_cache', function (Blueprint $table): void {
-            // Add detailed hours breakdown fields
             $table->decimal('day_shifts_hours', 8, 2)->default(0)->after('total_hours');
             $table->decimal('night_shifts_hours', 8, 2)->default(0)->after('day_shifts_hours');
             $table->decimal('freeload_penalty_hours', 8, 2)->default(0)->after('night_shifts_hours');
             $table->decimal('worklog_hours', 8, 2)->default(0)->after('freeload_penalty_hours');
+        });
 
-            // Rename existing shift count fields to match new naming
+        // Rename columns in separate operations for SQLite compatibility
+        $this->schema->table('goodiesv2_user_hours_cache', function (Blueprint $table): void {
             $table->renameColumn('completed_shifts', 'completed_shifts_count');
-            $table->renameColumn('freeloader_shifts', 'freeload_shifts_count');
-            $table->renameColumn('overnight_shifts', 'night_shifts_count');
+        });
 
-            // Add indexes for new fields
+        $this->schema->table('goodiesv2_user_hours_cache', function (Blueprint $table): void {
+            $table->renameColumn('freeloader_shifts', 'freeload_shifts_count');
+        });
+
+        $this->schema->table('goodiesv2_user_hours_cache', function (Blueprint $table): void {
+            $table->renameColumn('overnight_shifts', 'night_shifts_count');
+        });
+
+        // Add indexes for new fields
+        $this->schema->table('goodiesv2_user_hours_cache', function (Blueprint $table): void {
             $table->index(['day_shifts_hours']);
             $table->index(['night_shifts_hours']);
             $table->index(['worklog_hours']);
@@ -50,21 +60,34 @@ class EnhanceGoodiesUserHoursCache extends Migration
      */
     public function down(): void
     {
+        // Drop indexes first
         $this->schema->table('goodiesv2_user_hours_cache', function (Blueprint $table): void {
-            // Drop the new columns
+            $table->dropIndex(['day_shifts_hours']);
+            $table->dropIndex(['night_shifts_hours']);
+            $table->dropIndex(['worklog_hours']);
+        });
+
+        // Rename columns back in separate operations for SQLite compatibility
+        $this->schema->table('goodiesv2_user_hours_cache', function (Blueprint $table): void {
+            $table->renameColumn('completed_shifts_count', 'completed_shifts');
+        });
+
+        $this->schema->table('goodiesv2_user_hours_cache', function (Blueprint $table): void {
+            $table->renameColumn('freeload_shifts_count', 'freeloader_shifts');
+        });
+
+        $this->schema->table('goodiesv2_user_hours_cache', function (Blueprint $table): void {
+            $table->renameColumn('night_shifts_count', 'overnight_shifts');
+        });
+
+        // Drop the new columns
+        $this->schema->table('goodiesv2_user_hours_cache', function (Blueprint $table): void {
             $table->dropColumn([
                 'day_shifts_hours',
                 'night_shifts_hours',
                 'freeload_penalty_hours',
                 'worklog_hours',
             ]);
-
-            // Rename columns back to original names
-            $table->renameColumn('completed_shifts_count', 'completed_shifts');
-            $table->renameColumn('freeload_shifts_count', 'freeloader_shifts');
-            $table->renameColumn('night_shifts_count', 'overnight_shifts');
-
-            // Drop indexes (they will be automatically dropped with columns)
         });
     }
 }

@@ -12,6 +12,7 @@ use Engelsystem\Http\Exceptions\HttpForbidden;
 use Engelsystem\Http\Redirector;
 use Engelsystem\Http\Request;
 use Engelsystem\Http\Response;
+use Engelsystem\Models\User\User;
 use Engelsystem\Services\GoodiesService;
 use Engelsystem\Services\HoursCalculationService;
 use Engelsystem\Services\GoodiesDistributionService;
@@ -560,7 +561,6 @@ class BackstageController extends BaseController
 
     /**
      * Display comprehensive user goodies profile page.
-     * 
      * This is the main goodies distribution interface that shows:
      * - User information (name, ID, badge, staff status)
      * - Complete shift history until current time
@@ -579,18 +579,18 @@ class BackstageController extends BaseController
             // Get user with all required relationships
             $user = \Engelsystem\Models\User\User::with([
                 'state',
-                'personalData', 
+                'personalData',
                 'contact',
                 'certifications',
                 'shiftEntries.shift',
-                'worklogs'
+                'worklogs',
             ])->findOrFail($userId);
 
             // Get user's shift data until current time
             $currentTime = Carbon::now();
             $userShifts = $user->shiftEntries()
                 ->with(['shift'])
-                ->whereHas('shift', function ($query) use ($currentTime) {
+                ->whereHas('shift', function ($query) use ($currentTime): void {
                     $query->where('end', '<=', $currentTime);
                 })
                 ->join('shifts', 'shift_entries.shift_id', '=', 'shifts.id')
@@ -608,9 +608,11 @@ class BackstageController extends BaseController
             // Check eligibility and get distribution info for each goodie
             $goodiesWithEligibility = [];
             foreach ($goodiesItems as $goodie) {
-                $eligibilityCheck = $this->goodiesService->checkItemEligibility($user, 
-                    \Engelsystem\Models\GoodiesV2Item::find($goodie['id']));
-                
+                $eligibilityCheck = $this->goodiesService->checkItemEligibility(
+                    $user,
+                    \Engelsystem\Models\GoodiesV2Item::find($goodie['id'])
+                );
+
                 // Get distribution summary for this user and goodie
                 $distributionSummary = $this->getDistributionSummary($userId, $goodie['id']);
 
@@ -726,7 +728,7 @@ class BackstageController extends BaseController
             }
 
             // Redirect back to same user profile (requirement: refresh and stay on same page)
-            return $this->redirect->to("/admin/backstage/users/{$userId}/goodies");
+            return $this->redirect->to('/admin/backstage/users/' . $userId . '/goodies');
         } catch (\Exception $e) {
             $this->log->error('Error processing goodie distribution - {error} - stack trace: {trace}', [
                 'user' => auth()->user()->name,
@@ -761,7 +763,7 @@ class BackstageController extends BaseController
                 'total_delivered' => $totalQuantity,
                 'delivery_count' => $distributions->count(),
                 'last_delivered_at' => $lastDistribution ? $lastDistribution->created_at : null,
-                'display_text' => $totalQuantity > 0 ? "Delivered {$totalQuantity}x" : null,
+                'display_text' => $totalQuantity > 0 ? 'Delivered ' . $totalQuantity . 'x' : null,
             ];
         } catch (\Exception $e) {
             $this->log->warning('Could not get distribution summary', [
@@ -785,7 +787,6 @@ class BackstageController extends BaseController
     protected function calculatePreFilledQuantity(array $goodie): int
     {
         $maxPerPerson = $goodie['max_per_person'] ?? null;
-        
         // If no limit set, default to 1
         if ($maxPerPerson === null || $maxPerPerson <= 0) {
             return 1;
@@ -828,7 +829,7 @@ class BackstageController extends BaseController
     /**
      * Get user badges for staff/critter status display.
      */
-    protected function getUserBadges($user): array
+    protected function getUserBadges(User $user): array
     {
         $badges = [];
 

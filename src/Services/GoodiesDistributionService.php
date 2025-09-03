@@ -673,8 +673,12 @@ class GoodiesDistributionService
      * @param string|null $notes Optional notes about the distribution
      * @return array Distribution result with success status and details
      */
-    public function distributeItem(User $user, \Engelsystem\Models\GoodiesV2Item $item, int $quantity = 1, ?string $notes = null): array
-    {
+    public function distributeItem(
+        User $user,
+        \Engelsystem\Models\GoodiesV2Item $item,
+        int $quantity = 1,
+        ?string $notes = null
+    ): array {
         $this->log->info('Starting goodie item distribution', [
             'user' => $user->name,
             'user_id' => $user->id,
@@ -714,7 +718,8 @@ class GoodiesDistributionService
                 if (($existingDistributions + $quantity) > $item->max_per_person) {
                     return [
                         'success' => false,
-                        'reason' => "Distribution would exceed maximum per person limit ({$item->max_per_person})",
+                        'reason' => 'Distribution would exceed maximum per person limit ('
+                            . $item->max_per_person . ')',
                         'error_code' => 'EXCEEDS_LIMIT',
                         'current_count' => $existingDistributions,
                         'max_allowed' => $item->max_per_person,
@@ -723,11 +728,26 @@ class GoodiesDistributionService
                 }
             }
 
+            // Get user's current hours for audit trail
+            $userCurrentHours = 0;
+            try {
+                // Check if HoursCalculationService is available via container
+                $hoursService = app(\Engelsystem\Services\HoursCalculationService::class);
+                $hoursData = $hoursService->calculateGoodiesHours($user);
+                $userCurrentHours = (int) round($hoursData['total_hours']);
+            } catch (\Exception $e) {
+                $this->log->warning('Could not calculate user hours for distribution audit', [
+                    'user_id' => $user->id,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+
             // Create distribution record
             $distribution = \Engelsystem\Models\GoodiesV2Distribution::create([
                 'user_id' => $user->id,
                 'item_id' => $item->id,
                 'quantity' => $quantity,
+                'hours_at_distribution' => $userCurrentHours,
                 'distributed_by' => auth()->user()?->id ?? 1, // Fallback for system
                 'distributed_at' => Carbon::now(),
                 'notes' => $notes,
@@ -753,7 +773,6 @@ class GoodiesDistributionService
                 'distributor' => auth()->user()?->name ?? 'System',
                 'notes' => $notes,
             ];
-
         } catch (\Exception $e) {
             $this->log->error('Error distributing goodie item', [
                 'user' => $user->name,
