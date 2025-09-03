@@ -1,0 +1,409 @@
+{% extends 'layouts/app.twig' %}
+{% import 'macros/base.twig' as m %}
+{% import 'macros/form.twig' as f %}
+
+{% block title %}{{ __('backstage.users.goodies.title') }} - {{ target_user.name }}{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                {# Header with navigation #}
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1>
+                        {{ m.icon('gift') }}
+                        {{ block('title') }}
+                    </h1>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group" role="group">
+                            <a href="{{ url('/admin/backstage/users/search') }}" class="btn btn-secondary btn-sm">
+                                {{ m.icon('arrow-left') }}
+                                {{ __('backstage.users.back_to_search') }}
+                            </a>
+                            <a href="{{ url('/admin/backstage') }}" class="btn btn-outline-secondary btn-sm">
+                                {{ m.icon('house') }}
+                                {{ __('backstage.back_to_dashboard') }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                {% include 'layouts/parts/messages.twig' %}
+
+                <div class="row">
+                    {# User Information Section #}
+                    <div class="col-lg-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    {{ m.icon('person-circle') }}
+                                    {{ __('backstage.users.information') }}
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                {# User Basic Info #}
+                                <div class="row text-center mb-3">
+                                    <div class="col-6">
+                                        <div class="border rounded p-2">
+                                            <h6 class="text-muted mb-1">{{ __('backstage.users.id') }}</h6>
+                                            <strong>{{ target_user.id }}</strong>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="border rounded p-2">
+                                            <h6 class="text-muted mb-1">{{ __('backstage.users.badge') }}</h6>
+                                            <strong>{{ target_user.personalData.shirt_size|default('N/A') }}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {# User Name #}
+                                <div class="mb-3">
+                                    <h4 class="mb-1">{{ target_user.name }}</h4>
+                                    {% if target_user.personalData.first_name or target_user.personalData.last_name %}
+                                        <p class="text-muted">
+                                            {{ [target_user.personalData.first_name, target_user.personalData.last_name]|join(' ')|trim }}
+                                        </p>
+                                    {% endif %}
+                                </div>
+
+                                {# User Badges (Staff/Critter) #}
+                                <div class="mb-3">
+                                    {% for badge in user_badges %}
+                                        <span class="badge {{ badge.class }} me-2">
+                                            {{ badge.text }}
+                                        </span>
+                                    {% endfor %}
+                                </div>
+
+                                {# Arrival Status #}
+                                <div class="mb-3">
+                                    {% if target_user.state.arrived %}
+                                        <span class="badge bg-success">
+                                            {{ m.icon('check-circle') }}
+                                            {{ __('backstage.users.status.arrived') }}
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">
+                                            {{ m.icon('clock') }}
+                                            {{ __('backstage.users.status.not_arrived') }}
+                                        </span>
+                                    {% endif %}
+                                </div>
+
+                                {# Registration Date #}
+                                {% if target_user.created_at %}
+                                    <small class="text-muted">
+                                        {{ m.icon('calendar-plus') }}
+                                        {{ __('backstage.users.registered') }}: {{ target_user.created_at|date('Y-m-d') }}
+                                    </small>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Hours Calculation Section #}
+                    <div class="col-lg-8 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    {{ m.icon('clock-history') }}
+                                    {{ __('backstage.users.hours.title') }}
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                {# Total Hours Display #}
+                                <div class="row text-center mb-4">
+                                    <div class="col-12">
+                                        <div class="alert alert-info">
+                                            <h2 class="mb-0">
+                                                {{ hours_data.total_hours }}
+                                                <small class="text-muted">{{ __('backstage.users.hours.total') }}</small>
+                                            </h2>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {# Hours Breakdown #}
+                                <div class="row text-center">
+                                    <div class="col-md-3 col-6 mb-3">
+                                        <div class="border rounded p-3">
+                                            <h4 class="text-primary mb-1">{{ hours_data.day_shifts_hours }}</h4>
+                                            <small class="text-muted">{{ __('backstage.users.hours.day_shifts') }}</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-6 mb-3">
+                                        <div class="border rounded p-3">
+                                            <h4 class="text-warning mb-1">{{ hours_data.night_shifts_hours }}</h4>
+                                            <small class="text-muted">{{ __('backstage.users.hours.night_shifts') }}</small>
+                                            <br><small class="text-info">(+{{ hours_data.night_shifts_bonus }} bonus)</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-6 mb-3">
+                                        <div class="border rounded p-3">
+                                            <h4 class="text-success mb-1">{{ hours_data.worklog_hours }}</h4>
+                                            <small class="text-muted">{{ __('backstage.users.hours.worklog') }}</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-6 mb-3">
+                                        <div class="border rounded p-3">
+                                            <h4 class="text-danger mb-1">-{{ hours_data.freeload_penalty_hours }}</h4>
+                                            <small class="text-muted">{{ __('backstage.users.hours.freeload_penalty') }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {# Shifts Summary #}
+                                <div class="row text-center mt-3">
+                                    <div class="col-4">
+                                        <small class="text-muted">{{ __('backstage.users.shifts.completed') }}</small>
+                                        <br><strong>{{ hours_data.completed_shifts_count }}</strong>
+                                    </div>
+                                    <div class="col-4">
+                                        <small class="text-muted">{{ __('backstage.users.shifts.night') }}</small>
+                                        <br><strong>{{ hours_data.night_shifts_count }}</strong>
+                                    </div>
+                                    <div class="col-4">
+                                        <small class="text-muted">{{ __('backstage.users.shifts.freeload') }}</small>
+                                        <br><strong>{{ hours_data.freeload_shifts_count }}</strong>
+                                    </div>
+                                </div>
+
+                                <small class="text-muted mt-2 d-block">
+                                    {{ __('backstage.users.hours.calculated_at') }}: {{ hours_data.calculation_timestamp|date('H:i:s') }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# Goodies Section #}
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    {{ m.icon('gift') }}
+                                    {{ __('backstage.users.goodies.available') }}
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                {% if goodies_with_eligibility|length > 0 %}
+                                    <div class="row">
+                                        {% for goodie_data in goodies_with_eligibility %}
+                                            {% set goodie = goodie_data.goodie %}
+                                            {% set distribution_summary = goodie_data.distribution_summary %}
+                                            <div class="col-lg-6 col-xl-4 mb-4">
+                                                <div class="card h-100 {% if goodie_data.eligible %}border-success{% else %}border-secondary{% endif %}">
+                                                    <div class="card-body">
+                                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                                            <h6 class="card-title mb-0">{{ goodie.name }}</h6>
+                                                            <div class="text-end">
+                                                                {% if goodie_data.eligible %}
+                                                                    <span class="badge bg-success">{{ __('backstage.goodies.eligible') }}</span>
+                                                                {% else %}
+                                                                    <span class="badge bg-secondary">{{ __('backstage.goodies.not_eligible') }}</span>
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+
+                                                        {# Goodie Description #}
+                                                        {% if goodie.description %}
+                                                            <p class="text-muted small">{{ goodie.description }}</p>
+                                                        {% endif %}
+
+                                                        {# Hours Requirement #}
+                                                        <div class="mb-2">
+                                                            <small class="text-muted">
+                                                                {{ m.icon('clock') }}
+                                                                {{ __('backstage.goodies.hours_required') }}: {{ goodie.required_hours }}h
+                                                            </small>
+                                                        </div>
+
+                                                        {# Category Badge (Staff/Critter restrictions) #}
+                                                        {% if goodie.category %}
+                                                            <div class="mb-2">
+                                                                <span class="badge bg-info">{{ goodie.category.name }}</span>
+                                                            </div>
+                                                        {% endif %}
+
+                                                        {# Distribution Status #}
+                                                        {% if distribution_summary.display_text %}
+                                                            <div class="alert alert-success py-2">
+                                                                <strong>{{ distribution_summary.display_text }}</strong>
+                                                                {% if distribution_summary.last_delivered_at %}
+                                                                    <br><small>{{ __('backstage.goodies.last_delivered') }}: {{ distribution_summary.last_delivered_at|date('M j, H:i') }}</small>
+                                                                {% endif %}
+                                                            </div>
+                                                        {% endif %}
+
+                                                        {# Eligibility Issues #}
+                                                        {% if not goodie_data.eligible and goodie_data.reasons %}
+                                                            <div class="alert alert-warning py-2">
+                                                                <small>
+                                                                    {% for reason in goodie_data.reasons %}
+                                                                        • {{ reason }}<br>
+                                                                    {% endfor %}
+                                                                </small>
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+
+                                                    {# Distribution Form #}
+                                                    {% if can_distribute %}
+                                                        <div class="card-footer bg-transparent">
+                                                            <form method="post" action="{{ url('/admin/backstage/users/' ~ target_user.id ~ '/goodies/distribute') }}" class="row g-2">
+                                                                {{ csrf() }}
+                                                                <input type="hidden" name="goodie_id" value="{{ goodie.id }}">
+                                                                
+                                                                <div class="col-8">
+                                                                    <input type="number" 
+                                                                           name="quantity" 
+                                                                           class="form-control form-control-sm" 
+                                                                           value="{{ goodie_data.pre_filled_quantity }}" 
+                                                                           min="1" 
+                                                                           {% if goodie.max_per_person %}max="{{ goodie.max_per_person }}"{% endif %}
+                                                                           {% if not goodie_data.eligible %}disabled{% endif %}>
+                                                                    {% if goodie.max_per_person %}
+                                                                        <small class="text-muted">{{ __('backstage.goodies.max_per_person') }}: {{ goodie.max_per_person }}</small>
+                                                                    {% endif %}
+                                                                </div>
+                                                                
+                                                                <div class="col-4">
+                                                                    <button type="submit" 
+                                                                            class="btn btn-success btn-sm w-100"
+                                                                            {% if not goodie_data.eligible %}disabled{% endif %}>
+                                                                        {{ m.icon('check') }}
+                                                                        {{ __('backstage.goodies.distribute') }}
+                                                                    </button>
+                                                                </div>
+                                                                
+                                                                <div class="col-12 mt-2">
+                                                                    <input type="text" 
+                                                                           name="notes" 
+                                                                           class="form-control form-control-sm" 
+                                                                           placeholder="{{ __('backstage.goodies.notes_optional') }}"
+                                                                           {% if not goodie_data.eligible %}disabled{% endif %}>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <div class="text-center py-4">
+                                        <div class="mb-3">
+                                            {{ m.icon('gift', 64) }}
+                                        </div>
+                                        <h4 class="text-muted">{{ __('backstage.goodies.no_goodies_available') }}</h4>
+                                        <p class="text-muted">{{ __('backstage.goodies.no_goodies_message') }}</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# Distribution History Section #}
+                {% if distribution_history|length > 0 %}
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">
+                                        {{ m.icon('journal-text') }}
+                                        {{ __('backstage.users.goodies.history') }}
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>{{ __('backstage.goodies.item') }}</th>
+                                                    <th>{{ __('backstage.goodies.quantity') }}</th>
+                                                    <th>{{ __('backstage.goodies.distributed_by') }}</th>
+                                                    <th>{{ __('backstage.goodies.distributed_at') }}</th>
+                                                    <th>{{ __('backstage.goodies.notes') }}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for distribution in distribution_history %}
+                                                    <tr>
+                                                        <td>{{ distribution.item_name }}</td>
+                                                        <td><span class="badge bg-primary">{{ distribution.quantity }}</span></td>
+                                                        <td>{{ distribution.distributed_by }}</td>
+                                                        <td>{{ distribution.distributed_at|date('M j, H:i') }}</td>
+                                                        <td>
+                                                            {% if distribution.notes %}
+                                                                {{ distribution.notes }}
+                                                            {% else %}
+                                                                <em class="text-muted">{{ __('backstage.goodies.no_notes') }}</em>
+                                                            {% endif %}
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<style>
+/* Custom styles for goodies profile page */
+.card {
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+.card-header {
+    background-color: var(--bs-light);
+    border-bottom: 1px solid var(--bs-border-color);
+}
+
+.alert-info h2 {
+    color: inherit;
+}
+
+.border-success {
+    border-color: var(--bs-success) !important;
+}
+
+.border-secondary {
+    border-color: var(--bs-secondary) !important;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+    .row.text-center .col-md-3 {
+        margin-bottom: 1rem;
+    }
+    
+    .card-title {
+        font-size: 0.95rem;
+    }
+}
+
+/* Print styles */
+@media print {
+    .btn, .card-footer {
+        display: none;
+    }
+    
+    .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+}
+</style>
+{% endblock %}

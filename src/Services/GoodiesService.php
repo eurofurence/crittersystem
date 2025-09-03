@@ -1067,7 +1067,6 @@ class GoodiesService
         // Count how many of this item the user has already received
         $currentCount = $item->distributions()
             ->where('user_id', $user->id)
-            ->where('status', 'distributed')
             ->sum('quantity');
 
         $withinLimit = $currentCount < $item->max_per_person;

@@ -4072,3 +4072,110 @@ msgstr "Please enter search criteria"
 msgid "backstage.search.error"
 msgstr "An error occurred during search"
 
+# Goodies Profile Page Translations
+msgid "backstage.users.goodies.title"
+msgstr "Goodies Profile"
+
+msgid "backstage.users.back_to_search"
+msgstr "Back to Search"
+
+msgid "backstage.users.information"
+msgstr "User Information"
+
+msgid "backstage.users.hours.title"
+msgstr "Hours Calculation"
+
+msgid "backstage.users.hours.total"
+msgstr "Total Hours"
+
+msgid "backstage.users.hours.day_shifts"
+msgstr "Day Shifts"
+
+msgid "backstage.users.hours.night_shifts"
+msgstr "Night Shifts"
+
+msgid "backstage.users.hours.worklog"
+msgstr "Worklog Hours"
+
+msgid "backstage.users.hours.freeload_penalty"
+msgstr "Freeload Penalty"
+
+msgid "backstage.users.hours.calculated_at"
+msgstr "Calculated at"
+
+msgid "backstage.users.shifts.completed"
+msgstr "Completed"
+
+msgid "backstage.users.shifts.night"
+msgstr "Night"
+
+msgid "backstage.users.shifts.freeload"
+msgstr "Freeload"
+
+msgid "backstage.users.goodies.available"
+msgstr "Available Goodies"
+
+msgid "backstage.users.goodies.history"
+msgstr "Distribution History"
+
+msgid "backstage.users.goodies.no_goodies_available"
+msgstr "No Goodies Available"
+
+msgid "backstage.users.goodies.no_goodies_message"
+msgstr "There are currently no goodies configured in the system."
+
+msgid "backstage.goodies.eligible"
+msgstr "Eligible"
+
+msgid "backstage.goodies.not_eligible"
+msgstr "Not Eligible"
+
+msgid "backstage.goodies.hours_required"
+msgstr "Hours Required"
+
+msgid "backstage.goodies.max_per_person"
+msgstr "Max per person"
+
+msgid "backstage.goodies.distribute"
+msgstr "Distribute"
+
+msgid "backstage.goodies.notes_optional"
+msgstr "Notes (optional)"
+
+msgid "backstage.goodies.last_delivered"
+msgstr "Last delivered"
+
+msgid "backstage.goodies.item"
+msgstr "Item"
+
+msgid "backstage.goodies.quantity"
+msgstr "Quantity"
+
+msgid "backstage.goodies.distributed_by"
+msgstr "Distributed By"
+
+msgid "backstage.goodies.distributed_at"
+msgstr "Distributed At"
+
+msgid "backstage.goodies.notes"
+msgstr "Notes"
+
+msgid "backstage.goodies.no_notes"
+msgstr "No notes"
+
+# Notification messages for goodies distribution
+msgid "backstage.goodies.profile.error"
+msgstr "Error loading goodies profile"
+
+msgid "backstage.goodies.distribute.insufficient_permissions"
+msgstr "Insufficient permissions to distribute goodies"
+
+msgid "backstage.goodies.distribute.not_eligible"
+msgstr "User is not eligible for this goodie"
+
+msgid "backstage.goodies.distribute.success"
+msgstr "Goodie distributed successfully"
+
+msgid "backstage.goodies.distribute.error"
+msgstr "Error distributing goodie"
+

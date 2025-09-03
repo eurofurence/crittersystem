@@ -557,4 +557,340 @@ class BackstageController extends BaseController
             return $this->redirect->back();
         }
     }
+
+    /**
+     * Display comprehensive user goodies profile page.
+     * 
+     * This is the main goodies distribution interface that shows:
+     * - User information (name, ID, badge, staff status)
+     * - Complete shift history until current time
+     * - Real-time hours calculation with rule breakdown
+     * - All goodies ordered by required hours
+     * - Distribution history and delivery status
+     * - Distribution forms with quantity management
+     */
+    public function userGoodiesProfile(Request $request): Response
+    {
+        $this->checkGoodiesPermission('view');
+
+        $userId = (int) $request->getAttribute('user_id');
+
+        try {
+            // Get user with all required relationships
+            $user = \Engelsystem\Models\User\User::with([
+                'state',
+                'personalData', 
+                'contact',
+                'certifications',
+                'shiftEntries.shift',
+                'worklogs'
+            ])->findOrFail($userId);
+
+            // Get user's shift data until current time
+            $currentTime = Carbon::now();
+            $userShifts = $user->shiftEntries()
+                ->with(['shift'])
+                ->whereHas('shift', function ($query) use ($currentTime) {
+                    $query->where('end', '<=', $currentTime);
+                })
+                ->join('shifts', 'shift_entries.shift_id', '=', 'shifts.id')
+                ->orderBy('shifts.end', 'desc')
+                ->select('shift_entries.*')
+                ->get();
+
+            // Calculate hours using enhanced HoursCalculationService with caching
+            $hoursData = $this->hoursService->calculateGoodiesHoursWithCache($user);
+
+            // Get ALL goodies ordered by required hours (ascending)
+            $allGoodies = $this->goodiesService->getGoodiesItemsPaginated(1, 1000, ['active_only' => true]);
+            $goodiesItems = collect($allGoodies['data'])->sortBy('required_hours');
+
+            // Check eligibility and get distribution info for each goodie
+            $goodiesWithEligibility = [];
+            foreach ($goodiesItems as $goodie) {
+                $eligibilityCheck = $this->goodiesService->checkItemEligibility($user, 
+                    \Engelsystem\Models\GoodiesV2Item::find($goodie['id']));
+                
+                // Get distribution summary for this user and goodie
+                $distributionSummary = $this->getDistributionSummary($userId, $goodie['id']);
+
+                $goodiesWithEligibility[] = [
+                    'goodie' => $goodie,
+                    'eligible' => $eligibilityCheck['eligible'],
+                    'reasons' => $eligibilityCheck['reasons'] ?? [],
+                    'distribution_summary' => $distributionSummary,
+                    'max_per_person' => $goodie['max_per_person'],
+                    'pre_filled_quantity' => $this->calculatePreFilledQuantity($goodie),
+                ];
+            }
+
+            // Get complete distribution history
+            $distributionHistory = $this->getCompleteDistributionHistory($userId);
+
+            // Determine user badges (staff/critter status)
+            $userBadges = $this->getUserBadges($user);
+
+            $this->log->info('User goodies profile accessed', [
+                'user' => auth()->user()->name,
+                'user_id' => auth()->user()->id,
+                'target_user_id' => $userId,
+                'target_user_name' => $user->name,
+                'total_hours' => $hoursData['total_hours'],
+                'total_goodies' => count($goodiesWithEligibility),
+            ]);
+
+            return $this->response->withView(
+                'backstage/users/goodies-profile',
+                [
+                    'current_user' => auth()->user(),
+                    'target_user' => $user,
+                    'user_badges' => $userBadges,
+                    'shifts_data' => [
+                        'shifts' => $userShifts,
+                        'total_shifts' => $userShifts->count(),
+                    ],
+                    'hours_data' => $hoursData,
+                    'goodies_with_eligibility' => $goodiesWithEligibility,
+                    'distribution_history' => $distributionHistory,
+                    'can_distribute' => BackstagePermissionHelper::canDistributeGoodies(),
+                    'can_admin' => BackstagePermissionHelper::hasAdminAccess(),
+                ]
+            );
+        } catch (\Exception $e) {
+            $this->log->error('Error loading user goodies profile - {error} - stack trace: {trace}', [
+                'user' => auth()->user()->name,
+                'user_id' => auth()->user()->id,
+                'target_user_id' => $userId,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            $this->addNotification('backstage.goodies.profile.error', NotificationType::ERROR);
+            return $this->redirect->to('/admin/backstage/users/search');
+        }
+    }
+
+    /**
+     * Process goodie distribution from user profile page.
+     */
+    public function processGoodieDistribution(Request $request): Response
+    {
+        $this->checkGoodiesPermission('view');
+
+        // Must have distribution permissions
+        if (!BackstagePermissionHelper::canDistributeGoodies()) {
+            $this->addNotification('backstage.goodies.distribute.insufficient_permissions', NotificationType::ERROR);
+            return $this->redirect->back();
+        }
+
+        $userId = (int) $request->getAttribute('user_id');
+        $goodieId = (int) $request->get('goodie_id');
+        $quantity = (int) $request->get('quantity', 1);
+        $notes = trim($request->get('notes', ''));
+
+        try {
+            $user = \Engelsystem\Models\User\User::findOrFail($userId);
+            $goodie = \Engelsystem\Models\GoodiesV2Item::findOrFail($goodieId);
+
+            // Validate distribution
+            $eligibilityCheck = $this->goodiesService->checkItemEligibility($user, $goodie);
+            if (!$eligibilityCheck['eligible']) {
+                $this->addNotification(
+                    'backstage.goodies.distribute.not_eligible: ' . implode(', ', $eligibilityCheck['reasons']),
+                    NotificationType::WARNING
+                );
+                return $this->redirect->back();
+            }
+
+            // Process distribution through service
+            $distributionResult = $this->distributionService->distributeItem($user, $goodie, $quantity, $notes);
+
+            if ($distributionResult['success']) {
+                $this->log->info('Goodie distributed successfully', [
+                    'user' => auth()->user()->name,
+                    'user_id' => auth()->user()->id,
+                    'target_user_id' => $userId,
+                    'target_user_name' => $user->name,
+                    'goodie_id' => $goodieId,
+                    'goodie_name' => $goodie->name,
+                    'quantity' => $quantity,
+                    'notes' => $notes,
+                ]);
+
+                $this->addNotification('backstage.goodies.distribute.success', NotificationType::MESSAGE);
+            } else {
+                $this->addNotification(
+                    'backstage.goodies.distribute.error: ' . $distributionResult['reason'],
+                    NotificationType::ERROR
+                );
+            }
+
+            // Redirect back to same user profile (requirement: refresh and stay on same page)
+            return $this->redirect->to("/admin/backstage/users/{$userId}/goodies");
+        } catch (\Exception $e) {
+            $this->log->error('Error processing goodie distribution - {error} - stack trace: {trace}', [
+                'user' => auth()->user()->name,
+                'user_id' => auth()->user()->id,
+                'target_user_id' => $userId,
+                'goodie_id' => $goodieId,
+                'quantity' => $quantity,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            $this->addNotification('backstage.goodies.distribute.error', NotificationType::ERROR);
+            return $this->redirect->back();
+        }
+    }
+
+
+    /**
+     * Get distribution summary for a user and goodie (e.g., "Delivered 3x").
+     */
+    protected function getDistributionSummary(int $userId, int $goodieId): array
+    {
+        try {
+            $distributions = \Engelsystem\Models\GoodiesV2Distribution::where('user_id', $userId)
+                ->where('item_id', $goodieId)
+                ->get();
+
+            $totalQuantity = $distributions->sum('quantity');
+            $lastDistribution = $distributions->sortByDesc('created_at')->first();
+
+            return [
+                'total_delivered' => $totalQuantity,
+                'delivery_count' => $distributions->count(),
+                'last_delivered_at' => $lastDistribution ? $lastDistribution->created_at : null,
+                'display_text' => $totalQuantity > 0 ? "Delivered {$totalQuantity}x" : null,
+            ];
+        } catch (\Exception $e) {
+            $this->log->warning('Could not get distribution summary', [
+                'user_id' => $userId,
+                'goodie_id' => $goodieId,
+                'error' => $e->getMessage(),
+            ]);
+
+            return [
+                'total_delivered' => 0,
+                'delivery_count' => 0,
+                'last_delivered_at' => null,
+                'display_text' => null,
+            ];
+        }
+    }
+
+    /**
+     * Calculate pre-filled quantity using max_per_person field.
+     */
+    protected function calculatePreFilledQuantity(array $goodie): int
+    {
+        $maxPerPerson = $goodie['max_per_person'] ?? null;
+        
+        // If no limit set, default to 1
+        if ($maxPerPerson === null || $maxPerPerson <= 0) {
+            return 1;
+        }
+
+        // Use max_per_person as the default quantity
+        return (int) $maxPerPerson;
+    }
+
+    /**
+     * Get complete distribution history for a user.
+     */
+    protected function getCompleteDistributionHistory(int $userId): array
+    {
+        try {
+            $distributions = \Engelsystem\Models\GoodiesV2Distribution::where('user_id', $userId)
+                ->with(['item', 'distributedBy'])
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            return $distributions->map(function ($distribution) {
+                return [
+                    'item_name' => $distribution->item?->name ?? 'Unknown Item',
+                    'quantity' => $distribution->quantity,
+                    'distributed_at' => $distribution->created_at,
+                    'distributed_by' => $distribution->distributedBy?->name ?? 'Unknown Staff',
+                    'notes' => $distribution->notes,
+                ];
+            })->toArray();
+        } catch (\Exception $e) {
+            $this->log->warning('Could not load distribution history', [
+                'user_id' => $userId,
+                'error' => $e->getMessage(),
+            ]);
+
+            return [];
+        }
+    }
+
+    /**
+     * Get user badges for staff/critter status display.
+     */
+    protected function getUserBadges($user): array
+    {
+        $badges = [];
+
+        // Check if user is staff
+        if (BackstagePermissionHelper::hasStaffPrivilege($user)) {
+            $badges[] = [
+                'type' => 'staff',
+                'text' => 'Staff',
+                'class' => 'bg-primary',
+            ];
+        } else {
+            $badges[] = [
+                'type' => 'critter',
+                'text' => 'Critter',
+                'class' => 'bg-secondary',
+            ];
+        }
+
+        return $badges;
+    }
+
+    /**
+     * Check goodies permissions (uses backstage.goodies.view as clarified).
+     */
+    protected function checkGoodiesPermission(string $level): void
+    {
+        $user = auth()->user();
+
+        if (!$user) {
+            $this->log->warning('Unauthenticated access attempt to goodies profile', [
+                'ip_address' => request()->getClientIp(),
+                'user_agent' => request()->getHeaderLine('User-Agent'),
+                'requested_level' => $level,
+            ]);
+            throw new HttpForbidden('Authentication required');
+        }
+
+        $hasAccess = match ($level) {
+            'view' => BackstagePermissionHelper::hasViewAccess($user) ||
+                     BackstagePermissionHelper::canViewGoodies($user),
+            'admin' => BackstagePermissionHelper::canAdminGoodies($user) ||
+                      BackstagePermissionHelper::hasAdminAccess($user),
+            default => false,
+        };
+
+        if (!$hasAccess) {
+            $this->log->warning('Insufficient permissions for goodies profile access', [
+                'user' => $user->name,
+                'user_id' => $user->id,
+                'requested_level' => $level,
+                'user_permissions' => $user->privileges->pluck('name')->toArray(),
+                'ip_address' => request()->getClientIp(),
+            ]);
+            throw new HttpForbidden('Insufficient permissions');
+        }
+
+        // Log successful access for audit trail
+        $this->log->info('Goodies profile access granted', [
+            'user' => $user->name,
+            'user_id' => $user->id,
+            'level' => $level,
+            'timestamp' => Carbon::now()->toISOString(),
+        ]);
+    }
 }

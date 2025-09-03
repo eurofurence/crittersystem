@@ -12,9 +12,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
 
 /**
- * @property int                    $id
  * @property int                    $user_id
- * @property int                    $total_hours
+ * @property float                  $total_hours
+ * @property float                  $day_shifts_hours
+ * @property float                  $night_shifts_hours
+ * @property float                  $freeload_penalty_hours
+ * @property float                  $worklog_hours
+ * @property int                    $completed_shifts_count
+ * @property int                    $night_shifts_count
+ * @property int                    $freeload_shifts_count
  * @property Carbon|null            $last_calculated_at
  * @property Carbon                 $created_at
  * @property Carbon                 $updated_at
@@ -52,6 +58,13 @@ class GoodiesV2UserHoursCache extends BaseModel
     protected $fillable = [ // phpcs:ignore
         'user_id',
         'total_hours',
+        'day_shifts_hours',
+        'night_shifts_hours',
+        'freeload_penalty_hours',
+        'worklog_hours',
+        'completed_shifts_count',
+        'night_shifts_count',
+        'freeload_shifts_count',
         'last_calculated_at',
     ];
 
@@ -63,7 +76,14 @@ class GoodiesV2UserHoursCache extends BaseModel
     /** @var array<string, string> */
     protected $casts = [ // phpcs:ignore
         'user_id' => 'integer',
-        'total_hours' => 'integer',
+        'total_hours' => 'float',
+        'day_shifts_hours' => 'float',
+        'night_shifts_hours' => 'float',
+        'freeload_penalty_hours' => 'float',
+        'worklog_hours' => 'float',
+        'completed_shifts_count' => 'integer',
+        'night_shifts_count' => 'integer',
+        'freeload_shifts_count' => 'integer',
         'last_calculated_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',

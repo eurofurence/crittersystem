@@ -15,8 +15,9 @@ use Carbon\Carbon;
  * @property int                    $id
  * @property int                    $user_id
  * @property int                    $item_id
- * @property int                    $hours_at_distribution
+ * @property int                    $quantity
  * @property int                    $distributed_by
+ * @property Carbon                 $distributed_at
  * @property string|null            $notes
  * @property Carbon                 $created_at
  * @property Carbon                 $updated_at
@@ -53,8 +54,9 @@ class GoodiesV2Distribution extends BaseModel
     protected $fillable = [ // phpcs:ignore
         'user_id',
         'item_id',
-        'hours_at_distribution',
+        'quantity',
         'distributed_by',
+        'distributed_at',
         'notes',
     ];
 
@@ -66,8 +68,9 @@ class GoodiesV2Distribution extends BaseModel
     protected $casts = [ // phpcs:ignore
         'user_id' => 'integer',
         'item_id' => 'integer',
-        'hours_at_distribution' => 'integer',
+        'quantity' => 'integer',
         'distributed_by' => 'integer',
+        'distributed_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

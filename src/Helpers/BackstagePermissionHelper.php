@@ -208,4 +208,19 @@ class BackstagePermissionHelper
     {
         return !empty(self::getUserBackstagePermissions($user));
     }
+
+    /**
+     * Check if user has staff privileges (user.type.staff).
+     * Used for determining if user is staff or critter for goodies eligibility.
+     */
+    public static function hasStaffPrivilege(?User $user = null): bool
+    {
+        $user = $user ?: auth()->user();
+
+        if (!$user) {
+            return false;
+        }
+
+        return $user->hasPermission('user.type.staff');
+    }
 }

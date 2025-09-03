@@ -507,6 +507,10 @@ $route->addGroup(
                         $route->post('/search', 'BackstageController@processUserSearch');
                         $route->get('/qualify/{user_id:\d+}', 'BackstageController@qualifyUser');
                         $route->post('/qualify/{user_id:\d+}', 'BackstageController@processUserQualification');
+                        
+                        // Goodies Profile (New Feature)
+                        $route->get('/{user_id:\d+}/goodies', 'BackstageController@userGoodiesProfile');
+                        $route->post('/{user_id:\d+}/goodies/distribute', 'BackstageController@processGoodieDistribution');
                     }
                 );
 

@@ -661,4 +661,116 @@ class GoodiesDistributionService
         // Mock implementation
         return rand(0, 1) === 1;
     }
+
+    /**
+     * Distribute a specific goodie item to a user.
+     * This method handles the actual distribution process including validation,
+     * inventory management, and record creation.
+     *
+     * @param User $user The user receiving the goodie
+     * @param \Engelsystem\Models\GoodiesV2Item $item The goodie item to distribute
+     * @param int $quantity Number of items to distribute
+     * @param string|null $notes Optional notes about the distribution
+     * @return array Distribution result with success status and details
+     */
+    public function distributeItem(User $user, \Engelsystem\Models\GoodiesV2Item $item, int $quantity = 1, ?string $notes = null): array
+    {
+        $this->log->info('Starting goodie item distribution', [
+            'user' => $user->name,
+            'user_id' => $user->id,
+            'item_id' => $item->id,
+            'item_name' => $item->name,
+            'quantity' => $quantity,
+            'notes' => $notes,
+            'distributor' => auth()->user()?->name,
+            'distributor_id' => auth()->user()?->id,
+        ]);
+
+        try {
+            // Validate quantity
+            if ($quantity <= 0) {
+                return [
+                    'success' => false,
+                    'reason' => 'Quantity must be greater than 0',
+                    'error_code' => 'INVALID_QUANTITY',
+                ];
+            }
+
+            // Check if item is active
+            if (!$item->is_active) {
+                return [
+                    'success' => false,
+                    'reason' => 'Item is not active for distribution',
+                    'error_code' => 'ITEM_INACTIVE',
+                ];
+            }
+
+            // Check max per person limit if set
+            if ($item->max_per_person !== null && $item->max_per_person > 0) {
+                $existingDistributions = \Engelsystem\Models\GoodiesV2Distribution::where('user_id', $user->id)
+                    ->where('item_id', $item->id)
+                    ->sum('quantity');
+
+                if (($existingDistributions + $quantity) > $item->max_per_person) {
+                    return [
+                        'success' => false,
+                        'reason' => "Distribution would exceed maximum per person limit ({$item->max_per_person})",
+                        'error_code' => 'EXCEEDS_LIMIT',
+                        'current_count' => $existingDistributions,
+                        'max_allowed' => $item->max_per_person,
+                        'requested' => $quantity,
+                    ];
+                }
+            }
+
+            // Create distribution record
+            $distribution = \Engelsystem\Models\GoodiesV2Distribution::create([
+                'user_id' => $user->id,
+                'item_id' => $item->id,
+                'quantity' => $quantity,
+                'distributed_by' => auth()->user()?->id ?? 1, // Fallback for system
+                'distributed_at' => Carbon::now(),
+                'notes' => $notes,
+            ]);
+
+            $this->log->info('Goodie item distributed successfully', [
+                'distribution_id' => $distribution->id,
+                'user' => $user->name,
+                'user_id' => $user->id,
+                'item_id' => $item->id,
+                'item_name' => $item->name,
+                'quantity' => $quantity,
+                'distributor' => auth()->user()?->name,
+                'distributor_id' => auth()->user()?->id,
+            ]);
+
+            return [
+                'success' => true,
+                'distribution_id' => $distribution->id,
+                'item_name' => $item->name,
+                'quantity' => $quantity,
+                'distributed_at' => $distribution->distributed_at->toDateTimeString(),
+                'distributor' => auth()->user()?->name ?? 'System',
+                'notes' => $notes,
+            ];
+
+        } catch (\Exception $e) {
+            $this->log->error('Error distributing goodie item', [
+                'user' => $user->name,
+                'user_id' => $user->id,
+                'item_id' => $item->id,
+                'item_name' => $item->name,
+                'quantity' => $quantity,
+                'error' => $e->getMessage(),
+                'stack_trace' => $e->getTraceAsString(),
+            ]);
+
+            return [
+                'success' => false,
+                'reason' => 'Distribution failed due to system error',
+                'error_code' => 'SYSTEM_ERROR',
+                'error_message' => $e->getMessage(),
+            ];
+        }
+    }
 }

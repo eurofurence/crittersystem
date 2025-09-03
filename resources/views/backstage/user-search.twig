@@ -176,6 +176,11 @@
                                                 <div class="card-footer bg-transparent">
                                                     <div class="d-grid gap-2">
                                                         {% if can_qualify %}
+                                                            <a href="{{ url('/admin/backstage/users/' ~ user.id ~ '/goodies') }}"
+                                                               class="btn btn-success btn-sm">
+                                                                {{ m.icon('gift') }}
+                                                                {{ __('backstage.users.goodies.title') }}
+                                                            </a>
                                                             <a href="{{ url('/admin/backstage/users/qualify/' ~ user.id) }}"
                                                                class="btn btn-primary btn-sm">
                                                                 {{ m.icon('person-check') }}
