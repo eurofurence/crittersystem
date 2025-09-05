@@ -792,4 +792,131 @@ class GoodiesDistributionService
             ];
         }
     }
+
+    /**
+     * Distribute multiple items to a user in bulk.
+     *
+     * @param User $user The user receiving the items
+     * @param array $selectedItems Array of goodie IDs
+     * @param array $quantities Array of quantities indexed by goodie ID
+     * @param string $globalNotes Global notes for all distributions
+     * @param User $distributor The user performing the distribution
+     * @return array Result with success count and errors
+     */
+    public function distributeBulkItems(
+        User $user,
+        array $selectedItems,
+        array $quantities,
+        string $globalNotes,
+        User $distributor
+    ): array {
+        $this->log->info('Starting bulk distribution', [
+            'user' => $user->name,
+            'user_id' => $user->id,
+            'distributor' => $distributor->name,
+            'distributor_id' => $distributor->id,
+            'item_count' => count($selectedItems),
+            'selected_items' => $selectedItems,
+        ]);
+
+        $results = [
+            'success_count' => 0,
+            'errors' => [],
+            'distributions' => [],
+        ];
+
+        foreach ($selectedItems as $goodieId) {
+            try {
+                $goodie = \Engelsystem\Models\GoodiesV2Item::findOrFail($goodieId);
+                $quantity = (int) ($quantities[$goodieId] ?? 1);
+                if ($quantity <= 0) {
+                    $results['errors'][] = 'Invalid quantity for ' . $goodie->name;
+                    continue;
+                }
+
+                $distributionResult = $this->distributeItem($user, $goodie, $quantity, $globalNotes);
+                if ($distributionResult['success']) {
+                    $results['success_count']++;
+                    $results['distributions'][] = [
+                        'goodie_id' => $goodieId,
+                        'goodie_name' => $goodie->name,
+                        'quantity' => $quantity,
+                    ];
+                } else {
+                    $results['errors'][] = 'Failed to distribute ' . $goodie->name . ': ' .
+                        $distributionResult['reason'];
+                }
+            } catch (\Exception $e) {
+                $this->log->error('Error in bulk distribution for item', [
+                    'goodie_id' => $goodieId,
+                    'user_id' => $user->id,
+                    'error' => $e->getMessage(),
+                ]);
+                $results['errors'][] = 'Error processing item ID ' . $goodieId . ': ' . $e->getMessage();
+            }
+        }
+
+        $this->log->info('Bulk distribution completed', [
+            'user' => $user->name,
+            'user_id' => $user->id,
+            'distributor' => $distributor->name,
+            'success_count' => $results['success_count'],
+            'error_count' => count($results['errors']),
+        ]);
+
+        return $results;
+    }
+
+    /**
+     * Validate bulk distribution request.
+     *
+     * @param User $user The user to receive items
+     * @param array $selectedItems Array of goodie IDs
+     * @param array $quantities Array of quantities
+     * @return array Validation result
+     */
+    public function validateBulkDistribution(User $user, array $selectedItems, array $quantities): array
+    {
+        $errors = [];
+        $warnings = [];
+        if (empty($selectedItems)) {
+            $errors[] = 'No items selected for distribution';
+            return ['valid' => false, 'errors' => $errors, 'warnings' => $warnings];
+        }
+
+        foreach ($selectedItems as $goodieId) {
+            try {
+                $goodie = \Engelsystem\Models\GoodiesV2Item::findOrFail($goodieId);
+                $quantity = (int) ($quantities[$goodieId] ?? 1);
+
+                if ($quantity <= 0) {
+                    $errors[] = 'Invalid quantity for ' . $goodie->name;
+                    continue;
+                }
+
+                if ($goodie->max_per_person && $quantity > $goodie->max_per_person) {
+                    $errors[] = 'Quantity for ' . $goodie->name . ' exceeds maximum allowed (' .
+                        $goodie->max_per_person . ')';
+                }
+
+                // Check if user already has this item
+                $existingDistribution = \Engelsystem\Models\GoodiesV2Distribution::where('user_id', $user->id)
+                    ->where('item_id', $goodieId)
+                    ->sum('quantity');
+
+                if ($goodie->max_per_person && ($existingDistribution + $quantity) > $goodie->max_per_person) {
+                    $warnings[] = 'User already has ' . $existingDistribution . ' of ' . $goodie->name .
+                        ', adding ' . $quantity . ' may exceed limit';
+                }
+            } catch (\Exception $e) {
+                $errors[] = 'Error validating item ID ' . $goodieId . ': ' . $e->getMessage();
+            }
+        }
+
+        return [
+            'valid' => empty($errors),
+            'errors' => $errors,
+            'warnings' => $warnings,
+        ];
+    }
 }

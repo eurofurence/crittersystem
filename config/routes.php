@@ -514,6 +514,10 @@ $route->addGroup(
                             '/{user_id:\d+}/goodies/distribute',
                             'BackstageController@processGoodieDistribution'
                         );
+                        $route->post(
+                            '/{user_id:\d+}/goodies/bulk-distribute',
+                            'BackstageController@processBulkGoodieDistribution'
+                        );
                     }
                 );
 

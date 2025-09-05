@@ -504,7 +504,7 @@ class HoursCalculationService
         // Get worklog hours (simple sum of all entries)
         $worklogHours = 0;
         try {
-            $worklogHours = $user->worklogs()->sum('hours') ?? 0;
+            $worklogHours = (float) ($user->worklogs()->sum('hours') ?? 0);
         } catch (\Exception $e) {
             $this->log->warning('Could not load worklog hours for user', [
                 'user_id' => $user->id,

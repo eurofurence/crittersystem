@@ -4179,3 +4179,67 @@ msgstr "Goodie distributed successfully"
 msgid "backstage.goodies.distribute.error"
 msgstr "Error distributing goodie"
 
+# New goodies optimization feature translations
+msgid "backstage.goodies.qualified_items"
+msgstr "Qualified Goodies"
+
+msgid "backstage.goodies.qualified_description"  
+msgstr "Items you can claim right now with your current hours"
+
+msgid "backstage.goodies.next_to_claim"
+msgstr "Next Items to Claim"
+
+msgid "backstage.goodies.next_to_claim_description"
+msgstr "Items you will qualify for with more hours"
+
+msgid "backstage.goodies.already_claimed"
+msgstr "Already Claimed"
+
+msgid "backstage.goodies.already_claimed_description"
+msgstr "Items you have already received"
+
+msgid "backstage.goodies.select_all"
+msgstr "Select All"
+
+msgid "backstage.goodies.select"
+msgstr "Select"
+
+msgid "backstage.goodies.distribute_selected"
+msgstr "Distribute Selected Items"
+
+msgid "backstage.goodies.required_hours"
+msgstr "Required Hours"
+
+msgid "backstage.goodies.category"
+msgstr "Category"
+
+msgid "backstage.goodies.individual"
+msgstr "Individual"
+
+msgid "backstage.goodies.distribute_one"
+msgstr "Distribute One"
+
+msgid "backstage.goodies.global_notes"
+msgstr "Notes for All Items"
+
+msgid "backstage.goodies.hours_gap"
+msgstr "Hours Gap"
+
+msgid "backstage.goodies.progress"
+msgstr "Progress"
+
+msgid "backstage.goodies.quantity_claimed"
+msgstr "Quantity Claimed"
+
+msgid "backstage.goodies.last_distributed"
+msgstr "Last Distributed"
+
+msgid "backstage.goodies.summary"
+msgstr "Summary"
+
+msgid "backstage.goodies.no_goodies_available"
+msgstr "No Goodies Available"
+
+msgid "backstage.goodies.no_goodies_message"
+msgstr "This user has no available goodies at this time"
+

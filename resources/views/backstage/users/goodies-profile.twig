@@ -52,7 +52,7 @@
                                     <div class="col-6">
                                         <div class="border rounded p-2">
                                             <h6 class="text-muted mb-1">{{ __('backstage.users.badge') }}</h6>
-                                            <strong>{{ target_user.personalData.shirt_size|default('N/A') }}</strong>
+                                            <strong>{{ target_user.personalData.badge_number|default('N/A') }}</strong>
                                         </div>
                                     </div>
                                 </div>
@@ -177,134 +177,292 @@
                     </div>
                 </div>
 
-                {# Goodies Section #}
-                <div class="row">
+                {# Group 1: Qualified Goodies (Can claim now) #}
+                {% if categorized_goodies.qualified|length > 0 %}
+                <div class="row mb-4">
                     <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
+                        <div class="card border-success">
+                            <div class="card-header bg-success text-white">
                                 <h5 class="mb-0">
-                                    {{ m.icon('gift') }}
-                                    {{ __('backstage.users.goodies.available') }}
+                                    {{ m.icon('check-circle') }}
+                                    {{ __('backstage.goodies.qualified_items') }} ({{ categorized_goodies.qualified|length }})
                                 </h5>
+                                <small>{{ __('backstage.goodies.qualified_description') }}</small>
                             </div>
                             <div class="card-body">
-                                {% if goodies_with_eligibility|length > 0 %}
-                                    <div class="row">
-                                        {% for goodie_data in goodies_with_eligibility %}
-                                            {% set goodie = goodie_data.goodie %}
-                                            {% set distribution_summary = goodie_data.distribution_summary %}
-                                            <div class="col-lg-6 col-xl-4 mb-4">
-                                                <div class="card h-100 {% if goodie_data.eligible %}border-success{% else %}border-secondary{% endif %}">
-                                                    <div class="card-body">
-                                                        <div class="d-flex justify-content-between align-items-start mb-3">
-                                                            <h6 class="card-title mb-0">{{ goodie.name }}</h6>
-                                                            <div class="text-end">
-                                                                {% if goodie_data.eligible %}
-                                                                    <span class="badge bg-success">{{ __('backstage.goodies.eligible') }}</span>
-                                                                {% else %}
-                                                                    <span class="badge bg-secondary">{{ __('backstage.goodies.not_eligible') }}</span>
-                                                                {% endif %}
-                                                            </div>
-                                                        </div>
-
-                                                        {# Goodie Description #}
-                                                        {% if goodie.description %}
-                                                            <p class="text-muted small">{{ goodie.description }}</p>
-                                                        {% endif %}
-
-                                                        {# Hours Requirement #}
-                                                        <div class="mb-2">
-                                                            <small class="text-muted">
-                                                                {{ m.icon('clock') }}
-                                                                {{ __('backstage.goodies.hours_required') }}: {{ goodie.required_hours }}h
-                                                            </small>
-                                                        </div>
-
-                                                        {# Category Badge (Staff/Critter restrictions) #}
-                                                        {% if goodie.category %}
-                                                            <div class="mb-2">
+                                {% if can_distribute %}
+                                <form method="post" action="{{ url('/admin/backstage/users/' ~ target_user.id ~ '/goodies/bulk-distribute') }}" id="bulk-distribute-form">
+                                    {{ csrf() }}
+                                    
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="select-all-qualified">
+                                            <label class="form-check-label" for="select-all-qualified">
+                                                {{ __('backstage.goodies.select_all') }}
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <button type="submit" class="btn btn-success">
+                                                {{ m.icon('gift') }}
+                                                {{ __('backstage.goodies.distribute_selected') }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead class="table-dark">
+                                                <tr>
+                                                    <th width="50">{{ __('backstage.goodies.select') }}</th>
+                                                    <th>{{ __('backstage.goodies.item') }}</th>
+                                                    <th width="120">{{ __('backstage.goodies.required_hours') }}</th>
+                                                    <th width="120">{{ __('backstage.goodies.category') }}</th>
+                                                    <th width="100">{{ __('backstage.goodies.quantity') }}</th>
+                                                    <th width="120">{{ __('backstage.goodies.individual') }}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for goodie_data in categorized_goodies.qualified %}
+                                                    {% set goodie = goodie_data.goodie %}
+                                                    <tr>
+                                                        <td>
+                                                            <input class="form-check-input bulk-item-checkbox" 
+                                                                   type="checkbox" 
+                                                                   name="selected_items[]" 
+                                                                   value="{{ goodie.id }}">
+                                                        </td>
+                                                        <td>
+                                                            <strong>{{ goodie.name }}</strong>
+                                                            {% if goodie.description %}
+                                                                <br><small class="text-muted">{{ goodie.description }}</small>
+                                                            {% endif %}
+                                                            {% if goodie.max_per_person %}
+                                                                <br><small class="text-info">{{ __('backstage.goodies.max_per_person') }}: {{ goodie.max_per_person }}</small>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge bg-primary">{{ goodie.required_hours }}h</span>
+                                                        </td>
+                                                        <td>
+                                                            {% if goodie.category %}
                                                                 <span class="badge bg-info">{{ goodie.category.name }}</span>
-                                                            </div>
-                                                        {% endif %}
-
-                                                        {# Distribution Status #}
-                                                        {% if distribution_summary.display_text %}
-                                                            <div class="alert alert-success py-2">
-                                                                <strong>{{ distribution_summary.display_text }}</strong>
-                                                                {% if distribution_summary.last_delivered_at %}
-                                                                    <br><small>{{ __('backstage.goodies.last_delivered') }}: {{ distribution_summary.last_delivered_at|date('M j, H:i') }}</small>
-                                                                {% endif %}
-                                                            </div>
-                                                        {% endif %}
-
-                                                        {# Eligibility Issues #}
-                                                        {% if not goodie_data.eligible and goodie_data.reasons %}
-                                                            <div class="alert alert-warning py-2">
-                                                                <small>
-                                                                    {% for reason in goodie_data.reasons %}
-                                                                        • {{ reason }}<br>
-                                                                    {% endfor %}
-                                                                </small>
-                                                            </div>
-                                                        {% endif %}
-                                                    </div>
-
-                                                    {# Distribution Form #}
-                                                    {% if can_distribute %}
-                                                        <div class="card-footer bg-transparent">
-                                                            <form method="post" action="{{ url('/admin/backstage/users/' ~ target_user.id ~ '/goodies/distribute') }}" class="row g-2">
+                                                            {% else %}
+                                                                <span class="text-muted">-</span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>
+                                                            <input type="number" 
+                                                                   name="quantities[{{ goodie.id }}]" 
+                                                                   class="form-control form-control-sm" 
+                                                                   value="{{ goodie_data.pre_filled_quantity }}" 
+                                                                   min="1" 
+                                                                   {% if goodie.max_per_person %}max="{{ goodie.max_per_person }}"{% endif %}>
+                                                        </td>
+                                                        <td>
+                                                            <form method="post" action="{{ url('/admin/backstage/users/' ~ target_user.id ~ '/goodies/distribute') }}" class="d-inline">
                                                                 {{ csrf() }}
                                                                 <input type="hidden" name="goodie_id" value="{{ goodie.id }}">
-                                                                
-                                                                <div class="col-8">
-                                                                    <input type="number" 
-                                                                           name="quantity" 
-                                                                           class="form-control form-control-sm" 
-                                                                           value="{{ goodie_data.pre_filled_quantity }}" 
-                                                                           min="1" 
-                                                                           {% if goodie.max_per_person %}max="{{ goodie.max_per_person }}"{% endif %}
-                                                                           {% if not goodie_data.eligible %}disabled{% endif %}>
-                                                                    {% if goodie.max_per_person %}
-                                                                        <small class="text-muted">{{ __('backstage.goodies.max_per_person') }}: {{ goodie.max_per_person }}</small>
-                                                                    {% endif %}
-                                                                </div>
-                                                                
-                                                                <div class="col-4">
-                                                                    <button type="submit" 
-                                                                            class="btn btn-success btn-sm w-100"
-                                                                            {% if not goodie_data.eligible %}disabled{% endif %}>
-                                                                        {{ m.icon('check') }}
-                                                                        {{ __('backstage.goodies.distribute') }}
-                                                                    </button>
-                                                                </div>
-                                                                
-                                                                <div class="col-12 mt-2">
-                                                                    <input type="text" 
-                                                                           name="notes" 
-                                                                           class="form-control form-control-sm" 
-                                                                           placeholder="{{ __('backstage.goodies.notes_optional') }}"
-                                                                           {% if not goodie_data.eligible %}disabled{% endif %}>
-                                                                </div>
+                                                                <input type="hidden" name="quantity" value="1">
+                                                                <button type="submit" class="btn btn-outline-success btn-sm" title="{{ __('backstage.goodies.distribute_one') }}">
+                                                                    {{ m.icon('plus-circle') }}
+                                                                </button>
                                                             </form>
-                                                        </div>
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                        {% endfor %}
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
                                     </div>
-                                {% else %}
-                                    <div class="text-center py-4">
-                                        <div class="mb-3">
-                                            {{ m.icon('gift', 64) }}
+                                    
+                                    <div class="row mt-3">
+                                        <div class="col-12">
+                                            <label for="global_notes" class="form-label">{{ __('backstage.goodies.global_notes') }}</label>
+                                            <input type="text" name="global_notes" id="global_notes" class="form-control" 
+                                                   placeholder="{{ __('backstage.goodies.notes_optional') }}">
                                         </div>
-                                        <h4 class="text-muted">{{ __('backstage.goodies.no_goodies_available') }}</h4>
-                                        <p class="text-muted">{{ __('backstage.goodies.no_goodies_message') }}</p>
                                     </div>
+                                </form>
+                                {% else %}
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th>{{ __('backstage.goodies.item') }}</th>
+                                                <th>{{ __('backstage.goodies.required_hours') }}</th>
+                                                <th>{{ __('backstage.goodies.category') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for goodie_data in categorized_goodies.qualified %}
+                                                {% set goodie = goodie_data.goodie %}
+                                                <tr>
+                                                    <td>
+                                                        <strong>{{ goodie.name }}</strong>
+                                                        {% if goodie.description %}
+                                                            <br><small class="text-muted">{{ goodie.description }}</small>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td><span class="badge bg-primary">{{ goodie.required_hours }}h</span></td>
+                                                    <td>
+                                                        {% if goodie.category %}
+                                                            <span class="badge bg-info">{{ goodie.category.name }}</span>
+                                                        {% else %}
+                                                            <span class="text-muted">-</span>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
                                 {% endif %}
                             </div>
                         </div>
                     </div>
                 </div>
+                {% endif %}
+
+                {# Group 2: Next Items to Claim (Need more hours) #}
+                {% if categorized_goodies.next_to_claim|length > 0 %}
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card border-warning">
+                            <div class="card-header bg-warning text-dark">
+                                <h5 class="mb-0">
+                                    {{ m.icon('clock-history') }}
+                                    {{ __('backstage.goodies.next_to_claim') }} ({{ categorized_goodies.next_to_claim|length }})
+                                </h5>
+                                <small>{{ __('backstage.goodies.next_to_claim_description') }}</small>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th>{{ __('backstage.goodies.item') }}</th>
+                                                <th width="120">{{ __('backstage.goodies.required_hours') }}</th>
+                                                <th width="120">{{ __('backstage.goodies.hours_gap') }}</th>
+                                                <th width="200">{{ __('backstage.goodies.progress') }}</th>
+                                                <th width="120">{{ __('backstage.goodies.category') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for goodie_data in categorized_goodies.next_to_claim %}
+                                                {% set goodie = goodie_data.goodie %}
+                                                {% set progress_percentage = ((hours_data.total_hours / goodie.required_hours) * 100)|round %}
+                                                <tr>
+                                                    <td>
+                                                        <strong>{{ goodie.name }}</strong>
+                                                        {% if goodie.description %}
+                                                            <br><small class="text-muted">{{ goodie.description }}</small>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td><span class="badge bg-primary">{{ goodie.required_hours }}h</span></td>
+                                                    <td><span class="badge bg-warning">{{ goodie_data.hours_gap }}h</span></td>
+                                                    <td>
+                                                        <div class="progress" style="height: 20px;">
+                                                            <div class="progress-bar" role="progressbar" 
+                                                                 style="width: {{ progress_percentage }}%;" 
+                                                                 aria-valuenow="{{ progress_percentage }}" 
+                                                                 aria-valuemin="0" aria-valuemax="100">
+                                                                {{ progress_percentage }}%
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        {% if goodie.category %}
+                                                            <span class="badge bg-info">{{ goodie.category.name }}</span>
+                                                        {% else %}
+                                                            <span class="text-muted">-</span>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {# Group 3: Already Claimed Items #}
+                {% if categorized_goodies.already_claimed|length > 0 %}
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card border-info">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="mb-0">
+                                    {{ m.icon('check-square') }}
+                                    {{ __('backstage.goodies.already_claimed') }} ({{ categorized_goodies.already_claimed|length }})
+                                </h5>
+                                <small>{{ __('backstage.goodies.already_claimed_description') }}</small>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-sm">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th>{{ __('backstage.goodies.item') }}</th>
+                                                <th width="100">{{ __('backstage.goodies.quantity_claimed') }}</th>
+                                                <th width="150">{{ __('backstage.goodies.last_distributed') }}</th>
+                                                <th>{{ __('backstage.goodies.summary') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for goodie_data in categorized_goodies.already_claimed %}
+                                                {% set goodie = goodie_data.goodie %}
+                                                {% set distribution_summary = goodie_data.distribution_summary %}
+                                                <tr>
+                                                    <td>
+                                                        <strong>{{ goodie.name }}</strong>
+                                                        {% if goodie.description %}
+                                                            <br><small class="text-muted">{{ goodie.description }}</small>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge bg-success">{{ distribution_summary.total_delivered }}</span>
+                                                    </td>
+                                                    <td>
+                                                        {% if distribution_summary.last_delivered_at %}
+                                                            <small>{{ distribution_summary.last_delivered_at|date('M j, H:i') }}</small>
+                                                        {% else %}
+                                                            <span class="text-muted">-</span>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        <small class="text-success">
+                                                            {{ distribution_summary.display_text }}
+                                                        </small>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {# No Goodies Available Message #}
+                {% if categorized_goodies.qualified|length == 0 and categorized_goodies.next_to_claim|length == 0 and categorized_goodies.already_claimed|length == 0 %}
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body text-center py-5">
+                                <div class="mb-3">
+                                    {{ m.icon('gift', 64) }}
+                                </div>
+                                <h4 class="text-muted">{{ __('backstage.goodies.no_goodies_available') }}</h4>
+                                <p class="text-muted">{{ __('backstage.goodies.no_goodies_message') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
 
                 {# Distribution History Section #}
                 {% if distribution_history|length > 0 %}
@@ -361,7 +519,7 @@
 {% block stylesheets %}
 {{ parent() }}
 <style>
-/* Custom styles for goodies profile page */
+/* Custom styles for goodies profile page - Optimized table layout */
 .card {
     box-shadow: 0 2px 4px rgba(0,0,0,.1);
 }
@@ -375,35 +533,176 @@
     color: inherit;
 }
 
+/* Group-specific styling */
 .border-success {
     border-color: var(--bs-success) !important;
+    border-width: 2px !important;
 }
 
-.border-secondary {
-    border-color: var(--bs-secondary) !important;
+.border-warning {
+    border-color: var(--bs-warning) !important;
+    border-width: 2px !important;
 }
 
-/* Responsive improvements */
+.border-info {
+    border-color: var(--bs-info) !important;
+    border-width: 2px !important;
+}
+
+/* Table enhancements */
+.table-hover tbody tr:hover {
+    background-color: rgba(0,0,0,.04);
+}
+
+.table th {
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--bs-border-color);
+}
+
+.table td {
+    vertical-align: middle;
+    padding: 0.75rem 0.5rem;
+}
+
+/* Form enhancements */
+.form-control-sm {
+    font-size: 0.875rem;
+}
+
+input[type="number"].form-control-sm {
+    width: 80px;
+    text-align: center;
+}
+
+/* Checkbox styling */
+.form-check-input {
+    width: 1.1em;
+    height: 1.1em;
+}
+
+.bulk-item-checkbox {
+    cursor: pointer;
+}
+
+/* Progress bar enhancements */
+.progress {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+}
+
+.progress-bar {
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Badge styling improvements */
+.badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Button improvements */
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+}
+
+/* Card header styling */
+.bg-success {
+    background-color: var(--bs-success) !important;
+}
+
+.bg-warning {
+    background-color: var(--bs-warning) !important;
+}
+
+.bg-info {
+    background-color: var(--bs-info) !important;
+}
+
+/* Responsive table improvements */
 @media (max-width: 768px) {
-    .row.text-center .col-md-3 {
-        margin-bottom: 1rem;
+    .table-responsive table {
+        font-size: 0.875rem;
     }
     
-    .card-title {
-        font-size: 0.95rem;
+    .table td, .table th {
+        padding: 0.5rem 0.25rem;
+    }
+    
+    input[type="number"].form-control-sm {
+        width: 60px;
+    }
+    
+    .btn-sm {
+        padding: 0.125rem 0.25rem;
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .d-flex.justify-content-between {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .d-flex.justify-content-between > div {
+        text-align: center;
     }
 }
 
 /* Print styles */
 @media print {
-    .btn, .card-footer {
-        display: none;
+    .btn, .card-footer, .form-check, .col-12:last-child .row {
+        display: none !important;
     }
     
     .card {
         box-shadow: none;
-        border: 1px solid #ddd;
+        border: 1px solid #000;
+        break-inside: avoid;
+        margin-bottom: 1rem;
+    }
+    
+    .card-header {
+        background-color: #f8f9fa !important;
+        color: #000 !important;
+    }
+    
+    .table {
+        font-size: 0.8rem;
+    }
+    
+    .progress {
+        border: 1px solid #000;
+    }
+    
+    .badge {
+        border: 1px solid #000;
+        background-color: transparent !important;
+        color: #000 !important;
     }
 }
+
+/* Focus and accessibility improvements */
+.form-check-input:focus,
+.form-control:focus,
+.btn:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+}
+
+/* Loading state styles (for future enhancement) */
+.table tbody tr.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Status indicators */
+.text-success { color: var(--bs-success) !important; }
+.text-warning { color: var(--bs-warning) !important; }
+.text-info { color: var(--bs-info) !important; }
 </style>
 {% endblock %}

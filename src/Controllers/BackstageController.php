@@ -605,26 +605,8 @@ class BackstageController extends BaseController
             $allGoodies = $this->goodiesService->getGoodiesItemsPaginated(1, 1000, ['active_only' => true]);
             $goodiesItems = collect($allGoodies['data'])->sortBy('required_hours');
 
-            // Check eligibility and get distribution info for each goodie
-            $goodiesWithEligibility = [];
-            foreach ($goodiesItems as $goodie) {
-                $eligibilityCheck = $this->goodiesService->checkItemEligibility(
-                    $user,
-                    \Engelsystem\Models\GoodiesV2Item::find($goodie['id'])
-                );
-
-                // Get distribution summary for this user and goodie
-                $distributionSummary = $this->getDistributionSummary($userId, $goodie['id']);
-
-                $goodiesWithEligibility[] = [
-                    'goodie' => $goodie,
-                    'eligible' => $eligibilityCheck['eligible'],
-                    'reasons' => $eligibilityCheck['reasons'] ?? [],
-                    'distribution_summary' => $distributionSummary,
-                    'max_per_person' => $goodie['max_per_person'],
-                    'pre_filled_quantity' => $this->calculatePreFilledQuantity($goodie),
-                ];
-            }
+            // Categorize goodies into 3 groups for optimized display
+            $categorizedGoodies = $this->categorizeGoodiesForUser($user, $goodiesItems, $hoursData);
 
             // Get complete distribution history
             $distributionHistory = $this->getCompleteDistributionHistory($userId);
@@ -638,7 +620,9 @@ class BackstageController extends BaseController
                 'target_user_id' => $userId,
                 'target_user_name' => $user->name,
                 'total_hours' => $hoursData['total_hours'],
-                'total_goodies' => count($goodiesWithEligibility),
+                'total_goodies' => count($categorizedGoodies['qualified']) +
+                    count($categorizedGoodies['next_to_claim']) +
+                    count($categorizedGoodies['already_claimed']),
             ]);
 
             return $this->response->withView(
@@ -652,7 +636,7 @@ class BackstageController extends BaseController
                         'total_shifts' => $userShifts->count(),
                     ],
                     'hours_data' => $hoursData,
-                    'goodies_with_eligibility' => $goodiesWithEligibility,
+                    'categorized_goodies' => $categorizedGoodies,
                     'distribution_history' => $distributionHistory,
                     'can_distribute' => BackstagePermissionHelper::canDistributeGoodies(),
                     'can_admin' => BackstagePermissionHelper::hasAdminAccess(),
@@ -893,5 +877,110 @@ class BackstageController extends BaseController
             'level' => $level,
             'timestamp' => Carbon::now()->toISOString(),
         ]);
+    }
+
+    /**
+     * Process bulk goodie distribution.
+     */
+    public function processBulkGoodieDistribution(Request $request): Response
+    {
+        $this->checkGoodiesPermission('admin');
+
+        $userId = $request->getAttribute('user_id');
+        $user = User::with(['personalData', 'state', 'shiftEntries.shift', 'worklogs'])->findOrFail($userId);
+
+        $selectedItems = $request->getParsedBody()['selected_items'] ?? [];
+        $quantities = $request->getParsedBody()['quantities'] ?? [];
+        $globalNotes = $request->getParsedBody()['global_notes'] ?? '';
+
+        if (empty($selectedItems)) {
+            $this->addNotification('No items selected for distribution.', NotificationType::ERROR);
+            return $this->redirect->to('/admin/backstage/users/' . $userId . '/goodies');
+        }
+
+        $results = $this->distributionService->distributeBulkItems(
+            $user,
+            $selectedItems,
+            $quantities,
+            $globalNotes,
+            auth()->user()
+        );
+
+        // Add success/error notifications
+        if ($results['success_count'] > 0) {
+            $this->addNotification(
+                'Successfully distributed ' . $results['success_count'] . ' item(s).',
+                NotificationType::MESSAGE
+            );
+        }
+
+        if (!empty($results['errors'])) {
+            foreach ($results['errors'] as $error) {
+                $this->addNotification($error, NotificationType::ERROR);
+            }
+        }
+
+        return $this->redirect->to('/admin/backstage/users/' . $userId . '/goodies');
+    }
+
+    /**
+     * Categorize goodies into three groups for optimized display.
+     */
+    protected function categorizeGoodiesForUser(
+        User $user,
+        \Illuminate\Support\Collection $goodiesItems,
+        array $hoursData
+    ): array {
+        $qualifiedGoodies = [];
+        $nextToClaim = [];
+        $alreadyClaimed = [];
+        $userHours = $hoursData['total_hours'];
+        $userId = $user->id;
+
+        foreach ($goodiesItems as $goodie) {
+            $eligibilityCheck = $this->goodiesService->checkItemEligibility(
+                $user,
+                \Engelsystem\Models\GoodiesV2Item::find($goodie['id'])
+            );
+
+            // Get distribution summary for this user and goodie
+            $distributionSummary = $this->getDistributionSummary($userId, $goodie['id']);
+            $goodieData = [
+                'goodie' => $goodie,
+                'eligible' => $eligibilityCheck['eligible'],
+                'reasons' => $eligibilityCheck['reasons'] ?? [],
+                'distribution_summary' => $distributionSummary,
+                'max_per_person' => $goodie['max_per_person'],
+                'pre_filled_quantity' => $this->calculatePreFilledQuantity($goodie),
+                'hours_gap' => max(0, $goodie['required_hours'] - $userHours),
+            ];
+
+            // Check if user has already claimed this goodie
+            if ($distributionSummary['total_delivered'] > 0) {
+                $alreadyClaimed[] = $goodieData;
+            } elseif ($eligibilityCheck['eligible']) {
+                // User can claim immediately
+                $qualifiedGoodies[] = $goodieData;
+            } elseif ($userHours < $goodie['required_hours']) {
+                // User needs more hours but meets other criteria (category restrictions, etc.)
+                // Only show if the ONLY reason for ineligibility is insufficient hours
+                $isOnlyHoursProblem = true;
+                foreach ($eligibilityCheck['reasons'] ?? [] as $reason) {
+                    if (!str_contains($reason, 'hours') && !str_contains($reason, 'Hours')) {
+                        $isOnlyHoursProblem = false;
+                        break;
+                    }
+                }
+                if ($isOnlyHoursProblem) {
+                    $nextToClaim[] = $goodieData;
+                }
+            }
+        }
+
+        return [
+            'qualified' => collect($qualifiedGoodies)->sortBy('goodie.required_hours'),
+            'next_to_claim' => collect($nextToClaim)->sortBy('goodie.required_hours'),
+            'already_claimed' => collect($alreadyClaimed)->sortBy('goodie.name'),
+        ];
     }
 }
