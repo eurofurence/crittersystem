@@ -26,8 +26,8 @@ class BackstageController extends BaseController
 
     /** @var array<string> */
     protected array $permissions = [
-        'user.type.admin',
-//        'backstage.view',
+//        'user.type.admin',
+        'backstage.view',
 //        'backstage.admin',
     ];
 

@@ -24,7 +24,7 @@ class BackstageGoodiesController extends BaseController
 
     /** @var array<string> */
     protected array $permissions = [
-//        'backstage.goodies.view',
+        'backstage.goodies.view',
 //        'backstage.goodies.admin',
 //        'backstage.admin',
     ];
