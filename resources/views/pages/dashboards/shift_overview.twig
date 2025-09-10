@@ -1,0 +1,120 @@
+{% extends "layouts/app.twig" %}
+{% import 'macros/base.twig' as m %}
+{% import 'macros/form.twig' as f %}
+
+{%- macro critter_icon(color, shift_id, user_id, user_name) -%}
+    <a data-bs-toggle="tooltip" class="text-{{- color -}}"
+    data-critter-id="{%- if user_id %}{{ user_id }}{%- endif -%}"
+    href="{%- if user_id -%}
+        {{- url('/users', {'action': 'view', 'user_id': user_id}) -}}
+    {%- else -%}
+        {{- url('/shifts', {'action': 'view', 'shift_id': shift_id}) -}}
+    {%- endif -%}" title="{{ user_name | default('View shift') | e }}"><span class="bi bi-square-fill"></span></a>
+{%- endmacro -%}
+
+{% macro critter_warn_level_class(wanted=0, have=0) %}
+    {%- if wanted == have -%}
+        critter-warn-good
+    {%- elseif (wanted / have) >= 0.66 -%}
+        critter-warn-bad
+    {%- else -%}
+        critter-warn-critical
+    {%- endif -%}
+{% endmacro %}
+
+{% block title %}{{ __('dashboard.shift_overview.title') }}{% endblock %}
+
+{% block content %}
+
+<h1>{{ __('dashboard.shift_overview.title') }}</h1>
+<form class="row gy-5" action="" method="get">
+    <div class="col-2">
+        {{- f.input('start', __('shifts.start'), {
+            'type': 'date',
+            'value': (date_requested ?? "now") | date("Y-m-d")
+        }) -}}
+    </div>
+    <div class="col-2">
+        {{- f.switch('reload', __('dashboard.auto_update'), {
+            'checked': (reload ?? 0)
+        }) -}}
+        {{- f.switch('hide_past', __('dashboard.hide_past'), {
+            'checked': (hide_past ?? 0)
+        }) -}}
+    </div>
+    <div class="col-1">
+        <div class="mb-3">
+            <button id="dashboard-fullscreen" class="btn btn-secondary bi bi-fullscreen" type="button"> {{ __('Fullscreen') }}</button>
+            <!--<label for="start" class="form-label">&nbsp;</label>-->
+            <button class="btn btn-primary form-control" type="submit">{{- __('form.submit') -}}</button>
+        </div>
+    </div>
+</form>
+<div class="row">
+    {% block dashboard_shift_overview %}
+        <div id="fullscreen-wrapper" class="col" style="padding: 0;">
+            <table class="table table-hover dashboard-table">
+                <colgroup>
+                    <col span="3" class="dash-compound-key" />
+                </colgroup>
+                <thead class="table-light sticky-top" style="z-index: 1031;">
+                    <tr>
+                        <th>Time</th>
+                        <th>Location</th>
+                        <th>Shift</th>
+                        {%- for tname, tid in critter_types ~%}
+                            <th data-critter-type-id="{{ tid | e }}">
+                                <a href="{{- url('/angeltypes', {'action': 'view', 'angeltype_id': tid}) -}}">{{ tname | e }}</a>
+                            </th>
+                        {%- endfor ~%}
+                    </tr>
+                </thead>
+                {% block dashboard_shift_overview_body %}
+                    {% set previous_range = "0_0" %}
+                    {% set previous_date = "0" %}
+                    {% for shift in shifts %}
+                        {%- set new_range = (previous_range is not same as (shift.shift.shifts_start ~ '_' ~ shift.shift.shifts_end)) -%}
+                        {%- set new_date = (previous_date is not same as (shift.shift.shifts_start | date('Y-m-d'))) -%}
+                        {%- if new_range -%}
+                            {%- if not loop.first -%}
+                                </tbody>
+                            {%- endif -%}
+                            <tbody>
+                            {%- if new_date -%}
+                                <tr class="date_divider"><th colspan="999">{{- shift.shift.shifts_start | date('Y-m-d') -}}</th></tr>
+                            {%- endif -%}
+                        {%- endif -%}
+                            <tr data-start-time="{{ shift.shift.shifts_start | date('U') }}" data-end-time="{{ shift.shift.shifts_end | date('U') }}">
+                                <th>{{ shift.shift.shifts_start | date('H:i') }} - {{ shift.shift.shifts_end | date('H:i') }}</th>
+                                <td><a href="{{ url('/locations', {'action': 'view', 'location_id': shift.shift.locations_id}) }}">{{ shift.shift.locations_name | e }}</a></td>
+                                <td><a href="{{ url('/shifts', {'action': 'view', 'shift_id': shift.shift.shifts_id}) }}">{{ shift.shift.shifts_title | e }}</a></td>
+                                {%- for tname, tid in critter_types -%}
+                                    {%- if shift.critter_types[tid] is defined -%}
+                                        <td class="{{ _self.critter_warn_level_class(shift.critter_types[tid].have, shift.critter_types[tid].wanted) }}">
+                                        {%- for user_id, user_name in shift.critter_types[tid].users -%}
+                                            {{ _self.critter_icon('success', shift.shift.shifts_id, user_id, user_name) }}
+                                        {%- endfor -%}
+                                        {%- for i in shift.critter_types[tid].have..shift.critter_types[tid].wanted -%}
+                                            {%- if not loop.last -%}
+                                                {{ _self.critter_icon('danger', shift.shift.shifts_id) }}
+                                            {%- endif -%}
+                                        {%- endfor -%}
+                                        </td>
+                                    {%- else ~%}
+                                        <td></td>
+                                    {%- endif -%}
+                                {%- endfor -%}
+                            </tr>
+                        {%- set previous_range = shift.shift.shifts_start ~ '_' ~ shift.shift.shifts_end -%}
+                        {%- set previous_date = (shift.shift.shifts_start | date('Y-m-d')) -%}
+                        {%- if loop.last -%}
+                            </tbody>
+                        {%- endif -%}
+                    {% endfor %}
+                {% endblock %}
+            </table>
+        </div>
+    {% endblock %}
+</div>
+
+{% endblock %}

@@ -23,5 +23,8 @@ input[type='time']::-webkit-calendar-picker-indicator {
 .table > :not(caption) > * > * {
   color: #fff;
 }
+.table > thead.table-light > * > * {
+  color: #000;
+}
 
 $table-color: #fff !default;

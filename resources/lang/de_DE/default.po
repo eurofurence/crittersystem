@@ -2104,6 +2104,15 @@ msgstr "Title is required"
 msgid "validation.text.required"
 msgstr "Text is required"
 
+msgid "dashboard.shift_overview.title"
+msgstr "Schichtübersicht"
+
+msgid "dashboard.auto_update"
+msgstr "Auto-Update"
+
+msgid "dashboard.hide_past"
+msgstr "Vergangene verbergen"
+
 msgid "question.edit.locked"
 msgstr "Diese Frage wird schon von einem anderen Benutzer bearbeitet."
 

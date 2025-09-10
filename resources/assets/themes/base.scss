@@ -445,6 +445,68 @@ input[type='text']:invalid {
   color: map.get($theme-colors, 'danger');
 }
 
+/* For shift dashboard tables */
+.dashboard-table a {
+  text-decoration: none !important;
+}
+.dashboard-table a:hover {
+  text-decoration: underline !important;
+}
+
+.dashboard-table a[data-critter-id]:not([data-critter-id=""]) span.bi:hover,
+.dashboard-table a.secondary-highlight span,{
+  outline: 1px solid map.get($theme-colors, 'warning');
+  box-shadow: 0 0 0.5em map.get($theme-colors, 'warning');
+}
+
+.dashboard-table .date_divider {
+  background: rgba(255, 255, 255, .2);
+}
+
+.dashboard-table tbody tr.highlight {
+  background: content-box linear-gradient(90deg, rgba(180, 20, 20, .4), transparent);
+}
+
+.dashboard-table thead th a {
+  color: inherit !important;
+}
+
+@include media-breakpoint-down(lg) {
+  .dashboard-table thead th {
+    writing-mode: vertical-lr;
+  }
+}
+
+.dashboard-table tbody:not(:last-child):after {
+  content: '';
+  display: block;
+  height: 0.5em;
+}
+
+.dashboard-table tbody td a span {
+  margin-right: 0.3em;
+  color: inherit;
+}
+
+.dashboard-table tbody td.critter-warn-good,
+.dashboard-table tbody td.critter-warn-bad,
+.dashboard-table tbody td.critter-warn-critical {
+  border-bottom: 3px solid map.get($theme-colors, 'success');
+}
+
+.dashboard-table tbody td.critter-warn-bad {
+  border-bottom-color: var(--bs-orange);
+}
+
+.dashboard-table tbody td.critter-warn-critical {
+  border-bottom-color: map.get($theme-colors, 'danger');
+}
+
+#fullscreen-wrapper:fullscreen {
+  overflow-y: scroll;
+}
+
+
 .attention-ring::before {
   display: block;
   content: '';

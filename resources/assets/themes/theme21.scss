@@ -467,7 +467,8 @@ code {
 }
 
 // Specials ===================================================================
-body {
+body,
+#fullscreen-wrapper:fullscreen {
   background: #000 url('theme21/background.jpg') no-repeat center center fixed;
   background-size: cover;
 }
@@ -517,9 +518,15 @@ h5 {
   text-decoration: none;
 }
 
+.tooltip.show {
+  --bs-tooltip-color: var(--bs-body-bg);
+  --bs-tooltip-bg: var(--bs-body-color);
+}
+
 .choices__list[aria-expanded]
 {
   background-color: rgba(40, 40, 40, 0.75) !important;
+
 }
 
 /* Visibility fix: enforce opaque backgrounds for buttons and dropdowns */
