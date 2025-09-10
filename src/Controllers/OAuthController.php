@@ -253,14 +253,14 @@ class OAuthController extends BaseController
             );
         }
 
+        // Log the user in first to ensure permissions resolve correctly in this request
+        $response = $this->authController->loginUser($oauth->user);
+
         // Enforce access-mode restrictions before any side effects
         $accessCheck = $this->authController->checkAccessMode($oauth->user);
         if ($accessCheck instanceof Response) {
             return $accessCheck;
         }
-
-        // Log the user in first to ensure permissions resolve correctly in this request
-        $response = $this->authController->loginUser($oauth->user);
 
         if (isset($config['mark_arrived']) && $config['mark_arrived']) {
             $this->handleArrive($providerName, $oauth, $resourceOwner);
