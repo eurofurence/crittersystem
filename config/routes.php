@@ -107,6 +107,10 @@ $route->addGroup('/shifts', function (RouteCollector $route): void {
     $route->get('/random', 'ShiftsController@random');
 });
 
+
+// New dashboards (test)
+$route->get('/dashboards', 'DashboardsController@index');
+
 // Shift Manager V2
 $route->get('/shift-manager', 'ShiftManagerV2Controller@index');
 

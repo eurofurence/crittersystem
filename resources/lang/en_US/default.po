@@ -1073,6 +1073,15 @@ msgstr "Title is required"
 msgid "validation.text.required"
 msgstr "Text is required"
 
+msgid "dashboard.shift_overview.title"
+msgstr "Shift overview"
+
+msgid "dashboard.auto_update"
+msgstr "Auto update"
+
+msgid "dashboard.hide_past"
+msgstr "Hide past"
+
 msgid "question.edit.locked"
 msgstr "This question is already being edited by another user."
 
