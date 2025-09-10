@@ -82,6 +82,7 @@ class LocationsController extends BaseController
                 'name'        => 'required|max:35',
                 'description' => 'optional',
                 'dect'        => 'optional',
+                'staff_only'  => 'optional',
                 'map_url'     => 'optional|url',
             ] + $validation
         );
@@ -90,10 +91,11 @@ class LocationsController extends BaseController
             throw new ValidationException((new Validator())->addErrors(['name' => ['validation.name.exists']]));
         }
 
-        $location->name = $data['name'];
-        $location->description = $data['description'];
+        $location->name = globalCleanText(text: $data['name'], agressive: true);
+        $location->description = globalCleanText($data['description']);
         $location->dect = array_key_exists('dect', $data) && !empty($data['dect']) ? ltrim($data['dect'], '@') : null;
         $location->map_url = $data['map_url'];
+        $location->staff_only = (bool) $data['staff_only'];
 
         $location->save();
         $location->neededAngelTypes()->getQuery()->delete();

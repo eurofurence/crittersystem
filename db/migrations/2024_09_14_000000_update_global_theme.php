@@ -46,6 +46,5 @@ class UpdateGlobalTheme extends Migration
             ->update([
                 'theme' => $this->DefaultThemeID,
             ]);
-
     }
 }

@@ -19,6 +19,7 @@ use Engelsystem\Renderer\Twig\Extensions\Session;
 use Engelsystem\Renderer\Twig\Extensions\Translation;
 use Engelsystem\Renderer\Twig\Extensions\Url;
 use Engelsystem\Renderer\Twig\Extensions\Uuid;
+use Twig\Extra\String\StringExtension;
 use Symfony\Component\VarDumper\VarDumper;
 use Twig\Environment as Twig;
 use Twig\Extension\CoreExtension as TwigCore;
@@ -29,20 +30,21 @@ class TwigServiceProvider extends ServiceProvider
 {
     /** @var array<string, class-string> */
     protected array $extensions = [
-        'assets'         => Assets::class,
-        'authentication' => Authentication::class,
-        'config'         => Config::class,
-        'csrf'           => Csrf::class,
-        'develop'        => Develop::class,
-        'globals'        => Globals::class,
-        'notification'   => Notification::class,
-        'twigmodel'      => TwigModel::class,
-        'session'        => Session::class,
-        'legacy'         => Legacy::class,
-        'markdown'       => Markdown::class,
-        'translation'    => Translation::class,
-        'url'            => Url::class,
-        'uuid'           => Uuid::class,
+        'assets'            => Assets::class,
+        'authentication'    => Authentication::class,
+        'config'            => Config::class,
+        'csrf'              => Csrf::class,
+        'develop'           => Develop::class,
+        'globals'           => Globals::class,
+        'notification'      => Notification::class,
+        'twigmodel'         => TwigModel::class,
+        'session'           => Session::class,
+        'legacy'            => Legacy::class,
+        'markdown'          => Markdown::class,
+        'translation'       => Translation::class,
+        'url'               => Url::class,
+        'uuid'              => Uuid::class,
+        'stringextension'   => StringExtension::class,
     ];
 
     public function register(): void

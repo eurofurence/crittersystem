@@ -1,7 +1,6 @@
 <?php
 
 use Engelsystem\Database\Db;
-use Engelsystem\Models\AngelType;
 use Engelsystem\Models\Shifts\ShiftEntry;
 use Engelsystem\Models\User\State;
 use Engelsystem\Models\User\User;
@@ -206,9 +205,10 @@ function user_controller()
         }
     }
 
-    if ($user->id != $user_source->id and
+    if (
+        $user->id != $user_source->id and
         !(auth()->can('user.type.internal_staff') or
-          auth()->can('admin_user'))
+        auth()->can('admin_user'))
     ) {
         //        error(__('Not possible...'));
         throw_redirect(url('/'));
@@ -256,17 +256,19 @@ function user_controller()
         ->with(['user', 'creator'])
         ->get();
 
-    $is_ifsg_supporter = (bool) AngelType::whereRequiresIfsgCertificate(true)
-        ->leftJoin('user_angel_type', 'user_angel_type.angel_type_id', 'angel_types.id')
-        ->where('user_angel_type.user_id', $user->id)
-        ->where('user_angel_type.supporter', true)
-        ->count();
+//    $is_ifsg_supporter = (bool) AngelType::whereRequiresIfsgCertificate(true)
+//        ->leftJoin('user_angel_type', 'user_angel_type.angel_type_id', 'angel_types.id')
+//        ->where('user_angel_type.user_id', $user->id)
+//        ->where('user_angel_type.supporter', true)
+//        ->count();
+    $is_ifsg_supporter = false;
 
-    $is_drive_supporter = (bool) AngelType::whereRequiresDriverLicense(true)
-        ->leftJoin('user_angel_type', 'user_angel_type.angel_type_id', 'angel_types.id')
-        ->where('user_angel_type.user_id', $user->id)
-        ->where('user_angel_type.supporter', true)
-        ->count();
+//    $is_drive_supporter = (bool) AngelType::whereRequiresDriverLicense(true)
+//        ->leftJoin('user_angel_type', 'user_angel_type.angel_type_id', 'angel_types.id')
+//        ->where('user_angel_type.user_id', $user->id)
+//        ->where('user_angel_type.supporter', true)
+//        ->count();
+    $is_drive_supporter = false;
 
     return [
         htmlspecialchars($user_source->displayName),
@@ -409,10 +411,25 @@ function shiftCalendarRendererByShiftFilter(ShiftsFilter $shiftsFilter)
             $shift_entries[$shift_entry->shift_id][] = $shift_entry;
         }
     }
-
+    // Group needed angeltypes by shift and ensure no duplicates for same angel_type_id
     foreach ($needed_angeltypes_source as $needed_angeltype) {
-        if (isset($needed_angeltypes[$needed_angeltype['shift_id']])) {
-            $needed_angeltypes[$needed_angeltype['shift_id']][] = $needed_angeltype;
+        $shift_id = $needed_angeltype['shift_id'];
+        $angel_type_id = $needed_angeltype['id']; // Use 'id' field not 'angel_type_id'
+
+        if (isset($needed_angeltypes[$shift_id])) {
+            // Check if we already have this angeltype for this shift
+            $duplicate_found = false;
+            foreach ($needed_angeltypes[$shift_id] as $existing) {
+                if ($existing['id'] == $angel_type_id) {
+                    $duplicate_found = true;
+                    break;
+                }
+            }
+
+            // Only add if we haven't seen this angel_type_id for this shift yet
+            if (!$duplicate_found) {
+                $needed_angeltypes[$shift_id][] = $needed_angeltype;
+            }
         }
     }
 
@@ -477,48 +494,48 @@ function shiftCalendarRendererByShiftFilter(ShiftsFilter $shiftsFilter)
  */
 function user_driver_license_required_hint()
 {
-    $user = auth()->user();
+    // $user = auth()->user();
 
-    // User has already entered data, no hint needed.
-    if (!config('driving_license_enabled') || $user->license->wantsToDrive()) {
-        return null;
-    }
+    // // User has already entered data, no hint needed.
+    // if (!config('driving_license_enabled') || $user->license->wantsToDrive()) {
+    //     return null;
+    // }
 
-    $angeltypes = $user->userAngelTypes;
-    foreach ($angeltypes as $angeltype) {
-        if ($angeltype->requires_driver_license) {
-            return sprintf(
-                __('angeltype.driving_license.required.info.here'),
-                '<a href="' . url('/settings/certificates') . '">' . __('driving_license.info') . '</a>'
-            );
-        }
-    }
+    // $angeltypes = $user->userAngelTypes;
+    // foreach ($angeltypes as $angeltype) {
+    //     if ($angeltype->requires_driver_license) {
+    //         return sprintf(
+    //             __('angeltype.driving_license.required.info.here'),
+    //             '<a href="' . url('/settings/certificates') . '">' . __('driving_license.info') . '</a>'
+    //         );
+    //     }
+    // }
 
     return null;
 }
 
 function user_ifsg_certificate_required_hint()
 {
-    $user = auth()->user();
+    // $user = auth()->user();
 
-    // User has already entered data, no hint needed.
-    if (!config('ifsg_enabled') || $user->license->ifsg_light || $user->license->ifsg) {
-        return null;
-    }
+    // // User has already entered data, no hint needed.
+    // if (!config('ifsg_enabled') || $user->license->ifsg_light || $user->license->ifsg) {
+    //     return null;
+    // }
 
-    $angeltypes = $user->userAngelTypes;
-    foreach ($angeltypes as $angeltype) {
-        if (
-            $angeltype->requires_ifsg_certificate && !(
-                $user->license->ifsg_certificate || $user->license->ifsg_certificate_light
-            )
-        ) {
-            return sprintf(
-                __('angeltype.ifsg.required.info.here'),
-                '<a href="' . url('/settings/certificates') . '">' . __('ifsg.info') . '</a>'
-            );
-        }
-    }
+    // $angeltypes = $user->userAngelTypes;
+    // foreach ($angeltypes as $angeltype) {
+    //     if (
+    //         $angeltype->requires_ifsg_certificate && !(
+    //             $user->license->ifsg_certificate || $user->license->ifsg_certificate_light
+    //         )
+    //     ) {
+    //         return sprintf(
+    //             __('angeltype.ifsg.required.info.here'),
+    //             '<a href="' . url('/settings/certificates') . '">' . __('ifsg.info') . '</a>'
+    //         );
+    //     }
+    // }
 
     return null;
 }

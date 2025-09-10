@@ -157,7 +157,7 @@ msgid "schedule.import.load.info"
 msgstr "Import \"%s\" (version \"%s\")"
 
 msgid "schedule.name"
-msgstr "Programm name"
+msgstr "Schedule name"
 
 msgid "schedule.url"
 msgstr "Schedule URL (schedule.xml)"
@@ -205,7 +205,7 @@ msgid "schedule.import.shift.location"
 msgstr "Location"
 
 msgid "news.title"
-msgstr "News"
+msgstr "Announcements"
 
 msgid "news.title.meetings"
 msgstr "Meetings"
@@ -292,10 +292,10 @@ msgid "settings.profile.entry_required"
 msgstr "Entry required"
 
 msgid "general.nick"
-msgstr "Nick"
+msgstr "Nickname"
 
 msgid "settings.profile.nick.already-taken"
-msgstr "The nick is already taken."
+msgstr "The nickname is already taken."
 
 msgid "settings.profile.pronoun"
 msgstr "Pronoun"
@@ -344,11 +344,11 @@ msgstr "Allow Info Desk critters to contact me by e-mail."
 
 msgid "settings.profile.email_goodie"
 msgstr "To possibly receive vouchers for the next similar event, I consent "
-"that my nick, e-mail address and worked hours will be stored until then."
+"that my nickname, e-mail address and worked hours will be stored until then."
 
 msgid "settings.profile.email_tshirt"
 msgstr "To possibly receive vouchers for the next similar event, I consent "
-"that my nick, e-mail address, worked hours and T-shirt size will be stored until then."
+"that my nickname, e-mail address, worked hours and T-shirt size will be stored until then."
 
 msgid "settings.profile.privacy"
 msgstr "To withdraw your approval, send an e-mail to <a href=\"mailto:%s\">%1$s</a>."
@@ -620,6 +620,9 @@ msgstr "Edit T-shirt"
 msgid "user.edit.goodie"
 msgstr "Edit goodie"
 
+msgid "form.shirt"
+msgstr "T-Shirt"
+
 msgid "user.shirt_size"
 msgstr "T-shirt size"
 
@@ -743,6 +746,10 @@ msgstr "Edit location"
 
 msgid "location.delete.title"
 msgstr "Delete location \"%s\""
+
+msgid "location.delete.double_confirm"
+msgstr "Location has %d shifts still assigned to it. "
+"Are you sure you want to delete it?"
 
 msgid "shifttype.shifttypes"
 msgstr "Shift types"
@@ -913,7 +920,7 @@ msgid "design.title"
 msgstr "Design"
 
 msgid "login.welcome"
-msgstr "Welcome to the %s!"
+msgstr "Welcome to %s!"
 
 msgid "event.buildup.start"
 msgstr "Buildup starts"
@@ -947,6 +954,9 @@ msgstr "Read about the jobs you can do to help us."
 
 msgid "login.cookies"
 msgstr "Please note: You have to activate cookies!"
+
+msgid "login.use_username_password"
+msgstr "Login with username/password"
 
 msgid "general.angel"
 msgstr "Critter"
@@ -1044,3 +1054,3201 @@ msgstr "Configuration updated successfully"
 
 msgid "Add more critters"
 msgstr "Add more critter"
+
+msgid "auth.login.staff_only"
+msgstr "The system is not available for general public"
+
+msgid "auth.login.admin_only"
+msgstr "Login restricted to admins only"
+
+msgid "departments.title"
+msgstr "Department"
+
+msgid "departments.title.plural"
+msgstr "Departments"
+
+msgid "validation.title.required"
+msgstr "Title is required"
+
+msgid "validation.text.required"
+msgstr "Text is required"
+
+msgid "dashboard.shift_overview.title"
+msgstr "Shift overview"
+
+msgid "dashboard.auto_update"
+msgstr "Auto update"
+
+msgid "dashboard.hide_past"
+msgstr "Hide past"
+
+msgid "question.edit.locked"
+msgstr "This question is already being edited by another user."
+
+msgid "general.badge_number"
+msgstr "Badge Number"
+
+msgid "form.badge_number.admin"
+msgstr "Event Badge Number"
+
+msgid "settings.profile.badge_number"
+msgstr "Badge Number"
+
+msgid "badge_number.reset_info"
+msgstr "You can manually set/update the badge number"
+
+msgid "form.badge_number.success"
+msgstr "Badge information retrieved"
+
+msgid "general.profile.badge_number"
+msgstr "Badge Nr."
+
+msgid "settings.profile.badge_number_info"
+msgstr "Use the button to automatically retrieve your Badge ID"
+
+msgid "settings.profile.badge_number_update"
+msgstr "Update"
+
+# Certifications / Trainings Management
+msgid "certifications.title"
+msgstr "Certifications"
+
+msgid "certifications.create.title"
+msgstr "Create Certification"
+
+msgid "certifications.create.first"
+msgstr "Create First Certification"
+
+msgid "certifications.edit.title"
+msgstr "Edit Certification"
+
+msgid "certifications.filter.title"
+msgstr "Filter & Search"
+
+msgid "certifications.filter.status"
+msgstr "Status"
+
+msgid "certifications.filter.validity"
+msgstr "Validity Type"
+
+msgid "certifications.filter.self_confirmation"
+msgstr "Self-Confirmation"
+
+msgid "certifications.search.placeholder"
+msgstr "Search by name, description, or contact person..."
+
+msgid "certifications.active"
+msgstr "Active"
+
+msgid "certifications.inactive"
+msgstr "Inactive"
+
+msgid "certifications.perpetual"
+msgstr "Perpetual"
+
+msgid "certifications.timed"
+msgstr "Time-Limited"
+
+msgid "certifications.self_confirmable"
+msgstr "Self-Confirmable"
+
+msgid "certifications.not_self_confirmable"
+msgstr "Not Self-Confirmable"
+
+msgid "certifications.results.showing"
+msgstr "Showing %d certifications"
+
+msgid "certifications.results.filtered"
+msgstr "Filtered results displayed"
+
+msgid "certifications.title_field"
+msgstr "Title"
+
+msgid "certifications.contact_person"
+msgstr "Contact Person"
+
+msgid "certifications.contact_email"
+msgstr "Contact Email"
+
+msgid "certifications.validity"
+msgstr "Validity"
+
+msgid "certifications.status"
+msgstr "Status"
+
+msgid "certifications.critters_count"
+msgstr "Critters"
+
+msgid "certifications.created_at"
+msgstr "Created"
+
+msgid "certifications.updated_at"
+msgstr "Updated"
+
+msgid "certifications.details"
+msgstr "Certification Details"
+
+msgid "certifications.description"
+msgstr "Description"
+
+msgid "certifications.location"
+msgstr "Location"
+
+msgid "certifications.self_confirmation"
+msgstr "Self-Confirmation"
+
+msgid "certifications.valid_for_days"
+msgstr "%d days"
+
+msgid "certifications.back_to_list"
+msgstr "Back to Certifications"
+
+msgid "certifications.deactivate"
+msgstr "Deactivate"
+
+msgid "certifications.reactivate"
+msgstr "Reactivate"
+
+msgid "certifications.deactivate.confirm"
+msgstr "Are you sure you want to deactivate the certification '%s'?"
+
+msgid "certifications.more_actions"
+msgstr "More Actions"
+
+msgid "certifications.mass_revoke"
+msgstr "Mass Revoke"
+
+msgid "certifications.mass_revoke.confirm"
+msgstr "Are you sure you want to revoke the certification '%s' from all users?"
+
+msgid "certifications.delete.confirm"
+msgstr "Are you sure you want to delete the certification '%s'? This cannot be undone."
+
+msgid "certifications.no_results.title"
+msgstr "No Certifications Found"
+
+msgid "certifications.no_results.filtered"
+msgstr "No certifications match your current filters. Try adjusting your search criteria."
+
+msgid "certifications.no_results.empty"
+msgstr "No certifications have been created yet."
+
+# User Certifications
+msgid "user_certifications.title"
+msgstr "My Certifications"
+
+msgid "user_certifications.manage"
+msgstr "Manage User Certifications"
+
+msgid "user_certifications.status.pending"
+msgstr "Pending"
+
+msgid "user_certifications.status.approved"
+msgstr "Approved"
+
+msgid "user_certifications.status.self_confirmed"
+msgstr "Self-Confirmed"
+
+msgid "user_certifications.status.revoked"
+msgstr "Revoked"
+
+msgid "user_certifications.status.expired"
+msgstr "Expired"
+
+msgid "user_certifications.self_confirm"
+msgstr "Self-Confirm"
+
+msgid "user_certifications.date_completed"
+msgstr "Date Completed"
+
+msgid "user_certifications.date_expires"
+msgstr "Expires"
+
+msgid "user_certifications.expires_in"
+msgstr "Expires in %d days"
+
+msgid "user_certifications.expired_since"
+msgstr "Expired %d days ago"
+
+msgid "user_certifications.never_expires"
+msgstr "Never expires"
+
+msgid "user_certifications.notes"
+msgstr "Notes"
+
+msgid "user_certifications.certified_by"
+msgstr "Certified by"
+
+msgid "user_certifications.assign"
+msgstr "Assign Certification"
+
+msgid "user_certifications.remove"
+msgstr "Remove Certification"
+
+msgid "user_certifications.bulk_actions"
+msgstr "Bulk Actions"
+
+# Form fields
+msgid "form.certification"
+msgstr "Certification"
+
+msgid "form.certifications"
+msgstr "Certifications"
+
+msgid "form.validity_days"
+msgstr "Validity Period (Days)"
+
+msgid "form.validity_months"
+msgstr "Validity Period (Months)"
+
+msgid "form.allow_self_confirmation"
+msgstr "Allow Self-Confirmation"
+
+msgid "form.is_perpetual"
+msgstr "Perpetual (Never Expires)"
+
+msgid "form.is_active"
+msgstr "Active"
+
+msgid "form.not_specified"
+msgstr "Not specified"
+
+# Pagination
+msgid "pagination.navigation"
+msgstr "Certification pagination"
+
+msgid "pagination.previous"
+msgstr "Previous"
+
+msgid "pagination.next"
+msgstr "Next"
+
+# Notifications and messages
+msgid "certifications.created.success"
+msgstr "Certification created successfully"
+
+msgid "certifications.updated.success"
+msgstr "Certification updated successfully"
+
+msgid "certifications.deleted.success"
+msgstr "Certification deleted successfully"
+
+msgid "certifications.assigned.success"
+msgstr "Certification assigned successfully"
+
+msgid "certifications.removed.success"
+msgstr "Certification removed successfully"
+
+msgid "certifications.self_confirmed.success"
+msgstr "Certification self-confirmed successfully"
+
+msgid "certifications.mass_revoked.success"
+msgstr "Certification revoked from %d users"
+
+msgid "certifications.error.not_found"
+msgstr "Certification not found"
+
+msgid "certifications.error.already_assigned"
+msgstr "User already has this certification"
+
+msgid "certifications.error.cannot_delete"
+msgstr "Cannot delete certification that is assigned to users"
+
+msgid "certifications.error.self_confirmation_disabled"
+msgstr "Self-confirmation is not allowed for this certification"
+
+# Additional certification keys
+msgid "certifications.allow_self_confirmation"
+msgstr "Allow Self-Confirmation"
+
+msgid "certifications.allow_self_confirmation.help"
+msgstr "When enabled, users can confirm their own certification without administrator approval"
+
+msgid "certifications.approve"
+msgstr "Approve"
+
+msgid "certifications.approved_critters"
+msgstr "Approved Critters"
+
+msgid "certifications.basic_information"
+msgstr "Basic Information"
+
+msgid "certifications.common_periods"
+msgstr "Common Periods"
+
+msgid "certifications.contact_email.help"
+msgstr "Email address for questions about this certification"
+
+msgid "certifications.contact_information"
+msgstr "Contact Information"
+
+msgid "certifications.contact_person.help"
+msgstr "Name of the person responsible for this certification"
+
+msgid "certifications.create.description"
+msgstr "Create a new certification to track training and qualifications"
+
+msgid "certifications.create.submit"
+msgstr "Create Certification"
+
+msgid "certifications.created"
+msgstr "Created"
+
+msgid "certifications.critters"
+msgstr "Critters"
+
+msgid "certifications.current_status"
+msgstr "Current Status"
+
+msgid "certifications.custom_validity_days"
+msgstr "Custom Validity Days"
+
+msgid "certifications.custom_validity_days.help"
+msgstr "Enter a custom number of days this certification is valid"
+
+msgid "certifications.date_certified"
+msgstr "Date Certified"
+
+msgid "certifications.description.help"
+msgstr "Detailed description of what this certification covers"
+
+msgid "certifications.edit.description"
+msgstr "Edit the details of this certification"
+
+msgid "certifications.expires_at"
+msgstr "Expires At"
+
+msgid "certifications.help.contact_section"
+msgstr "Contact Information"
+
+msgid "certifications.help.contact_text"
+msgstr "Provide contact details for users who have questions about this certification"
+
+msgid "certifications.help.description_section"
+msgstr "Description"
+
+msgid "certifications.help.description_text"
+msgstr "Provide a clear description of what this certification covers and any requirements"
+
+msgid "certifications.help.perpetual_text"
+msgstr "Perpetual certifications never expire and remain valid indefinitely"
+
+msgid "certifications.help.self_confirmation_text"
+msgstr "When enabled, users can confirm their own certification without administrator approval"
+
+msgid "certifications.help.timed_text"
+msgstr "Time-limited certifications expire after a specified period and need renewal"
+
+msgid "certifications.help.title_section"
+msgstr "Title"
+
+msgid "certifications.help.title_text"
+msgstr "Choose a clear, descriptive name for this certification"
+
+msgid "certifications.help.validity_section"
+msgstr "Validity Settings"
+
+msgid "certifications.is_active"
+msgstr "Active"
+
+msgid "certifications.is_active.help"
+msgstr "Only active certifications can be assigned to users"
+
+msgid "certifications.is_perpetual"
+msgstr "Perpetual (Never Expires)"
+
+msgid "certifications.is_perpetual.help"
+msgstr "Perpetual certifications never expire and remain valid indefinitely"
+
+msgid "certifications.location.help"
+msgstr "Physical location where this certification training takes place"
+
+msgid "certifications.no_critters_with_status"
+msgstr "No critters with this status"
+
+msgid "certifications.no_expiry"
+msgstr "No Expiry"
+
+msgid "certifications.notes"
+msgstr "Notes"
+
+msgid "certifications.quick_reference"
+msgstr "Quick Reference"
+
+msgid "certifications.remove"
+msgstr "Remove"
+
+msgid "certifications.remove.confirm"
+msgstr "Are you sure you want to remove this certification?"
+
+msgid "certifications.restore"
+msgstr "Restore"
+
+msgid "certifications.revoke"
+msgstr "Revoke"
+
+msgid "certifications.revoke.confirm"
+msgstr "Are you sure you want to revoke this certification?"
+
+msgid "certifications.statistics"
+msgstr "Statistics"
+
+msgid "certifications.status.approved"
+msgstr "Approved"
+
+msgid "certifications.status.expired"
+msgstr "Expired"
+
+msgid "certifications.status.pending"
+msgstr "Pending"
+
+msgid "certifications.status.revoked"
+msgstr "Revoked"
+
+msgid "certifications.status.self_confirmed"
+msgstr "Self-Confirmed"
+
+msgid "certifications.title.help"
+msgstr "Choose a clear, descriptive name for this certification"
+
+msgid "certifications.total_critters"
+msgstr "Total Critters"
+
+msgid "certifications.validity_period_days"
+msgstr "Validity Period (Days)"
+
+msgid "certifications.validity_period_days.help"
+msgstr "Number of days this certification remains valid"
+
+msgid "certifications.validity_period.30_days"
+msgstr "30 days (1 month)"
+
+msgid "certifications.validity_period.90_days"
+msgstr "90 days (3 months)"
+
+msgid "certifications.validity_period.180_days"
+msgstr "180 days (6 months)"
+
+msgid "certifications.validity_period.365_days"
+msgstr "365 days (1 year)"
+
+msgid "certifications.validity_period.730_days"
+msgstr "730 days (2 years)"
+
+msgid "certifications.validity_period.1095_days"
+msgstr "1095 days (3 years)"
+
+msgid "certifications.validity_period.custom"
+msgstr "Custom period"
+
+msgid "certifications.validity_period.select"
+msgstr "Select validity period"
+
+msgid "certifications.validity_settings"
+msgstr "Validity Settings"
+
+msgid "certifications.view_details"
+msgstr "View Details"
+
+msgid "certifications.view_user_certs"
+msgstr "View User Certifications"
+
+msgid "certifications.examples.annual"
+msgstr "Annual (365 days)"
+
+msgid "certifications.examples.biennial"
+msgstr "Biennial (730 days)"
+
+msgid "certifications.examples.permanent"
+msgstr "Permanent (never expires)"
+
+msgid "certifications.examples.short_term"
+msgstr "Short-term (30-180 days)"
+
+# User Certifications - Extended
+msgid "user_certifications.active_filters"
+msgstr "Active Filters"
+
+msgid "user_certifications.add_certification"
+msgstr "Add Certification"
+
+msgid "user_certifications.add_certifications"
+msgstr "Add Certifications"
+
+msgid "user_certifications.add_note_title"
+msgstr "Add Note"
+
+msgid "user_certifications.add_note"
+msgstr "Add Note"
+
+msgid "user_certifications.admin.description"
+msgstr "Manage user certifications, approve pending requests, and track compliance."
+
+msgid "user_certifications.admin.title"
+msgstr "User Certification Management"
+
+msgid "user_certifications.all_certifications"
+msgstr "All Certifications"
+
+msgid "user_certifications.all_departments"
+msgstr "All Departments"
+
+msgid "user_certifications.all_statuses"
+msgstr "All Statuses"
+
+msgid "user_certifications.and_more"
+msgstr "and %d more"
+
+msgid "user_certifications.approve"
+msgstr "Approve"
+
+msgid "user_certifications.available_certifications"
+msgstr "Available Certifications"
+
+msgid "user_certifications.bulk_add_title"
+msgstr "Bulk Add Certifications"
+
+msgid "user_certifications.bulk_add.certification_help"
+msgstr "Select the certification to assign to the selected users"
+
+msgid "user_certifications.bulk_add.instruction_1"
+msgstr "1. Select users from the list below"
+
+msgid "user_certifications.bulk_add.instruction_2"
+msgstr "2. Choose a certification to assign"
+
+msgid "user_certifications.bulk_add.instruction_3"
+msgstr "3. Set the initial status for the certification"
+
+msgid "user_certifications.bulk_add.instruction_4"
+msgstr "4. Optionally add notes and click 'Add Certifications'"
+
+msgid "user_certifications.bulk_add.instructions_title"
+msgstr "Instructions"
+
+msgid "user_certifications.bulk_add.notes_help"
+msgstr "Optional notes about this certification assignment"
+
+msgid "user_certifications.bulk_add.notes_placeholder"
+msgstr "Enter optional notes about this certification..."
+
+msgid "user_certifications.bulk_add.status_help"
+msgstr "The initial status for the certification"
+
+msgid "user_certifications.bulk_add.user_selection_help"
+msgstr "Select one or more users to assign this certification to"
+
+msgid "user_certifications.bulk_add.user_selection_placeholder"
+msgstr "Start typing to search for users..."
+
+msgid "user_certifications.bulk_add"
+msgstr "Bulk Add"
+
+msgid "user_certifications.bulk_approve"
+msgstr "Bulk Approve"
+
+msgid "user_certifications.bulk_revoke"
+msgstr "Bulk Revoke"
+
+msgid "user_certifications.by"
+msgstr "by"
+
+msgid "user_certifications.certification_filter"
+msgstr "Certification Filter"
+
+msgid "user_certifications.certification"
+msgstr "Certification"
+
+msgid "user_certifications.certifications_found"
+msgstr "%d certifications found"
+
+msgid "user_certifications.change_reason_placeholder"
+msgstr "Enter reason for this change..."
+
+msgid "user_certifications.change_reason.help"
+msgstr "Please provide a reason for this status change"
+
+msgid "user_certifications.change_reason"
+msgstr "Change Reason"
+
+msgid "user_certifications.confirm_bulk_action"
+msgstr "Confirm Bulk Action"
+
+msgid "user_certifications.confirm_certification"
+msgstr "Confirm Certification"
+
+msgid "user_certifications.confirm_delete"
+msgstr "Confirm Delete"
+
+msgid "user_certifications.confirm_status_change"
+msgstr "Confirm Status Change"
+
+msgid "user_certifications.confirm"
+msgstr "Confirm"
+
+msgid "user_certifications.contact_description"
+msgstr "If you need help with certifications or have questions about the process, please contact the certification coordinator."
+
+msgid "user_certifications.contact_support"
+msgstr "Contact Support"
+
+msgid "user_certifications.contact"
+msgstr "Contact"
+
+msgid "user_certifications.critter_id"
+msgstr "Critter ID"
+
+msgid "user_certifications.critter_name"
+msgstr "Critter Name"
+
+msgid "user_certifications.date_certified"
+msgstr "Date Certified"
+
+msgid "user_certifications.department_filter"
+msgstr "Department Filter"
+
+msgid "user_certifications.department"
+msgstr "Department"
+
+msgid "user_certifications.departments"
+msgstr "Departments"
+
+msgid "user_certifications.edit_expiry_title"
+msgstr "Edit Expiry Date"
+
+msgid "user_certifications.edit_expiry.help"
+msgstr "Enter a new expiry date for this certification"
+
+msgid "user_certifications.edit_expiry.warning"
+msgstr "Changing the expiry date will affect the validity of this certification"
+
+msgid "user_certifications.edit_expiry"
+msgstr "Edit Expiry"
+
+msgid "user_certifications.enter_new_expiry"
+msgstr "Enter New Expiry Date"
+
+msgid "user_certifications.enter_note"
+msgstr "Enter Note"
+
+msgid "user_certifications.entries"
+msgstr "entries"
+
+msgid "user_certifications.expired"
+msgstr "Expired"
+
+msgid "user_certifications.expires"
+msgstr "Expires"
+
+msgid "user_certifications.expiring_soon"
+msgstr "Expiring Soon"
+
+msgid "user_certifications.expiry_date"
+msgstr "Expiry Date"
+
+msgid "user_certifications.export"
+msgstr "Export"
+
+msgid "user_certifications.help"
+msgstr "Help"
+
+msgid "user_certifications.initial_status"
+msgstr "Initial Status"
+
+msgid "user_certifications.internal_note.help"
+msgstr "Internal notes visible only to administrators"
+
+msgid "user_certifications.internal_note"
+msgstr "Internal Note"
+
+msgid "user_certifications.items"
+msgstr "items"
+
+msgid "user_certifications.last_updated"
+msgstr "Last Updated"
+
+msgid "user_certifications.list_title"
+msgstr "User Certifications"
+
+msgid "user_certifications.location"
+msgstr "Location"
+
+msgid "user_certifications.my_certifications"
+msgstr "My Certifications"
+
+msgid "user_certifications.need_help"
+msgstr "Need Help?"
+
+msgid "user_certifications.never"
+msgstr "Never"
+
+msgid "user_certifications.no_active_description"
+msgstr "No active certifications found. Try adjusting your filters or check the 'All' tab."
+
+msgid "user_certifications.no_active"
+msgstr "No Active Certifications"
+
+msgid "user_certifications.no_certifications_description"
+msgstr "No certifications have been assigned yet. Contact your coordinator to get started."
+
+msgid "user_certifications.no_certifications"
+msgstr "No Certifications"
+
+msgid "user_certifications.no_department"
+msgstr "No Department"
+
+msgid "user_certifications.no_expiring_description"
+msgstr "No certifications are expiring soon."
+
+msgid "user_certifications.no_expiring"
+msgstr "No Expiring Certifications"
+
+msgid "user_certifications.no_pending_description"
+msgstr "No certifications are pending approval."
+
+msgid "user_certifications.no_pending"
+msgstr "No Pending Certifications"
+
+msgid "user_certifications.no_recent_activity"
+msgstr "No Recent Activity"
+
+msgid "user_certifications.no_results_description"
+msgstr "No certifications match your current filters."
+
+msgid "user_certifications.no_results"
+msgstr "No Results"
+
+msgid "user_certifications.note_placeholder"
+msgstr "Enter a note..."
+
+msgid "user_certifications.note.help"
+msgstr "Optional note about this certification"
+
+msgid "user_certifications.note"
+msgstr "Note"
+
+msgid "user_certifications.notes_placeholder"
+msgstr "Enter optional notes..."
+
+msgid "user_certifications.obtained"
+msgstr "Obtained"
+
+msgid "user_certifications.optional_notes"
+msgstr "Optional Notes"
+
+msgid "user_certifications.perpetual"
+msgstr "Perpetual"
+
+msgid "user_certifications.print"
+msgstr "Print"
+
+msgid "user_certifications.quick_add"
+msgstr "Quick Add"
+
+msgid "user_certifications.quick_info"
+msgstr "Quick Info"
+
+msgid "user_certifications.recent_activity"
+msgstr "Recent Activity"
+
+msgid "user_certifications.renew"
+msgstr "Renew"
+
+msgid "user_certifications.renewal_available"
+msgstr "Renewal Available"
+
+msgid "user_certifications.restore"
+msgstr "Restore"
+
+msgid "user_certifications.revoke"
+msgstr "Revoke"
+
+msgid "user_certifications.search_placeholder"
+msgstr "Search certifications..."
+
+msgid "user_certifications.search_user.placeholder"
+msgstr "Search users..."
+
+msgid "user_certifications.search_user"
+msgstr "Search User"
+
+msgid "user_certifications.select_certification_placeholder"
+msgstr "Select a certification..."
+
+msgid "user_certifications.select_certification"
+msgstr "Select Certification"
+
+msgid "user_certifications.select_items_first"
+msgstr "Please select one or more items first"
+
+msgid "user_certifications.select_user_placeholder"
+msgstr "Select a user..."
+
+msgid "user_certifications.select_user"
+msgstr "Select User"
+
+msgid "user_certifications.self_confirm_acknowledgment"
+msgstr "I acknowledge that I have completed this certification"
+
+msgid "user_certifications.self_confirm_agreement"
+msgstr "I agree that the information I have provided is accurate"
+
+msgid "user_certifications.self_confirm_available"
+msgstr "Self-Confirmation Available"
+
+msgid "user_certifications.self_confirm_description"
+msgstr "You can self-confirm this certification if you have already completed it"
+
+msgid "user_certifications.self_confirm_for"
+msgstr "Self-Confirm for"
+
+msgid "user_certifications.self_confirm_instructions"
+msgstr "Please confirm that you have completed this certification by checking the boxes below"
+
+msgid "user_certifications.self_confirm_notes_placeholder"
+msgstr "Optionally add notes about when/where you completed this certification..."
+
+msgid "user_certifications.self_confirm_success"
+msgstr "Certification successfully self-confirmed"
+
+msgid "user_certifications.self_confirm_title"
+msgstr "Self-Confirm Certification"
+
+msgid "user_certifications.self_confirmable"
+msgstr "Self-Confirmable"
+
+msgid "user_certifications.stats.active"
+msgstr "Active"
+
+msgid "user_certifications.stats.approved"
+msgstr "Approved"
+
+msgid "user_certifications.stats.expired"
+msgstr "Expired"
+
+msgid "user_certifications.stats.expiring_soon"
+msgstr "Expiring Soon"
+
+msgid "user_certifications.stats.pending"
+msgstr "Pending"
+
+msgid "user_certifications.stats.total_users"
+msgstr "Total Users"
+
+msgid "user_certifications.stats.total"
+msgstr "Total"
+
+msgid "user_certifications.status_filter"
+msgstr "Status Filter"
+
+msgid "user_certifications.status_help.approved"
+msgstr "Certification has been approved by an administrator"
+
+msgid "user_certifications.status_help.expired"
+msgstr "Certification has expired and needs to be renewed"
+
+msgid "user_certifications.status_help.pending"
+msgstr "Certification is pending approval from an administrator"
+
+msgid "user_certifications.status_help.revoked"
+msgstr "Certification has been revoked"
+
+msgid "user_certifications.status_help.self_confirmed"
+msgstr "Certification was self-confirmed by the user"
+
+msgid "user_certifications.status_legend"
+msgstr "Status Legend"
+
+msgid "user_certifications.status"
+msgstr "Status"
+
+msgid "user_certifications.tabs.active"
+msgstr "Active"
+
+msgid "user_certifications.tabs.all"
+msgstr "All"
+
+msgid "user_certifications.tabs.expiring"
+msgstr "Expiring"
+
+msgid "user_certifications.tabs.pending"
+msgstr "Pending"
+
+msgid "user_certifications.user_selection"
+msgstr "User Selection"
+
+msgid "user_certifications.user.description"
+msgstr "Manage certifications for this user"
+
+msgid "user_certifications.user"
+msgstr "User"
+
+msgid "user_certifications.view_history"
+msgstr "View History"
+
+# Additional form keys
+msgid "form.actions"
+msgstr "Actions"
+
+msgid "form.clear"
+msgstr "Clear"
+
+msgid "form.create"
+msgstr "Create"
+
+msgid "form.days"
+msgstr "Days"
+
+msgid "form.help"
+msgstr "Help"
+
+msgid "form.save_changes"
+msgstr "Save Changes"
+
+msgid "form.select_all"
+msgstr "Select All"
+
+msgid "form.view"
+msgstr "View"
+
+# Additional pagination keys
+msgid "pagination.showing"
+msgstr "Showing"
+
+msgid "certifications.error.permission_denied"
+msgstr "You do not have permission to perform this action"
+
+msgid "%d helper needed"
+msgstr "%d helper needed"
+
+msgid "%s (%s as %s) in %s, %s - %s"
+msgstr "%s (%s als %s) in %s, %s - %s"
+
+msgid "%s (not"
+msgstr "%s (not"
+
+msgid "%s confirmed for critter type %s."
+msgstr "%s for Critter type %s approved."
+
+msgid "%s has been subscribed to the shift."
+msgstr "%s wurde in die Shift eingetragen."
+
+msgid "%s has done enough."
+msgstr "%s has done enough."
+
+msgid "API Settings"
+msgstr "API Settings"
+
+msgid "Active"
+msgstr "Active"
+
+msgid "Active Critters"
+msgstr "Active Critters"
+
+msgid "Add supporter rights"
+msgstr "Add supporter rights"
+
+msgid "Add user to critter type"
+msgstr "Add user to critter type"
+
+msgid "Added by %s at %s"
+msgstr "Added by %s at %s"
+
+msgid "Added supporter rights for %s to %s."
+msgstr "Added supporter rights for %s to %s."
+
+msgid "Additional description"
+msgstr "Additional description"
+
+msgid "Admin"
+msgstr "Admin"
+
+msgid "All"
+msgstr "All"
+
+msgid "All Critters"
+msgstr "All Critters"
+
+msgid "All users"
+msgstr "Alle User"
+
+msgid "Answer questions"
+msgstr "Answer questions"
+
+msgid "Apply"
+msgstr "Apply"
+
+msgid "Arrival date"
+msgstr "Arrival date"
+
+msgid "Arrival statistics"
+msgstr "Arrival statistics"
+
+msgid "Arrive critters"
+msgstr "Arrive critters"
+
+msgid "Arrived at %s"
+msgstr "Arrived at %s"
+
+msgid "Ask the Info Desk"
+msgstr "Ask the Info Desk"
+
+msgid "Assigned to Shift"
+msgstr "Assigned to Shift"
+
+msgid "Back to profile"
+msgstr "Back to profile"
+
+msgid "Become %s"
+msgstr "Become a %s"
+
+msgid "Become a %s"
+msgstr "Join as: %s"
+
+msgid "Changes were saved."
+msgstr "Changes were saved."
+
+msgid "Comment (for your eyes only):"
+msgstr "Comment (for your eyes only):"
+
+msgid "Confirm"
+msgstr "Confirm"
+
+msgid "Confirm all"
+msgstr "Confirm all"
+
+msgid "Confirm all users"
+msgstr "Confirm all users"
+
+msgid "Confirm critter type for user"
+msgstr "Confirm critter type for user"
+
+msgid "Confirm user"
+msgstr "Confirm user"
+
+msgid "Confirmed all users for critter type %s."
+msgstr "Confirmed all users for critter type %s."
+
+msgid "Contact"
+msgstr "Contact"
+
+msgid "Copy needed critters from location settings"
+msgstr "Copy needed critters from location settings"
+
+msgid "Copy needed critters from shift type settings"
+msgstr "Copy needed critters from shift type settings"
+
+msgid "Create a shift over midnight."
+msgstr "Create a shift over midnight."
+
+msgid "Create critter type"
+msgstr "Create critter type"
+
+msgid "Create multiple shifts"
+msgstr "Create multiple shifts"
+
+msgid "Create multiple shifts with variable length"
+msgstr "Create multiple shifts with variable length"
+
+msgid "Create one shift"
+msgstr "Create one shift"
+
+msgid "Create shifts"
+msgstr "Create shifts"
+
+msgid "Critter can receive another %d vouchers and is FA."
+msgstr "Critter can receive another %d vouchers and is FA."
+
+msgid "Critter can receive another %d vouchers."
+msgstr "Critter can receive another %d vouchers."
+
+msgid "Critter has been marked as active."
+msgstr "Critter has been marked as active."
+
+msgid "Critter has been marked as arrived."
+msgstr "Critter has been marked as arrived."
+
+msgid "Critter has been marked as not active."
+msgstr "Critter has been marked as not active."
+
+msgid "Critter has got a T-shirt."
+msgstr "Critter has got a T-shirt."
+
+msgid "Critter has got a goodie."
+msgstr "Critter has got a goodie."
+
+msgid "Critter has got no T-shirt."
+msgstr "Critter has got no T-shirt."
+
+msgid "Critter has got no goodie."
+msgstr "Critter has got no goodie."
+
+msgid "Critter not found."
+msgstr "Critter not found."
+
+msgid "Critter type"
+msgstr "Critter type"
+
+msgid "Critter type %s deleted."
+msgstr "Critter type %s deleted."
+
+msgid "Critter type saved."
+msgstr "Critter type saved."
+
+msgid "Critter:"
+msgstr "Critter:"
+
+msgid "Critters"
+msgstr "Critter"
+
+msgid "Critters currently working"
+msgstr "Critters currently working"
+
+msgid "Critters needed for nightshifts"
+msgstr "Critters needed for nightshifts"
+
+msgid "Critters needed in the next 3 hrs"
+msgstr "Critters needed in the next 3 hrs"
+
+msgid "Crittertype doesn't exist."
+msgstr "Crittertype doesn't exist."
+
+msgid "Date, Duration:"
+msgstr "Date, Duration:"
+
+msgid "Day & Time"
+msgstr "Day & Time"
+
+msgid "Delete %s"
+msgstr "Delete %s"
+
+msgid "Delete critter type %s"
+msgstr "Delete critter type %s"
+
+msgid "Denied all users for critter type %s."
+msgstr "Denied all users for critter type %s."
+
+msgid "Deny"
+msgstr "Deny"
+
+msgid "Deny all"
+msgstr "Deny all"
+
+msgid "Deny all users"
+msgstr "Deny all users"
+
+msgid "Do you really want to add %s to %s?"
+msgstr "Do you really want to add %s to %s?"
+
+msgid "Do you really want to add supporter rights for %s to %s?"
+msgstr "Do you really want to add supporter rights for %s to %s?"
+
+msgid "Do you really want to confirm %s for %s?"
+msgstr "Do you really want to confirm %s for %s?"
+
+msgid "Do you really want to confirm all users for %s?"
+msgstr "Do you really want to confirm all users for %s?"
+
+msgid "Do you really want to deny all users for %s?"
+msgstr "Do you really want to deny all users for %s?"
+
+msgid "Do you really want to leave"
+msgstr "Do you really want to leave"
+
+msgid "Do you really want to remove"
+msgstr "Do you really want to remove"
+
+msgid "Do you really want to remove supporter rights for %s from %s?"
+msgstr "Do you really want to remove supporter rights for %s from %s?"
+
+msgid "Do you want to become a %2$s?"
+msgstr "Do you want to become a %2$s?"
+
+msgid "Do you want to delete critter type %s?"
+msgstr "Do you want to delete critter type %s?"
+
+msgid "Do you want to delete the shift"
+msgstr "Do you want to delete the shift"
+
+msgid "Do you want to sign off %s from shift %s from %s to %s as %s?"
+msgstr "Do you want to sign off %s from shift %s from %s to %s as %s?"
+
+msgid "Do you want to sign off from your shift %s from %s to %s as %s?"
+msgstr "Do you want to sign off from your shift %s from %s to %s as %s?"
+
+msgid "Do you want to sign up for this shift as %s?"
+msgstr "Do you want to sign up for this shift as %s?"
+
+msgid "Do you want to sign up the following user for this shift as %s?"
+msgstr "Do you want to sign up the following user for this shift as %s?"
+
+msgid "Do you want to sign up the following user for this shift?"
+msgstr "Do you want to sign up the following user for this shift?"
+
+msgid "Driver"
+msgstr "Driver"
+
+msgid "Duration"
+msgstr "Duration"
+
+msgid "Edit %s"
+msgstr "Edit %s"
+
+msgid "Edit certificates"
+msgstr "Edit certificates"
+
+msgid "Edit group"
+msgstr "Edit group"
+
+msgid "Edit shift entry"
+msgstr "Edit shift entry"
+
+msgid "Edit user"
+msgstr "Edit User"
+
+msgid "End:"
+msgstr "End:"
+
+msgid "Enough"
+msgstr "Enough"
+
+msgid "Filter"
+msgstr "Filter"
+
+msgid "Filtered"
+msgstr "Filtered"
+
+msgid "Force active"
+msgstr "Force active"
+
+msgid "Forced"
+msgstr "Forced"
+
+msgid "Free Critters"
+msgstr "Free Critters"
+
+msgid "Freeload comment (Only for shift coordination and supporters):"
+msgstr "Freeload comment (Only for shift coordination and supporters):"
+
+msgid "Freeloaded"
+msgstr "Freeloaded"
+
+msgid "Freeloader"
+msgstr "Freeloader"
+
+msgid "Freeloads"
+msgstr "Freeloads"
+
+msgid "Fri"
+msgstr "Fri"
+
+msgid "Fullscreen"
+msgstr "Fullscreen"
+
+msgid "Given T-shirts"
+msgstr "Given T-shirts"
+
+msgid "Given goodies"
+msgstr "Given goodies"
+
+msgid "Goodie"
+msgstr "Goodie"
+
+msgid "Goodie score"
+msgstr "Goodie Score"
+
+msgid "Goodie statistic"
+msgstr "Goodie statistic"
+
+msgid "Got %s of %s vouchers"
+msgstr "Got %s of %s vouchers"
+
+msgid "Got T-shirt"
+msgstr "Got T-shirt"
+
+msgid "Got goodie"
+msgstr "Got goodie"
+
+msgid "Got no vouchers"
+msgstr "Got no vouchers"
+
+msgid "Grouprights"
+msgstr "Grouprights"
+
+msgid "Has car"
+msgstr "Has car"
+
+msgid "Help needed"
+msgstr "Help needed"
+
+msgid "Here you can define the user groups of the critter:"
+msgstr "Here you can define the user groups of the critter:"
+
+msgid "Here you can reset the password of this critter:"
+msgstr "Here you can reset the password of this critter:"
+
+msgid "Hide at Registration"
+msgstr "Hide at Registration"
+
+msgid "History ID: %s"
+msgstr "History ID: %s"
+
+msgid "Hours to be worked"
+msgstr "Hours to be worked"
+
+msgid "How many critters should be active?"
+msgstr "How many critters should be active?"
+
+msgid "If the critter is active, it can claim a goodie. If goodie is set to 'Yes', the critter already got their goodie."
+msgstr "If the critter is active, it can claim a goodie. If goodie is set to 'Yes', the critter already got their goodie."
+
+msgid "Info"
+msgstr "Info"
+
+msgid "JSON Export"
+msgstr "JSON Export"
+
+msgid "Join"
+msgstr "Join"
+
+msgid "Last login"
+msgstr "Last login"
+
+msgid "Last shift"
+msgstr "Last shift"
+
+msgid "Leave"
+msgstr "Leave"
+
+msgid "Leave critter type"
+msgstr "Leave critter type"
+
+msgid "Length"
+msgstr "Length"
+
+msgid "Length (in minutes)"
+msgstr "Length (in minutes)"
+
+msgid "Location"
+msgstr "Location"
+
+msgid "Location:"
+msgstr "Location:"
+
+msgid "Locations"
+msgstr "Locations"
+
+msgid "Manage locations"
+msgstr "Manage locations"
+
+msgid "Marked critters."
+msgstr "Marked critters."
+
+msgid "Member"
+msgstr "Member"
+
+msgid "Members"
+msgstr "Members"
+
+msgid "Membership"
+msgstr "Membership"
+
+msgid "Mode"
+msgstr "Mode"
+
+msgid "Mon"
+msgstr "Mon"
+
+msgid "My driving license"
+msgstr "My driving license"
+
+msgid "Name & Workmates"
+msgstr "Name & Workmates"
+
+msgid "Needed critters"
+msgstr "Needed critters"
+
+msgid "Needed critters:"
+msgstr "Needed critters:"
+
+msgid "Next shift %c"
+msgstr "Next shift %c"
+
+msgid "Night shifts between %d and %d am are multiplied by %d for the %s score."
+msgstr "Night shifts between %d and %d am are multiplied by %d for the %s score."
+
+msgid "No"
+msgstr "No"
+
+msgid "No data found."
+msgstr "No data found."
+
+msgid "No shifts found."
+msgstr "No shifts found."
+
+msgid "No supporter update given."
+msgstr "No supporter update given."
+
+msgid "No."
+msgstr "No."
+
+msgid "None"
+msgstr "None"
+
+msgid "Not arrived"
+msgstr "Not arrived"
+
+msgid "Not arrived (Planned: %s)"
+msgstr "Not arrived (Planned: %s)"
+
+msgid "Number of shifts: %s"
+msgstr "Number of shifts: %s"
+
+msgid "Number of vouchers given out"
+msgstr "Number of vouchers given out"
+
+msgid "Occupancy"
+msgstr "Occupancy"
+
+msgid "Other critter type needed / collides with my shifts"
+msgstr "Other critter type needed / collides with my shifts"
+
+msgid "Own"
+msgstr "Own"
+
+msgid "Password reset done."
+msgstr "Password reset done."
+
+msgid "Password reset in progress"
+msgstr "Password reset in progress"
+
+msgid "Planned arrival"
+msgstr "Planned arrival"
+
+msgid "Planned arrival statistics"
+msgstr "Planned arrival statistics"
+
+msgid "Planned departure"
+msgstr "Planned departure"
+
+msgid "Planned departure statistics"
+msgstr "Planned departure statistics"
+
+msgid "Please check the name. Maybe it already exists."
+msgstr "Please check the name. Maybe it already exists."
+
+msgid "Please check the needed critters for team %s."
+msgstr "Please check the needed critters for team %s."
+
+msgid "Please check your input for needed critters of type %s."
+msgstr "Please check your input for needed critters of type %s."
+
+msgid "Please enter a freeload comment!"
+msgstr "Please enter a freeload comment!"
+
+msgid "Please enter a number of critter to be marked as active."
+msgstr "Please enter a number of critter to be marked as active."
+
+msgid "Please enter a shift duration in minutes."
+msgstr "Please enter a shift duration in minutes."
+
+msgid "Please enter a valid ending time for the shifts."
+msgstr "Please enter a valid ending time for the shifts."
+
+msgid "Please enter a valid number of vouchers."
+msgstr "Please enter a valid number of vouchers."
+
+msgid "Please enter a valid starting time for the shifts."
+msgstr "Please enter a valid starting time for the shifts."
+
+msgid "Please select a location."
+msgstr "Please select a location."
+
+msgid "Please select a mode for needed critters."
+msgstr "Please select a mode for needed critters."
+
+msgid "Please select a mode."
+msgstr "Please select a mode."
+
+msgid "Please select a shift type."
+msgstr "Please select a shift type."
+
+msgid "Please select a start time."
+msgstr "Please select a start time."
+
+msgid "Please select an end time."
+msgstr "Please select an end time."
+
+msgid "Please select needed critters."
+msgstr "Please select needed critters."
+
+msgid "Please split the shift-change hours by colons."
+msgstr "Please split the shift-change hours by colons."
+
+msgid "Please use markdown for the description."
+msgstr "Please use markdown for the description."
+
+msgid "Please validate the change hour %s. It should be between 00:00 and 24:00."
+msgstr "Please validate the change hour %s. It should be between 00:00 and 24:00."
+
+msgid "Primary contact person/desk for user questions."
+msgstr "Primary contact person/desk for user questions."
+
+msgid "Privileges"
+msgstr "Privileges"
+
+msgid "Public Dashboard"
+msgstr "Public Dashboard"
+
+msgid "Remove"
+msgstr "Remove"
+
+msgid "Remove T-shirt"
+msgstr "Remove T-shirt"
+
+msgid "Remove active"
+msgstr "Remove active"
+
+msgid "Remove goodie"
+msgstr "Remove goodie"
+
+msgid "Remove supporter rights"
+msgstr "Remove supporter rights"
+
+msgid "Removed from Shift"
+msgstr "Removed from Shift"
+
+msgid "Removed supporter rights for %s from %s."
+msgstr "Removed supporter rights for %s from %s."
+
+msgid "Requires driver license"
+msgstr "Requires driver license"
+
+msgid "Reset"
+msgstr "Reset"
+
+msgid "Reset done. Critter has not arrived."
+msgstr "Reset done. Critter has not arrived."
+
+msgid "Reset to previous state"
+msgstr "Reset to previous state"
+
+msgid "Rights"
+msgstr "Rights"
+
+msgid "Sat"
+msgstr "Sat"
+
+msgid "Saved the number of vouchers."
+msgstr "Saved the number of vouchers."
+
+msgid "Search critter:"
+msgstr "Search critter:"
+
+msgid "Set active"
+msgstr "Set active"
+
+msgid "Shift change hours"
+msgstr "Shift change hours"
+
+msgid "Shift could not be found."
+msgstr "Shift could not be found."
+
+msgid "Shift deleted."
+msgstr "Shift deleted."
+
+msgid "Shift ended %c"
+msgstr "Shift ended %c"
+
+msgid "Shift ends %c"
+msgstr "Shift ends %c"
+
+msgid "Shift entry removed."
+msgstr "Shift entry removed."
+
+msgid "Shift is full"
+msgstr "Shift is full"
+
+msgid "Shift is running/ended or you have not arrived"
+msgstr "Shift is running/ended or you have not arrived"
+
+msgid "Shift saved."
+msgstr "Shift saved."
+
+msgid "Shift sign off"
+msgstr "Shift sign off"
+
+msgid "Shift signup"
+msgstr "Shift signup"
+
+msgid "Shift started %c"
+msgstr "Shift started %c"
+
+msgid "Shift type"
+msgstr "Shift type"
+
+msgid "Shift updated."
+msgstr "Shift updated."
+
+msgid "Shifts created."
+msgstr "Shifts created."
+
+msgid "Show all shifts"
+msgstr "Show all shifts"
+
+msgid "Show on dashboard"
+msgstr "Show on dashboard"
+
+msgid "Sign off"
+msgstr "Sign off"
+
+msgid "Sign up"
+msgstr "Sign up"
+
+msgid "Size"
+msgstr "Size"
+
+msgid "Start:"
+msgstr "Start:"
+
+msgid "State"
+msgstr "State"
+
+msgid "Sum"
+msgstr "Sum"
+
+msgid "Sum:"
+msgstr "Sum:"
+
+msgid "Sun"
+msgstr "Sun"
+
+msgid "Supporter"
+msgstr "Supporter"
+
+msgid "Supporters"
+msgstr "Supporters"
+
+msgid "T-shirt"
+msgstr "T-shirt"
+
+msgid "T-shirt score"
+msgstr "T-shirt score"
+
+msgid "T-shirt statistic"
+msgstr "T-shirt statistic"
+
+msgid "Team %s"
+msgstr "Team %s"
+
+msgid "The administration has not configured any locations yet."
+msgstr "The administration has not configured any locations yet."
+
+msgid "The administration has not configured any shifts yet."
+msgstr "The administration has not configured any shifts yet."
+
+msgid "The ending time has to be after the starting time."
+msgstr "The ending time has to be after the starting time."
+
+msgid "The entries must match and must not be empty!"
+msgstr "The entries must match and must not be empty!"
+
+msgid "The following critters are needed"
+msgstr "The following critters are needed"
+
+msgid "The shifts end has to be after its start."
+msgstr "The shifts end has to be after its start."
+
+msgid "There are 0 critters needed. Please enter the amounts of needed critters."
+msgstr "There are 0 critters needed. Please enter the amounts of needed critters."
+
+msgid "There are unanswered questions!"
+msgstr "There are unanswered questions!"
+
+msgid "There are unconfirmed critters in %d critter type. Critter type that needs approval:"
+msgstr "There are unconfirmed critters in %d critter type. Critter type that needs approval:"
+
+msgid "This description is for single shifts, otherwise please use the description in shift type."
+msgstr "This description is for single shifts, otherwise please use the description in shift type."
+
+msgid "This page is much more comfortable with javascript."
+msgstr "This page is much more comfortable with javascript."
+
+msgid "This shift collides with one of your shifts."
+msgstr "This shift collides with one of your shifts."
+
+msgid "This shift ended already."
+msgstr "This shift ended already."
+
+msgid "This shift is already occupied."
+msgstr "This shift is already occupied."
+
+msgid "This shift is in the far future and becomes available for signup at %s."
+msgstr "This shift is in the far future and becomes available for signup at %s."
+
+msgid "This shift was imported from a schedule so some changes will be overwritten with the next import."
+msgstr "This shift was imported from a schedule so some changes will be overwritten with the next import."
+
+msgid "This user does not exist."
+msgstr "This user does not exist."
+
+msgid "Thu"
+msgstr "Thu"
+
+msgid "Time and location"
+msgstr "Time and location"
+
+msgid "Title:"
+msgstr "Title:"
+
+msgid "Today"
+msgstr "Today"
+
+msgid "Tomorrow"
+msgstr "Tomorrow"
+
+msgid "Tue"
+msgstr "Tue"
+
+msgid "Type and title"
+msgstr "Type and title"
+
+msgid "Type:"
+msgstr "Type:"
+
+msgid "Unconfirmed"
+msgstr "Unconfirmed"
+
+msgid "User %s added to %s."
+msgstr "User %s added to %s."
+
+msgid "User %s could not be notified by e-mail due to an error."
+msgstr "User %s could not be notified by e-mail due to an error."
+
+msgid "User"
+msgstr "User"
+
+msgid "User deleted."
+msgstr "User deleted."
+
+msgid "User groups saved."
+msgstr "User groups saved."
+
+msgid "User is not in critter type."
+msgstr "User is not in critter type."
+
+msgid "User not found."
+msgstr "User not found."
+
+msgid "View"
+msgstr "View"
+
+msgid "Voucher"
+msgstr "Voucher"
+
+msgid "Vouchers"
+msgstr "Vouchers"
+
+msgid "Wed"
+msgstr "Wed"
+
+msgid "Work log entry"
+msgstr "Work log entry"
+
+msgid "Yes"
+msgstr "Yes"
+
+msgid "Yesterday"
+msgstr "Yesterday"
+
+msgid "You are already a %s."
+msgstr "You are already a %s."
+
+msgid "You are not allowed to confirm all users for this critter type."
+msgstr "You are not allowed to confirm all users for this critter type."
+
+msgid "You are not allowed to confirm this users critter type."
+msgstr "You are not allowed to confirm this users critter type."
+
+msgid "You are not allowed to delete all users for this critter type."
+msgstr "You are not allowed to delete all users for this critter type."
+
+msgid "You are not allowed to delete this users critter type."
+msgstr "You are not allowed to delete this users critter type."
+
+msgid "You are not allowed to sign up yet."
+msgstr "You are not allowed to sign up yet."
+
+msgid "You are not marked as arrived."
+msgstr "You are not marked as arrived."
+
+msgid "You are signed up for this shift."
+msgstr "You are signed up for this shift."
+
+msgid "You are subscribed. Thank you!"
+msgstr "You are subscribed. Thank you!"
+
+msgid "You cannot delete yourself."
+msgstr "You cannot delete yourself."
+
+msgid "You cannot edit critters with more rights."
+msgstr "You cannot edit critters with more rights."
+
+msgid "You cannot edit your own rights."
+msgstr "You cannot edit your own rights."
+
+msgid "You have been assigned to a Shift:"
+msgstr "You have been assigned to a Shift:"
+
+msgid "You have been removed from a Shift:"
+msgstr "You have been removed from a Shift:"
+
+msgid "You have done enough."
+msgstr "You have done enough."
+
+msgid "You joined %s."
+msgstr "You joined %s."
+
+msgid "You need be accepted member of the critter type."
+msgstr "You need be accepted member of the critter type."
+
+msgid "You successfully left"
+msgstr "You successfully left"
+
+msgid "Your account has been deleted."
+msgstr "Your account has been deleted."
+
+msgid "Your password"
+msgstr "Your password"
+
+msgid "Your shift"
+msgstr "Your shift"
+
+msgid "arrived sum"
+msgstr "arrived sum"
+
+msgid "created at %s by %s"
+msgstr "created at %s by %s"
+
+msgid "edited at %s by %s"
+msgstr "edited at %s by %s"
+
+msgid "ended"
+msgstr "ended"
+
+msgid "free"
+msgstr "free"
+
+msgid "goodie"
+msgstr "goodie"
+
+msgid "iCal Export"
+msgstr "iCal Export"
+
+msgid "iCal export and API"
+msgstr "iCal Export und API"
+
+msgid "last 4h"
+msgstr "last 4h"
+
+msgid "last 8h"
+msgstr "last 8h"
+
+msgid "m-d"
+msgstr "m-d"
+
+msgid "next 4h"
+msgstr "next 4h"
+
+msgid "next 8h"
+msgstr "next 8h"
+
+msgid "not yet"
+msgstr "not yet"
+
+msgid "occupied"
+msgstr "occupied"
+
+msgid "out of %s"
+msgstr "out of %s"
+
+msgid "please arrive for signup"
+msgstr "please arrive for signup"
+
+msgid "angeltypes.certification_requirements.user_info"
+msgstr "This Critter type requires certification before you can apply"
+
+
+# User Certifications - Missing keys added
+msgid "user_certifications.status.not_applied"
+msgstr "Not Applied"
+
+msgid "user_certifications.self_confirmable_tooltip"
+msgstr "This certification can be self-confirmed by the user"
+
+msgid "user_certifications.perpetual_tooltip"
+msgstr "This certification never expires"
+
+msgid "user_certifications.time_limited_tooltip"
+msgstr "This certification is valid for a limited time"
+
+msgid "user_certifications.days_valid"
+msgstr "days valid"
+
+msgid "user_certifications.expiring_soon_tooltip"
+msgstr "This certification will expire soon"
+
+msgid "user_certifications.self_confirm_tooltip"
+msgstr "Self-confirm your completion of this certification"
+
+msgid "user_certifications.apply_formal_tooltip"
+msgstr "Submit a formal application for this certification"
+
+msgid "user_certifications.apply_formal"
+msgstr "Apply Formally"
+
+msgid "user_certifications.apply_tooltip"
+msgstr "Apply for this certification"
+
+msgid "user_certifications.apply"
+msgstr "Apply"
+
+msgid "user_certifications.withdraw_application_tooltip"
+msgstr "Withdraw your application"
+
+msgid "user_certifications.withdraw_application"
+msgstr "Withdraw Application"
+
+msgid "user_certifications.self_confirm_pending_tooltip"
+msgstr "You have already applied. Self-confirmation is not available while pending."
+
+msgid "user_certifications.renew_tooltip"
+msgstr "Renew this certification"
+
+msgid "user_certifications.apply_description"
+msgstr "Apply for this certification using the form below."
+
+msgid "user_certifications.apply_existing_status"
+msgstr "Current Status"
+
+msgid "user_certifications.apply_already_pending"
+msgstr "You already have a pending application for this certification."
+
+msgid "user_certifications.apply_expired_reapply"
+msgstr "Your certification has expired. You can reapply."
+
+msgid "user_certifications.apply_already_have"
+msgstr "You already have this certification."
+
+msgid "user_certifications.apply_reapply_allowed"
+msgstr "You can reapply for this certification."
+
+msgid "user_certifications.apply_process_title"
+msgstr "Application Process"
+
+msgid "user_certifications.apply_self_confirmable_info"
+msgstr "This certification allows self-confirmation for immediate activation."
+
+msgid "user_certifications.apply_standard_info"
+msgstr "Your application will be reviewed by a coordinator."
+
+msgid "user_certifications.apply_expiry_info"
+msgstr "If approved, the certification will be valid for %d days."
+
+msgid "user_certifications.apply_confirmation"
+msgstr "I confirm that the information in this application is correct."
+
+msgid "user_certifications.apply_confirmation_details"
+msgstr "Submitting false information may lead to revocation of this certification."
+
+msgid "user_certifications.submit_application"
+msgstr "Submit Application"
+
+msgid "user_certifications.quick_actions"
+msgstr "Quick Actions"
+
+msgid "user_certifications.self_confirmable_description"
+msgstr "You can confirm completion yourself without waiting for review."
+
+msgid "user_certifications.time_limited"
+msgstr "Time-limited"
+
+msgid "user_certifications.perpetual_description"
+msgstr "This certification does not expire."
+
+msgid "user_certifications.time_limited_description"
+msgstr "This certification expires after %d days."
+
+msgid "user_certifications.contact_trainer"
+msgstr "Contact Trainer"
+
+msgid "user_certifications.help_description"
+msgstr "Find guidance on how certifications work and how to apply."
+
+msgid "user_certifications.view_guide"
+msgstr "View Guide"
+
+msgid "user_certifications.my_applications"
+msgstr "My Applications"
+
+msgid "user_certifications.applications_pending_review"
+msgstr "Applications pending review"
+
+msgid "user_certifications.applied_on"
+msgstr "Applied on"
+
+msgid "user_certifications.withdraw"
+msgstr "Withdraw"
+
+msgid "user_certifications.applications_info_title"
+msgstr "About Applications"
+
+msgid "user_certifications.applications_info_description"
+msgstr "Applications are reviewed by coordinators. You will be notified once a decision is made."
+
+msgid "user_certifications.application_history"
+msgstr "Application History"
+
+msgid "user_certifications.recent_applications"
+msgstr "Recent Applications"
+
+msgid "user_certifications.total_applications"
+msgstr "Total Applications"
+
+msgid "user_certifications.pending"
+msgstr "Pending"
+
+msgid "user_certifications.approved"
+msgstr "Approved"
+
+msgid "user_certifications.rejected"
+msgstr "Rejected"
+
+msgid "user_certifications.cancelled"
+msgstr "Cancelled"
+
+msgid "user_certifications.application_approved_on"
+msgstr "Application approved on"
+
+msgid "user_certifications.self_confirmed_on"
+msgstr "Self-confirmed on"
+
+msgid "user_certifications.application_submitted_on"
+msgstr "Application submitted on"
+
+msgid "user_certifications.application_rejected_on"
+msgstr "Application rejected on"
+
+msgid "user_certifications.application_cancelled_on"
+msgstr "Application cancelled on"
+
+msgid "user_certifications.pending_for_days"
+msgstr "Pending for %d days"
+
+msgid "user_certifications.expires_on"
+msgstr "Expires on"
+
+msgid "user_certifications.view_full_history"
+msgstr "View Full History"
+
+msgid "user_certifications.stats.my_active"
+msgstr "My Active"
+
+msgid "user_certifications.stats.available"
+msgstr "Available"
+
+msgid "user_certifications.stats.self_confirmable"
+msgstr "Self-confirmable"
+
+msgid "user_certifications.filters"
+msgstr "Filters"
+
+msgid "user_certifications.clear_filters"
+msgstr "Clear Filters"
+
+msgid "user_certifications.search_help"
+msgstr "Search by certification name or description"
+
+msgid "user_certifications.my_status"
+msgstr "My Status"
+
+msgid "user_certifications.type"
+msgstr "Type"
+
+msgid "user_certifications.all_types"
+msgstr "All Types"
+
+msgid "user_certifications.availability"
+msgstr "Availability"
+
+msgid "user_certifications.all_available"
+msgstr "All Availability"
+
+msgid "user_certifications.available_to_apply"
+msgstr "Available to Apply"
+
+msgid "user_certifications.i_have"
+msgstr "I have"
+
+msgid "user_certifications.sort"
+msgstr "Sort"
+
+msgid "user_certifications.sort.title"
+msgstr "Title"
+
+msgid "user_certifications.sort.status"
+msgstr "Status"
+
+msgid "user_certifications.sort.type"
+msgstr "Type"
+
+msgid "user_certifications.apply_server_filters"
+msgstr "Apply Filters"
+
+msgid "user_certifications.quick_filters"
+msgstr "Quick Filters"
+
+msgid "user_certifications.self_confirmable_only"
+msgstr "Self-confirmable only"
+
+msgid "user_certifications.available_only"
+msgstr "Available only"
+
+msgid "user_certifications.expiring_only"
+msgstr "Expiring only"
+
+msgid "user_certifications.expired_only"
+msgstr "Expired only"
+
+msgid "user_certifications.certification_catalog"
+msgstr "Certification Catalog"
+
+msgid "user_certifications.certifications_available"
+msgstr "Certifications Available"
+
+msgid "user_certifications.no_certifications_available"
+msgstr "No certifications available"
+
+msgid "user_certifications.no_certifications_available_description"
+msgstr "There are currently no certifications available to you."
+
+msgid "user_certifications.certifications_showing"
+msgstr "Showing %d certifications"
+
+msgid "user_certifications.self_confirm_current_status"
+msgstr "Current Status"
+
+msgid "user_certifications.self_confirm_pending_info"
+msgstr "Your request is pending review. You will be notified once approved."
+
+msgid "user_certifications.self_confirm_expired_renew"
+msgstr "Your certification has expired. You can renew it now."
+
+msgid "user_certifications.self_confirm_valid_renew"
+msgstr "Your certification is active. You can renew it if needed."
+
+msgid "user_certifications.self_confirm_renewal_info"
+msgstr "You can renew an expired or revoked certification."
+
+msgid "user_certifications.self_confirm_process_title"
+msgstr "Self-Confirmation Process"
+
+msgid "user_certifications.self_confirm_process_info"
+msgstr "Confirm that you have completed this certification to activate it immediately."
+
+msgid "user_certifications.self_confirm_expiry_info"
+msgstr "Upon confirmation, the certification will be valid for %d days."
+
+msgid "user_certifications.self_confirm_responsibility_title"
+msgstr "Your Responsibility"
+
+msgid "user_certifications.self_confirm_responsibility_info"
+msgstr "By confirming, you state that you have truthfully completed the required training."
+
+msgid "user_certifications.self_confirm_accuracy_warning"
+msgstr "Providing inaccurate information may lead to revocation or disciplinary action."
+
+msgid "user_certifications.self_confirm_acknowledgment_details"
+msgstr "I understand that false statements may have consequences and agree to provide accurate information."
+
+msgid "user_certifications.confirm_self_certification"
+msgstr "Confirm Self-Certification"
+
+msgid "user_certifications.self_confirm_benefits"
+msgstr "Benefits"
+
+msgid "user_certifications.immediate_activation"
+msgstr "Immediate Activation"
+
+msgid "user_certifications.immediate_activation_desc"
+msgstr "Your certification becomes active right after confirmation."
+
+msgid "user_certifications.self_responsibility"
+msgstr "Self-Responsibility"
+
+msgid "user_certifications.self_responsibility_desc"
+msgstr "You are responsible for the correctness of your confirmation."
+
+msgid "user_certifications.valid_for_days"
+msgstr "Valid for %d days"
+
+msgid "user_certifications.renewal_required_desc"
+msgstr "You will need to renew this certification before it expires."
+
+msgid "user_certifications.alternative_options"
+msgstr "Alternative Options"
+
+msgid "user_certifications.alternative_options_desc"
+msgstr "If you prefer, you can submit a formal application or contact the trainer."
+
+msgid "user_certifications.self_confirm_help_desc"
+msgstr "Learn more about how self-confirmation works and when to use it."
+
+msgid "user_certifications.view_self_confirm_guide"
+msgstr "View Self-Confirmation Guide"
+
+msgid "department.badge.approved"
+msgstr "Member"
+
+msgid "department.badge.pending"
+msgstr "Pending"
+
+msgid "department.badge.denied"
+msgstr "Denied"
+
+msgid "certification.create.sucess"
+msgstr "Certification created"
+
+msgid "certification.create.fail"
+msgstr "Error creating the certification"
+
+msgid "certification.create.error"
+msgstr "Error creating the certification"
+
+msgid "validation.description.min"
+msgstr "Error: Description needs to be longer"
+
+msgid "certification.self_confirm.success"
+msgstr "Successfully self confirmed"
+
+msgid "certification.apply.success"
+msgstr "Successfully applied"
+
+msgid "certification.user.update.success"
+msgstr "Successfully updated user certification"
+
+msgid "certification.withdraw.success"
+msgstr "Successfully withdraw"
+
+msgid "nav.shift.info"
+msgstr "Next Shift"
+
+msgid "nav.language.info"
+msgstr "Language"
+
+msgid "nav.message.info"
+msgstr "Private Messages"
+
+# Backstage translations
+msgid "backstage.activity.by"
+msgstr "by"
+
+msgid "backstage.back_to_dashboard"
+msgstr "Back to Dashboard"
+
+msgid "backstage.back_to_search"
+msgstr "Back to Search"
+
+msgid "backstage.charts.loading"
+msgstr "Loading chart data..."
+
+msgid "backstage.coming_soon"
+msgstr "Coming Soon"
+
+msgid "backstage.created_at"
+msgstr "Created At"
+
+msgid "backstage.dashboard.error.message"
+msgstr "An error occurred while loading the dashboard."
+
+msgid "backstage.dashboard.error.title"
+msgstr "Dashboard Error"
+
+msgid "backstage.dashboard.title"
+msgstr "Backstage Dashboard"
+
+msgid "backstage.distribution.filter.date_from"
+msgstr "From Date"
+
+msgid "backstage.distribution.filter.date_to"
+msgstr "To Date"
+
+msgid "backstage.distribution.filter.distributor"
+msgstr "Distributor"
+
+msgid "backstage.distribution.filter.my_distributions"
+msgstr "Only My Distributions"
+
+msgid "backstage.distribution.filter.title"
+msgstr "Filter Distributions"
+
+msgid "backstage.distribution.filter.user"
+msgstr "User"
+
+msgid "backstage.distribution.filter.user_placeholder"
+msgstr "Search by name or email..."
+
+msgid "backstage.distribution.history.date"
+msgstr "Date"
+
+msgid "backstage.distribution.history.distributor"
+msgstr "Distributor"
+
+msgid "backstage.distribution.history.empty.filtered"
+msgstr "No distributions found matching your filters."
+
+msgid "backstage.distribution.history.empty.message"
+msgstr "No distributions have been made yet."
+
+msgid "backstage.distribution.history.empty.title"
+msgstr "No Distributions Found"
+
+msgid "backstage.distribution.history.hours"
+msgstr "Hours"
+
+msgid "backstage.distribution.history.item"
+msgstr "Item"
+
+msgid "backstage.distribution.history.notes"
+msgstr "Notes"
+
+msgid "backstage.distribution.history.title"
+msgstr "Distribution History"
+
+msgid "backstage.distribution.history.user"
+msgstr "User"
+
+msgid "backstage.distribution.history.you"
+msgstr "You"
+
+msgid "backstage.distribution.reports"
+msgstr "Reports"
+
+msgid "backstage.distribution.start_distributing"
+msgstr "Start Distribution"
+
+msgid "backstage.distribution.stats.today"
+msgstr "Today"
+
+msgid "backstage.distribution.stats.total"
+msgstr "Total"
+
+msgid "backstage.distribution.stats.unique_users"
+msgstr "Unique Users"
+
+msgid "backstage.distribution.stats.week"
+msgstr "This Week"
+
+msgid "backstage.distribution.title"
+msgstr "Distribution Center"
+
+msgid "backstage.distribution_stats.title"
+msgstr "Distribution Statistics"
+
+msgid "backstage.goodies.categories.back_to_list"
+msgstr "Back to Categories"
+
+msgid "backstage.goodies.categories.basic_info"
+msgstr "Basic Information"
+
+msgid "backstage.goodies.categories.create.first"
+msgstr "Create First Category"
+
+msgid "backstage.goodies.categories.create.submit"
+msgstr "Create Category"
+
+msgid "backstage.goodies.categories.create.title"
+msgstr "Create Category"
+
+msgid "backstage.goodies.categories.description"
+msgstr "Description"
+
+msgid "backstage.goodies.categories.description_help"
+msgstr "Optional description of this category"
+
+msgid "backstage.goodies.categories.description_placeholder"
+msgstr "Enter category description..."
+
+msgid "backstage.goodies.categories.details"
+msgstr "Category Details"
+
+msgid "backstage.goodies.categories.display_order"
+msgstr "Display Order"
+
+msgid "backstage.goodies.categories.display_order_help"
+msgstr "Lower numbers are displayed first"
+
+msgid "backstage.goodies.categories.empty.message"
+msgstr "No categories have been created yet."
+
+msgid "backstage.goodies.categories.empty.title"
+msgstr "No Categories Found"
+
+msgid "backstage.goodies.categories.help.display_order"
+msgstr "Categories with lower display order values appear first in lists."
+
+msgid "backstage.goodies.categories.help.organization"
+msgstr "Categories help organize your goodies into logical groups."
+
+msgid "backstage.goodies.categories.help.status"
+msgstr "Inactive categories and their items are hidden from distribution."
+
+msgid "backstage.goodies.categories.help.title"
+msgstr "Categories help organize your goodies"
+
+msgid "backstage.goodies.categories.is_active"
+msgstr "Active"
+
+msgid "backstage.goodies.categories.is_active_help"
+msgstr "Inactive categories are hidden from distribution"
+
+msgid "backstage.goodies.categories.items"
+msgstr "Items"
+
+msgid "backstage.goodies.categories.items_count"
+msgstr "Items Count"
+
+msgid "backstage.goodies.categories.more_actions"
+msgstr "More Actions"
+
+msgid "backstage.goodies.categories.name"
+msgstr "Category Name"
+
+msgid "backstage.goodies.categories.name_help"
+msgstr "A clear, descriptive name for this category"
+
+msgid "backstage.goodies.categories.name_placeholder"
+msgstr "Enter category name..."
+
+msgid "backstage.goodies.categories.order"
+msgstr "Order"
+
+msgid "backstage.goodies.categories.settings"
+msgstr "Category Settings"
+
+msgid "backstage.goodies.categories.show.title"
+msgstr "Category Details"
+
+msgid "backstage.goodies.categories.status"
+msgstr "Status"
+
+msgid "backstage.goodies.categories.title"
+msgstr "Goodies Categories"
+
+msgid "backstage.goodies.distributions.date"
+msgstr "Distribution Date"
+
+msgid "backstage.goodies.distributions.distributed_by"
+msgstr "Distributed By"
+
+msgid "backstage.goodies.distributions.empty.help"
+msgstr "Distributions will appear here once items are given out."
+
+msgid "backstage.goodies.distributions.empty.title"
+msgstr "No Distributions Yet"
+
+msgid "backstage.goodies.distributions.empty.message_for_item"
+msgstr "No distributions have been made for %s yet."
+
+msgid "backstage.goodies.distributions.notes"
+msgstr "Notes"
+
+msgid "backstage.goodies.distributions.system"
+msgstr "System"
+
+msgid "backstage.goodies.distributions.user"
+msgstr "Recipient"
+
+msgid "backstage.goodies.items.add_distribution"
+msgstr "Add Distribution"
+
+msgid "backstage.goodies.items.back_to_list"
+msgstr "Back to Items"
+
+msgid "backstage.goodies.items.basic_info"
+msgstr "Basic Information"
+
+msgid "backstage.goodies.items.category"
+msgstr "Category"
+
+msgid "backstage.goodies.items.category_help"
+msgstr "Select a category for organization"
+
+msgid "backstage.goodies.items.create.first"
+msgstr "Create First Item"
+
+msgid "backstage.goodies.items.create.submit"
+msgstr "Create Item"
+
+msgid "backstage.goodies.items.create.title"
+msgstr "Create Item"
+
+msgid "backstage.goodies.items.description"
+msgstr "Description"
+
+msgid "backstage.goodies.items.description_help"
+msgstr "Optional description of this item"
+
+msgid "backstage.goodies.items.description_placeholder"
+msgstr "Enter item description..."
+
+msgid "backstage.goodies.items.details"
+msgstr "Item Details"
+
+msgid "backstage.goodies.items.display_order"
+msgstr "Display Order"
+
+msgid "backstage.goodies.items.display_order_help"
+msgstr "Lower numbers are displayed first"
+
+msgid "backstage.goodies.items.distributed"
+msgstr "Distributed"
+
+msgid "backstage.goodies.items.distributions"
+msgstr "Distribution History"
+
+msgid "backstage.goodies.items.empty.filtered"
+msgstr "No items found matching your filters."
+
+msgid "backstage.goodies.items.empty.message"
+msgstr "No items have been created yet."
+
+msgid "backstage.goodies.items.empty.title"
+msgstr "No Items Found"
+
+msgid "backstage.goodies.items.filter.title"
+msgstr "Filter Items"
+
+msgid "backstage.goodies.items.is_active"
+msgstr "Active"
+
+msgid "backstage.goodies.items.is_active_help"
+msgstr "Inactive items are hidden from distribution"
+
+msgid "backstage.goodies.items.more_actions"
+msgstr "More Actions"
+
+msgid "backstage.goodies.items.name"
+msgstr "Item Name"
+
+msgid "backstage.goodies.items.name_help"
+msgstr "A clear, descriptive name for this item"
+
+msgid "backstage.goodies.items.name_placeholder"
+msgstr "Enter item name..."
+
+msgid "backstage.goodies.items.no_categories"
+msgstr "No categories available"
+
+msgid "backstage.goodies.items.no_categories_help"
+msgstr "Create a category first before adding items"
+
+msgid "backstage.goodies.items.no_category"
+msgstr "No Category"
+
+msgid "backstage.goodies.items.order"
+msgstr "Order"
+
+msgid "backstage.goodies.items.quick_actions"
+msgstr "Quick Actions"
+
+msgid "backstage.goodies.items.required_hours"
+msgstr "Required Hours"
+
+msgid "backstage.goodies.items.required_hours_help"
+msgstr "Minimum volunteer hours required to receive this item"
+
+msgid "backstage.goodies.items.max_per_person"
+msgstr "Maximum per Person"
+
+msgid "backstage.goodies.items.max_per_person_help"
+msgstr "Maximum quantity one person can receive. Leave empty for no limit."
+
+msgid "backstage.goodies.items.no_limit"
+msgstr "No limit"
+
+msgid "backstage.goodies.items.certifications"
+msgstr "Certification Requirements"
+
+msgid "backstage.goodies.items.required_certifications"
+msgstr "Required Certifications"
+
+msgid "backstage.goodies.items.required_certifications_help"
+msgstr "Select certifications that users must have completed to receive this item"
+
+msgid "backstage.goodies.items.optional"
+msgstr "optional"
+
+msgid "backstage.goodies.items.max_limit"
+msgstr "max"
+
+msgid "backstage.goodies.items.certifications_required"
+msgstr "Certifications Required"
+
+msgid "backstage.goodies.items.certifications_required_help"
+msgstr "Users must have all of the following certifications to receive this item:"
+
+msgid "backstage.goodies.items.required_hours_min"
+msgstr "Minimum Required Hours"
+
+msgid "backstage.goodies.items.requirements"
+msgstr "Requirements"
+
+msgid "backstage.goodies.items.select_category"
+msgstr "Select Category"
+
+msgid "backstage.goodies.items.show.title"
+msgstr "Item Details"
+
+msgid "backstage.goodies.items.status"
+msgstr "Status"
+
+msgid "backstage.goodies.items.status_settings"
+msgstr "Status Settings"
+
+msgid "backstage.goodies.items.title"
+msgstr "Goodies Items"
+
+msgid "backstage.goodies.items.uuid"
+msgstr "UUID"
+
+msgid "backstage.goodies.status.active"
+msgstr "Active"
+
+msgid "backstage.goodies.status.inactive"
+msgstr "Inactive"
+
+msgid "backstage.hours_stats.title"
+msgstr "Hours Statistics"
+
+msgid "backstage.kpi.distributions_today"
+msgstr "Distributions Today"
+
+msgid "backstage.kpi.distributions_week"
+msgstr "Distributions This Week"
+
+msgid "backstage.kpi.eligible_users"
+msgstr "Eligible Users"
+
+msgid "backstage.kpi.pending_recalc"
+msgstr "Pending Recalculation"
+
+msgid "backstage.kpi.qualified_users"
+msgstr "Qualified Users"
+
+msgid "backstage.kpi.total_hours"
+msgstr "Total Hours"
+
+msgid "backstage.loading"
+msgstr "Loading..."
+
+msgid "backstage.qualification.available_goodies"
+msgstr "Available Goodies"
+
+msgid "backstage.qualification.calculation_help"
+msgstr "Hours are calculated from completed shifts and may take time to update."
+
+msgid "backstage.qualification.calculation_note"
+msgstr "Hour Calculation"
+
+msgid "backstage.qualification.certifications"
+msgstr "Certifications"
+
+msgid "backstage.qualification.clear_selection"
+msgstr "Clear Selection"
+
+msgid "backstage.qualification.confirm.items"
+msgstr "Selected Items"
+
+msgid "backstage.qualification.confirm.message"
+msgstr "Please confirm you want to distribute the following items:"
+
+msgid "backstage.qualification.confirm.user"
+msgstr "User"
+
+msgid "backstage.qualification.eligible"
+msgstr "Eligible"
+
+msgid "backstage.qualification.email"
+msgstr "Email"
+
+msgid "backstage.qualification.hours_breakdown"
+msgstr "Hours Breakdown"
+
+msgid "backstage.qualification.hours_summary"
+msgstr "Hours Summary"
+
+msgid "backstage.qualification.insufficient_permissions.message"
+msgstr "You don't have permission to distribute goodies."
+
+msgid "backstage.qualification.insufficient_permissions.title"
+msgstr "Insufficient Permissions"
+
+msgid "backstage.qualification.mobile"
+msgstr "Mobile"
+
+msgid "backstage.qualification.no_goodies.all_received"
+msgstr "This user has already received all available goodies."
+
+msgid "backstage.qualification.no_goodies.no_hours"
+msgstr "This user doesn't have enough volunteer hours for any goodies."
+
+msgid "backstage.qualification.no_goodies.title"
+msgstr "No Available Goodies"
+
+msgid "backstage.qualification.no_selection"
+msgstr "No items selected"
+
+msgid "backstage.qualification.not_eligible"
+msgstr "Not Eligible"
+
+msgid "backstage.qualification.notes"
+msgstr "Distribution Notes"
+
+msgid "backstage.qualification.notes_help"
+msgstr "Optional notes about this distribution"
+
+msgid "backstage.qualification.notes_placeholder"
+msgstr "Add any relevant notes..."
+
+msgid "backstage.qualification.previous_distributions"
+msgstr "Previous Distributions"
+
+msgid "backstage.qualification.selected_single"
+msgstr "Selected"
+
+msgid "backstage.qualification.status"
+msgstr "Status"
+
+msgid "backstage.qualification.submit"
+msgstr "Distribute Selected Items"
+
+msgid "backstage.qualification.title"
+msgstr "User Qualification"
+
+msgid "backstage.qualification.total"
+msgstr "Total"
+
+msgid "backstage.qualification.total_hours"
+msgstr "Total Hours"
+
+msgid "backstage.qualification.user_info"
+msgstr "User Information"
+
+msgid "backstage.qualification.user_not_found.message"
+msgstr "The requested user could not be found."
+
+msgid "backstage.qualification.user_not_found.title"
+msgstr "User Not Found"
+
+msgid "backstage.qualification.validation.no_selection"
+msgstr "Please select at least one item to distribute."
+
+msgid "backstage.recent_activity.empty"
+msgstr "No recent distributions"
+
+msgid "backstage.recent_activity.title"
+msgstr "Recent Activity"
+
+msgid "backstage.recent_activity.view_all"
+msgstr "View All"
+
+msgid "backstage.services."
+msgstr "Service"
+
+msgid "backstage.status."
+msgstr "Status"
+
+msgid "backstage.system_status.error"
+msgstr "Error loading status"
+
+msgid "backstage.system_status.loading"
+msgstr "Loading system status..."
+
+msgid "backstage.system_status.title"
+msgstr "System Status"
+
+msgid "backstage.updated_at"
+msgstr "Updated At"
+
+msgid "backstage.users.certifications"
+msgstr "Certifications"
+
+msgid "backstage.users.details.basic_info"
+msgstr "Basic Information"
+
+msgid "backstage.users.details.breakdown"
+msgstr "Hours Breakdown"
+
+msgid "backstage.users.details.error.message"
+msgstr "Could not load user details."
+
+msgid "backstage.users.details.error.network"
+msgstr "Network error occurred while loading user details."
+
+msgid "backstage.users.details.error.title"
+msgstr "Error Loading Details"
+
+msgid "backstage.users.details.no_breakdown"
+msgstr "No detailed breakdown available."
+
+msgid "backstage.users.details.title"
+msgstr "User Details"
+
+msgid "backstage.users.eligible_hours"
+msgstr "Eligible Hours"
+
+msgid "backstage.users.last_calculated"
+msgstr "Last Calculated"
+
+msgid "backstage.users.previous_distributions"
+msgstr "Previous Distributions"
+
+msgid "backstage.users.qualify.title"
+msgstr "Qualification Check"
+
+msgid "backstage.users.search.clear_filters"
+msgstr "Clear Filters"
+
+msgid "backstage.users.search.filter.title"
+msgstr "Filter Options"
+
+msgid "backstage.users.search.help"
+msgstr "Search by name, email, nickname, badge number, or digital-id URL"
+
+msgid "backstage.users.search.hours_max"
+msgstr "Maximum Hours"
+
+msgid "backstage.users.search.hours_max_help"
+msgstr "Show users with less than this many hours"
+
+msgid "backstage.users.search.hours_min"
+msgstr "Minimum Hours"
+
+msgid "backstage.users.search.hours_min_help"
+msgstr "Show users with at least this many hours"
+
+msgid "backstage.users.search.no_results.empty"
+msgstr "Try adjusting your search terms or filters."
+
+msgid "backstage.users.search.no_results.filtered"
+msgstr "No users match your current filters."
+
+msgid "backstage.users.search.no_results.title"
+msgstr "No Users Found"
+
+msgid "backstage.users.search.placeholder"
+msgstr "Search users..."
+
+msgid "backstage.users.search.query"
+msgstr "Search Query"
+
+msgid "backstage.users.search.results.filtered"
+msgstr "Showing filtered results"
+
+msgid "backstage.users.search.results.none"
+msgstr "No results"
+
+msgid "backstage.users.search.submit"
+msgstr "Search Users"
+
+msgid "backstage.users.search.title"
+msgstr "User Search"
+
+msgid "backstage.users.status.arrived"
+msgstr "Arrived"
+
+msgid "backstage.users.status.not_arrived"
+msgstr "Not Arrived"
+
+msgid "backstage.users.total_hours"
+msgstr "Total Hours"
+
+msgid "backstage.users.view_details"
+msgstr "View Details"
+
+msgid "backstage.users.view_hours"
+msgstr "View Hours"
+
+# Additional form translations used in backstage
+msgid "form.back"
+msgstr "Back"
+
+msgid "form.close"
+msgstr "Close"
+
+msgid "form.filter"
+msgstr "Filter"
+
+msgid "form.never"
+msgstr "Never"
+
+msgid "form.no_description"
+msgstr "No description"
+
+msgid "form.no_notes"
+msgstr "No notes"
+
+msgid "form.print"
+msgstr "Print"
+
+# Additional backstage translations
+msgid "backstage.goodies.items.updated"
+msgstr "Item updated successfully"
+
+msgid "backstage.goodies.items.update_error"
+msgstr "Error updating item"
+
+msgid "backstage.goodies.items.deleted"
+msgstr "Item deleted successfully"
+
+msgid "backstage.goodies.items.delete_failed"
+msgstr "Failed to delete item"
+
+msgid "backstage.goodies.items.delete_error"
+msgstr "Error deleting item"
+
+msgid "backstage.goodies.items.not_found"
+msgstr "Item not found"
+
+msgid "backstage.goodies.categories.updated"
+msgstr "Category updated successfully"
+
+msgid "backstage.goodies.categories.update_error"
+msgstr "Error updating category"
+
+msgid "backstage.goodies.categories.deleted"
+msgstr "Category deleted successfully"
+
+msgid "backstage.goodies.categories.delete_failed"
+msgstr "Failed to delete category"
+
+msgid "backstage.goodies.categories.delete_error"
+msgstr "Error deleting category"
+
+msgid "backstage.goodies.categories.not_found"
+msgstr "Category not found"
+
+msgid "backstage.goodies.categories.uuid"
+msgstr "UUID"
+
+msgid "backstage.goodies.categories.created"
+msgstr "Category created successfully"
+
+msgid "backstage.goodies.categories.create_error"
+msgstr "Error creating category"
+
+msgid "backstage.goodies.items.created"
+msgstr "Item created successfully"
+
+msgid "backstage.goodies.items.create_error"
+msgstr "Error creating item"
+
+msgid "backstage.users.badge"
+msgstr "Badge"
+
+msgid "backstage.users.id"
+msgstr "User ID"
+
+msgid "backstage.users.status"
+msgstr "Status"
+
+msgid "backstage.users.active"
+msgstr "Active"
+
+msgid "backstage.users.inactive"
+msgstr "Inactive"
+
+msgid "backstage.users.registered"
+msgstr "Registered"
+
+msgid "backstage.users.search.results.found"
+msgstr "Found %s user(s)"
+
+msgid "backstage.search.empty_criteria"
+msgstr "Please enter search criteria"
+
+msgid "backstage.search.error"
+msgstr "An error occurred during search"
+
+# Goodies Profile Page Translations
+msgid "backstage.users.goodies.title"
+msgstr "Goodies Profile"
+
+msgid "backstage.users.back_to_search"
+msgstr "Back to Search"
+
+msgid "backstage.users.information"
+msgstr "User Information"
+
+msgid "backstage.users.hours.title"
+msgstr "Hours Calculation"
+
+msgid "backstage.users.hours.total"
+msgstr "Total Hours"
+
+msgid "backstage.users.hours.day_shifts"
+msgstr "Day Shifts"
+
+msgid "backstage.users.hours.night_shifts"
+msgstr "Night Shifts"
+
+msgid "backstage.users.hours.worklog"
+msgstr "Worklog Hours"
+
+msgid "backstage.users.hours.freeload_penalty"
+msgstr "Freeload Penalty"
+
+msgid "backstage.users.hours.calculated_at"
+msgstr "Calculated at"
+
+msgid "backstage.users.shifts.completed"
+msgstr "Completed"
+
+msgid "backstage.users.shifts.night"
+msgstr "Night"
+
+msgid "backstage.users.shifts.freeload"
+msgstr "Freeload"
+
+msgid "backstage.users.goodies.available"
+msgstr "Available Goodies"
+
+msgid "backstage.users.goodies.history"
+msgstr "Distribution History"
+
+msgid "backstage.users.goodies.no_goodies_available"
+msgstr "No Goodies Available"
+
+msgid "backstage.users.goodies.no_goodies_message"
+msgstr "There are currently no goodies configured in the system."
+
+msgid "backstage.goodies.eligible"
+msgstr "Eligible"
+
+msgid "backstage.goodies.not_eligible"
+msgstr "Not Eligible"
+
+msgid "backstage.goodies.hours_required"
+msgstr "Hours Required"
+
+msgid "backstage.goodies.max_per_person"
+msgstr "Max per person"
+
+msgid "backstage.goodies.distribute"
+msgstr "Distribute"
+
+msgid "backstage.goodies.notes_optional"
+msgstr "Notes (optional)"
+
+msgid "backstage.goodies.last_delivered"
+msgstr "Last delivered"
+
+msgid "backstage.goodies.item"
+msgstr "Item"
+
+msgid "backstage.goodies.quantity"
+msgstr "Quantity"
+
+msgid "backstage.goodies.distributed_by"
+msgstr "Distributed By"
+
+msgid "backstage.goodies.distributed_at"
+msgstr "Distributed At"
+
+msgid "backstage.goodies.notes"
+msgstr "Notes"
+
+msgid "backstage.goodies.no_notes"
+msgstr "No notes"
+
+# Notification messages for goodies distribution
+msgid "backstage.goodies.profile.error"
+msgstr "Error loading goodies profile"
+
+msgid "backstage.goodies.distribute.insufficient_permissions"
+msgstr "Insufficient permissions to distribute goodies"
+
+msgid "backstage.goodies.distribute.not_eligible"
+msgstr "User is not eligible for this goodie"
+
+msgid "backstage.goodies.distribute.success"
+msgstr "Goodie distributed successfully"
+
+msgid "backstage.goodies.distribute.error"
+msgstr "Error distributing goodie"
+
+# New goodies optimization feature translations
+msgid "backstage.goodies.qualified_items"
+msgstr "Qualified Goodies"
+
+msgid "backstage.goodies.qualified_description"  
+msgstr "Items you can claim right now with your current hours"
+
+msgid "backstage.goodies.next_to_claim"
+msgstr "Next Items to Claim"
+
+msgid "backstage.goodies.next_to_claim_description"
+msgstr "Items you will qualify for with more hours"
+
+msgid "backstage.goodies.already_claimed"
+msgstr "Already Claimed"
+
+msgid "backstage.goodies.already_claimed_description"
+msgstr "Items you have already received"
+
+msgid "backstage.goodies.select_all"
+msgstr "Select All"
+
+msgid "backstage.goodies.select"
+msgstr "Select"
+
+msgid "backstage.goodies.distribute_selected"
+msgstr "Distribute Selected Items"
+
+msgid "backstage.goodies.required_hours"
+msgstr "Required Hours"
+
+msgid "backstage.goodies.category"
+msgstr "Category"
+
+msgid "backstage.goodies.individual"
+msgstr "Individual"
+
+msgid "backstage.goodies.distribute_one"
+msgstr "Distribute One"
+
+msgid "backstage.goodies.global_notes"
+msgstr "Notes for All Items"
+
+msgid "backstage.goodies.hours_gap"
+msgstr "Hours Gap"
+
+msgid "backstage.goodies.progress"
+msgstr "Progress"
+
+msgid "backstage.goodies.quantity_claimed"
+msgstr "Quantity Claimed"
+
+msgid "backstage.goodies.last_distributed"
+msgstr "Last Distributed"
+
+msgid "backstage.goodies.summary"
+msgstr "Summary"
+
+msgid "backstage.goodies.no_goodies_available"
+msgstr "No Goodies Available"
+
+msgid "backstage.goodies.no_goodies_message"
+msgstr "This user has no available goodies at this time"
+

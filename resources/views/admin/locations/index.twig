@@ -46,6 +46,10 @@
                                         <a href="{{ url('/locations', {'action': 'view', 'location_id': location.id}) }}">
                                             {{ location.name }}
                                         </a>
+                                        {% if location.staff_only %}
+{#                                             <br> #}
+                                            <span class="badge bg-primary">Staff Only</span>
+                                        {% endif %}
                                     </td>
 
                                     <td>{{ m.iconBool(location.dect) }}</td>
@@ -62,13 +66,21 @@
                                             <form method="post" class="ps-1">
                                                 {{ csrf() }}
                                                 {{ f.hidden('id', location.id) }}
-                                                {{ f.delete(null, {
-                                                    'size': 'sm',
-                                                    'confirm_title': __('location.delete.title', [location.name|e]),
-                                                    'confirm_button_text': __('form.delete'),
-                                                }) }}
+                                                {% if location.shifts_count > 0 %}
+                                                    {{ f.delete(null, {
+                                                        'size': 'sm',
+                                                        'confirm_title': __('location.delete.title', [location.name|e]),
+                                                        'confirm_button_text': __('form.delete'),
+                                                        'double_confirm_text': __('location.delete.double_confirm', [location.shifts_count]),
+                                                    }) }}
+                                                {% else %}
+                                                    {{ f.delete(null, {
+                                                        'size': 'sm',
+                                                        'confirm_title': __('location.delete.title', [location.name|e]),
+                                                        'confirm_button_text': __('form.delete'),
+                                                    }) }}
+                                                {% endif %}
                                             </form>
-
                                         </div>
                                     </td>
                                 </tr>

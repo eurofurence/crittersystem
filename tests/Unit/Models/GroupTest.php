@@ -22,6 +22,7 @@ class GroupTest extends ModelTest
 
         $model = new Group();
         $model->name = 'Some Group';
+        $model->slug = 'some-group';
         $model->save();
 
         $model->privileges()->attach($privilege1);
@@ -46,6 +47,7 @@ class GroupTest extends ModelTest
 
         $model = new Group();
         $model->name = 'Some Group';
+        $model->slug = 'some-group';
         $model->save();
 
         $model->users()->attach($user1);
@@ -55,5 +57,36 @@ class GroupTest extends ModelTest
         $savedModel = Group::all()->last();
         $this->assertEquals($user1->name, $savedModel->users[0]->name);
         $this->assertEquals($user2->name, $savedModel->users[1]->name);
+    }
+
+    /**
+     * @covers \Engelsystem\Models\Group::generateUniqueSlug
+     */
+    public function testGenerateUniqueSlug(): void
+    {
+        // Test basic slug generation
+        $slug = Group::generateUniqueSlug('Test Group');
+        $this->assertEquals('test-group', $slug);
+
+        // Create a group with the generated slug
+        $group = new Group();
+        $group->name = 'Test Group';
+        $group->slug = $slug;
+        $group->save();
+
+        // Test generating a slug for the same name (should add a counter)
+        $newSlug = Group::generateUniqueSlug('Test Group');
+        $this->assertEquals('test-group-1', $newSlug);
+
+        // Test excluding the current group when generating a slug
+        $updatedSlug = Group::generateUniqueSlug('Test Group', $group->id);
+        $this->assertEquals('test-group', $updatedSlug);
+
+        // Test with special characters
+        $specialSlug = Group::generateUniqueSlug('Test & Group!');
+        $this->assertEquals('test-group', $specialSlug);
+
+        // Clean up
+        $group->delete();
     }
 }

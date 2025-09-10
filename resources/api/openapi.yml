@@ -1,9 +1,10 @@
 openapi: 3.0.3
 
 info:
-  version: 0.1.0-beta
-  title: Engelsystem
+  version: 1.0.0-beta
+  title: CritterSystem API
   description: >
+    The CritterSystem API provides comprehensive access to event management functionality.
     This API is as stable as a **beta** version might be.
     It could burst into flames and morph into a monster at any second!
     (But we try to keep it somewhat consistent, at least during events).
@@ -16,9 +17,16 @@ info:
 
 servers:
   - url: /api/v0-beta
-    description: This server
+    description: This server (Legacy v0-beta)
+  - url: /api/v2
+    description: This server (v2)
   - url: '{host}/api/v0-beta'
-    description: Engelsystem instance to use
+    description: CritterSystem instance to use (Legacy v0-beta)
+    variables:
+      host:
+        default: http://localhost:5080
+  - url: '{host}/api/v2'
+    description: CritterSystem instance to use (v2)
     variables:
       host:
         default: http://localhost:5080
@@ -26,8 +34,8 @@ servers:
 tags:
   - name: api
     description: API related
-  - name: angel type
-    description: Angel types
+  - name: critter type
+    description: Critter types (formerly angel types)
   - name: event
     description: Event information
   - name: location
@@ -40,6 +48,16 @@ tags:
     description: Shift types
   - name: user
     description: Users
+  - name: shift management
+    description: Shift Manager V2 API
+  - name: digital id
+    description: Digital ID system
+  - name: certification
+    description: User certifications system
+  - name: department
+    description: Department management
+  - name: authentication
+    description: Authentication and authorization
 
 security:
   - bearer-auth: [ ]
@@ -83,7 +101,7 @@ components:
             $ref: '#/components/schemas/Error'
 
   schemas:
-    AngelType:
+    CritterType:
       type: object
       properties:
         id:
@@ -91,26 +109,26 @@ components:
           example: 42
         name:
           type: string
-          example: Angel
+          example: Helper
         description:
           type: string
-          example: Standard angel type, without further requirements
+          example: Standard critter type, without further requirements
         restricted:
           type: boolean
           example: false
-          description: True if the angel type requires an introduction
+          description: True if the critter type requires an introduction
         url:
           type: string
-          example: https://example.com/angeltype/42
-          description: Link to the page of the given angel type.
+          example: https://example.com/crittertype/42
+          description: Link to the page of the given critter type.
       required:
         - id
         - name
         - description
         - url
-    UserAngelType:
+    UserCritterType:
       allOf:
-        - $ref: '#/components/schemas/AngelType'
+        - $ref: '#/components/schemas/CritterType'
         - type: object
           properties:
             confirmed:
@@ -118,11 +136,11 @@ components:
               example: true
               description: >
                 If the user is confirmed
-                (either by the angel type not requiring confirmation, being a supporter or being confirmed by one).
+                (either by the critter type not requiring confirmation, being a supporter or being confirmed by one).
             supporter:
               type: boolean
               example: false
-              description: If the user is a supporter of the angel type.
+              description: If the user is a supporter of the critter type.
           required:
             - confirmed
             - supporter
@@ -196,25 +214,25 @@ components:
         - name
         - description
         - url
-    NeededAngelType:
+    NeededCritterType:
       type: object
       properties:
         entries:
           type: array
           items:
             $ref: '#/components/schemas/ShiftEntry'
-        angel_type:
+        critter_type:
           $ref: '#/components/schemas/Reference'
         needs:
           type: integer
           description: >
-            Number of users needed for the shift of the given angel type.
+            Number of users needed for the shift of the given critter type.
             Will be greater than users count when not full, less when overbooked
             or 0 when only additional users with given type have been added.
           example: 3
       required:
         - entries
-        - angel_type
+        - critter_type
         - needs
     Shift:
       type: object
@@ -244,11 +262,11 @@ components:
           $ref: '#/components/schemas/DateTimeOptional'
         updated_at:
           $ref: '#/components/schemas/DateTimeOptional'
-        needed_angel_types:
+        needed_critter_types:
           type: array
-          description: Needed angel types and user entries, can be empty (for example on Schedule import of unused room)
+          description: Needed critter types and user entries, can be empty (for example on Schedule import of unused room)
           items:
-            $ref: '#/components/schemas/NeededAngelType'
+            $ref: '#/components/schemas/NeededCritterType'
         url:
           type: string
           example: https://example.com/shifts/42
@@ -263,7 +281,7 @@ components:
         - shift_type
         - created_at
         - updated_at
-        - needed_angel_types
+        - needed_critter_types
         - url
     ShiftEntry:
       type: object
@@ -374,12 +392,224 @@ components:
             arrived:
               type: boolean
               example: true
+          required:
+            - email
+            - tshirt_size
+            - dates
+            - language
+            - arrived
+
+    Certification:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+        name:
+          type: string
+          example: First Aid Training
+        description:
+          type: string
+          example: Basic first aid and medical emergency response training
+        category:
+          type: string
+          example: medical
+        is_active:
+          type: boolean
+          example: true
+        requirements:
+          type: object
+          properties:
+            min_age:
+              type: integer
+              nullable: true
+              example: 18
+            requires_training:
+              type: boolean
+              example: true
+            valid_period_months:
+              type: integer
+              nullable: true
+              example: 24
+          required:
+            - requires_training
+        created_at:
+          $ref: '#/components/schemas/DateTime'
+        updated_at:
+          $ref: '#/components/schemas/DateTimeOptional'
       required:
-        - email
-        - tshirt_size
-        - dates
-        - language
-        - arrived
+        - uuid
+        - name
+        - description
+        - category
+        - is_active
+        - requirements
+        - created_at
+        - updated_at
+
+    UserCertification:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 42
+        user:
+          $ref: '#/components/schemas/Reference'
+        certification:
+          $ref: '#/components/schemas/Reference'
+        status:
+          type: string
+          enum: [active, expired, revoked, pending, applied]
+          example: active
+        issued_at:
+          $ref: '#/components/schemas/DateTimeOptional'
+        expires_at:
+          $ref: '#/components/schemas/DateTimeOptional'
+        revoked_at:
+          $ref: '#/components/schemas/DateTimeOptional'
+        notes:
+          type: string
+          nullable: true
+          example: Completed advanced training module
+        verified_by:
+          $ref: '#/components/schemas/Reference'
+        created_at:
+          $ref: '#/components/schemas/DateTime'
+        updated_at:
+          $ref: '#/components/schemas/DateTimeOptional'
+      required:
+        - id
+        - user
+        - certification
+        - status
+        - created_at
+        - updated_at
+
+    Department:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+        name:
+          type: string
+          example: Security Team
+        description:
+          type: string
+          example: Event security and safety coordination
+        contact_info:
+          type: object
+          properties:
+            email:
+              type: string
+              nullable: true
+              example: security@example.com
+            phone:
+              type: string
+              nullable: true
+              example: +1234567890
+        is_active:
+          type: boolean
+          example: true
+        created_at:
+          $ref: '#/components/schemas/DateTime'
+        updated_at:
+          $ref: '#/components/schemas/DateTimeOptional'
+      required:
+        - uuid
+        - name
+        - description
+        - is_active
+        - created_at
+        - updated_at
+
+    ShiftApplication:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 42
+        shift:
+          $ref: '#/components/schemas/Reference'
+        user:
+          $ref: '#/components/schemas/Reference'
+        critter_type:
+          $ref: '#/components/schemas/Reference'
+        status:
+          type: string
+          enum: [pending, approved, rejected, cancelled]
+          example: pending
+        applied_at:
+          $ref: '#/components/schemas/DateTime'
+        reviewed_at:
+          $ref: '#/components/schemas/DateTimeOptional'
+        reviewed_by:
+          $ref: '#/components/schemas/Reference'
+        notes:
+          type: string
+          nullable: true
+          example: Previous experience in this area
+      required:
+        - id
+        - shift
+        - user
+        - critter_type
+        - status
+        - applied_at
+
+    DigitalId:
+      type: object
+      properties:
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+        expires_at:
+          $ref: '#/components/schemas/DateTime'
+        qr_code_url:
+          type: string
+          example: https://example.com/digital-id/qr/token123
+      required:
+        - token
+        - expires_at
+        - qr_code_url
+
+    WorkLog:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 42
+        user:
+          $ref: '#/components/schemas/Reference'
+        shift:
+          $ref: '#/components/schemas/Reference'
+        hours:
+          type: number
+          format: float
+          example: 4.5
+        comment:
+          type: string
+          nullable: true
+          example: Excellent work on setup
+        worked_at:
+          $ref: '#/components/schemas/DateTime'
+        created_by:
+          $ref: '#/components/schemas/Reference'
+        created_at:
+          $ref: '#/components/schemas/DateTime'
+        updated_at:
+          $ref: '#/components/schemas/DateTimeOptional'
+      required:
+        - id
+        - user
+        - shift
+        - hours
+        - worked_at
+        - created_by
+        - created_at
+        - updated_at
 
     DateTime:
       type: string
@@ -403,21 +633,21 @@ components:
         api:
           type: string
           description: API version for easier version detection
-          example: 1.2.3
+          example: 1.0.0
         spec:
           type: string
           description: Link to OpenAPI specification
-          example: https://galactic-help.example/api/v1.2.3/openapi
+          example: https://event-help.example/api/v1.0.0/openapi
         name:
           type: string
           example: 42. Galactic Conglomeration Congress
         app_name:
           type: string
-          example: Engelsystem
+          example: CritterSystem
         url:
           type: string
           description: URL to be used when linking to the application
-          example: https://galactic-help.example
+          example: https://event-help.example
         timezone:
           type: string
           example: Europe/Berlin
@@ -473,11 +703,14 @@ components:
         - id
 
 paths:
+  # Legacy v0-beta endpoints (critter types formerly angel types)
   /angeltypes:
     get:
       tags:
-        - angel type
-      summary: Get a list of angel types
+        - critter type
+      summary: Get a list of critter types (legacy endpoint)
+      deprecated: true
+      description: Legacy endpoint, use /crittertypes instead
       responses:
         '200':
           description: Ok
@@ -489,26 +722,107 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/AngelType'
+                      $ref: '#/components/schemas/CritterType'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+
+  /crittertypes:
+    get:
+      tags:
+        - critter type
+      summary: Get a list of critter types
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CritterType'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+
+  /crittertypes/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: The critter type identifier
+        example: 42
+        schema:
+          type: integer
+    get:
+      tags:
+        - critter type
+      summary: Get a specific critter type
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/CritterType'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
 
   /angeltypes/{id}/shifts:
     parameters:
       - name: id
         in: path
         required: true
-        description: The angel type identifier
+        description: The critter type identifier (legacy)
         example: 42
         schema:
           type: integer
     get:
       tags:
-        - angel type
+        - critter type
         - shift
-      summary: Get all shifts of the requested angel type
+      summary: Get all shifts of the requested critter type (legacy endpoint)
+      deprecated: true
+      description: Legacy endpoint, use /crittertypes/{id}/shifts instead
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Shift'
+
+  /crittertypes/{id}/shifts:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: The critter type identifier
+        example: 42
+        schema:
+          type: integer
+    get:
+      tags:
+        - critter type
+        - shift
+      summary: Get all shifts of the requested critter type
       responses:
         '200':
           description: Ok
@@ -701,9 +1015,11 @@ paths:
             - type: integer
     get:
       tags:
-        - angel type
+        - critter type
         - user
-      summary: Get the users angel types
+      summary: Get the users critter types (legacy endpoint)
+      deprecated: true
+      description: Legacy endpoint, use /users/{id}/crittertypes instead
       responses:
         '200':
           description: Ok
@@ -715,7 +1031,42 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/UserAngelType'
+                      $ref: '#/components/schemas/UserCritterType'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /users/{id}/crittertypes:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: The user identifier or `self`
+        example: 42
+        schema:
+          oneOf:
+            - type: string
+            - type: integer
+    get:
+      tags:
+        - critter type
+        - user
+      summary: Get the users critter types
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserCritterType'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '403':
@@ -794,5 +1145,236 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '403':
           $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  # Shift Manager V2 API endpoints
+  /v2/shift-manager/dates:
+    get:
+      tags:
+        - shift management
+      summary: Get available shift dates
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: string
+                      format: date
+                      example: "2023-05-23"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+
+  /v2/shift-manager/shifts:
+    get:
+      tags:
+        - shift management
+      summary: Get shifts for management interface
+      parameters:
+        - name: date
+          in: query
+          description: Filter by date
+          schema:
+            type: string
+            format: date
+            example: "2023-05-23"
+        - name: location_id
+          in: query
+          description: Filter by location
+          schema:
+            type: integer
+            example: 42
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Shift'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+
+  /v2/shift-manager/apply:
+    post:
+      tags:
+        - shift management
+      summary: Apply for a shift
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                shift_id:
+                  type: integer
+                  example: 42
+                critter_type_id:
+                  type: integer
+                  example: 1
+              required:
+                - shift_id
+                - critter_type_id
+      responses:
+        '201':
+          description: Application created successfully
+        '400':
+          description: Bad request - invalid data
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+
+  # Digital ID System endpoints
+  /digital-id:
+    get:
+      tags:
+        - digital id
+      summary: Get user's digital ID information
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/DigitalId'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /digital-id/refresh:
+    post:
+      tags:
+        - digital id
+      summary: Refresh digital ID token
+      responses:
+        '200':
+          description: Token refreshed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/DigitalId'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  # Certification System endpoints
+  /user/certifications:
+    get:
+      tags:
+        - certification
+        - user
+      summary: Get user's certifications
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserCertification'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /user/certifications/apply:
+    post:
+      tags:
+        - certification
+        - user
+      summary: Apply for a certification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                certification_uuid:
+                  type: string
+                  format: uuid
+                  example: "550e8400-e29b-41d4-a716-446655440000"
+                notes:
+                  type: string
+                  nullable: true
+                  example: "Completed training on 2023-05-15"
+              required:
+                - certification_uuid
+      responses:
+        '201':
+          description: Application submitted successfully
+        '400':
+          description: Bad request - invalid data or already applied
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  # Department Management endpoints
+  /departments:
+    get:
+      tags:
+        - department
+      summary: Get list of departments
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Department'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /departments/{uuid}:
+    parameters:
+      - name: uuid
+        in: path
+        required: true
+        description: The department UUID
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - department
+      summary: Get department details
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Department'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
         '404':
           $ref: '#/components/responses/NotFoundError'

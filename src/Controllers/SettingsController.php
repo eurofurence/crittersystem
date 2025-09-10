@@ -6,12 +6,12 @@ namespace Engelsystem\Controllers;
 
 use Engelsystem\Config\Config;
 use Engelsystem\Config\GoodieType;
+use Engelsystem\Helpers\OAuthHelper;
 use Engelsystem\Http\Exceptions\HttpNotFound;
 use Engelsystem\Http\Response;
 use Engelsystem\Http\Redirector;
 use Engelsystem\Http\Request;
 use Engelsystem\Helpers\Authenticator;
-use Engelsystem\Models\AngelType;
 use Engelsystem\Models\User\User;
 use Psr\Log\LoggerInterface;
 
@@ -31,6 +31,7 @@ class SettingsController extends BaseController
         protected Authenticator $auth,
         protected Config $config,
         protected LoggerInterface $log,
+        protected OAuthHelper $oauthHelper,
         protected Redirector $redirect,
         protected Response $response
     ) {
@@ -66,7 +67,7 @@ class SettingsController extends BaseController
         $data = $this->validate($request, $this->getSaveProfileRules($user));
         $goodie = GoodieType::from(config('goodie_type'));
         $goodie_enabled = $goodie !== GoodieType::None;
-        $goodie_tshirt = $goodie === GoodieType::Tshirt;
+        // $goodie_tshirt = $goodie === GoodieType::Tshirt;
 
         if (config('enable_pronoun')) {
             $user->personalData->pronoun = $data['pronoun'];
@@ -91,7 +92,8 @@ class SettingsController extends BaseController
         }
 
         if (config('enable_dect')) {
-            $user->contact->dect = array_key_exists('dect', $data) && !empty($data['dect']) ? ltrim($data['dect'], '@') : null;
+            $user->contact->dect = array_key_exists('dect', $data) &&
+            !empty($data['dect']) ? ltrim($data['dect'], '@') : null;
         }
 
         $user->contact->mobile = $data['mobile'];
@@ -110,13 +112,13 @@ class SettingsController extends BaseController
             $user->settings->email_goodie = $data['email_goodie'] ?: false;
         }
 
-        if (
-            $goodie_tshirt
-            && isset(config('tshirt_sizes')[$data['shirt_size'] ?? ''])
-            && !$user->state->got_goodie
-        ) {
-            $user->personalData->shirt_size = $data['shirt_size'];
-        }
+//        if (
+//            $goodie_tshirt
+//            && isset(config('tshirt_sizes')[$data['shirt_size'] ?? ''])
+//            && !$user->state->got_goodie
+//        ) {
+//            $user->personalData->shirt_size = $data['shirt_size'];
+//        }
 
         $user->personalData->save();
         $user->contact->save();
@@ -126,6 +128,32 @@ class SettingsController extends BaseController
         $this->addNotification('settings.success');
 
         return $this->redirect->to('/settings/profile');
+    }
+
+    public function updateBadgeNumber(): Response
+    {
+        if (false == $this->config->get('display_badge_number')) {
+            return $this->redirect->to(path: '/settings/profile');
+        }
+
+        $user = $this->auth->user();
+        if ($user->personalData->badge_number != null) {
+            return $this->redirect->to(path: '/settings/profile');
+        }
+
+        $oauth = $user->oauthActive()->first();
+        if (!$oauth || !$this->oauthHelper->isValidProvider($oauth->provider)) {
+            // No oauth provided, require re-login, then it should fetch Badge via OAuthController
+            return $this->redirect->to(path: '/logout');
+        }
+
+        if ($this->oauthHelper->updateBadgeNumber($user)) {
+            $this->addNotification('notification.badge_number.updated');
+        } else {
+            $this->addNotification('notification.badge_number.error', NotificationType::ERROR);
+        }
+
+        return $this->redirect->to(path: '/settings/profile');
     }
 
     public function password(): Response
@@ -243,23 +271,25 @@ class SettingsController extends BaseController
 
     public function certificate(): Response
     {
-        if (
-            !(config('ifsg_enabled') && $this->checkIfsgCertificate())
-            && !(config('driving_license_enabled') && $this->checkDrivingLicense())
-        ) {
-            throw new HttpNotFound();
-        }
+        throw new HttpNotFound();
 
-        $user = $this->auth->user();
-        return $this->response->withView(
-            'pages/settings/certificates',
-            [
-                'settings_menu' => $this->settingsMenu(),
-                'driving_license' => $this->checkDrivingLicense(),
-                'ifsg' => $this->checkIfsgCertificate(),
-                'certificates' => $user->license,
-            ]
-        );
+        // if (
+        //     !(config('ifsg_enabled') && $this->checkIfsgCertificate())
+        //     && !(config('driving_license_enabled') && $this->checkDrivingLicense())
+        // ) {
+        //     throw new HttpNotFound();
+        // }
+
+        // $user = $this->auth->user();
+        // return $this->response->withView(
+        //     'pages/settings/certificates',
+        //     [
+        //         'settings_menu' => $this->settingsMenu(),
+        //         'driving_license' => $this->checkDrivingLicense(),
+        //         'ifsg' => $this->checkIfsgCertificate(),
+        //         'certificates' => $user->license,
+        //     ]
+        // );
     }
 
     public function saveIfsgCertificate(Request $request): Response
@@ -287,31 +317,31 @@ class SettingsController extends BaseController
 
     public function saveDrivingLicense(Request $request): Response
     {
-        if (!config('driving_license_enabled') || !$this->checkDrivingLicense()) {
-            throw new HttpNotFound();
-        }
+        // if (!config('driving_license_enabled') || !$this->checkDrivingLicense()) {
+        //     throw new HttpNotFound();
+        // }
 
-        $user = $this->auth->user();
-        $data = $this->validate($request, [
-            'has_car' => 'optional|checked',
-            'drive_car' => 'optional|checked',
-            'drive_3_5t' => 'optional|checked',
-            'drive_7_5t' => 'optional|checked',
-            'drive_12t' => 'optional|checked',
-            'drive_forklift' => 'optional|checked',
-        ]);
+        // $user = $this->auth->user();
+        // $data = $this->validate($request, [
+        //     'has_car' => 'optional|checked',
+        //     'drive_car' => 'optional|checked',
+        //     'drive_3_5t' => 'optional|checked',
+        //     'drive_7_5t' => 'optional|checked',
+        //     'drive_12t' => 'optional|checked',
+        //     'drive_forklift' => 'optional|checked',
+        // ]);
 
-        $user->license->has_car = (bool) $data['has_car'];
-        if (!$user->license->drive_confirmed) {
-            $user->license->drive_car = (bool) $data['drive_car'];
-            $user->license->drive_3_5t = (bool) $data['drive_3_5t'];
-            $user->license->drive_7_5t = (bool) $data['drive_7_5t'];
-            $user->license->drive_12t = (bool) $data['drive_12t'];
-            $user->license->drive_forklift = (bool) $data['drive_forklift'];
-        }
-        $user->license->save();
+        // $user->license->has_car = (bool) $data['has_car'];
+        // if (!$user->license->drive_confirmed) {
+        //     $user->license->drive_car = (bool) $data['drive_car'];
+        //     $user->license->drive_3_5t = (bool) $data['drive_3_5t'];
+        //     $user->license->drive_7_5t = (bool) $data['drive_7_5t'];
+        //     $user->license->drive_12t = (bool) $data['drive_12t'];
+        //     $user->license->drive_forklift = (bool) $data['drive_forklift'];
+        // }
+        // $user->license->save();
 
-        $this->addNotification('settings.certificates.success');
+        // $this->addNotification('settings.certificates.success');
 
         return $this->redirect->to('/settings/certificates');
     }
@@ -387,11 +417,22 @@ class SettingsController extends BaseController
 
     public function settingsMenu(): array
     {
-        $menu = [
-            url('/users', ['action' => 'view']) => ['title' => 'profile.my-shifts', 'icon' => 'chevron-left'],
-            url('/settings/profile')  => 'settings.profile',
-            url('/settings/password') => ['title' => 'settings.password', 'icon' => 'key-fill'],
-        ];
+//        $menu = [
+//            url('/users', ['action' => 'view']) => ['title' => 'profile.my-shifts', 'icon' => 'chevron-left'],
+//            url('/settings/profile')  => 'settings.profile',
+//            url('/settings/password') => ['title' => 'settings.password', 'icon' => 'key-fill'],
+//        ];
+        $menu = [];
+
+        $menu[url('/users', ['action' => 'view'])] = ['title' => 'profile.my-shifts', 'icon' => 'chevron-left'];
+
+        $menu[url('/settings/profile')] = 'settings.profile';
+
+        $menu[url('/user/certifications')] = 'Certifications';
+
+        if (empty(config('oauth'))) {
+            $menu[url('/settings/password')] = ['title' => 'settings.password', 'icon' => 'key-fill'];
+        }
 
         if (count(config('locales')) > 1) {
             $menu[url('/settings/language')] = ['title' => 'settings.language', 'icon' => 'translate'];
@@ -401,18 +442,19 @@ class SettingsController extends BaseController
             $menu[url('/settings/theme')] = 'settings.theme';
         }
 
-        if (
-            (config('ifsg_enabled') && $this->checkIfsgCertificate())
-            || (config('driving_license_enabled') && $this->checkDrivingLicense())
-        ) {
-            $menu[url('/settings/certificates')] = ['title' => 'settings.certificates', 'icon' => 'card-checklist'];
-        }
+//        if (
+//            (config('ifsg_enabled') && $this->checkIfsgCertificate())
+//            || (config('driving_license_enabled') && $this->checkDrivingLicense())
+//        ) {
+//            $menu[url('/settings/certificates')] = ['title' => 'settings.certificates', 'icon' => 'card-checklist'];
+//        }
 
-        $menu[url('/settings/sessions')] = 'settings.sessions';
+//        $menu[url('/settings/sessions')] = 'settings.sessions';
 
-        if (!empty(config('oauth'))) {
-            $menu[url('/settings/oauth')] = ['title' => 'settings.oauth', 'hidden' => $this->checkOauthHidden()];
-        }
+        // TODO: Reactivate - with permission level admin/dev
+//        if (!empty(config('oauth'))) {
+//            $menu[url('/settings/oauth')] = ['title' => 'settings.oauth', 'hidden' => $this->checkOauthHidden()];
+//        }
 
         if ($this->auth->canAny(['api', 'shifts_json_export', 'ical', 'atom'])) {
             $menu[url('/settings/api')] = ['title' => 'settings.api', 'icon' => 'braces'];
@@ -434,16 +476,18 @@ class SettingsController extends BaseController
 
     protected function checkDrivingLicense(): bool
     {
-        return $this->auth->user()->userAngelTypes->filter(function (AngelType $angelType) {
-            return $angelType->requires_driver_license;
-        })->isNotEmpty();
+        // return $this->auth->user()->userAngelTypes->filter(function (AngelType $angelType) {
+        //     return $angelType->requires_driver_license;
+        // })->isNotEmpty();
+        return false;
     }
 
     protected function checkIfsgCertificate(): bool
     {
-        return $this->auth->user()->userAngelTypes->filter(function (AngelType $angelType) {
-            return $angelType->requires_ifsg_certificate;
-        })->isNotEmpty();
+        // return $this->auth->user()->userAngelTypes->filter(function (AngelType $angelType) {
+        //     return $angelType->requires_ifsg_certificate;
+        // })->isNotEmpty();
+        return false;
     }
 
     private function isRequired(string $key): string

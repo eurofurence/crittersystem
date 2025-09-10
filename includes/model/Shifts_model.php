@@ -212,7 +212,8 @@ function NeededAngeltypes_by_ShiftsFilter(ShiftsFilter $shiftsFilter)
             `angel_types`.`id`,
             `angel_types`.`name`,
             `angel_types`.`restricted`,
-            `angel_types`.`shift_self_signup`
+            `angel_types`.`shift_self_signup`,
+            1 AS priority
         FROM `shifts`
         JOIN `needed_angel_types` ON `needed_angel_types`.`shift_id`=`shifts`.`id`
         JOIN `angel_types` ON `angel_types`.`id`= `needed_angel_types`.`angel_type_id`
@@ -230,7 +231,8 @@ function NeededAngeltypes_by_ShiftsFilter(ShiftsFilter $shiftsFilter)
             `angel_types`.`id`,
             `angel_types`.`name`,
             `angel_types`.`restricted`,
-            `angel_types`.`shift_self_signup`
+            `angel_types`.`shift_self_signup`,
+            2 AS priority
         FROM `shifts`
         JOIN `needed_angel_types` ON `needed_angel_types`.`shift_type_id`=`shifts`.`shift_type_id`
         JOIN `angel_types` ON `angel_types`.`id`= `needed_angel_types`.`angel_type_id`
@@ -250,7 +252,8 @@ function NeededAngeltypes_by_ShiftsFilter(ShiftsFilter $shiftsFilter)
             `angel_types`.`id`,
             `angel_types`.`name`,
             `angel_types`.`restricted`,
-            `angel_types`.`shift_self_signup`
+            `angel_types`.`shift_self_signup`,
+            3 AS priority
         FROM `shifts`
         JOIN `needed_angel_types` ON `needed_angel_types`.`location_id`=`shifts`.`location_id`
         JOIN `angel_types` ON `angel_types`.`id`= `needed_angel_types`.`angel_type_id`
@@ -262,7 +265,7 @@ function NeededAngeltypes_by_ShiftsFilter(ShiftsFilter $shiftsFilter)
         AND se.needed_from_shift_type = FALSE
     ';
 
-    return Db::select(
+    $results = Db::select(
         $sql,
         [
             $shiftsFilter->getStart(),
@@ -273,6 +276,34 @@ function NeededAngeltypes_by_ShiftsFilter(ShiftsFilter $shiftsFilter)
             $shiftsFilter->getEnd(),
         ]
     );
+
+    // Deduplicate results: keep only the highest priority (lowest number) entry for each shift+angeltype combination
+    $deduplicated = [];
+    $seen = [];
+
+    foreach ($results as $result) {
+        // Use the id field from angel_types table, not angel_type_id from needed_angel_types
+        $key = $result['shift_id'] . '_' . $result['id'];
+
+        if (!isset($seen[$key]) || $result['priority'] < $seen[$key]['priority']) {
+            $seen[$key] = $result;
+            $deduplicated[$key] = $result;
+        }
+    }
+
+    // Sort the results by shift_id, then priority, then angel_type_id
+    $final = array_values($deduplicated);
+    usort($final, function ($a, $b) {
+        if ($a['shift_id'] != $b['shift_id']) {
+            return $a['shift_id'] <=> $b['shift_id'];
+        }
+        if ($a['priority'] != $b['priority']) {
+            return $a['priority'] <=> $b['priority'];
+        }
+        return $a['angel_type_id'] <=> $b['angel_type_id'];
+    });
+
+    return $final;
 }
 
 /**
@@ -486,7 +517,24 @@ function Shift_signup_allowed_angel(
     }
 
     if (config('signup_requires_arrival') && !$user->state->arrived) {
-        return new ShiftSignupState(ShiftSignupStatus::NOT_ARRIVED, $free_entries);
+        // Allow signups for non-arrived users when the SHIFT itself lies in pre-/post-event windows
+        $shiftStart = $shift->start; // Carbon instance
+        $buildupStart = config('buildup_start');
+        $eventStart = config('event_start');
+        $eventEnd = config('event_end');
+        $teardownEnd = config('teardown_end');
+
+        $withinPreEventWindow = !empty($buildupStart) && !empty($eventStart)
+            && $shiftStart->greaterThanOrEqualTo($buildupStart)
+            && $shiftStart->lessThan($eventStart);
+
+        $withinPostEventWindow = !empty($eventEnd) && !empty($teardownEnd)
+            && $shiftStart->greaterThan($eventEnd)
+            && $shiftStart->lessThanOrEqualTo($teardownEnd);
+
+        if (!($withinPreEventWindow || $withinPostEventWindow)) {
+            return new ShiftSignupState(ShiftSignupStatus::NOT_ARRIVED, $free_entries);
+        }
     }
 
     // Hooray, shift is free for you!

@@ -1,0 +1,72 @@
+/* Backstage User Qualification Styles */
+
+.avatar-placeholder {
+    font-weight: bold;
+}
+
+.goodie-card {
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    border: 1px solid #e9ecef !important;
+}
+
+.goodie-card:not(.disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.goodie-card.border-success {
+    border-color: #198754 !important;
+    background-color: #f8fff9;
+}
+
+.goodie-card .form-check-input:disabled + .form-check-label {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.goodie-card .form-check-input:disabled {
+    cursor: not-allowed;
+}
+
+.goodie-card:has(.form-check-input:disabled) {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.goodie-card:has(.form-check-input:disabled):hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.progress {
+    height: 1.5rem;
+}
+
+.list-group-item {
+    border-left: none;
+    border-right: none;
+}
+
+.list-group-item:first-child {
+    border-top: none;
+}
+
+.list-group-item:last-child {
+    border-bottom: none;
+}
+
+@media (max-width: 576px) {
+    .goodie-card {
+        margin-bottom: 1rem;
+    }
+
+    .btn-toolbar .btn-group {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .btn-toolbar .btn-group .btn {
+        margin-bottom: 0.25rem;
+    }
+}

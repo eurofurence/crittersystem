@@ -1,0 +1,37 @@
+version: 1.0
+updated_on: YYYY-MM-DD HH:MM:SS
+
+# Options: normal, stupid
+# - normal: Add/Remove dynamically users
+# - stupid: Add dynamically the user - Remove by Admins manually.
+policy_department_set: normal
+policy_permission_set: normal
+
+# Options: auto, manual
+# - auto: If does not exist, it will be create automatically
+# - manual: The site admin needs to manually create before it can be used
+policy_department_create: auto
+
+idp_group_id_1:
+    name: super duper department Name
+    slug: super_duper_department
+    # Hide from non-staff by default
+    default_hidden: yes
+    permission_slugs:
+        - xxxxx
+        - xxxxx
+        - xxxxx
+
+# #########################################################################
+# Catch all - Everyone gets this group - No restrictions
+# #########################################################################
+# To disable: `ALL: null'
+ALL:
+    name: super duper department Name
+    slug: super_duper_department
+    # Hide from non-staff by default
+    default_hidden: yes
+    permission_slugs:
+        - xxxxx
+        - xxxxx
+        - xxxxx

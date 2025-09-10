@@ -62,7 +62,7 @@ class UserWorklogController extends BaseController
 
         $data = $this->validate($request, [
             'work_date' => 'required|date:Y-m-d',
-            'work_hours' => 'float|min:0',
+            'work_hours' => 'float',
             'comment' => 'required|max:200',
         ]);
 
@@ -80,7 +80,7 @@ class UserWorklogController extends BaseController
         }
         $worklog->worked_at = $data['work_date'];
         $worklog->hours = $data['work_hours'];
-        $worklog->comment = $data['comment'];
+        $worklog->comment = globalCleanText($data['comment']);
         $worklog->save();
 
         $this->log->info(

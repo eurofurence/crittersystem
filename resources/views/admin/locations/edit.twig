@@ -10,6 +10,19 @@
         {{ f.hidden('id', location ? location.id : '') }}
 
         <div class="row">
+
+            <div class="card h-100 border-secondary {{ m.type_bg_class() }}">
+                <div class="card-body">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="staff_only" name="staff_only" {{ f.formData('staff_only', location.staff_only ? 'checked' : '') }}>
+                        <label class="form-check-label" for="staff_only">
+                            {{ __('Staff Only') }}
+                            <span class="bi bi-info-circle-fill text-info" data-bs-toggle="tooltip" title="{{ __('Restrict to STAFF ONLY') }}"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
             <div class="col-lg-6">
                 {{ f.input('name', __('general.name'), {
                     'required': true,
@@ -34,25 +47,25 @@
                 }) }}
             </div>
 
-            <div class="col-lg-6">
-                <h4>{{ __('location.required_angels') }}</h4>
-                {% for types in angel_types.chunk(3) %}
-                    <div class="row">
-                        {% for angel_type in types %}
-                            {% set needed = needed_angel_types ? needed_angel_types.where('angel_type_id', angel_type.id).first() : null %}
-                            {% set name = 'angel_type_' ~ angel_type.id %}
-                            <div class="col-md-4">
-                                {{ f.number(name, angel_type.name, {
-                                    'value': f.formData(name, needed ? needed.count : 0),
-                                    'min': 0,
-                                    'step': 1,
-                                }) }}
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
+{#             <div class="col-lg-6"> #}
+{#                 <h4>{{ __('location.required_angels') }}</h4> #}
+{#                 {% for types in angel_types.chunk(3) %} #}
+{#                     <div class="row"> #}
+{#                         {% for angel_type in types %} #}
+{#                             {% set needed = needed_angel_types ? needed_angel_types.where('angel_type_id', angel_type.id).first() : null %} #}
+{#                             {% set name = 'angel_type_' ~ angel_type.id %} #}
+{#                             <div class="col-md-4"> #}
+{#                                 {{ f.number(name, angel_type.name, { #}
+{#                                     'value': f.formData(name, needed ? needed.count : 0), #}
+{#                                     'min': 0, #}
+{#                                     'step': 1, #}
+{#                                 }) }} #}
+{#                             </div> #}
+{#                         {% endfor %} #}
+{#                     </div> #}
+{#                 {% endfor %} #}
+{#             </div> #}
+{#         </div> #}
 
         <div class="col-md-12">
             <div class="btn-group">

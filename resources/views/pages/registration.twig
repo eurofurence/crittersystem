@@ -293,36 +293,36 @@
             </div>
         </div>
 
-        <div class="mb-5">
-            <h2>{{ __('registration.what_todo') }}</h2>
-            <div class="row mb-3">
-                {% for angelType in angelTypes %}
-                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
-                        {{ f.checkbox(
-                            'angel_types_' ~ angelType.id,
-                            angelType.name|e ~ (angelType.restricted ? ' ' ~ m.icon('mortarboard-fill', 'text-body') : ''),
-                            {
-                                'value': angelType.id,
-                                'raw_label': true,
-                                'checked': preselectedAngelTypes['angel_types_' ~ angelType.id] ?? false,
-                            }
-                        ) }}
-                    </div>
-                {% endfor %}
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="mb-2">
-                        {{ m.icon('mortarboard-fill', 'text-body') }}
-                        {{ __('angeltypes.restricted.hint') }}
-                    </div>
-                    <div>
-                        {{ m.icon('info-circle', 'text-body') }}
-                        {{ __('angeltypes.can-change-later') }}
-                    </div>
-                </div>
-            </div>
-        </div>
+{#         <div class="mb-5"> #}
+{#             <h2>{{ __('registration.what_todo') }}</h2> #}
+{#             <div class="row mb-3"> #}
+{#                 {% for angelType in angelTypes %} #}
+{#                     <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2"> #}
+{#                         {{ f.checkbox( #}
+{#                             'angel_types_' ~ angelType.id, #}
+{#                             angelType.name|e ~ (angelType.restricted ? ' ' ~ m.icon('mortarboard-fill', 'text-body') : ''), #}
+{#                             { #}
+{#                                 'value': angelType.id, #}
+{#                                 'raw_label': true, #}
+{#                                 'checked': preselectedAngelTypes['angel_types_' ~ angelType.id] ?? false, #}
+{#                             } #}
+{#                         ) }} #}
+{#                     </div> #}
+{#                 {% endfor %} #}
+{#             </div> #}
+{#             <div class="row"> #}
+{#                 <div class="col-md-6"> #}
+{#                     <div class="mb-2"> #}
+{#                         {{ m.icon('mortarboard-fill', 'text-body') }} #}
+{#                         {{ __('angeltypes.restricted.hint') }} #}
+{#                     </div> #}
+{#                     <div> #}
+{#                         {{ m.icon('info-circle', 'text-body') }} #}
+{#                         {{ __('angeltypes.can-change-later') }} #}
+{#                     </div> #}
+{#                 </div> #}
+{#             </div> #}
+{#         </div> #}
 
         {#
             By assigning a name here, some magic™ will create a session var

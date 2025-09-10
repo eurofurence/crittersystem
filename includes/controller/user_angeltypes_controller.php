@@ -65,7 +65,7 @@ function user_angeltypes_delete_all_controller(): array
     $request = request();
 
     if (!$request->has('angeltype_id')) {
-        error(__('Angeltype doesn\'t exist.'));
+        error(__('Crittertype doesn\'t exist.'));
         throw_redirect(url('/angeltypes'));
     }
 
@@ -102,7 +102,7 @@ function user_angeltypes_confirm_all_controller(): array
     $request = request();
 
     if (!$request->has('angeltype_id')) {
-        error(__('Angeltype doesn\'t exist.'));
+        error(__('Crittertype doesn\'t exist.'));
         throw_redirect(url('/angeltypes'));
     }
 
@@ -405,6 +405,75 @@ function user_angeltype_join_controller(AngelType $angeltype)
     if (!empty($user_angeltype)) {
         error(sprintf(__('You are already a %s.'), $angeltype->name));
         throw_redirect(url('/angeltypes'));
+    }
+
+    // Check certification requirements using the dedicated service method
+    $certification_service = app(\Engelsystem\Services\CertificationService::class);
+    $certification_check = $certification_service->checkUserCertificationRequirements($user, $angeltype);
+
+    if (!$certification_check['meets_requirements']) {
+        $missing_certifications = $certification_check['missing_certifications'];
+        $expired_certifications = $certification_check['expired_certifications'];
+        $pending_certifications = $certification_check['pending_certifications'];
+
+        $issues = [];
+
+        // Collect missing certification names
+        if (!empty($missing_certifications)) {
+            $missing_names = array_map(function ($cert) {
+                return $cert['title'];
+            }, $missing_certifications);
+            $issues[] = sprintf(__('Missing: %s'), implode(', ', $missing_names));
+        }
+
+        // Collect expired certification names
+        if (!empty($expired_certifications)) {
+            $expired_names = array_map(function ($item) {
+                return $item['certification']['title'];
+            }, $expired_certifications);
+            $issues[] = sprintf(__('Expired: %s'), implode(', ', $expired_names));
+        }
+
+        // Collect pending certification names
+        if (!empty($pending_certifications)) {
+            $pending_names = array_map(function ($item) {
+                return $item['certification']['title'];
+            }, $pending_certifications);
+            $issues[] = sprintf(__('Pending approval: %s'), implode(', ', $pending_names));
+        }
+
+        error(sprintf(
+            __('You cannot join %s because you have certification requirement issues: %s. Please resolve these issues first.'),
+            $angeltype->name,
+            implode('; ', $issues)
+        ));
+
+        // Add helpful information for missing certifications
+        $all_problem_certs = array_merge(
+            $missing_certifications,
+            array_map(function ($item) {
+                return $item['certification'];
+            }, $expired_certifications)
+        );
+
+        if (count($all_problem_certs) === 1) {
+            $cert = $all_problem_certs[0];
+            if ($cert['contact_email'] || $cert['contact_person']) {
+                info(sprintf(
+                    __('For information about "%s", contact: %s'),
+                    $cert['title'],
+                    $cert['contact_person'] . ($cert['contact_email'] ? ' (' . $cert['contact_email'] . ')' : '')
+                ));
+            }
+            if ($cert['allow_self_confirmation']) {
+                info(sprintf(
+                    __('"%s" allows self-confirmation. You may be able to confirm this certification yourself.'),
+                    $cert['title']
+                ));
+            }
+        }
+
+        throw_redirect(url('/angeltypes', ['action' => 'view', 'angeltype_id' => $angeltype->id]));
     }
 
     $request = request();

@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * DEPRECATED
+ * Moved to a new controller src/Controllers/CritterTypesController.php
+ * This legacy controller remains for reference only.
+ */
+
 use Engelsystem\Helpers\Carbon;
 use Engelsystem\Models\AngelType;
 use Engelsystem\Models\Location;
@@ -122,8 +128,8 @@ function angeltype_edit_controller()
             $angeltype->hide_register = $request->has('hide_register');
             $angeltype->hide_on_shift_view = $request->has('hide_on_shift_view');
 
-            $angeltype->requires_driver_license = $request->has('requires_driver_license');
-            $angeltype->requires_ifsg_certificate = $request->has('requires_ifsg_certificate');
+            // $angeltype->requires_driver_license = $request->has('requires_driver_license');
+            // $angeltype->requires_ifsg_certificate = $request->has('requires_ifsg_certificate');
         }
 
         $angeltype->description = strip_request_item_nl('description', $angeltype->description);
@@ -135,16 +141,54 @@ function angeltype_edit_controller()
         if ($valid) {
             $angeltype->save();
 
+            // Handle certification requirements (only for admins, not supporters)
+            if (!$supporter_mode) {
+                // Get current requirements
+                $current_requirements = $angeltype->requiredCertifications->pluck('id')->toArray();
+
+                // Get new requirements from form
+                $new_requirements = $request->has('certification_requirements')
+                    ? (array) $request->input('certification_requirements')
+                    : [];
+
+                // Convert to integers and filter valid IDs
+                $new_requirements = array_filter(array_map('intval', $new_requirements));
+
+                // Validate that all certification IDs exist and are active
+                if (!empty($new_requirements)) {
+                    $valid_certifications = \Engelsystem\Models\Certification::whereIn('id', $new_requirements)
+                        ->where('is_active', true)
+                        ->pluck('id')
+                        ->toArray();
+                    $new_requirements = array_intersect($new_requirements, $valid_certifications);
+                }
+
+                // Update requirements if changed
+                if (array_diff($current_requirements, $new_requirements) || array_diff($new_requirements, $current_requirements)) {
+                    // Sync the certification requirements
+                    $angeltype->requiredCertifications()->sync($new_requirements);
+
+                    // Log the change
+                    $certification_names = \Engelsystem\Models\Certification::whereIn('id', $new_requirements)
+                        ->pluck('title')
+                        ->toArray();
+                    engelsystem_log(
+                        'Updated certification requirements for angel type: ' . $angeltype->name
+                        . ' - Requirements: ' . (empty($certification_names) ? 'None' : implode(', ', $certification_names))
+                    );
+                }
+            }
+
             success(__('Critter type saved.'));
             engelsystem_log(
                 'Saved angel type: ' . $angeltype->name . ($angeltype->restricted ? ', restricted' : '')
                 . ($angeltype->shift_self_signup ? ', shift_self_signup' : '')
-                . (config('driving_license_enabled')
-                    ? (($angeltype->requires_driver_license ? ', requires driver license' : '') . ', ')
-                    : '')
-                . (config('ifsg_enabled')
-                    ? (($angeltype->requires_ifsg_certificate ? ', requires ifsg certificate' : '') . ', ')
-                    : '')
+                // . (config('driving_license_enabled')
+                //     ? (($angeltype->requires_driver_license ? ', requires driver license' : '') . ', ')
+                //     : '')
+                // . (config('ifsg_enabled')
+                //     ? (($angeltype->requires_ifsg_certificate ? ', requires ifsg certificate' : '') . ', ')
+                //     : '')
                 . $angeltype->contact_name . ', '
                 . $angeltype->contact_dect . ', '
                 . $angeltype->contact_email . ', '
@@ -208,7 +252,7 @@ function angeltype_controller()
             auth()->can('admin_user_angeltypes') || $isSupporter,
             auth()->can('admin_angel_types'),
             $isSupporter,
-            $user->license,
+            // $user->license,
             $user,
             $shiftsFilterRenderer,
             $shiftCalendarRenderer,
@@ -320,7 +364,7 @@ function angeltypes_list_controller()
                     ['action' => 'delete', 'user_angeltype_id' => $angeltype->user_angel_type_id]
                 ),
                 icon('box-arrow-right') . ($admin_angeltypes ? '' : __('Leave')),
-                'btn-sm',
+                'btn-sm btn-warning',
                 '',
                 ($admin_angeltypes ? __('Leave') : '')
             );

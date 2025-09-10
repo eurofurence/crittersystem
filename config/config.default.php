@@ -2,31 +2,114 @@
 
 declare(strict_types=1);
 
+// #####################################################################
 // To change or overwrite some settings, create a config.php
+// Keep only the settings you want to change inside the config.php
+// #####################################################################
 
 return [
-    // MySQL-Connection Settings
-    'database'                => [
-        'host'     => env('MYSQL_HOST', 'localhost'),
-        'database' => env('MYSQL_DATABASE', 'engelsystem'),
-        'username' => env('MYSQL_USER', 'root'),
-        'password' => env('MYSQL_PASSWORD', ''),
-    ],
+    // #################################################################
+    // Group: Main Application
+    // #################################################################
+    // Application name (not the event name)
+    'app_name'                => env('APP_NAME', 'Critter System'),
 
-    // For accessing /metrics (and /stats)
-    'api_key'                 => env('API_KEY', ''),
+    // Set to development to enable debugging messages [production, development]
+    'environment'             => env('APP_ENV', 'production'),
+
+    // Application URL and base path to use instead of the auto-detected
+    'url'                     => env('APP_URL'),
 
     // Enable maintenance mode (show a static page to all users)
-    'maintenance'             => (bool) env('MAINTENANCE', false),
+    'maintenance'             => (bool) env('APP_ENABLE_MAINTENANCE', false),
 
-    // Application name (not the event name)
-    'app_name'                => env('APP_NAME', 'Engelsystem'),
+    // For accessing /metrics (and /stats)
+    'api_key'                 => env('APP_METRICS_API_KEY', null),
 
-    // Set to development to enable debugging messages
-    'environment'             => env('ENVIRONMENT', 'production'),
+    // Enable installation workflow interface
+    'enable_install_workflow' => (bool) env(key: 'APP_ENABLE_INSTALL_WORKFLOW', default: false),
 
-    // Application URL and base path to use instead of the auto-detected one
-    'url'                     => env('APP_URL'),
+    // Login DEV Warning Message
+    'login_dev_warning'     => env('APP_ENABLE_DEMO_MODE', false),
+
+    // Initial admin password, configured on first migration
+    'setup_admin_password'    => env('APP_INITIAL_ADMIN_PASSWORD', null),
+
+    // Redirect to this site after logging in or when clicking the page name
+    // Must be one of news, meetings, user_shifts, angeltypes, questions
+    'home_site'               => env('APP_HOME_SITE', 'news'),
+
+    // Required user fields
+    'required_user_fields' => [
+        'pronoun'            => (bool) env('APP_REQUIRE_PRONOUN', false),
+        'firstname'          => (bool) env('APP_REQUIRE_FIRSTNAME', false),
+        'lastname'           => (bool) env('APP_REQUIRE_LASTNAME', false),
+        'tshirt_size'        => (bool) env('APP_REQUIRE_TSHIRT_SIZE', false), //TODO: REMOVE
+        'mobile'             => (bool) env('APP_REQUIRE_MOBILE', false),
+        'dect'               => (bool) env('APP_REQUIRE_DECT', false),
+    ],
+
+    // Local time zone
+    'timezone'                => env('APP_TIMEZONE', 'Europe/Berlin'),
+
+    // The default locale to use
+    'default_locale'          => env('APP_DEFAULT_LOCALE', 'en_US'),
+
+    // Available locales in /resources/lang/
+    // To disable a locale in config.php, you can set its value to null
+    'locales'                 => [
+        'de_DE' => 'Deutsch',
+        'en_US' => 'English',
+    ],
+
+    // Default theme - ID comes from THEMES section
+    'theme'                   => env('APP_DEFAULT_THEME', 21),
+    // #################################################################
+
+    // #################################################################
+    // Group: DATABASE
+    // #################################################################
+    // MySQL-Connection Settings
+    'database'                => [
+        'host'     => env('APP_MYSQL_HOST', 'localhost'),
+        'database' => env('APP_MYSQL_DATABASE', 'critterdb'),
+        'username' => env('APP_MYSQL_USER', ''),
+        'password' => env('APP_MYSQL_PASSWORD', ''),
+    ],
+    // #################################################################
+
+    // #################################################################
+    // Group: E-mail
+    // #################################################################
+    'email'                   => [
+        // Can be mail, smtp, sendmail, log or an symfony mailer dsn string like smtps://[usr]:[pass]@smtp.foo.bar:465
+        'driver' => env('APP_MAIL_DRIVER', 'mail'),
+        'from'   => [
+            // From address of all emails
+            'address' => env('APP_MAIL_FROM_ADDRESS', 'noreply@example.com'),
+            'name'    => env('APP_MAIL_FROM_NAME', env('APP_NAME', 'Critter System')),
+        ],
+
+        'host'       => env('APP_MAIL_HOST', 'localhost'),
+        'port'       => env('APP_MAIL_PORT', 587),
+        // If tls transport encryption should be enabled
+        'tls'        => env('APP_MAIL_TLS'),
+        'username'   => env('APP_MAIL_USERNAME'),
+        'password'   => env('APP_MAIL_PASSWORD'),
+        'sendmail'   => env('APP_MAIL_SENDMAIL', '/usr/sbin/sendmail -bs'),
+    ],
+    // #################################################################
+
+    // #################################################################
+    // Group: Website Features / Customizations
+    // #################################################################
+
+    // Show opt-in on user profile and registration pages to save some personal data after the event (???)
+    'enable_email_goodie' => (bool) env('ENABLE_EMAIL_GOODIE', false),
+
+    // TODO: REMOVE
+    // Enable Driving License
+    'driving_license_enabled' => (bool) env('DRIVING_LICENSE_ENABLED', false),
 
     // Header links
     // Available link placeholders: %lang%
@@ -50,284 +133,82 @@ return [
         'faq.faq' => [env('FAQ_URL', '/faq'), 'faq.view'],
 
         // Contact email address, linked on every page
-        'Contact' => env('CONTACT_EMAIL', 'mailto:ticket@c3heaven.de'),
+        'Contact' => env('CONTACT_EMAIL', 'mailto:noreply@example.com'),
     ],
 
     // Other ways to ask the heaven
     // Multiple contact options / links are possible, analogue to footer_items
     'contact_options' => [
         // E-mail address
-        'general.email' => env('CONTACT_EMAIL', 'mailto:ticket@c3heaven.de'),
+        'general.email' => env('CONTACT_EMAIL', 'mailto:noreply@example.com'),
     ],
 
+    // TODO: MOVE THIS TO DB ENTRY
     // Additional text displayed on the FAQ page, rendered as markdown
     'faq_text'                => env('FAQ_TEXT'),
 
     // Link to documentation/help
-    'documentation_url'       => env('DOCUMENTATION_URL', 'https://engelsystem.de/doc/'),
-
-    // Email config
-    'email'                   => [
-        // Can be mail, smtp, sendmail, log or an symfony mailer dsn string like smtps://[usr]:[pass]@smtp.foo.bar:465
-        'driver' => env('MAIL_DRIVER', 'mail'),
-        'from'   => [
-            // From address of all emails
-            'address' => env('MAIL_FROM_ADDRESS', 'noreply@example.com'),
-            'name'    => env('MAIL_FROM_NAME', env('APP_NAME', 'Engelsystem')),
-        ],
-
-        'host'       => env('MAIL_HOST', 'localhost'),
-        'port'       => env('MAIL_PORT', 587),
-        // If tls transport encryption should be enabled
-        'tls'        => env('MAIL_TLS'),
-        'username'   => env('MAIL_USERNAME'),
-        'password'   => env('MAIL_PASSWORD'),
-        'sendmail'   => env('MAIL_SENDMAIL', '/usr/sbin/sendmail -bs'),
-    ],
+    'documentation_url'       => env('DOCUMENTATION_URL', 'https://github.com/eurofurence/crittersystem/'),
 
     // Your privacy@ contact address
     'privacy_email' => env('PRIVACY_EMAIL'),
 
-    // Show opt-in on user profile and registration pages to save some personal data after the event
-    'enable_email_goodie' => (bool) env('ENABLE_EMAIL_GOODIE', false),
-
-    // Initial admin password, configured on first migration
-    'setup_admin_password'    => env('SETUP_ADMIN_PASSWORD'),
-
-    // Setup external authentication providers
-    'oauth'                   => [
-        // '[name]' => [config]
-        /*
-        '[name]' => [
-            // Name shown to the user (optional)
-            'name' => 'Some Provider',
-            // Auth client ID
-            'client_id' => 'engelsystem',
-            // Auth client secret
-            'client_secret' => '[generated by provider]',
-            // Authentication URL
-            'url_auth' => '[generated by provider]',
-            // Token URL
-            'url_token' => '[generated by provider]',
-            // User info URL which provides userdata
-            'url_info' => '[generated by provider]',
-            // OAuth Scopes
-            // 'scope' => ['openid'],
-            // Info unique user id field
-            'id' => 'uuid',
-            // The following fields are used for registration
-            // Info username field (optional)
-            'username' => 'nickname',
-            // Info email field (optional)
-            'email' => 'email',
-            // Info first name field (optional)
-            'first_name' => 'first-name',
-            // Info last name field (optional)
-            'last_name' => 'last-name',
-            // User URL to provider, linked on provider settings page (optional)
-            'url' => '[provider page]',
-            // Whether info attributes are nested arrays (optional)
-            // For example {"user":{"name":"foo"}} can be accessed using user.name
-            'nested_info' => false,
-            // Only show after clicking the page title (optional)
-            'hidden' => false,
-            // Mark user as arrived when using this provider (optional)
-            'mark_arrived' => false,
-            // If the password field should be enabled on registration (optional)
-            'enable_password' => false,
-            // Allow registration even if disabled in config (optional)
-            'allow_registration' => null,
-            // Auto join teams
-            // Info groups field (optional)
-            'groups' => 'groups',
-            // Groups to team (angeltype) mapping (optional)
-            'teams' => [
-                '/Lorem' => 4, // 4 being the ID of the team (angeltype)
-                '/Foo Mod' => ['id' => 5, 'supporter' => true], // 5 being the ID of the team (angeltype)
-            ],
-        ],
-        */
-    ],
-
-    // Default theme, 1 = theme1.scss etc.
-    'theme'                   => env('THEME', 20),
-
-    // Supported themes
-    // To disable a theme in config.php, you can set its value to null
-    'themes' => [
-        20 => [
-            'name' => 'Eurofurence 2024 - Cyberpunk ',
-            'type' => 'dark',
-            'navbar_classes' => 'navbar-dark',
-        ],
-        19 => [
-            'name' => 'Eurofurence Light',
-            'type' => 'light',
-            'navbar_classes' => 'navbar-light bg-light',
-        ],
-        18=> [
-            'name' => 'Eurofurence Dark',
-            'type' => 'dark',
-            'navbar_classes' => 'navbar-primary navbar-dark bg-black border-dark',
-        ],
-        17 => [
-            'name' => 'Engelsystem 37c3 (2023)',
-            'type' => 'dark',
-            'navbar_classes' => 'navbar-dark',
-        ],
-        16 => [
-            'name' => 'Engelsystem cccamp23 (2023)',
-            'type' => 'dark',
-            'navbar_classes' => 'navbar-dark',
-        ],
-        15 => [
-            'name' => 'Engelsystem rC3 (2021)',
-            'type' => 'dark',
-            'navbar_classes' => 'navbar-dark',
-        ],
-        14 => [
-            'name' => 'Engelsystem rC3 teal (2020)',
-            'type' => 'dark',
-            'navbar_classes' => 'navbar-dark bg-black border-dark',
-        ],
-        13 => [
-            'name' => 'Engelsystem rC3 violet (2020)',
-            'type' => 'dark',
-            'navbar_classes' => 'navbar-dark bg-black border-dark',
-        ],
-        12 => [
-            'name' => 'Engelsystem 36c3 (2019)',
-            'type' => 'dark',
-            'navbar_classes' => 'navbar-dark bg-black border-dark',
-        ],
-        10 => [
-            'name' => 'Engelsystem cccamp19 green (2019)',
-            'type' => 'dark',
-            'navbar_classes' => 'navbar-dark bg-black border-dark',
-        ],
-        9 => [
-            'name' => 'Engelsystem cccamp19 yellow (2019)',
-            'type' => 'dark',
-            'navbar_classes' => 'navbar-dark bg-black border-dark',
-        ],
-        8 => [
-            'name' => 'Engelsystem cccamp19 blue (2019)',
-            'type' => 'dark',
-            'navbar_classes' => 'navbar-dark bg-black border-dark',
-        ],
-        7 => [
-            'name' => 'Engelsystem 35c3 dark (2018)',
-            'type' => 'dark',
-            'navbar_classes' => 'navbar-primary navbar-dark bg-black border-primary',
-        ],
-        6 => [
-            'name' => 'Engelsystem 34c3 dark (2017)',
-            'type' => 'dark',
-            'navbar_classes' => 'navbar-dark bg-black border-dark',
-        ],
-        5 => [
-            'name' => 'Engelsystem 34c3 light (2017)',
-            'type' => 'light',
-            'navbar_classes' => 'navbar-light bg-light',
-        ],
-        4 => [
-            'name' => 'Engelsystem 33c3 (2016)',
-            'type' => 'dark',
-            'navbar_classes' => 'navbar-dark bg-body border-dark',
-        ],
-        3 => [
-            'name' => 'Engelsystem 32c3 (2015)',
-            'type' => 'light',
-            'navbar_classes' => 'navbar-dark bg-black border-dark',
-        ],
-        2 => [
-            'name' => 'Engelsystem cccamp15',
-            'type' => 'light',
-            'navbar_classes' => 'navbar-light bg-light',
-        ],
-        11 => [
-            'name' => 'Engelsystem high contrast',
-            'type' => 'dark',
-            'navbar_classes' => 'navbar-dark bg-black border-dark',
-        ],
-        0 => [
-            'name' => 'Engelsystem light',
-            'type' => 'light',
-            'navbar_classes' => 'navbar-light bg-light',
-        ],
-        1 => [
-            'name' => 'Engelsystem dark',
-            'type' => 'dark',
-            'navbar_classes' => 'navbar-dark bg-black border-dark',
-        ],
-    ],
-
-    // Redirect to this site after logging in or when clicking the page name
-    // Must be one of news, meetings, user_shifts, angeltypes, questions
-    'home_site'               => env('HOME_SITE', 'news'),
-
     // Number of News shown on one site and for feed readers (minimum 1)
     'display_news'            => env('DISPLAY_NEWS', 10),
 
-    // Users are able to sign up
+    // A list of credits
+    'credits'                 => [
+        'Contribution' => 'Please visit `
+            . `[eurofurence/crittersystem GitHub](https://github.com/eurofurence/crittersystem) '
+            . 'if you want to contribute, have found any [bugs](https://github.com/eurofurence/crittersystem/issues) '
+            . 'or need help.',
+    ],
+
+    // #################################################################
+    // User Information / Registration / Password
+    // #################################################################
+
+    // Users are able to Register
     'registration_enabled'    => (bool) env('REGISTRATION_ENABLED', true),
 
     // URL to external registration page, linked from login page
     'external_registration_url'   => env('EXTERNAL_REGISTRATION_URL'),
 
-    // Required user fields
-    'required_user_fields' => [
-        'pronoun'            => (bool) env('PRONOUN_REQUIRED', false),
-        'firstname'          => (bool) env('FIRSTNAME_REQUIRED', false),
-        'lastname'           => (bool) env('LASTNAME_REQUIRED', false),
-        'tshirt_size'        => (bool) env('TSHIRT_SIZE_REQUIRED', true),
-        'mobile'             => (bool) env('MOBILE_REQUIRED', false),
-        'dect'               => (bool) env('DECT_REQUIRED', false),
-    ],
+    // Enable the planned arrival/leave date
+    'enable_planned_arrival'  => (bool) env('ENABLE_PLANNED_ARRIVAL', true),
 
-    // Only arrived users can sign up for shifts
-    'signup_requires_arrival' => (bool) env('SIGNUP_REQUIRES_ARRIVAL', false),
+    // Whether force active should be enabled
+    'enable_force_active' => (bool) env('ENABLE_FORCE_ACTIVE', true),
 
-    // Whether newly-registered users should automatically be marked as arrived
-    'autoarrive'              => (bool) env('AUTOARRIVE', false),
+    // Allow users with sufficient permission to add worklogs for themselves
+    'enable_self_worklog' => (bool) env('ENABLE_SELF_WORKLOG', true),
 
-    // Supporters of a team (angeltype) can promote other users of the team (angeltype) to supporter
-    'supporters_can_promote' => (bool) env('SUPPORTERS_CAN_PROMOTE', false),
-
-    // Only allow shift signup this number of hours in advance
-    // Setting this to 0 disables the feature
-    'signup_advance_hours'    => env('SIGNUP_ADVANCE_HOURS', 0),
-
-    // Allow signup this many minutes after the start of the shift.
-    // If signup_post_fraction is set, it's first applied before adding the number of minutes specified here.
-    'signup_post_minutes'     => env('SIGNUP_POST_MINUTES', 0),
-
-    // Allow signup this fraction of the shift length after the start of the shift.
-    // Example: If it is set to 1, signup is allowed until the end of a shift
-    //          If it is set to 0.5, signup is allowed for the first half of a shift
-    // If signup_post_minutes is set, this is first applied and then the signup_post_minutes added on top.
-    'signup_post_fraction'    => env('SIGNUP_POST_FRACTION', 0),
-
-    // Number of hours that a user can sign out of own shifts beforehand
-    'last_unsubscribe'        => env('LAST_UNSUBSCRIBE', 3),
-
-    // Define the algorithm to use for `password_verify()`
-    // If a user password is hashed with an old algorithm, the password will be converted to the new format on login
-    // See https://secure.php.net/manual/en/password.constants.php for a complete list
-    'password_algorithm'      => env('PASSWORD_ALGORITHM', PASSWORD_DEFAULT),
-
-    // The minimum length for passwords
-    'password_min_length'     => env('PASSWORD_MIN_LENGTH', 8),
-
-    // Whether the login and registration via password should be enabled (login will be hidden if false)
-    // This is useful when using oauth, disabling it also disables normal registration without oauth
-    'enable_password'         => (bool) env('ENABLE_PASSWORD', true),
+    // Enable displaying the pronoun fields
+    'enable_pronoun'          => (bool) env('ENABLE_PRONOUN', true),
 
     // Whether the DECT field should be enabled
     'enable_dect'             => (bool) env('ENABLE_DECT', true),
 
     // Whether the mobile number will be shown to other users
     'enable_mobile_show'      => (bool) env('ENABLE_MOBILE_SHOW', false),
+
+    // show users registration number retrieved from the registration service
+    'display_badge_number'   => env('DISPLAY_BADGE_NUMBER', false),
+
+    // TODO: REMOVE
+    // Instruction in accordance with § 43 Para. 1 of the German Infection Protection Act (IfSG)
+    'ifsg_enabled'           => (bool) env('IFSG_ENABLED', false),
+
+    // TODO: REMOVE
+    // Instruction only onsite in accordance with § 43 Para. 1 of the German Infection Protection Act (IfSG)
+    'ifsg_light_enabled'           => env('IFSG_LIGHT_ENABLED', false) && env('IFSG_ENABLED', false),
+
+    // Whether to show the current day of the event (-2, -1, 0, 1, 2…) in footer and on the dashboard.
+    // The event start date has to be set for it to appear.
+    'enable_day_of_event' => (bool) env('ENABLE_DAY_OF_EVENT', true),
+
+    // If true there will be a day 0 (-1, 0, 1…). If false there won't (-1, 1…)
+    'event_has_day0' => (bool) env('EVENT_HAS_DAY0', true),
 
     // Regular expression describing a FALSE username.
     // Per default usernames must only contain alphanumeric chars, "-", "_" or ".".
@@ -340,45 +221,338 @@ return [
     'display_full_name'  => env('DISPLAY_FULL_NAME', false)
         && env('ENABLE_FULL_NAME', false),
 
-    // Enable displaying the pronoun fields
-    'enable_pronoun'          => (bool) env('ENABLE_PRONOUN', true),
+    // Whether the login and registration via password should be enabled (login will be hidden if false)
+    // This is useful when using oauth, disabling it also disables normal registration without oauth
+    // HOWEVER, if you have no oAuth enabled - this parameter is ignored otherwise you are locked out
+    'enable_password'         => (bool) env('ENABLE_PASSWORD', true),
 
-    // Enable the planned arrival/leave date
-    'enable_planned_arrival'  => (bool) env('ENABLE_PLANNED_ARRIVAL', true),
+    // Define the algorithm to use for `password_verify()`
+    // If a user password is hashed with an old algorithm, the password will be converted to the new format on login
+    // See https://secure.php.net/manual/en/password.constants.php for a complete list
+    'password_algorithm'      => env('PASSWORD_ALGORITHM', PASSWORD_DEFAULT),
 
-    // Whether force active should be enabled
-    'enable_force_active' => (bool) env('ENABLE_FORCE_ACTIVE', true),
+    // The minimum length for passwords
+    'password_min_length'     => env('PASSWORD_MIN_LENGTH', 8),
 
-    // Allow users with sufficient permission to add worklogs for themselves
-    'enable_self_worklog' => (bool) env('ENABLE_SELF_WORKLOG', true),
+    // Whether newly-registered users should automatically be marked as arrived
+    'autoarrive'              => (bool) env('AUTOARRIVE', false),
 
+    // Supporters of a team (angeltype) can promote other users of the team (angeltype) to supporter
+    'supporters_can_promote' => (bool) env('SUPPORTERS_CAN_PROMOTE', false),
+
+    // Hide columns in backend user view. Possible values are any sortable parameters of the table.
+    'disabled_user_view_columns' => [],
+    // #################################################################
+
+    // #################################################################
+    // Group: OAUTH
+    // #################################################################
+    'oauth'                   => [
+        // '[name]' => [config]
+        'ef' => [
+            // Enable Oauth
+            'enabled' => env(key: 'APP_OAUTH_EF_ENABLED', default: false),
+
+            // Name shown to the user
+            'name' => env(key: 'APP_OAUTH_EF_NAME', default: 'Eurofurence IDP'),
+
+            // Auth client ID
+            'client_id' => env(key: 'APP_OAUTH_EF_CLIENT_ID', default: null),
+
+            // Auth client secret
+            'client_secret' => env(key: 'APP_OAUTH_EF_CLIENT_SECRET', default: null),
+
+            // Authentication URL
+            'url_auth' => env(key: 'APP_OAUTH_EF_URL_AUTH', default: null),
+
+            // Token URL
+            'url_token' => env(key: 'APP_OAUTH_EF_URL_TOKEN', default: null),
+
+            // User info URL which provides userdata
+            'url_info' => env(key: 'APP_OAUTH_EF_URL_USER_INFO', default: null),
+
+            // User URL to provider, linked on provider settings page (optional)
+            'url' => env(key: 'APP_OAUTH_EF_URL_PROVIDER', default: null),
+
+            // OAuth Scopes
+            'scope' => env(key: 'APP_OAUTH_EF_SCOPE', default: ['openid', 'profile', 'email', 'groups']),
+
+            // Info unique user id field
+            'id' => env(key: 'APP_OAUTH_EF_MAP_USER_ID', default: 'sub'),
+
+            // ----------------------------------------------------------------
+            // The following fields are used for registration
+            // ----------------------------------------------------------------
+            // Info username field
+            'username' => env(key: 'APP_OAUTH_EF_MAP_USERNAME', default: 'name'),
+
+            // Info email field (optional)
+            'email' => env(key: 'APP_OAUTH_EF_MAP_EMAIL', default: 'email'),
+
+            // Groups
+            'groups' => env(key: 'APP_OAUTH_EF_MAP_GROUPS', default: 'groups'),
+
+            // Info first name field (optional)
+            'first_name' => env(key: 'APP_OAUTH_EF_MAP_FIRST_NAME', default: 'first-name'),
+
+            // Info last name field (optional)
+            'last_name' => env(key: 'APP_OAUTH_EF_MAP_LAST_NAME', default: 'last-name'),
+
+            // Whether info attributes are nested arrays (optional)
+            // For example {"user":{"name":"foo"}} can be accessed using user.name
+            'nested_info' => env(key: 'APP_OAUTH_EF_NESTED_ARRAYS_ENABLE', default: false),
+
+            // Only show after clicking the page title (optional)
+            'hidden' => env(key: 'APP_OAUTH_EF_HIDDEN', default: false),
+
+            // Mark user as arrived when using this provider (optional)
+            'mark_arrived' => env(key: 'APP_OAUTH_EF_POLICY_MARK_ARRIVIED', default: false),
+
+            // If the password field should be enabled on registration (optional)
+            'enable_password' => env(key: 'APP_OAUTH_EF_POLICY_ENABLE_PASSWORD', default: false),
+
+            // Allow registration even if disabled in config (optional)
+            'allow_registration' => env(key: 'APP_OAUTH_EF_POLICY_ALLOW_REGISTRATION', default: null),
+
+            // Registration API to fetch reg num for user
+            'badge_number_api' => env(key: 'APP_OAUTH_EF_URL_BADGE_API', default: null),
+        ],
+        'generic' => [
+            // Enable Oauth
+            'enabled' => env(key: 'APP_OAUTH_GENERIC_ENABLED', default: false),
+
+            // Name shown to the user
+            'name' => env(key: 'APP_OAUTH_GENERIC_NAME', default: 'Generic SSO'),
+
+            // Auth client ID
+            'client_id' => env(key: 'APP_OAUTH_GENERIC_CLIENT_ID', default: null),
+
+            // Auth client secret
+            'client_secret' => env(key: 'APP_OAUTH_GENERIC_CLIENT_SECRET', default: null),
+
+            // Authentication URL
+            'url_auth' => env(key: 'APP_OAUTH_GENERIC_URL_AUTH', default: null),
+
+            // Token URL
+            'url_token' => env(key: 'APP_OAUTH_GENERIC_URL_TOKEN', default: null),
+
+            // User info URL which provides userdata
+            'url_info' => env(key: 'APP_OAUTH_GENERIC_URL_USER_INFO', default: null),
+
+            // User URL to provider, linked on provider settings page (optional)
+            'url' => env(key: 'APP_OAUTH_GENERIC_URL_PROVIDER', default: null),
+
+            // OAuth Scopes
+            'scope' => env(key: 'APP_OAUTH_GENERIC_SCOPE', default: ['openid']),
+
+            // Info unique user id field
+            'id' => env(key: 'APP_OAUTH_GENERIC_MAP_USER_ID', default: 'uuid'),
+
+            // ----------------------------------------------------------------
+            // The following fields are used for registration
+            // ----------------------------------------------------------------
+            // Info username field (optional)
+            'username' => env(key: 'APP_OAUTH_GENERIC_MAP_USERNAME', default: 'name'),
+
+            // Info email field (optional)
+            'email' => env(key: 'APP_OAUTH_GENERIC_MAP_EMAIL', default: 'email'),
+
+            // Auto join teams
+            // Info groups field (optional)
+            'groups' => env(key: 'APP_OAUTH_GENERIC_MAP_GROUPS', default: 'groups'),
+
+            // Info first name field (optional)
+            'first_name' => env(key: 'APP_OAUTH_GENERIC_MAP_FIRST_NAME', default: 'first-name'),
+
+            // Info last name field (optional)
+            'last_name' => env(key: 'APP_OAUTH_GENERIC_MAP_LAST_NAME', default: 'last-name'),
+
+            // Whether info attributes are nested arrays (optional)
+            // For example {"user":{"name":"foo"}} can be accessed using user.name
+            'nested_info' => env(key: 'APP_OAUTH_GENERIC_NESTED_ARRAYS_ENABLE', default: false),
+
+            // Only show after clicking the page title (optional)
+            'hidden' => env(key: 'APP_OAUTH_GENERIC_HIDDEN', default: false),
+
+            // Mark user as arrived when using this provider (optional)
+            'mark_arrived' => env(key: 'APP_OAUTH_GENERIC_POLICY_MARK_ARRIVIED', default: false),
+
+            // If the password field should be enabled on registration (optional)
+            'enable_password' => env(key: 'APP_OAUTH_GENERIC_POLICY_ENABLE_PASSWORD', default: false),
+
+            // Allow registration even if disabled in config (optional)
+            'allow_registration' => env(key: 'APP_OAUTH_GENERIC_POLICY_ALLOW_REGISTRATION', default: null),
+
+            // Registration API to fetch reg num for user
+            'badge_number_api' => env(key: 'APP_OAUTH_GENERIC_URL_BADGE_API', default: null),
+        ],
+    ],
+    // #################################################################
+
+    // #################################################################
+    // Group: Themes
+    // #################################################################
+
+    // Supported themes
+    // To disable a theme in config.php, you can set its value to null
+    'themes' => [
+        21 => [
+            'name' => 'EF 29',
+            'type' => 'dark',
+            'navbar_classes' => 'navbar-dark',
+        ],
+        22 => [
+            'name' => 'EF 29 - CVD',
+            'type' => 'dark',
+            'navbar_classes' => 'navbar-dark',
+        ],
+        20 => [
+            'name' => 'EF 28',
+            'type' => 'dark',
+            'navbar_classes' => 'navbar-dark',
+        ],
+        19 => [
+            'name' => 'EF Light',
+            'type' => 'light',
+            'navbar_classes' => 'navbar-light bg-light',
+        ],
+        18 => [
+            'name' => 'EF Dark',
+            'type' => 'dark',
+            'navbar_classes' => 'navbar-primary navbar-dark bg-black border-dark',
+        ],
+//        17 => [
+//            'name' => 'Engelsystem 37c3 (2023)',
+//            'type' => 'dark',
+//            'navbar_classes' => 'navbar-dark',
+//        ],
+//        16 => [
+//            'name' => 'Engelsystem cccamp23 (2023)',
+//            'type' => 'dark',
+//            'navbar_classes' => 'navbar-dark',
+//        ],
+//        15 => [
+//            'name' => 'Engelsystem rC3 (2021)',
+//            'type' => 'dark',
+//            'navbar_classes' => 'navbar-dark',
+//        ],
+//        14 => [
+//            'name' => 'Engelsystem rC3 teal (2020)',
+//            'type' => 'dark',
+//            'navbar_classes' => 'navbar-dark bg-black border-dark',
+//        ],
+//        13 => [
+//            'name' => 'Engelsystem rC3 violet (2020)',
+//            'type' => 'dark',
+//            'navbar_classes' => 'navbar-dark bg-black border-dark',
+//        ],
+//        12 => [
+//            'name' => 'Engelsystem 36c3 (2019)',
+//            'type' => 'dark',
+//            'navbar_classes' => 'navbar-dark bg-black border-dark',
+//        ],
+//        10 => [
+//            'name' => 'Engelsystem cccamp19 green (2019)',
+//            'type' => 'dark',
+//            'navbar_classes' => 'navbar-dark bg-black border-dark',
+//        ],
+//        9 => [
+//            'name' => 'Engelsystem cccamp19 yellow (2019)',
+//            'type' => 'dark',
+//            'navbar_classes' => 'navbar-dark bg-black border-dark',
+//        ],
+//        8 => [
+//            'name' => 'Engelsystem cccamp19 blue (2019)',
+//            'type' => 'dark',
+//            'navbar_classes' => 'navbar-dark bg-black border-dark',
+//        ],
+//        7 => [
+//            'name' => 'Engelsystem 35c3 dark (2018)',
+//            'type' => 'dark',
+//            'navbar_classes' => 'navbar-primary navbar-dark bg-black border-primary',
+//        ],
+//        6 => [
+//            'name' => 'Engelsystem 34c3 dark (2017)',
+//            'type' => 'dark',
+//            'navbar_classes' => 'navbar-dark bg-black border-dark',
+//        ],
+//        5 => [
+//            'name' => 'Engelsystem 34c3 light (2017)',
+//            'type' => 'light',
+//            'navbar_classes' => 'navbar-light bg-light',
+//        ],
+//        4 => [
+//            'name' => 'Engelsystem 33c3 (2016)',
+//            'type' => 'dark',
+//            'navbar_classes' => 'navbar-dark bg-body border-dark',
+//        ],
+//        3 => [
+//            'name' => 'Engelsystem 32c3 (2015)',
+//            'type' => 'light',
+//            'navbar_classes' => 'navbar-dark bg-black border-dark',
+//        ],
+//        2 => [
+//            'name' => 'Engelsystem cccamp15',
+//            'type' => 'light',
+//            'navbar_classes' => 'navbar-light bg-light',
+//        ],
+//        11 => [
+//            'name' => 'Engelsystem high contrast',
+//            'type' => 'dark',
+//            'navbar_classes' => 'navbar-dark bg-black border-dark',
+//        ],
+//        1 => [
+//            'name' => 'Engelsystem dark',
+//            'type' => 'dark',
+//            'navbar_classes' => 'navbar-dark bg-black border-dark',
+//        ],
+//        0 => [
+//            'name' => 'Engelsystem light',
+//            'type' => 'light',
+//            'navbar_classes' => 'navbar-light bg-light',
+//        ],
+    ],
+    // #################################################################
+
+    // #################################################################
+    // Shift settings / Policies
+    // #################################################################
+    // Only arrived users can sign up for shifts
+    'signup_requires_arrival' => (bool) env('SIGNUP_REQUIRES_ARRIVAL', true),
+
+    // Only allow shift signup this number of hours in advance
+    // Setting this to 0 disables the feature
+    'signup_advance_hours'    => env('SIGNUP_ADVANCE_HOURS', 0),
+
+    // Allow signup this many minutes after the start of the shift.
+    // If signup_post_fraction is set, it's first applied before adding the number of minutes specified here.
+    'signup_post_minutes'     => env('SIGNUP_POST_MINUTES', 15),
+
+    // Allow signup this fraction of the shift length after the start of the shift.
+    // Example: If it is set to 1, signup is allowed until the end of a shift
+    //          If it is set to 0.5, signup is allowed for the first half of a shift
+    // If signup_post_minutes is set, this is first applied and then the signup_post_minutes added on top.
+    'signup_post_fraction'    => env('SIGNUP_POST_FRACTION', 0),
+
+    // Number of hours that a user can sign out of own shifts beforehand
+    'last_unsubscribe'        => env('LAST_UNSUBSCRIBE', 1),
+
+    // #################################################################
+    // Goodies / TShirts / ETC
+    // #################################################################
+
+    // TODO: REMOVE
     // Resembles the Goodie Type. There are three options:
     // 'none' => no goodie at all
     // 'goodie' => a goodie which has no sizing options
     // 'tshirt' => goodie that is called tshirt and has sizing options
     'goodie_type'             => env('GOODIE_TYPE', 'goodie'),
 
-    // Enable (food) vouchers
+    // TODO: REMOVE
+    // Enable vouchers
     'enable_voucher'          => (bool) env('ENABLE_VOUCHER', true),
 
-    // Number of shifts to freeload until a user is locked from shift signup.
-    'max_freeloadable_shifts' => env('MAX_FREELOADABLE_SHIFTS', 2),
-
-    // Hide columns in backend user view. Possible values are any sortable parameters of the table.
-    'disabled_user_view_columns' => [],
-
-    // Local timezone
-    'timezone'                => env('TIMEZONE', 'Europe/Berlin'),
-
-    // Multiply 'night shifts' and freeloaded shifts (start or end between 2 and 8 exclusive) by 2 in goodie score
-    // Goodies must be enabled to use this feature
-    'night_shifts'            => [
-        'enabled'    => (bool) env('NIGHT_SHIFTS', true), // Disable to weigh every shift the same
-        'start'      => env('NIGHT_SHIFTS_START', 2), // Starting from hour
-        'end'        => env('NIGHT_SHIFTS_END', 8), // Ends at (without including) hour
-        'multiplier' => env('NIGHT_SHIFTS_MULTIPLIER', 2),
-    ],
-
+    // TODO: REMOVE
     // Voucher calculation
     'voucher_settings'        => [
         'initial_vouchers'   => env('INITIAL_VOUCHERS', 0),
@@ -388,25 +562,7 @@ return [
         'voucher_start'      => env('VOUCHER_START') ?: null,
     ],
 
-    // Enable Driving License
-    'driving_license_enabled' => (bool) env('DRIVING_LICENSE_ENABLED', true),
-
-    # Instruction in accordance with § 43 Para. 1 of the German Infection Protection Act (IfSG)
-    'ifsg_enabled'           => (bool) env('IFSG_ENABLED', false),
-
-    # Instruction only onsite in accordance with § 43 Para. 1 of the German Infection Protection Act (IfSG)
-    'ifsg_light_enabled'           => env('IFSG_LIGHT_ENABLED', false) && env('IFSG_ENABLED', false),
-
-    // Available locales in /resources/lang/
-    // To disable a locale in config.php, you can set its value to null
-    'locales'                 => [
-        'de_DE' => 'Deutsch',
-        'en_US' => 'English',
-    ],
-
-    // The default locale to use
-    'default_locale'          => env('DEFAULT_LOCALE', 'en_US'),
-
+    // TODO: REMOVE
     // Available T-Shirt sizes
     // To disable a t-shirt size in config.php, you can set its value to null
     'tshirt_sizes'            => [
@@ -423,14 +579,23 @@ return [
         '4XL'  => '4XLarge Straight-Cut',
     ],
 
+    // TODO: REMOVE
     // T-shirt Size-Guide link
     'tshirt_link' => env('TSHIRT_LINK'),
 
-    // Whether to show the current day of the event (-2, -1, 0, 1, 2…) in footer and on the dashboard.
-    // The event start date has to be set for it to appear.
-    'enable_day_of_event' => (bool) env('ENABLE_DAY_OF_EVENT', false),
-    // If true there will be a day 0 (-1, 0, 1…). If false there won't (-1, 1…)
-    'event_has_day0' => (bool) env('EVENT_HAS_DAY0', true),
+
+    // #################################################################
+    // Group: Shift and event configuration
+    // #################################################################
+
+    // Multiply 'night shifts' and freeloaded shifts (start or end between 2 and 8 exclusive) by 2 in goodie score
+    // Goodies must be enabled to use this feature
+    'night_shifts'            => [
+        'enabled'    => (bool) env('NIGHT_SHIFTS', true), // Disable to weigh every shift the same
+        'start'      => env('NIGHT_SHIFTS_START', 2), // Starting from hour
+        'end'        => env('NIGHT_SHIFTS_END', 8), // Ends at (without including) hour
+        'multiplier' => env('NIGHT_SHIFTS_MULTIPLIER', 2),
+    ],
 
     'metrics'                 => [
         // User work buckets in seconds
@@ -442,6 +607,14 @@ return [
     // Set max number of hours that can be shown at once
     // 0 means no limit
     'filter_max_duration'     => env('FILTER_MAX_DURATION', 0),
+
+    // Number of shifts to freeload until a user is locked from shift signup.
+    'max_freeloadable_shifts' => env('MAX_FREELOADABLE_SHIFTS', 2),
+    // #################################################################
+
+    // #################################################################
+    // Group: Advanced - Header / Session / Proxy
+    // #################################################################
 
     // Session config
     'session'                 => [
@@ -468,7 +641,9 @@ return [
         'Referrer-Policy'         => 'strict-origin-when-cross-origin',
         'Content-Security-Policy' =>
             'default-src \'self\'; '
-            . ' frame-src https://nav.eurofurence.org; '
+            . ' frame-src https://www.openstreetmap.org/ https://identity.eurofurence.org https://nav.eurofurence.org; '
+            . ' font-src \'self\'; '
+            . ' script-src \'self\'; '
             . ' style-src \'self\' \'unsafe-inline\'; '
             . ' img-src \'self\' data:;',
         'X-XSS-Protection'        => '1; mode=block',
@@ -477,14 +652,12 @@ return [
         //'Expect-CT' => 'max-age=7776000,enforce,report-uri="[uri]"',
     ],
 
-    // A list of credits
-    'credits'                 => [
-        'Contribution' => 'Please visit [engelsystem/engelsystem](https://github.com/engelsystem/engelsystem) if '
-            . 'you want to contribute, have found any [bugs](https://github.com/engelsystem/engelsystem/issues) '
-            . 'or need help.',
-    ],
 
+    // #################################################################
     // Policy features
+    // #################################################################
+
+    // TODO: Add External variables for easy config
     'policy'                => [
         // Adds the prefix to the visual text but do not affect the link
         'telegram_visual_prefix' => '',
@@ -494,6 +667,10 @@ return [
         'non_staff_message_via_telegram' => true,
     ],
 
+    // #################################################################
+    // Group: DEVELOPMENT
+    // #################################################################
+    // You need to manually enable this and be sure to use the development image
     // var dump server
     'var_dump_server'         => [
         'host' => '127.0.0.1',

@@ -20,6 +20,38 @@ class Migrate
 
     protected string $table = 'migrations';
 
+    protected string $fileMigrationFlagOk = 'migration.ok';
+    protected string $fileMigrationFlagFail = 'migration.fail';
+    protected string $fileMigrationFlagRunning = 'migration.running';
+    protected string $fileMigrationFlagBasePath = '';
+
+    private function removeFile(string $file): void
+    {
+        if ($this->fileMigrationFlagBasePath !== '') {
+            if (file_exists(filename: $this->fileMigrationFlagBasePath . $file)) {
+                unlink(filename: $this->fileMigrationFlagBasePath . $file);
+            }
+        }
+    }
+
+    private function createFile(string $file): void
+    {
+        if ($this->fileMigrationFlagBasePath !== '') {
+            if (!file_exists(filename:$this->fileMigrationFlagBasePath . $file)) {
+                fopen(filename:$this->fileMigrationFlagBasePath . $file, mode: 'w');
+            }
+        }
+    }
+
+    private function removeAllMigrationFlagFiles(): void
+    {
+        if ($this->fileMigrationFlagBasePath !== '') {
+            $this->removeFile(file: $this->fileMigrationFlagOk);
+            $this->removeFile(file: $this->fileMigrationFlagFail);
+            $this->removeFile(file: $this->fileMigrationFlagRunning);
+        }
+    }
+
     /**
      * Migrate constructor
      */
@@ -31,13 +63,21 @@ class Migrate
 
     /**
      * Run a migration
+     * @throws Throwable
      */
     public function run(
         string $path,
         Direction $direction = Direction::UP,
         bool $oneStep = false,
-        bool $forceMigration = false
+        bool $forceMigration = false,
+        string $migrationFlagPath = ''
     ): void {
+
+        // Set the migration flag path
+        $this->fileMigrationFlagBasePath = $migrationFlagPath;
+        // Clean the migration flags
+        $this->removeAllMigrationFlagFiles();
+
         $this->initMigration();
 
         $this->lockTable($forceMigration);
@@ -49,6 +89,9 @@ class Migrate
         if ($direction === Direction::DOWN) {
             $migrations = $migrations->reverse();
         }
+
+        // Create running migration flag
+        $this->createFile(file: $this->fileMigrationFlagRunning);
 
         try {
             foreach ($migrations as $migration) {
@@ -77,10 +120,103 @@ class Migrate
         } catch (Throwable $e) {
             $this->unlockTable();
 
-            throw $e;
+            // Clean the migration flags
+            $this->removeAllMigrationFlagFiles();
+            // Create fail flag
+            $this->createFile(file: $this->fileMigrationFlagFail);
+
+            $error_text = print_r($e, true);
+            $error_text = substr($error_text, 0, 2000);
+
+            printf(PHP_EOL);
+            printf(str_repeat('*', 100) . PHP_EOL);
+            printf('!! ERROR !!' . PHP_EOL);
+            printf(str_repeat('*', 100) . PHP_EOL . PHP_EOL);
+            // dump($e);
+            print_r($error_text);
+            printf(PHP_EOL . str_repeat('*', 100) . PHP_EOL . PHP_EOL);
+
+            if (PHP_SAPI === 'cli') {
+                throw new Exception(message:'Migration failed', code: $e->getCode(), previous: $e);
+            } else {
+                die('Migration fail');
+            }
         }
 
         $this->unlockTable();
+
+        // Clean the migration flags
+        $this->removeAllMigrationFlagFiles();
+        // Create fail flag
+        $this->createFile(file: $this->fileMigrationFlagOk);
+
+        // Keep 'admin' group's privileges in sync with all privileges
+        try {
+            // Only proceed if required tables exist
+            if (
+                $this->schema->hasTable('groups') &&
+                $this->schema->hasTable('privileges') &&
+                $this->schema->hasTable('group_privileges')
+            ) {
+                $db = $this->schema->getConnection();
+
+                // Detect admin group (prefer slug if available, fallback to ID=1)
+                $adminId = null;
+                if ($this->schema->hasColumn('groups', 'slug')) {
+                    $admin = $db->table('groups')->where('slug', 'admin')->first();
+                    if ($admin) {
+                        $adminId = (int) ($admin->id ?? 0);
+                    }
+                }
+                if (!$adminId) {
+                    $admin = $db->table('groups')->where('id', 1)->first();
+                    if ($admin) {
+                        $adminId = (int) ($admin->id ?? 0);
+                    }
+                }
+
+                // If admin group does not exist (e.g., downgrade), skip
+                if ($adminId) {
+                    // Get all privilege IDs
+                    $allPrivilegeIds = $db->table('privileges')->pluck('id')->all();
+
+                    if (!empty($allPrivilegeIds)) {
+                        // Get existing privilege IDs for admin
+                        $existing = $db->table('group_privileges')
+                            ->where('group_id', $adminId)
+                            ->pluck('privilege_id')
+                            ->all();
+
+                        // Compute missing privilege IDs
+                        $missing = array_values(
+                            array_diff(
+                                array_map(
+                                    'intval',
+                                    $allPrivilegeIds
+                                ),
+                                array_map('intval', $existing)
+                            )
+                        );
+
+                        if (!empty($missing)) {
+                            $rows = [];
+                            foreach ($missing as $pid) {
+                                $rows[] = ['group_id' => $adminId, 'privilege_id' => (int) $pid];
+                            }
+                            // Insert missing rows in one go
+                            $db->table('group_privileges')->insert($rows);
+                        }
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
+            // Skip silently; this logic must never fail the migration run
+        }
+
+        // Inform the user
+        printf(PHP_EOL . str_repeat('*', 100) . PHP_EOL);
+        printf('Migration finished' . PHP_EOL);
+        printf(str_repeat('*', 100) . PHP_EOL . PHP_EOL);
     }
 
     /**
@@ -183,11 +319,27 @@ class Migrate
                 ->first();
 
             if ($lock && !$forceMigration) {
-                throw new Exception('Unable to acquire migration table lock');
+                // Clean the migration flags
+                $this->removeAllMigrationFlagFiles();
+                // Create fail flag
+                $this->createFile(file: $this->fileMigrationFlagFail);
+
+                printf(PHP_EOL);
+                printf(str_repeat('*', 100) . PHP_EOL);
+                printf('!! ERROR !!' . PHP_EOL);
+                printf(str_repeat('*', 100) . PHP_EOL . PHP_EOL);
+                printf('Table LOCK detected - You can force the lock bypass with --force' . PHP_EOL);
+                printf(PHP_EOL . str_repeat('*', 100) . PHP_EOL . PHP_EOL);
+
+                if (PHP_SAPI === 'cli') {
+                    throw new Exception(message:'Unable to acquire migration table lock', code: 0, previous: null);
+                } else {
+                    die('Unable to acquire migration table lock');
+                }
             }
 
             $this->getTableQuery()
-                ->insert(['migration' => 'lock']);
+                 ->insert(['migration' => 'lock']);
         });
     }
 

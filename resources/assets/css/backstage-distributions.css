@@ -1,0 +1,33 @@
+/* Backstage Distributions Styles */
+
+.avatar-placeholder {
+    font-weight: bold;
+}
+
+@media print {
+    .btn-toolbar,
+    .card-header .btn-group,
+    .btn-group,
+    .navbar,
+    .container-fluid > .row > .col-12 > .d-flex:first-child {
+        display: none !important;
+    }
+
+    .card {
+        border: 1px solid #dee2e6;
+        box-shadow: none;
+    }
+
+    .table th,
+    .table td {
+        border: 1px solid #dee2e6;
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .badge {
+        border: 1px solid #dee2e6;
+        color: #000 !important;
+        background: transparent !important;
+    }
+}

@@ -1,0 +1,170 @@
+{% extends 'layouts/app.twig' %}
+{% import 'macros/base.twig' as m %}
+{% import 'macros/form.twig' as f %}
+
+{% block title %}{{ __('form.edit') }}: {{ category.name }}{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <!-- Breadcrumb Navigation -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0">
+                                <li class="breadcrumb-item">
+                                    <a href="{{ url('/admin/backstage') }}">
+                                        {{ m.icon('house-door') }}
+                                        {{ __('backstage.dashboard.title') }}
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="{{ url('/admin/backstage/goodies/categories') }}">
+                                        {{ __('backstage.goodies.categories.title') }}
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item active">{{ __('form.edit') }}</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+
+                {% include 'layouts/parts/messages.twig' %}
+
+                <!-- Main Content -->
+                <div class="row">
+                    <div class="col-md-8 offset-md-2">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h4 class="card-title mb-0">
+                                    {{ m.icon('pencil') }}
+                                    {{ __('form.edit') }}: {{ category.name }}
+                                </h4>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ url('/admin/backstage/goodies/categories/' ~ category.uuid) }}" class="btn btn-info btn-sm">
+                                        {{ m.icon('eye') }}
+                                        {{ __('form.view') }}
+                                    </a>
+                                    <a href="{{ url('/admin/backstage/goodies/categories') }}" class="btn btn-secondary btn-sm">
+                                        {{ m.icon('arrow-left') }}
+                                        {{ __('form.back') }}
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <form method="post" action="{{ url('/admin/backstage/goodies/categories/' ~ category.uuid) }}">
+                                    {{ csrf() }}
+                                    <input type="hidden" name="_method" value="PUT">
+
+                                    <!-- Basic Information -->
+                                    <div class="mb-4">
+                                        <h6 class="text-muted mb-3">{{ __('backstage.goodies.categories.basic_info') }}</h6>
+
+                                        {{ f.input('name', __('backstage.goodies.categories.name'), {
+                                            'required': true,
+                                            'placeholder': __('backstage.goodies.categories.name_placeholder'),
+                                            'help': __('backstage.goodies.categories.name_help'),
+                                            'value': category.name
+                                        }) }}
+
+                                        {{ f.textarea('description', __('backstage.goodies.categories.description'), {
+                                            'placeholder': __('backstage.goodies.categories.description_placeholder'),
+                                            'help': __('backstage.goodies.categories.description_help'),
+                                            'rows': 4,
+                                            'value': category.description
+                                        }) }}
+                                    </div>
+
+                                    <!-- Settings -->
+                                    <div class="mb-4">
+                                        <h6 class="text-muted mb-3">{{ __('backstage.goodies.categories.settings') }}</h6>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                {{ f.input('display_order', __('backstage.goodies.categories.display_order'), {
+                                                    'type': 'number',
+                                                    'min': 0,
+                                                    'help': __('backstage.goodies.categories.display_order_help'),
+                                                    'value': category.display_order
+                                                }) }}
+                                            </div>
+                                            <div class="col-md-6 d-flex align-items-center">
+                                                {{ f.checkbox('is_active', __('backstage.goodies.categories.is_active'), {
+                                                    'checked': category.is_active,
+                                                    'help': __('backstage.goodies.categories.is_active_help')
+                                                }) }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Category Information -->
+                                    <div class="mb-4">
+                                        <h6 class="text-muted mb-3">{{ __('backstage.goodies.categories.details') }}</h6>
+                                        
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <dl class="row small">
+                                                    <dt class="col-sm-5">{{ __('backstage.goodies.categories.uuid') }}:</dt>
+                                                    <dd class="col-sm-7">
+                                                        <code class="small">{{ category.uuid }}</code>
+                                                    </dd>
+                                                    
+                                                    <dt class="col-sm-5">{{ __('backstage.created_at') }}:</dt>
+                                                    <dd class="col-sm-7">
+                                                        <span class="text-muted small">{{ category.created_at|date('Y-m-d H:i') }}</span>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <dl class="row small">
+                                                    <dt class="col-sm-5">{{ __('backstage.goodies.categories.items_count') }}:</dt>
+                                                    <dd class="col-sm-7">
+                                                        <span class="badge bg-info">{{ category.items_count|default(0) }}</span>
+                                                    </dd>
+                                                    
+                                                    <dt class="col-sm-5">{{ __('backstage.updated_at') }}:</dt>
+                                                    <dd class="col-sm-7">
+                                                        <span class="text-muted small">{{ category.updated_at|date('Y-m-d H:i') }}</span>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Form Actions -->
+                                    <div class="d-flex justify-content-between">
+                                        <a href="{{ url('/admin/backstage/goodies/categories/' ~ category.uuid) }}" class="btn btn-secondary">
+                                            {{ m.icon('x-circle') }}
+                                            {{ __('form.cancel') }}
+                                        </a>
+                                        {{ f.submit(__('form.save_changes'), {
+                                            'icon_left': 'check-circle',
+                                            'class': 'btn-primary'
+                                        }) }}
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Additional Help -->
+                        <div class="card mt-4 bg-info bg-opacity-10 border-info">
+                            <div class="card-body">
+                                <h6 class="text-info mb-2">
+                                    {{ m.icon('info-circle') }}
+                                    {{ __('backstage.goodies.categories.help.title') }}
+                                </h6>
+                                <ul class="small text-muted mb-0">
+                                    <li>{{ __('backstage.goodies.categories.help.organization') }}</li>
+                                    <li>{{ __('backstage.goodies.categories.help.display_order') }}</li>
+                                    <li>{{ __('backstage.goodies.categories.help.status') }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

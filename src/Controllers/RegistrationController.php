@@ -96,7 +96,13 @@ class RegistrationController extends BaseController
                 'minPasswordLength' => $this->config->get('password_min_length'),
                 'tShirtSizes' => $this->config->get('tshirt_sizes'),
                 'tShirtLink' => $this->config->get('tshirt_link'),
-                'angelTypes' => AngelType::whereHideRegister(false)->get(),
+                'angelTypes' => (function () {
+                    $q = AngelType::whereHideRegister(false);
+                    if (!auth()->can('user.type.staff')) {
+                        $q->where('staff_only', false);
+                    }
+                    return $q->get();
+                })(),
                 'preselectedAngelTypes' => $preselectedAngelTypes,
                 'buildUpStartDate' => $this->userFactory->determineBuildUpStartDate()->format('Y-m-d'),
                 'tearDownEndDate' => $this->config->get('teardown_end')?->format('Y-m-d'),
@@ -131,11 +137,20 @@ class RegistrationController extends BaseController
 
         $preselectedAngelTypes = [];
 
-        if ($this->session->has('oauth2_connect_provider')) {
-            $preselectedAngelTypes = $this->loadAngelTypesFromSessionOAuthGroups();
-        }
+        // TODO: FIX THIS OR REPLACE - Session saving the groups should be replaced by departments...maybe
+        // if ($this->session->has('oauth2_connect_provider')) {
+        //     $preselectedAngelTypes = $this->loadAngelTypesFromSessionOAuthGroups();
+        // }
 
-        foreach (AngelType::whereRestricted(false)->whereHideRegister(false)->get() as $angelType) {
+        foreach (
+            (function () {
+                $q = AngelType::whereRestricted(false)->whereHideRegister(false);
+                if (!auth()->can('user.type.staff')) {
+                    $q->where('staff_only', false);
+                }
+                return $q->get();
+            })() as $angelType
+        ) {
             // preselect every angel type without restriction
             $preselectedAngelTypes['angel_types_' . $angelType->id] = 1;
         }
@@ -143,31 +158,37 @@ class RegistrationController extends BaseController
         return $preselectedAngelTypes;
     }
 
-    /**
-     * @return Array<string, 1>
-     */
-    private function loadAngelTypesFromSessionOAuthGroups(): array
-    {
-        $oAuthAngelTypes = [];
-        $ssoTeams = $this->oAuth->getSsoTeams($this->session->get('oauth2_connect_provider'));
-        $oAuth2Groups = $this->session->get('oauth2_groups');
+    // /**
+    //  * @return Array<string, 1>
+    //  */
+    // private function loadAngelTypesFromSessionOAuthGroups(): array
+    // {
+    //     $oAuthAngelTypes = [];
+    //     $ssoTeams = $this->oAuth->getSsoTeams($this->session->get('oauth2_connect_provider'));
+    //     $oAuth2Groups = $this->session->get('oauth2_groups');
 
-        foreach ($ssoTeams as $name => $team) {
-            if (in_array($name, $oAuth2Groups)) {
-                // preselect angel type from oauth
-                $oAuthAngelTypes['angel_types_' . $team['id']] = 1;
-            }
-        }
+    //     foreach ($ssoTeams as $name => $team) {
+    //         if (in_array($name, $oAuth2Groups)) {
+    //             // preselect angel type from oauth
+    //             $oAuthAngelTypes['angel_types_' . $team['id']] = 1;
+    //         }
+    //     }
 
-        return $oAuthAngelTypes;
-    }
+    //     return $oAuthAngelTypes;
+    // }
 
     /**
      * @return Array<string, 1>
      */
     private function loadAngelTypesFromSessionFormData(): array
     {
-        $angelTypes = AngelType::whereHideRegister(false)->get();
+        $angelTypes = (function () {
+            $q = AngelType::whereHideRegister(false);
+            if (!auth()->can('user.type.staff')) {
+                $q->where('staff_only', false);
+            }
+            return $q->get();
+        })();
         $selectedAngelTypes = [];
 
         foreach ($angelTypes as $angelType) {

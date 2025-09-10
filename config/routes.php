@@ -13,6 +13,15 @@ $route->post('/register', 'RegistrationController@save');
 $route->get('/credits', 'CreditsController@index');
 $route->get('/health', 'HealthController@index');
 
+// Installation workflow
+$route->addGroup('/admin/install', function (RouteCollector $route): void {
+    $route->get('', 'Admin\\InstallController@index');
+    $route->post('/authenticate', 'Admin\\InstallController@authenticate');
+    $route->get('/status', 'Admin\\InstallController@status');
+    $route->post('/migrate', 'Admin\\InstallController@migrate');
+    $route->post('/sql', 'Admin\\InstallController@executeSql');
+});
+
 // Authentication
 $route->get('/login', 'AuthController@login');
 $route->post('/login', 'AuthController@postLogin');
@@ -48,6 +57,7 @@ $route->addGroup(
         $route->get('/oauth', 'SettingsController@oauth');
         $route->get('/sessions', 'SettingsController@sessions');
         $route->post('/sessions', 'SettingsController@sessionsDelete');
+        $route->get('/badge-number', 'SettingsController@updateBadgeNumber');
     }
 );
 
@@ -76,15 +86,57 @@ $route->addGroup(
 $route->get('/metrics', 'Metrics\\Controller@metrics');
 $route->get('/stats', 'Metrics\\Controller@stats');
 
-// Angeltypes
+// Angeltypes (legacy entry points)
 $route->addGroup('/angeltypes', function (RouteCollector $route): void {
     $route->get('/about', 'AngelTypesController@about');
+});
+
+// Crittertypes (new)
+$route->addGroup('/crittertypes', function (RouteCollector $route): void {
+    $route->get('', 'CritterTypesController@index');
+    $route->get('/about', 'AngelTypesController@about');
+    $route->get('/edit[/{angeltype_id:\d+}]', 'CritterTypesController@edit');
+    $route->post('/edit[/{angeltype_id:\d+}]', 'CritterTypesController@save');
+    $route->get('/{angeltype_id:\d+}', 'CritterTypesController@show');
+    $route->get('/{angeltype_id:\d+}/delete', 'CritterTypesController@deleteConfirm');
+    $route->post('/{angeltype_id:\d+}/delete', 'CritterTypesController@delete');
 });
 
 // Shifts
 $route->addGroup('/shifts', function (RouteCollector $route): void {
     $route->get('/random', 'ShiftsController@random');
 });
+
+
+// New dashboards (test)
+$route->get('/dashboards', 'DashboardsController@index');
+
+// Shift Manager V2
+$route->get('/shift-manager', 'ShiftManagerV2Controller@index');
+
+// Shift Manager V2 API (v2)
+$route->addGroup('/api/v2/shift-manager', function (RouteCollector $route): void {
+    $route->get('/dates', 'Api\\ShiftManagerV2Controller@dates');
+    $route->get('/shifts', 'Api\\ShiftManagerV2Controller@shifts');
+    $route->get('/shift/{id:\\d+}', 'Api\\ShiftManagerV2Controller@shift');
+    $route->get('/applications/{id:\\d+}', 'Api\\ShiftManagerV2Controller@applications');
+    $route->post('/applications/approve', 'Api\\ShiftManagerV2Controller@approveApplications');
+    $route->post('/apply', 'Api\\ShiftManagerV2Controller@apply');
+    $route->post('/cancel', 'Api\\ShiftManagerV2Controller@cancel');
+    $route->post('/assign', 'Api\\ShiftManagerV2Controller@assign');
+    $route->post('/unassign', 'Api\\ShiftManagerV2Controller@unassign');
+    $route->post('/worklog', 'Api\\ShiftManagerV2Controller@worklog');
+    $route->post('/noshow', 'Api\\ShiftManagerV2Controller@noshow');
+    $route->get('/users', 'Api\\ShiftManagerV2Controller@users');
+});
+
+// Digital ID System
+$route->get('/digital-id', 'DigitalIdController@index');
+$route->post('/digital-id/refresh', 'DigitalIdController@refreshToken');
+$route->get('/digital-id/verify/{token}', 'QrController@verifyToken');
+
+// Certification QR System
+$route->get('/certification-scan/verify/{token}', 'QrController@verifyCertificationToken');
 
 // News
 $route->get('/meetings', 'NewsController@meetings');
@@ -130,6 +182,29 @@ $route->addGroup(
     function (RouteCollector $route): void {
         $route->get('', 'Api\IndexController@index');
 
+        // Backstage API Routes (must be before catch-all route)
+        $route->addGroup(
+            '/v1/backstage',
+            function (RouteCollector $route): void {
+                // Dashboard KPIs
+                $route->get('/kpis', 'Api\\BackstageController@kpis');
+                $route->get('/stats', 'Api\\BackstageController@stats');
+
+                // User Search API
+                $route->get('/users/search', 'Api\\BackstageController@searchUsers');
+                $route->get('/users/{user_id:\d+}/hours', 'Api\\BackstageController@userHours');
+                $route->get('/users/{user_id:\d+}/eligibility', 'Api\\BackstageController@userEligibility');
+
+                // Goodies API
+                $route->get('/goodies/categories', 'Api\\BackstageController@goodiesCategories');
+                $route->get('/goodies/items', 'Api\\BackstageController@goodiesItems');
+                $route->get('/goodies/distributions', 'Api\\BackstageController@distributions');
+
+                // Real-time updates
+                $route->get('/live-stats', 'Api\\BackstageController@liveStats');
+            }
+        );
+
         $route->addGroup(
             '/v0-beta',
             function (RouteCollector $route): void {
@@ -161,7 +236,8 @@ $route->addGroup(
                 $route->get('/[{resource:.+}]', 'Api\IndexController@notFound');
             }
         );
-        $route->get('/[{resource:.+}]', 'Api\IndexController@notFound');
+        // Catch-all for undefined API routes (excluding v1 and v0-beta)
+        $route->get('/[{resource:(?!v1|v0-beta).+}]', 'Api\IndexController@notFound');
     }
 );
 
@@ -188,6 +264,15 @@ $route->addGroup(
             }
         );
 
+        // Digital ID Configuration
+        $route->addGroup(
+            '/digital-id',
+            function (RouteCollector $route): void {
+                $route->get('', 'Admin\\DigitalIdConfigController@index');
+                $route->post('', 'Admin\\DigitalIdConfigController@store');
+            }
+        );
+
         // FAQ
         $route->addGroup(
             '/faq',
@@ -203,6 +288,31 @@ $route->addGroup(
             function (RouteCollector $route): void {
                 $route->get('', 'Admin\\LogsController@index');
                 $route->post('', 'Admin\\LogsController@index');
+            }
+        );
+
+        // Purge
+        $route->addGroup(
+            '/purge',
+            function (RouteCollector $route): void {
+                $route->get('', 'Admin\\PurgeController@index');
+                $route->post('/preview', 'Admin\\PurgeController@preview');
+                $route->post('/execute', 'Admin\\PurgeController@execute');
+                $route->get('/audit-logs', 'Admin\\PurgeController@auditLogs');
+                $route->get('/download-backup/{id:\d+}', 'Admin\\PurgeController@downloadBackup');
+                $route->get('/status/{id:\d+}', 'Admin\\PurgeController@getStatus');
+            }
+        );
+
+        // Database Dump Manager
+        $route->addGroup(
+            '/dumpmanager',
+            function (RouteCollector $route): void {
+                $route->get('', 'Admin\\DumpManagerController@index');
+                $route->post('/create', 'Admin\\DumpManagerController@createDump');
+                $route->get('/download/{filename}', 'Admin\\DumpManagerController@downloadDump');
+                $route->post('/upload', 'Admin\\DumpManagerController@uploadRestore');
+                $route->post('/restore', 'Admin\\DumpManagerController@executeRestore');
             }
         );
 
@@ -247,6 +357,7 @@ $route->addGroup(
                 $route->post('', 'Admin\\QuestionsController@delete');
                 $route->get('/{question_id:\d+}', 'Admin\\QuestionsController@edit');
                 $route->post('/{question_id:\d+}', 'Admin\\QuestionsController@save');
+                $route->get('/{question_id:\d+}/unlock', 'Admin\\QuestionsController@unlock');
             }
         );
 
@@ -258,6 +369,74 @@ $route->addGroup(
                 $route->post('', 'Admin\\LocationsController@delete');
                 $route->get('/edit[/{location_id:\d+}]', 'Admin\\LocationsController@edit');
                 $route->post('/edit[/{location_id:\d+}]', 'Admin\\LocationsController@save');
+            }
+        );
+
+        // Certifications
+        $route->addGroup(
+            '/certifications',
+            function (RouteCollector $route): void {
+                // Main certification management
+                $route->get('', 'Admin\\CertificationsController@index');
+                $route->get('/create', 'Admin\\CertificationsController@create');
+                $route->post('', 'Admin\\CertificationsController@store');
+                $route->get('/{certification_uuid:[0-9a-f-]+}', 'Admin\\CertificationsController@show');
+                $route->get('/{certification_uuid:[0-9a-f-]+}/edit', 'Admin\\CertificationsController@edit');
+                $route->put('/{certification_uuid:[0-9a-f-]+}', 'Admin\\CertificationsController@update');
+                $route->delete('/{certification_uuid:[0-9a-f-]+}', 'Admin\\CertificationsController@destroy');
+                // Fallback for environments without method override
+                $route->post('/{certification_uuid:[0-9a-f-]+}/update', 'Admin\\CertificationsController@update');
+                $route->post(
+                    '/{certification_uuid:[0-9a-f-]+}/delete',
+                    'Admin\\CertificationsController@destroy'
+                );
+
+                // Certification actions
+                $route->post(
+                    '/{certification_uuid:[0-9a-f-]+}/mass-revoke',
+                    'Admin\\CertificationsController@massRevoke'
+                );
+                $route->post(
+                    '/{certification_uuid:[0-9a-f-]+}/deactivate',
+                    'Admin\\CertificationsController@deactivate'
+                );
+                $route->post(
+                    '/{certification_uuid:[0-9a-f-]+}/reactivate',
+                    'Admin\\CertificationsController@reactivate'
+                );
+                // QR Code functionality
+                $route->get(
+                    '/{certification_uuid:[0-9a-f-]+}/qr',
+                    'Admin\\CertificationsController@qr'
+                );
+                $route->post(
+                    '/{certification_uuid:[0-9a-f-]+}/qr/refresh',
+                    'Admin\\CertificationsController@generateQrToken'
+                );
+            }
+        );
+
+        // User Certification Management
+        $route->addGroup(
+            '/user-certifications',
+            function (RouteCollector $route): void {
+                $route->get('', 'UserCertificationsController@index');
+                $route->post('', 'UserCertificationsController@store');
+                $route->put('/{user_certification_id:\d+}', 'UserCertificationsController@update');
+                $route->delete('/{user_certification_id:\d+}', 'UserCertificationsController@destroy');
+                // Fallback for environments without method override DELETE
+                $route->post('/{user_certification_id:\d+}/delete', 'UserCertificationsController@destroy');
+
+                // Bulk operations
+                $route->post('/bulk', 'UserCertificationsController@bulk');
+                $route->post('/bulk-add', 'UserCertificationsController@bulkAdd');
+
+                // Application review (admin)
+                $route->post('/approve', 'UserCertificationsController@approveApplication');
+                $route->post('/reject', 'UserCertificationsController@rejectApplication');
+
+                // Notes
+                $route->post('/{user_certification_id:\d+}/note', 'UserCertificationsController@addNote');
             }
         );
 
@@ -290,6 +469,21 @@ $route->addGroup(
                         );
                     }
                 );
+
+                // User Certifications
+                $route->addGroup(
+                    '/certifications',
+                    function (RouteCollector $route): void {
+                        $route->get('', 'UserCertificationsController@userIndex');
+                        $route->post('', 'UserCertificationsController@userStore');
+                        $route->put('/{user_certification_id:\d+}', 'UserCertificationsController@userUpdate');
+                        $route->delete('/{user_certification_id:\d+}', 'UserCertificationsController@userDestroy');
+                        // Fallback for environments without method override
+                        $route->post('/{user_certification_id:\d+}/update', 'UserCertificationsController@userUpdate');
+                        $route->post('/{user_certification_id:\d+}/delete', 'UserCertificationsController@userDestroy');
+                        $route->post('/{user_certification_id:\d+}/note', 'UserCertificationsController@addUserNote');
+                    }
+                );
             }
         );
 
@@ -301,5 +495,133 @@ $route->addGroup(
                 $route->post('[/{news_id:\d+}]', 'Admin\\NewsController@save');
             }
         );
+
+        // Backstage System
+        $route->addGroup(
+            '/backstage',
+            function (RouteCollector $route): void {
+                // Main Backstage Dashboard
+                $route->get('', 'BackstageController@dashboard');
+
+                // User Search & Management
+                $route->addGroup(
+                    '/users',
+                    function (RouteCollector $route): void {
+                        $route->get('/search', 'BackstageController@userSearch');
+                        $route->post('/search', 'BackstageController@processUserSearch');
+                        $route->get('/qualify/{user_id:\d+}', 'BackstageController@qualifyUser');
+                        $route->post('/qualify/{user_id:\d+}', 'BackstageController@processUserQualification');
+
+                        // Goodies Profile (New Feature)
+                        $route->get('/{user_id:\d+}/goodies', 'BackstageController@userGoodiesProfile');
+                        $route->post(
+                            '/{user_id:\d+}/goodies/distribute',
+                            'BackstageController@processGoodieDistribution'
+                        );
+                        $route->post(
+                            '/{user_id:\d+}/goodies/bulk-distribute',
+                            'BackstageController@processBulkGoodieDistribution'
+                        );
+                    }
+                );
+
+                // Goodies Management (Admin Only)
+                $route->addGroup(
+                    '/goodies',
+                    function (RouteCollector $route): void {
+                        // Categories Management
+                        $route->addGroup(
+                            '/categories',
+                            function (RouteCollector $route): void {
+                                $route->get('', 'BackstageGoodiesController@categoriesIndex');
+                                $route->get('/create', 'BackstageGoodiesController@createCategory');
+                                $route->post('', 'BackstageGoodiesController@storeCategory');
+                                $route->get('/{uuid:[0-9a-f-]+}', 'BackstageGoodiesController@showCategory');
+                                $route->get('/{uuid:[0-9a-f-]+}/edit', 'BackstageGoodiesController@editCategory');
+                                $route->put('/{uuid:[0-9a-f-]+}', 'BackstageGoodiesController@updateCategory');
+                                $route->delete('/{uuid:[0-9a-f-]+}', 'BackstageGoodiesController@destroyCategory');
+                                // Fallback for environments without method override
+                                $route->post('/{uuid:[0-9a-f-]+}/update', 'BackstageGoodiesController@updateCategory');
+                                $route->post('/{uuid:[0-9a-f-]+}/delete', 'BackstageGoodiesController@destroyCategory');
+                            }
+                        );
+
+                        // Items Management
+                        $route->addGroup(
+                            '/items',
+                            function (RouteCollector $route): void {
+                                $route->get('', 'BackstageGoodiesController@itemsIndex');
+                                $route->get('/create', 'BackstageGoodiesController@createItem');
+                                $route->post('', 'BackstageGoodiesController@storeItem');
+                                $route->get('/{uuid:[0-9a-f-]+}', 'BackstageGoodiesController@showItem');
+                                $route->get('/{uuid:[0-9a-f-]+}/edit', 'BackstageGoodiesController@editItem');
+                                $route->put('/{uuid:[0-9a-f-]+}', 'BackstageGoodiesController@updateItem');
+                                $route->delete('/{uuid:[0-9a-f-]+}', 'BackstageGoodiesController@destroyItem');
+                                // Fallback for environments without method override
+                                $route->post('/{uuid:[0-9a-f-]+}/update', 'BackstageGoodiesController@updateItem');
+                                $route->post('/{uuid:[0-9a-f-]+}/delete', 'BackstageGoodiesController@destroyItem');
+                            }
+                        );
+
+                        // Distribution Management
+                        $route->get('/distributions', 'BackstageGoodiesController@distributionsIndex');
+                        $route->post('/distribute', 'BackstageGoodiesController@distribute');
+                        $route->get('/reports', 'BackstageGoodiesController@reports');
+                    }
+                );
+            }
+        );
+    }
+);
+
+// User certifications (own)
+$route->addGroup(
+    '/user/certifications',
+    function (RouteCollector $route): void {
+        $route->get('', 'UserCertificationsController@userIndex');
+        $route->post('/self-confirm', 'UserCertificationsController@selfConfirm');
+        $route->get('/self-confirm/{certification_uuid:[0-9a-f-]+}', 'UserCertificationsController@showSelfConfirm');
+        $route->get('/apply/{certification_uuid:[0-9a-f-]+}', 'UserCertificationsController@showApplyForm');
+        $route->post('/apply', 'UserCertificationsController@apply');
+        $route->post('/withdraw', 'UserCertificationsController@withdrawApplication');
+        $route->get('/export', 'UserCertificationsController@export');
+        $route->get('/renew/{certification_uuid:[0-9a-f-]+}', 'UserCertificationsController@renew');
+        $route->post('/renew/{certification_uuid:[0-9a-f-]+}', 'UserCertificationsController@processRenewal');
+    }
+);
+
+// AdminV2
+$route->addGroup(
+    '/adminv2',
+    function (RouteCollector $route): void {
+        // Import/Export
+        $route->addGroup(
+            '/export',
+            function (RouteCollector $route): void {
+                $route->get('', 'AdminV2\\ExportController@showExportPage');
+                $route->get('/download', 'AdminV2\\ExportController@export');
+                $route->post('/import', 'AdminV2\\ExportController@import');
+            }
+        );
+    }
+);
+
+// Departments
+$route->addGroup(
+    '/departments',
+    function ($router): void {
+        // Department routes
+        $router->get('', 'Department\\DepartmentController@index');
+        $router->get('/create', 'Department\\DepartmentController@create');
+        $router->get('/{uuid}', 'Department\\DepartmentController@show');
+        $router->get('/{uuid}/edit', 'Department\\DepartmentController@edit');
+        $router->post('', 'Department\\DepartmentController@store');
+        $router->post('/{uuid}/delete', 'Department\\DepartmentController@destroy');
+        $router->post('/{uuid}/update', 'Department\\DepartmentController@update');
+
+        // Department application routes
+        $router->post('/{uuid}/apply', 'Department\\DepartmentApplicationController@apply');
+        $router->post('/{uuid}/approve/{userId}', 'Department\\DepartmentApplicationController@approve');
+        $router->post('/{uuid}/deny/{userId}', 'Department\\DepartmentApplicationController@deny');
     }
 );

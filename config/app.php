@@ -37,7 +37,11 @@ return [
         \Engelsystem\Http\HttpClientServiceProvider::class,
         \Engelsystem\Helpers\DumpServerServiceProvider::class,
         \Engelsystem\Helpers\UuidServiceProvider::class,
+        \Engelsystem\Helpers\UserSearchServiceProvider::class,
         \Engelsystem\Controllers\Api\UsesAuthServiceProvider::class,
+
+        // V2 - Import/Export
+        \Engelsystem\ServiceProvider\ShiftExportServiceProvider::class,
     ],
 
     // Application middleware
@@ -45,6 +49,10 @@ return [
         // Basic initialization
         \Engelsystem\Middleware\SendResponseHandler::class,
         \Engelsystem\Middleware\ExceptionHandler::class,
+        // Migration gate must run as early as possible
+        \Engelsystem\Middleware\MigrationGate::class,
+        // Maintenance mode check - after migration gate, before normal operations
+        \Engelsystem\Middleware\MaintenanceMiddleware::class,
 
         // Changes of request/response parameters
         \Engelsystem\Middleware\SetLocale::class,
@@ -60,6 +68,8 @@ return [
         \Engelsystem\Middleware\SessionHandler::class,
 
         // Handle request
+        \Engelsystem\Middleware\CertificationPermissions::class,
+        \Engelsystem\Middleware\BackstagePermissions::class,
         \Engelsystem\Middleware\RequestHandler::class,
     ],
 

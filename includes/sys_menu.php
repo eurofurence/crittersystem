@@ -57,15 +57,18 @@ function make_navigation()
     $page = current_page();
     $menu = [];
     $pages = [
-        'news'           => __('news.title'),
-        'meetings'       => [__('news.title.meetings'), 'user_meetings'],
-        'user_shifts'    => __('general.shifts'),
-        'angeltypes'     => __('angeltypes.angeltypes'),
-        'questions'      => [__('Ask the Info Desk'), 'question.add'],
+        'news'                     => [__('news.title'), 'news'],
+//        'meetings'               => [__('news.title.meetings'), 'user_meetings'],
+        'user_shifts'              => [__('general.shifts'), 'user_shifts'],
+        'user/certifications'      => [__('certifications.title'), 'certificates.view'],
+        'questions'                => [__('Ask the Info Desk'), 'question.add'],
+        'crittertypes'             => [__('angeltypes.angeltypes'), 'angeltypes'],
+//        'digital-id'               => [__('Critter-ID'), 'logout'],
+        'departments'              => [__('departments.title.plural'), 'dept.view'],
     ];
 
     foreach ($pages as $menu_page => $options) {
-        if (!menu_is_allowed($menu_page, $options)) {
+        if (!menu_is_allowed(permissions: $options)) {
             continue;
         }
 
@@ -86,18 +89,24 @@ function make_navigation()
         // path              => name,
         // path              => [name, permission],
 
-        'admin_arrive'       => [admin_arrive_title(), 'users.arrive.list'],
-        'admin_active'       => 'Active Critters',
-        'users'              => ['All Critters', 'admin_user'],
-        'admin_free'         => 'Free Critters',
-        'admin/questions'    => ['Answer questions', 'question.edit'],
-        'admin/shifttypes'   => ['shifttype.shifttypes', 'shifttypes.view'],
-        'admin_shifts'       => 'Create shifts',
-        'admin/locations'    => ['location.locations', 'admin_locations'],
-        'admin_groups'       => 'Grouprights',
-        'admin/schedule'     => ['schedule.import', 'schedule.import'],
-        'admin/logs'         => ['log.log', 'admin_log'],
-        'admin/config'       => ['config.config', 'config.edit'],
+        'admin_arrive'           => [admin_arrive_title(), 'users.arrive.list'],
+        'admin_active'           => ['Active Critters', 'admin_active'],
+        'users'                  => ['All Critters', 'admin_user'],
+        'admin_free'             => ['Free Critters','admin_free'],
+        'admin/questions'        => ['Answer questions', 'question.edit'],
+        'admin/shifttypes'       => ['shifttype.shifttypes', 'shifttypes.view'],
+        'admin/certifications'   => ['Certifications', 'certificates.manage'],
+        'admin_shifts'           => ['Create shifts', 'admin_shifts'],
+        'admin/locations'        => ['location.locations', 'admin_locations'],
+        'admin_groups'           => ['Grouprights', 'admin_groups'],
+        'admin/schedule'         => ['schedule.import', 'schedule.import'],
+        'admin/backstage'        => ['Backstage', 'backstage.view'],
+        'admin/logs'             => ['log.log', 'admin_log'],
+        'admin/purge'            => ['Purge Data', 'user.type.admin'],
+        'admin/dumpmanager'      => ['Database Dump Manager', 'user.type.admin'],
+        'admin/config'           => ['config.config', 'config.edit'],
+        'admin/digital-id'       => ['Digital ID Config', 'config.edit'],
+        'adminv2/export'         => ['V2-Export', 'admin_user'],
     ];
 
     if (config('autoarrive')) {
@@ -105,7 +114,7 @@ function make_navigation()
     }
 
     foreach ($admin_pages as $menu_page => $options) {
-        if (!menu_is_allowed($menu_page, $options)) {
+        if (!menu_is_allowed(permissions: $options)) {
             continue;
         }
 
@@ -125,21 +134,23 @@ function make_navigation()
 }
 
 /**
- * @param string          $page
- * @param string|string[] $options
+ * If permission is not set, it will be visible
+ * Removed the feature the use the page name as permission setting
+ *
+ * @param string|string[] $permissions
  *
  * @return bool
  */
-function menu_is_allowed(string $page, $options)
+function menu_is_allowed($permissions)
 {
-    $options = (array) $options;
-    $permissions = $page;
+    $permissions = (array) $permissions;
 
-    if (isset($options[1])) {
-        $permissions = $options[1];
+    if (isset($permissions[1])) {
+        return auth()->can(abilities: $permissions[1]);
+    } else {
+        // If the permission is not set, allow the creation
+        return true;
     }
-
-    return auth()->can($permissions);
 }
 
 /**
@@ -148,14 +159,20 @@ function menu_is_allowed(string $page, $options)
  * @param string[] $menu Rendered menu
  * @return string[]
  */
-function make_location_navigation($menu)
+function make_location_navigation(array $menu): array
 {
     if (!auth()->can('view_locations')) {
         return $menu;
     }
 
     // Get a list of all locations
-    $locations = Location::orderBy('name')->get();
+    $query = Location::query();
+
+    if (!auth()->can('user.type.staff')) {
+        $query->whereNot('staff_only', true);
+    }
+    $locations = $query->orderBy('name')->get();
+
     $location_menu = [];
     if (auth()->can('admin_locations')) {
         $location_menu[] = toolbar_dropdown_item(

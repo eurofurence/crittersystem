@@ -1,0 +1,263 @@
+#!/usr/bin/env bash
+#
+# Critter System Project Preparation Script
+# This script prepares the project for deployment by installing dependencies,
+# building assets, and copying required files.
+#
+# Usage: ./bin/prepare_instance
+#
+
+set -e  # Exit on any error
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Function to print colored output
+print_info() {
+    echo -e "${BLUE}[INFO]${NC} $1"
+}
+
+print_success() {
+    echo -e "${GREEN}[SUCCESS]${NC} $1"
+}
+
+print_warning() {
+    echo -e "${YELLOW}[WARNING]${NC} $1"
+}
+
+print_error() {
+    echo -e "${RED}[ERROR]${NC} $1"
+}
+
+print_step() {
+    echo -e "${GREEN}[STEP]${NC} $1"
+}
+
+# Function to execute command with error handling
+execute_command() {
+    local cmd="$1"
+    local description="$2"
+
+    print_info "Executing: $cmd"
+    if [ -n "$description" ]; then
+        print_info "$description"
+    fi
+
+    if ! eval "$cmd"; then
+        print_error "Command failed: $cmd"
+        print_error "Error occurred during: $description"
+        exit 1
+    fi
+
+    print_success "Command completed successfully"
+    echo ""
+}
+
+# Check if running as root
+check_root_user() {
+    if [ "$EUID" -eq 0 ]; then
+        print_warning "You are running this script as ROOT user!"
+        print_warning "Running as root is generally not recommended for security reasons."
+        print_warning "Only use root in special deployment cases (containers, system setup, etc.)"
+        echo ""
+        read -p "Do you want to continue as root? (y/N): " -r
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            print_info "Script execution cancelled by user."
+            exit 0
+        fi
+        print_warning "Continuing as root user..."
+        echo ""
+    fi
+}
+
+# Check if a command exists
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+# Check if a package is installed (for apt-based systems)
+package_installed() {
+    if command_exists dpkg; then
+        dpkg -l | grep -q "^ii  $1 "
+    elif command_exists rpm; then
+        rpm -q "$1" >/dev/null 2>&1
+    elif command_exists pacman; then
+        pacman -Q "$1" >/dev/null 2>&1
+    else
+        # Fallback: check if related commands exist
+        case "$1" in
+            "gettext")
+                command_exists msgfmt && command_exists xgettext
+                ;;
+            *)
+                return 1
+                ;;
+        esac
+    fi
+}
+
+# Check dependencies
+check_dependencies() {
+    print_step "Checking dependencies..."
+
+    local missing_deps=()
+
+    # Check Node.js
+    if ! command_exists node; then
+        missing_deps+=("node (Node.js)")
+        print_error "Node.js is not installed"
+    else
+        print_success "Node.js found: $(node --version)"
+    fi
+
+    # Check Yarn
+    if ! command_exists yarn; then
+        missing_deps+=("yarn")
+        print_error "Yarn is not installed"
+    else
+        print_success "Yarn found: $(yarn --version)"
+    fi
+
+    # Check Composer
+    if ! command_exists composer; then
+        missing_deps+=("composer")
+        print_error "Composer is not installed"
+    else
+        print_success "Composer found: $(composer --version | head -n1)"
+    fi
+
+    # Check gettext
+    if ! package_installed "gettext" && ! command_exists msgfmt; then
+        missing_deps+=("gettext")
+        print_error "gettext package is not installed"
+    else
+        print_success "gettext found"
+    fi
+
+    if [ ${#missing_deps[@]} -gt 0 ]; then
+        print_error "Missing dependencies: ${missing_deps[*]}"
+        print_error "Please install the missing dependencies and run this script again."
+
+        print_info "Installation suggestions:"
+        print_info "Ubuntu/Debian: sudo apt update && sudo apt install nodejs npm yarn composer gettext"
+        print_info "CentOS/RHEL: sudo yum install nodejs npm yarn composer gettext"
+        print_info "Arch Linux: sudo pacman -S nodejs npm yarn composer gettext"
+        print_info "For Yarn: npm install -g yarn (if not available in package manager)"
+
+        exit 1
+    fi
+
+    print_success "All dependencies are installed!"
+    echo ""
+}
+
+# Create special assets directory
+create_special_directory() {
+    print_step "Creating special assets directory..."
+
+    local special_dir="public/assets/special"
+
+    if [ ! -d "$special_dir" ]; then
+        execute_command "mkdir -p '$special_dir'" "Creating special assets directory"
+    else
+        print_info "Special assets directory already exists"
+    fi
+}
+
+# Copy node modules to special directory
+copy_special_assets() {
+    print_step "Copying special assets..."
+
+    local special_dir='public/assets/special'
+
+    # Create subdirectories and copy files
+    local copies=(
+        "node_modules/@xterm/xterm:$special_dir"
+        "node_modules/bootstrap/dist/css:$special_dir/bootstrap"
+        "node_modules/bootstrap/dist/js:$special_dir/bootstrap"
+        "node_modules/bootstrap-icons/font:$special_dir/bootstrap-icons"
+        "node_modules/bootstrap-icons/icons:$special_dir/bootstrap-icons"
+        "resources/assets/js/install.js:$special_dir/install.js"
+        "resources/assets/css/install.css:$special_dir/install.css"
+    )
+
+    for copy_item in "${copies[@]}"; do
+
+        local src="${copy_item%%:*}"
+        local dest="${copy_item##*:}"
+
+        if [ -e "$src" ]; then
+            if [ -d "$src" ] && ! [ -d "$dest" ]; then
+                # Create destination directory if it doesn't exist
+                execute_command "mkdir -p $dest" "Creating directory for $dest"
+            fi
+
+            if [ -d "$src" ]; then
+                execute_command "cp -r '$src' '$dest'" "Copying directory $src to $dest"
+            else
+                execute_command "cp '$src' '$dest'" "Copying file $src to $dest"
+            fi
+        else
+            print_warning "Source not found: $src (skipping)"
+        fi
+    done
+
+    print_success "Special assets copied successfully!"
+    echo ""
+}
+
+# Main script execution
+main() {
+    print_info "Starting Critter System project preparation..."
+    echo ""
+
+    # Check if running as root
+    check_root_user
+
+    # Check dependencies
+    check_dependencies
+
+    # Install PHP dependencies
+    print_step "Installing PHP dependencies with Composer..."
+    execute_command "composer install" "Installing PHP packages"
+
+    # Install JavaScript dependencies
+    print_step "Installing JavaScript dependencies with Yarn..."
+    execute_command "yarn install" "Installing Node.js packages"
+
+    # Build assets
+    print_step "Building frontend assets..."
+    execute_command "yarn build" "Compiling and building frontend assets"
+
+    # Compile translations
+    print_step "Compiling translations..."
+    execute_command "bin/translation_compile" "Compiling gettext translations"
+
+    # Update browserslist database
+    print_step "Updating browserslist database..."
+    execute_command "npx update-browserslist-db@latest" "Updating browserslist database for better browser support"
+
+    # Run database migrations
+    print_step "Running database migrations..."
+    execute_command "bin/migrate" "Applying database migrations"
+
+    # # Create special assets directory
+    # create_special_directory
+
+    # # Copy special assets
+    # copy_special_assets
+
+    print_success "=========================================="
+    print_success "Project preparation completed successfully!"
+    print_success "=========================================="
+    print_info "Your Critter System project is now ready for use."
+    print_info "All dependencies have been installed and assets have been built."
+    echo ""
+}
+
+# Run the main function
+main "$@"

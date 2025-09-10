@@ -43,6 +43,14 @@ if [[ -n "${RUN_USER}" ]]; then
   echo "Running as $user:$group"
 fi
 
+## Path to the migration ok file
+#MIGRATION_OK="config/migration.ok"
+#
+## Check if the file exists
+#if [ ! -f "$MIGRATION_OK" ]; then
+#    echo "Migration needed!! Running migration..."
+#    bin/migrate
+#fi
 
 nginx -g 'daemon off;'&
 exec "$@"

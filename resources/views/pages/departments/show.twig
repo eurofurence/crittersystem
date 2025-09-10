@@ -1,0 +1,171 @@
+{% extends "layouts/app.twig" %}
+{% import 'macros/base.twig' as m %}
+
+{% block title %}{{ department.name }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col">
+                <h1>
+                    {{ m.back(url('/departments')) }}
+                    {% if department.staff_only %}
+                        <i class="bi bi-shield-lock-fill text-muted" title="{{ __('Staff Only') }}"></i>
+                    {% endif %}
+                    {{ department.name }}
+                </h1>
+            </div>
+            {% if can_manage %}
+                <div class="col-auto">
+                    <div class="btn-group">
+                        <a href="{{ url('/departments/' ~ department.uuid ~ '/edit') }}" class="btn btn-primary">
+                            <i class="bi bi-pencil"></i> {{ __('Edit') }}
+                        </a>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                            <i class="bi bi-trash"></i> {{ __('Delete') }}
+                        </button>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        {% if department.description %}
+            <div class="row mb-4">
+                <div class="col">
+                    <div class="card border-secondary {{ m.type_bg_class() }}">
+                        <div class="card-body bg-secondary">
+                            {{ department.description }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if pending_users.isNotEmpty() and can_manage %}
+            <div class="row mb-4">
+                <div class="col">
+                    <h3>{{ __('Pending Applications') }}</h3>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>{{ __('User') }}</th>
+                                <th>{{ __('Actions') }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for user in pending_users %}
+                                <tr>
+                                    <td>{{ user.displayName }}</td>
+                                    <td>
+                                        <form action="{{ url('/departments/' ~ department.uuid ~ '/approve/' ~ user.id) }}" method="POST" class="d-inline">
+                                            <button type="submit" class="btn btn-success btn-sm">
+                                                {{ __('Approve') }}
+                                            </button>
+                                        </form>
+                                        <form action="{{ url('/departments/' ~ department.uuid ~ '/deny/' ~ user.id) }}" method="POST" class="d-inline">
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                {{ __('Deny') }}
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <h3>{{ __('Staff Members') }}</h3>
+                {% if staff_users.isEmpty() %}
+                    <p class="text-muted">{{ __('No staff members') }}</p>
+                {% else %}
+                    <ul class="list-group">
+                        {% for user in staff_users %}
+                            <li class="list-group-item">{{ user.displayName }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                <h3>{{ __('Other Members') }}</h3>
+                {% if other_users.isEmpty() %}
+                    <p class="text-muted">{{ __('No other members') }}</p>
+                {% else %}
+                    <ul class="list-group">
+                        {% for user in other_users %}
+                            <li class="list-group-item">{{ user.displayName }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <h3>{{ __('Locations') }}</h3>
+                {% if locations.isEmpty() %}
+                    <p class="text-muted">{{ __('No locations assigned') }}</p>
+                {% else %}
+                    <ul class="list-group">
+                        {% for location in locations %}
+                            <li class="list-group-item">{{ location.name }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-md-4">
+                <h3>{{ __('Shifts') }}</h3>
+                {% if shifts.isEmpty() %}
+                    <p class="text-muted">{{ __('No shifts assigned') }}</p>
+                {% else %}
+                    <ul class="list-group">
+                        {% for shift in shifts %}
+                            <li class="list-group-item">{{ shift.title }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="col-md-4">
+                <h3>{{ __('Critter Types') }}</h3>
+                {% if angel_types.isEmpty() %}
+                    <p class="text-muted">{{ __('No critter types assigned') }}</p>
+                {% else %}
+                    <ul class="list-group">
+                        {% for type in angel_types %}
+                            <li class="list-group-item">{{ type.name }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if can_manage %}
+        <div class="modal fade" id="deleteModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content bg-dark text-white">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ __('Delete Department') }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>{{ __('Are you sure you want to delete this department?') }}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <form action="{{ url('/departments/' ~ department.uuid ~ '/delete') }}" method="POST">
+                            {{ csrf() }}
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
+                            <button type="submit" class="btn btn-danger">{{ __('Delete') }}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

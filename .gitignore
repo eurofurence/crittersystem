@@ -14,12 +14,27 @@ Thumbs.db
 _vimrc_local.vim
 .sass-cache
 
+project_control_docs/
+
+# NO SYNC Files/Folders
+_NOSYNC
+.NOSYNC
+*_NOSYNC
+*.NOSYNC
+_NOSYNC/
+.NOSYNC/
+*_NOSYNC/
+*.NOSYNC/
+
 # Visual Studio files
 /.vs
+.github/copilot-*
+.github/instructions/
 
 # PHPstorm files
 /.idea/
 /.phpstorm.meta.php
+.junie/
 
 # Docker .env files
 /docker/.env
@@ -28,6 +43,12 @@ _vimrc_local.vim
 /docker/dev/deployment.env
 
 # Project files
+# Migration Status files
+/config/migration.ok
+/config/migration.fail
+/config/migration.running
+/config/migration.log
+/config/idp_*_groups.yaml
 /config/config.php
 /config/lang/
 /public/*.xml
@@ -36,13 +57,14 @@ _vimrc_local.vim
 /coverage
 /unittests.xml
 /resources/lang/*/*.mo
+/bin/latest/
 
 # Composer files
 /vendor/
 
 # Frontend files
 /node_modules
-/public/assets
+/public/assets/*
 /package-lock.json
 /yarn-error.log
 /.yarn-cache

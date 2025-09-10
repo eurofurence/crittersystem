@@ -1,0 +1,153 @@
+{% extends 'layouts/app.twig' %}
+{% import 'macros/form.twig' as f %}
+
+{% block title %}
+    {{ __('Digital ID Configuration') }}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="h2">
+                        <i class="bi bi-qr-code me-2"></i>{{ __('Digital ID Configuration') }}
+                    </h1>
+                    <a href="{{ url('/admin') }}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> {{ __('Back to Admin') }}
+                    </a>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-8">
+                        <!-- Configuration Form -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="bi bi-gear"></i> {{ __('System Settings') }}
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <form method="post" action="{{ url('/admin/digital-id') }}">
+                                    {{ csrf() }}
+
+                                    <!-- Enable/Disable Toggle -->
+                                    <div class="mb-4">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" 
+                                                   id="digital_id_enabled" name="digital_id_enabled"
+                                                   {% if config.digital_id_enabled %}checked{% endif %}>
+                                            <label class="form-check-label" for="digital_id_enabled">
+                                                <strong>{{ __('Enable Digital ID System') }}</strong>
+                                            </label>
+                                        </div>
+                                        <div class="form-text">
+                                            {{ __('When enabled, users can access their Digital ID from the navbar menu.') }}
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <!-- Refresh Interval -->
+                                    <div class="mb-4">
+                                        {{ f.input('digital_id_refresh_interval', __('QR Code Refresh Interval (seconds)'), 'number', {
+                                            'required': true,
+                                            'min': 30,
+                                            'max': 3600,
+                                            'value': config.digital_id_refresh_interval,
+                                            'class': 'form-control'
+                                        }) }}
+                                        <div class="form-text">
+                                            {{ __('How often the QR code refreshes automatically. Minimum: 30 seconds, Maximum: 3600 seconds (1 hour).') }}
+                                        </div>
+                                    </div>
+
+                                    <!-- Token Overlap -->
+                                    <div class="mb-4">
+                                        {{ f.input('digital_id_token_overlap', __('Token Overlap Period (seconds)'), 'number', {
+                                            'required': true,
+                                            'min': 0,
+                                            'max': 300,
+                                            'value': config.digital_id_token_overlap,
+                                            'class': 'form-control'
+                                        }) }}
+                                        <div class="form-text">
+                                            {{ __('Grace period where both old and new tokens remain valid during refresh. Prevents issues with scanning timing.') }}
+                                        </div>
+                                    </div>
+
+                                    <!-- Submit Button -->
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="bi bi-check-lg"></i> {{ __('Save Configuration') }}
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <!-- Information Panel -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="bi bi-info-circle"></i> {{ __('System Information') }}
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <dl class="row">
+                                    <dt class="col-sm-6">{{ __('Status') }}:</dt>
+                                    <dd class="col-sm-6">
+                                        {% if config.digital_id_enabled %}
+                                            <span class="badge bg-success">{{ __('Enabled') }}</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">{{ __('Disabled') }}</span>
+                                        {% endif %}
+                                    </dd>
+
+                                    <dt class="col-sm-6">{{ __('Refresh Rate') }}:</dt>
+                                    <dd class="col-sm-6">{{ config.digital_id_refresh_interval }}s</dd>
+
+                                    <dt class="col-sm-6">{{ __('Overlap Period') }}:</dt>
+                                    <dd class="col-sm-6">{{ config.digital_id_token_overlap }}s</dd>
+                                </dl>
+
+                                <hr>
+
+                                <h6>{{ __('How It Works') }}:</h6>
+                                <ol class="small">
+                                    <li>{{ __('Users access Digital ID from navbar') }}</li>
+                                    <li>{{ __('QR code contains verification URL') }}</li>
+                                    <li>{{ __('Security team scans for identity verification') }}</li>
+                                    <li>{{ __('Shows user info and current shift status') }}</li>
+                                    <li>{{ __('Tokens refresh automatically for security') }}</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <!-- Security Notes -->
+                        <div class="card mt-3">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="bi bi-shield-check"></i> {{ __('Security Notes') }}
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="alert alert-warning small">
+                                    <strong>{{ __('Important') }}:</strong>
+                                    <ul class="mb-0 mt-2">
+                                        <li>{{ __('Tokens are cryptographically secure') }}</li>
+                                        <li>{{ __('Verification URLs are publicly accessible') }}</li>
+                                        <li>{{ __('Expired tokens are automatically cleaned up') }}</li>
+                                        <li>{{ __('Lower refresh intervals increase security') }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

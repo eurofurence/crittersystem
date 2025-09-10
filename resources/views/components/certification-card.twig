@@ -1,0 +1,203 @@
+{% import 'macros/base.twig' as m %}
+
+{# Certification Card Component
+   Usage: {% include 'components/certification-card.twig' with {
+       'certification': certification_object,
+       'user_certification': user_cert_pivot|null,
+       'user_status': 'not_applied'|'pending'|'approved'|'self_confirmed'|'expired'|'revoked',
+       'is_expired': false,
+       'is_expiring_soon': false,
+       'show_actions': true
+   } %}
+#}
+
+{% set user_status = user_status|default('not_applied') %}
+{% set is_expired = is_expired|default(false) %}
+{% set is_expiring_soon = is_expiring_soon|default(false) %}
+{% set show_actions = show_actions|default(true) %}
+
+<div class="list-group-item certification-item"
+     data-title="{{ certification.title|lower }}"
+     data-description="{{ certification.description|lower }}"
+     data-status="{{ user_status }}"
+     data-type="{{ certification.is_perpetual ? 'perpetual' : 'time_limited' }}"
+     data-self-confirmable="{{ certification.allow_self_confirmation ? 'yes' : 'no' }}"
+     data-availability="{{ user_status != 'not_applied' ? 'have' : 'available' }}">
+
+    <div class="d-flex justify-content-between align-items-start">
+        <div class="flex-grow-1">
+            <div class="d-flex align-items-center mb-2 flex-wrap">
+                <h6 class="mb-0 me-2">{{ certification.title }}</h6>
+
+                {# User Status Badge #}
+                {% if user_status == 'approved' %}
+                    <span class="badge bg-success">
+                        {{ m.icon('check-circle-fill') }}
+                        {{ __('user_certifications.status.approved') }}
+                    </span>
+                {% elseif user_status == 'self_confirmed' %}
+                    <span class="badge bg-info">
+                        {{ m.icon('person-check-fill') }}
+                        {{ __('user_certifications.status.self_confirmed') }}
+                    </span>
+                {% elseif user_status == 'pending' %}
+                    <span class="badge bg-warning text-dark">
+                        {{ m.icon('clock') }}
+                        {{ __('user_certifications.status.pending') }}
+                    </span>
+                {% elseif is_expired or user_status == 'expired' %}
+                    <span class="badge bg-danger">
+                        {{ m.icon('exclamation-triangle-fill') }}
+                        {{ __('user_certifications.status.expired') }}
+                    </span>
+                {% elseif user_status == 'revoked' %}
+                    <span class="badge bg-dark">
+                        {{ m.icon('x-circle-fill') }}
+                        {{ __('user_certifications.status.revoked') }}
+                    </span>
+                {% else %}
+                    <span class="badge bg-light text-dark border">
+                        {{ m.icon('circle') }}
+                        {{ __('user_certifications.status.not_applied') }}
+                    </span>
+                {% endif %}
+
+                {# Certification Type Indicators #}
+                {% if certification.allow_self_confirmation %}
+                    <span class="badge bg-success-subtle text-success ms-1" title="{{ __('user_certifications.self_confirmable_tooltip') }}">
+                        {{ m.icon('check-circle-fill') }}
+                        {{ __('user_certifications.self_confirmable') }}
+                    </span>
+                {% endif %}
+
+                {% if certification.is_perpetual %}
+                    <span class="badge bg-primary-subtle text-primary ms-1" title="{{ __('user_certifications.perpetual_tooltip') }}">
+                        {{ m.icon('infinity') }}
+                        {{ __('user_certifications.perpetual') }}
+                    </span>
+                {% else %}
+                    <span class="badge bg-secondary-subtle text-secondary ms-1" title="{{ __('user_certifications.time_limited_tooltip', {'days': certification.validity_period_days}) }}">
+                        {{ m.icon('clock') }}
+                        {{ certification.validity_period_days }} {{ __('user_certifications.days_valid') }}
+                    </span>
+                {% endif %}
+
+                {# Expiring Soon Warning #}
+                {% if is_expiring_soon %}
+                    <span class="badge bg-warning ms-1" title="{{ __('user_certifications.expiring_soon_tooltip') }}">
+                        {{ m.icon('exclamation-triangle') }}
+                        {{ __('user_certifications.expiring_soon') }}
+                    </span>
+                {% endif %}
+            </div>
+
+            {# Certification Details #}
+            <div class="small text-muted mb-2">
+                {% if certification.description %}
+                    <div class="mb-1">{{ certification.description }}</div>
+                {% endif %}
+
+                <div class="row g-2">
+                    {% if certification.contact_person %}
+                        <div class="col-md-4">
+                            <strong>{{ __('user_certifications.contact') }}:</strong>
+                            {{ certification.contact_person }}
+                            {% if certification.contact_email %}
+                                <br><a href="mailto:{{ certification.contact_email }}" class="text-decoration-none">{{ certification.contact_email }}</a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if certification.location %}
+                        <div class="col-md-4">
+                            <strong>{{ __('user_certifications.location') }}:</strong>
+                            {{ certification.location }}
+                        </div>
+                    {% endif %}
+
+                    {# User-specific information if they have this certification #}
+                    {% if user_certification %}
+                        {% if user_certification.date_certified %}
+                            <div class="col-md-4">
+                                <strong>{{ __('user_certifications.date_certified') }}:</strong>
+                                {{ user_certification.date_certified|date('Y-m-d') }}
+                            </div>
+                        {% endif %}
+
+                        {% if user_certification.date_expires %}
+                            <div class="col-md-4">
+                                <strong>{{ __('user_certifications.date_expires') }}:</strong>
+                                {{ user_certification.date_expires|date('Y-m-d') }}
+                            </div>
+                        {% endif %}
+
+                        {% if user_certification.notes %}
+                            <div class="col-12">
+                                <strong>{{ __('user_certifications.notes') }}:</strong>
+                                {{ user_certification.notes }}
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {# Action Buttons #}
+        {% if show_actions %}
+            <div class="ms-3 d-flex flex-column gap-2">
+                {% if user_status == 'not_applied' %}
+                    {# Apply/Self-confirm buttons for certifications user doesn't have #}
+                    {% if certification.allow_self_confirmation %}
+                        <div class="btn-group" role="group">
+                            <a href="{{ url('/user/certifications/self-confirm/' ~ certification.uuid) }}"
+                               class="btn btn-success btn-sm"
+                               title="{{ __('user_certifications.self_confirm_tooltip') }}">
+                                {{ m.icon('check-circle') }}
+                                {{ __('user_certifications.self_confirm') }}
+                            </a>
+                            <a href="{{ url('/user/certifications/apply/' ~ certification.uuid) }}"
+                               class="btn btn-success btn-sm"
+                               title="{{ __('user_certifications.apply_formal_tooltip') }}">
+                                {{ m.icon('plus-circle') }}
+                                {{ __('user_certifications.apply_formal') }}
+                            </a>
+                        </div>
+                    {% else %}
+                        <a href="{{ url('/user/certifications/apply/' ~ certification.uuid) }}"
+                           class="btn btn-sm btn-info"
+                           title="{{ __('user_certifications.apply_tooltip') }}">
+                            {{ m.icon('plus-circle') }}
+                            {{ __('user_certifications.apply') }}
+                        </a>
+                    {% endif %}
+                {% elseif user_status == 'pending' %}
+                    {# Withdrawal button for pending applications #}
+                    <button type="button"
+                            class="btn btn-warning btn-sm withdraw-application-btn"
+                            data-certification-uuid="{{ certification.uuid }}"
+                            data-certification-title="{{ certification.title }}"
+                            title="{{ __('user_certifications.withdraw_application_tooltip') }}">
+                        {{ m.icon('x-circle') }}
+                        {{ __('user_certifications.withdraw_application') }}
+                    </button>
+                    {% if certification.allow_self_confirmation %}
+                        {# Also show self-confirm option for pending self-confirmable certifications #}
+                        <a href="{{ url('/user/certifications/self-confirm/' ~ certification.uuid) }}"
+                           class="btn btn-success btn-sm ms-1"
+                           title="{{ __('user_certifications.self_confirm_pending_tooltip') }}">
+                            {{ m.icon('check-circle') }}
+                            {{ __('user_certifications.self_confirm') }}
+                        </a>
+                    {% endif %}
+                {% elseif (is_expired or is_expiring_soon) and certification.allow_self_confirmation %}
+                    <a href="{{ url('/user/certifications/renew/' ~ certification.uuid) }}"
+                       class="btn btn-sm btn-info"
+                       title="{{ __('user_certifications.renew_tooltip') }}">
+                        {{ m.icon('arrow-clockwise') }}
+                        {{ __('user_certifications.renew') }}
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>

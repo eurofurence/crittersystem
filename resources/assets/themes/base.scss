@@ -212,6 +212,13 @@ table .border-bottom {
   display: block;
 }
 
+.sticky-legend {
+  position: sticky;
+  top: calc(40px + $navbar-padding-y * 2 + var(--#{$prefix}border-width));
+  z-index: $zindex-sticky;
+  height: 25px;
+}
+
 .shift-calendar {
   display: flex;
   flex-direction: row;
@@ -228,7 +235,7 @@ table .border-bottom {
 
     .header {
       position: sticky;
-      top: calc(40px + $navbar-padding-y * 2 + var(--#{$prefix}border-width));
+      top: calc(60px + $navbar-padding-y * 2 + var(--#{$prefix}border-width));
       z-index: $zindex-sticky;
       border-bottom: 1px solid $table-border-color;
       height: 30px;
@@ -436,4 +443,96 @@ input[type='number'] {
 
 input[type='text']:invalid {
   color: map.get($theme-colors, 'danger');
+}
+
+/* For shift dashboard tables */
+.dashboard-table a {
+  text-decoration: none !important;
+}
+.dashboard-table a:hover {
+  text-decoration: underline !important;
+}
+
+.dashboard-table a[data-critter-id]:not([data-critter-id=""]) span.bi:hover,
+.dashboard-table a.secondary-highlight span,{
+  outline: 1px solid map.get($theme-colors, 'warning');
+  box-shadow: 0 0 0.5em map.get($theme-colors, 'warning');
+}
+
+.dashboard-table .date_divider {
+  background: rgba(255, 255, 255, .2);
+}
+
+.dashboard-table tbody tr.highlight {
+  background: content-box linear-gradient(90deg, rgba(180, 20, 20, .4), transparent);
+}
+
+.dashboard-table thead th a {
+  color: inherit !important;
+}
+
+@include media-breakpoint-down(lg) {
+  .dashboard-table thead th {
+    writing-mode: vertical-lr;
+  }
+}
+
+.dashboard-table tbody:not(:last-child):after {
+  content: '';
+  display: block;
+  height: 0.5em;
+}
+
+.dashboard-table tbody td a span {
+  margin-right: 0.3em;
+  color: inherit;
+}
+
+.dashboard-table tbody td.critter-warn-good,
+.dashboard-table tbody td.critter-warn-bad,
+.dashboard-table tbody td.critter-warn-critical {
+  border-bottom: 3px solid map.get($theme-colors, 'success');
+}
+
+.dashboard-table tbody td.critter-warn-bad {
+  border-bottom-color: var(--bs-orange);
+}
+
+.dashboard-table tbody td.critter-warn-critical {
+  border-bottom-color: map.get($theme-colors, 'danger');
+}
+
+#fullscreen-wrapper:fullscreen {
+  overflow-y: scroll;
+}
+
+
+.attention-ring::before {
+  display: block;
+  content: '';
+  pointer-events: none;
+  border-radius: 50%;
+  border: 10px solid red;
+  opacity: 0;
+  position: absolute;
+  animation: attention 1s cubic-bezier(0, 0, 0.2, 1) 2;
+  animation-delay: 1s;
+}
+@keyframes attention {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(5); /* multiple of the initial size */
+    opacity: 0;
+  }
+}
+
+.text-small {
+  font-size: 80%;
+}
+
+.text-tiny {
+  font-size: 60%;
 }

@@ -1,0 +1,559 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.edit.title"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+#: resources\views\admin\certifications\index.twig
+msgid "certifications.create.title"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+#: resources\views\admin\certifications\index.twig
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.title"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+#: resources\views\admin\certifications\index.twig
+#: resources\views\admin\certifications\show.twig
+msgid "form.edit"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "form.create"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.edit.description"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.create.description"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.basic_information"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+#: resources\views\admin\certifications\index.twig
+msgid "certifications.title_field"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.title.help"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.description"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.description.help"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.location"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.location.help"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.is_active"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.is_active.help"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.contact_information"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+#: resources\views\admin\certifications\index.twig
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.contact_person"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.contact_person.help"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.contact_email"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.contact_email.help"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.validity_settings"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.is_perpetual"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.is_perpetual.help"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.validity_period_days"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.validity_period.select"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.validity_period.30_days"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.validity_period.90_days"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.validity_period.180_days"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.validity_period.365_days"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.validity_period.730_days"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.validity_period.1095_days"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.validity_period.custom"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.validity_period_days.help"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.custom_validity_days"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.custom_validity_days.help"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.allow_self_confirmation"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.allow_self_confirmation.help"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "form.help"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.help.title_section"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.help.title_text"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.help.description_section"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.help.description_text"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.help.validity_section"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.help.perpetual_text"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.help.timed_text"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.help.self_confirmation_text"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.help.contact_section"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.help.contact_text"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.quick_reference"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.common_periods"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "form.days"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.examples.short_term"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.examples.annual"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.examples.biennial"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+#: resources\views\admin\certifications\index.twig
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.perpetual"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.examples.permanent"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.current_status"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+#: resources\views\admin\certifications\index.twig
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.status"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+#: resources\views\admin\certifications\index.twig
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.active"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+#: resources\views\admin\certifications\index.twig
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.inactive"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+#: resources\views\admin\certifications\index.twig
+msgid "certifications.critters"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.created"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.view_details"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "form.cancel"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "form.save_changes"
+msgstr ""
+
+#: resources\views\admin\certifications\edit.twig
+msgid "certifications.create.submit"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+msgid "certifications.filter.title"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+msgid "form.search"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+msgid "certifications.search.placeholder"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+msgid "certifications.filter.status"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+msgid "form.select_all"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+msgid "certifications.filter.validity"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+msgid "certifications.timed"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+msgid "certifications.filter.self_confirmation"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.self_confirmable"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.not_self_confirmable"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+msgid "form.clear"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+msgid "certifications.results.showing"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+msgid "certifications.results.filtered"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.validity"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+msgid "certifications.critters_count"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.created_at"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+#: resources\views\admin\certifications\show.twig
+msgid "form.actions"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+#: resources\views\admin\certifications\show.twig
+msgid "form.not_specified"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.valid_for_days"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+msgid "form.view"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.deactivate"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.deactivate.confirm"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.reactivate"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.more_actions"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.mass_revoke.confirm"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.mass_revoke"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.delete.confirm"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+#: resources\views\admin\certifications\show.twig
+msgid "form.delete"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+msgid "pagination.showing"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+msgid "pagination.to"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+msgid "pagination.of"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+msgid "pagination.results"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+msgid "pagination.navigation"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+msgid "pagination.previous"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+msgid "pagination.next"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+msgid "certifications.no_results.title"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+msgid "certifications.no_results.filtered"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+msgid "certifications.no_results.empty"
+msgstr ""
+
+#: resources\views\admin\certifications\index.twig
+msgid "certifications.create.first"
+msgstr ""
+
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.details"
+msgstr ""
+
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.self_confirmation"
+msgstr ""
+
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.updated_at"
+msgstr ""
+
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.statistics"
+msgstr ""
+
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.total_critters"
+msgstr ""
+
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.approved_critters"
+msgstr ""
+
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.status.pending"
+msgstr ""
+
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.status.self_confirmed"
+msgstr ""
+
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.status.revoked"
+msgstr ""
+
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.status.approved"
+msgstr ""
+
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.status.expired"
+msgstr ""
+
+#: resources\views\admin\certifications\show.twig
+msgid "general.name"
+msgstr ""
+
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.date_certified"
+msgstr ""
+
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.expires_at"
+msgstr ""
+
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.notes"
+msgstr ""
+
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.no_expiry"
+msgstr ""
+
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.view_user_certs"
+msgstr ""
+
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.approve"
+msgstr ""
+
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.revoke"
+msgstr ""
+
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.revoke.confirm"
+msgstr ""
+
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.restore"
+msgstr ""
+
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.remove"
+msgstr ""
+
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.remove.confirm"
+msgstr ""
+
+#: resources\views\admin\certifications\show.twig
+msgid "certifications.no_critters_with_status"
+msgstr ""
+

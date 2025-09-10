@@ -58,13 +58,6 @@
                                 {% endif %}
                             {% endif %}
                         {% endblock %}
-                        {%- block info_text %}
-                            {% if config('contact_options') and not is_admin|default(false) %}
-                                <p>
-                                    {{ m.info(__('question.contact_options') ~ block('contact_options'), true) }}
-                                </p>
-                            {% endif %}
-                        {% endblock %}
 
                         {% for question in questions %}
                             <div class="row mb-4">
@@ -72,6 +65,15 @@
                                     <div class="card {% if theme.type =='light' %}bg-light{% else %}bg-secondary{% endif %}">
                                         <div class="card-body bg-body">
                                             {{ question.text|nl2br }}
+
+                                    {% if question.answer %}
+                                        <p class="card-text mt-3 mx-3">
+                                            Answer: <br>
+                                            {{ question.answer }}
+                                        </p>
+                                    {% endif %}
+
+
                                         </div>
 
                                         <div class="card-footer {{ m.type_bg_class() }} d-flex align-items-center">
@@ -80,7 +82,15 @@
                                             </div>
 
                                             {% if can('question.edit') %}
-                                                {{ m.user(question.user, {'pronoun': true}) }}
+                                                <div class="me-3">
+                                                    {{ m.user(question.user, {'pronoun': true}) }}
+                                                </div>
+                                            {% endif %}
+
+                                            {% if question.editor %}
+                                                <div class="me-3">
+                                                    {{ m.icon('pencil') }} {{ question.editor.displayName }}
+                                                </div>
                                             {% endif %}
 
                                             <div class="d-flex ms-auto">
@@ -103,21 +113,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                {% if question.answer %}
-                                    <div class="col-md-11 offset-md-1 mt-3">
-                                        <div class="card bg-info">
-                                            <div class="card-body bg-body {{ m.type_text_class() }}">
-                                                {{ question.answer|markdown }}
-                                            </div>
-                                            <div class="card-footer {{ m.type_bg_class() }} d-flex align-items-center {{ m.type_text_class() }}">
-                                                <div class="me-3">
-                                                    {{ m.icon('clock') }} {{ question.updated_at.format(__('general.datetime')) }}
-                                                </div>
-                                                {{ m.user(question.answerer, {'pronoun': true}) }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endif %}
                             </div> <!-- row -->
                         {% endfor %}
                     {% endblock %}

@@ -82,12 +82,17 @@ function admin_free()
     foreach ($users as $usr) {
         if (count($tokens) > 0) {
             $match = false;
-            $index = join('', $usr->attributesToArray());
             foreach ($tokens as $token) {
                 $token = trim($token);
-                if (!empty($token) && stristr($index, $token)) {
-                    $match = true;
-                    break;
+                if (!empty($token)) {
+                    if (stristr($usr->name, $token)) {
+                        $match = true;
+                        break;
+                    }
+                    if (ctype_digit($token) && $usr->personalData->badge_number == intval($token)) {
+                        $match = true;
+                        break;
+                    }
                 }
             }
             if (!$match) {
@@ -100,9 +105,10 @@ function admin_free()
             'name'        => User_Nick_render($usr)
                 . User_Pronoun_render($usr)
                 . user_info_icon($usr),
+            'badge_number' => $usr->personalData->badge_number,
             'shift_state' => User_shift_state_render($usr),
             'last_shift'  => User_last_shift_render($usr),
-            'dect'        => sprintf('<a href="https://t.me/%s">%s%1$s</a>', str_replace('@','', htmlspecialchars((string) $usr->contact->dect)), config('policy')['telegram_visual_prefix']),
+            'dect'        => sprintf('<a href="https://t.me/%s">%s%1$s</a>', str_replace('@', '', htmlspecialchars((string) $usr->contact->dect)), config('policy')['telegram_visual_prefix']),
             'email'       => $usr->settings->email_human
                 ? sprintf('<a href="mailto:%s">%1$s</a>', htmlspecialchars((string) $email))
                 : icon('eye-slash'),
@@ -126,6 +132,7 @@ function admin_free()
         ]),
         table([
             'name'        => __('general.name'),
+            'badge_number' => __('general.badge_number'),
             'shift_state' => __('shift.next'),
             'last_shift'  => __('Last shift'),
             'dect'        => __('general.dect'),

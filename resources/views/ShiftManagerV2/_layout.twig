@@ -1,0 +1,25 @@
+{% extends "layouts/app.twig" %}
+
+{% block title %}{{ page_title|default('Shift Manager') }}{% endblock %}
+
+{% block head %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('assets/shiftManagerV2-css.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-3" id="shift-manager-v2" data-persona="{{ persona }}">
+  {% block smv2_content %}{% endblock %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+  {{ parent() }}
+  <script src="{{ asset('assets/shiftManagerV2.js') }}" 
+    {% if event_dates %}
+      data-buildup-start="{{ event_dates.buildup_start ? event_dates.buildup_start.toISOString() : '' }}"
+      data-event-start="{{ event_dates.event_start ? event_dates.event_start.toISOString() : '' }}"
+      data-event-end="{{ event_dates.event_end ? event_dates.event_end.toISOString() : '' }}"
+      data-teardown-end="{{ event_dates.teardown_end ? event_dates.teardown_end.toISOString() : '' }}"
+    {% endif %}></script>
+{% endblock %}

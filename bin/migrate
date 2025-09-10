@@ -12,6 +12,10 @@ use Engelsystem\Exceptions\Handlers\NullHandler;
 
 require_once __DIR__ . '/../includes/application.php';
 
+// Base directory to save the migration flags
+// To disable the flags function, set $migrationBaseDir = ''
+$migrationFlagBaseDir = __DIR__ . '/../storage/';
+
 /** @var $loader ClassLoader */
 $baseDir = __DIR__ . '/../db/migrations';
 
@@ -50,4 +54,5 @@ if (in_array('force', $argv) || in_array('--force', $argv) || in_array('-f', $ar
     $force = true;
 }
 
-$migration->run($baseDir, $direction, $oneStep, $force);
+// Just... migrate
+$migration->run($baseDir, $direction, $oneStep, $force, $migrationFlagBaseDir);

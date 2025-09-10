@@ -1,0 +1,289 @@
+{% extends 'layouts/app.twig' %}
+{% import 'macros/base.twig' as m %}
+{% import 'macros/form.twig' as f %}
+
+{% block title %}{{ __('backstage.goodies.items.show.title') }}: {{ item.name }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>
+            {{ m.icon('box') }}
+            {{ item.name }}
+            {% if item.is_active %}
+                <span class="badge bg-success ms-2">{{ __('backstage.goodies.status.active') }}</span>
+            {% else %}
+                <span class="badge bg-danger ms-2">{{ __('backstage.goodies.status.inactive') }}</span>
+            {% endif %}
+        </h1>
+
+        {% include 'layouts/parts/messages.twig' %}
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="btn-toolbar justify-content-between" role="toolbar">
+                    <div class="btn-group" role="group">
+                        <a href="{{ url('/admin/backstage/goodies/items') }}" class="btn btn-secondary btn-sm">
+                            {{ m.icon('arrow-left') }}
+                            {{ __('backstage.goodies.items.back_to_list') }}
+                        </a>
+                        {% if item.category %}
+                            <a href="{{ url('/admin/backstage/goodies/categories/' ~ item.category.uuid) }}" 
+                               class="btn btn-info btn-sm">
+                                {{ m.icon('grid-3x3-gap') }}
+                                {{ item.category.name }}
+                            </a>
+                        {% endif %}
+                        <a href="{{ url('/admin/backstage') }}" class="btn btn-secondary btn-sm">
+                            {{ m.icon('house') }}
+                            {{ __('backstage.back_to_dashboard') }}
+                        </a>
+                    </div>
+                    {% if can_edit %}
+                        <div class="btn-group" role="group">
+                            <a href="{{ url('/admin/backstage/goodies/items/' ~ item.uuid ~ '/edit') }}" 
+                               class="btn btn-primary btn-sm">
+                                {{ m.icon('pencil') }}
+                                {{ __('form.edit') }}
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {# Item Details #}
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            {{ m.icon('info-circle') }}
+                            {{ __('backstage.goodies.items.details') }}
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <dl class="row">
+                                    <dt class="col-sm-4">{{ __('backstage.goodies.items.name') }}:</dt>
+                                    <dd class="col-sm-8">{{ item.name }}</dd>
+                                    
+                                    <dt class="col-sm-4">{{ __('backstage.goodies.items.category') }}:</dt>
+                                    <dd class="col-sm-8">
+                                        {% if item.category %}
+                                            <a href="{{ url('/admin/backstage/goodies/categories/' ~ item.category.uuid) }}"
+                                               class="badge bg-primary text-decoration-none">
+                                                {{ item.category.name }}
+                                            </a>
+                                        {% else %}
+                                            <span class="text-muted fst-italic">{{ __('backstage.goodies.items.no_category') }}</span>
+                                        {% endif %}
+                                    </dd>
+                                    
+                                    <dt class="col-sm-4">{{ __('backstage.goodies.items.status') }}:</dt>
+                                    <dd class="col-sm-8">
+                                        {% if item.is_active %}
+                                            <span class="badge bg-success">{{ __('backstage.goodies.status.active') }}</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">{{ __('backstage.goodies.status.inactive') }}</span>
+                                        {% endif %}
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="col-md-6">
+                                <dl class="row">
+                                    <dt class="col-sm-4">{{ __('backstage.goodies.items.required_hours') }}:</dt>
+                                    <dd class="col-sm-8">
+                                        <span class="badge bg-warning text-dark">{{ item.required_hours }}h</span>
+                                    </dd>
+
+                                    <dt class="col-sm-4">{{ __('backstage.goodies.items.max_per_person') }}:</dt>
+                                    <dd class="col-sm-8">
+                                        {% if item.max_per_person %}
+                                            <span class="badge bg-info">{{ item.max_per_person }} {{ __('backstage.goodies.items.max_limit') }}</span>
+                                        {% else %}
+                                            <span class="badge bg-success">{{ __('backstage.goodies.items.no_limit') }}</span>
+                                        {% endif %}
+                                    </dd>
+                                    
+                                    <dt class="col-sm-4">{{ __('backstage.goodies.items.order') }}:</dt>
+                                    <dd class="col-sm-8">
+                                        <span class="badge bg-secondary">{{ item.display_order|default(0) }}</span>
+                                    </dd>
+                                    
+                                    <dt class="col-sm-4">{{ __('backstage.goodies.items.uuid') }}:</dt>
+                                    <dd class="col-sm-8">
+                                        <code class="small">{{ item.uuid }}</code>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                        
+                        {% if item.description %}
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <dt>{{ __('backstage.goodies.items.description') }}:</dt>
+                                    <dd class="mt-2">
+                                        <div class="alert alert-info">
+                                            {{ item.description }}
+                                        </div>
+                                    </dd>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {# Certification Requirements #}
+                        {% if item.certifications|length > 0 %}
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <dt>{{ __('backstage.goodies.items.required_certifications') }}:</dt>
+                                    <dd class="mt-2">
+                                        <div class="alert alert-warning">
+                                            <h6 class="alert-heading">
+                                                {{ m.icon('shield-check') }}
+                                                {{ __('backstage.goodies.items.certifications_required') }}
+                                            </h6>
+                                            <p class="mb-2">{{ __('backstage.goodies.items.certifications_required_help') }}</p>
+                                            <div class="row">
+                                                {% for certification in item.certifications %}
+                                                    <div class="col-md-6 mb-2">
+                                                        <div class="d-flex align-items-start">
+                                                            <span class="badge bg-primary me-2">{{ m.icon('award') }}</span>
+                                                            <div>
+                                                                <strong>{{ certification.title }}</strong>
+                                                                {% if certification.description %}
+                                                                    <br>
+                                                                    <small class="text-muted">{{ certification.description }}</small>
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </dd>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {# Timestamps #}
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <dl class="row">
+                                    <dt class="col-sm-4">{{ __('backstage.created_at') }}:</dt>
+                                    <dd class="col-sm-8">
+                                        <span class="text-muted">{{ item.created_at|date('Y-m-d H:i:s') }}</span>
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="col-md-6">
+                                <dl class="row">
+                                    <dt class="col-sm-4">{{ __('backstage.updated_at') }}:</dt>
+                                    <dd class="col-sm-8">
+                                        <span class="text-muted">{{ item.updated_at|date('Y-m-d H:i:s') }}</span>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Distribution History #}
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">
+                            {{ m.icon('clock-history') }}
+                            {{ __('backstage.goodies.items.distributions') }}
+                            <span class="badge bg-primary ms-2">{{ distributions|length }}</span>
+                        </h5>
+                        {% if can_edit %}
+                            <button type="button" class="btn btn-success btn-sm" disabled>
+                                {{ m.icon('plus-circle') }}
+                                {{ __('backstage.goodies.items.add_distribution') }}
+                                <small class="text-muted">({{ __('backstage.coming_soon') }})</small>
+                            </button>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        {% if distributions|length > 0 %}
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>{{ __('backstage.goodies.distributions.user') }}</th>
+                                            <th>{{ __('backstage.goodies.distributions.date') }}</th>
+                                            <th>{{ __('backstage.goodies.distributions.notes') }}</th>
+                                            <th>{{ __('backstage.goodies.distributions.distributed_by') }}</th>
+                                            {% if can_admin %}
+                                                <th class="text-end">{{ __('form.actions') }}</th>
+                                            {% endif %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for distribution in distributions %}
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="badge bg-info me-2">{{ m.icon('person') }}</span>
+                                                        {{ distribution.user.name }}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="text-muted">
+                                                        {{ distribution.distributed_at|date('Y-m-d H:i:s') }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    {% if distribution.notes %}
+                                                        <span class="text-muted">
+                                                            {{ distribution.notes|length > 30 ? distribution.notes|slice(0, 30) ~ '...' : distribution.notes }}
+                                                        </span>
+                                                    {% else %}
+                                                        <span class="text-muted fst-italic">{{ __('form.no_notes') }}</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if distribution.distributed_by_user %}
+                                                        <span class="badge bg-secondary">{{ distribution.distributed_by_user.name }}</span>
+                                                    {% else %}
+                                                        <span class="text-muted fst-italic">{{ __('backstage.goodies.distributions.system') }}</span>
+                                                    {% endif %}
+                                                </td>
+                                                {% if can_admin %}
+                                                    <td>
+                                                        <div class="btn-group" role="group">
+                                                            <button class="btn btn-sm btn-info" disabled title="{{ __('form.view') }}">
+                                                                {{ m.icon('eye') }}
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                {% endif %}
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="text-center py-5">
+                                <div class="mb-3">
+                                    {{ m.icon('clock-history', 64) }}
+                                </div>
+                                <h4 class="text-muted">{{ __('backstage.goodies.distributions.empty.title') }}</h4>
+                                <p class="text-muted">
+                                    {{ __('backstage.goodies.distributions.empty.message_for_item', [item.name]) }}
+                                </p>
+                                <p class="small text-muted">
+                                    {{ __('backstage.goodies.distributions.empty.help') }}
+                                </p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -3,6 +3,10 @@
 
 {% block title %}{{ __('general.login') }}{% endblock %}
 
+{% set oauth_enabled = config('oauth')['ef'].enabled or config('oauth')['generic'].enabled %}
+{% set login_hidden = not config('enable_password') and oauth_enabled %}
+
+
 {% block content %}
     <div class="col-md-12">
         <div class="row mb-3 mt-5">
@@ -31,7 +35,6 @@
         <div class="row mb-5">
             <div class="col-md-6 offset-md-3 col-lg-4 offset-lg-4">
                 <div class="card {{ m.type_bg_class() }} registration">
-                    {% set login_hidden = not config('enable_password') %}
                     <div class="card-body">
                         {% include 'layouts/parts/messages.twig' %}
 
@@ -39,63 +42,82 @@
                             {{ m.alert(config('welcome_msg') | md, null, true) }}
                         {% endif %}
 
-                        <form action="" enctype="multipart/form-data" method="post">
-                            {{ csrf() }}
-                            <div class="mb-3{% if login_hidden %} d-none{% endif %}">
-                                <div class="input-group input-group-lg">
-                                    <span class="input-group-text {{ m.type_text_class() }}">
-                                        {{ m.angel }}
-                                    </span>
-                                    <input
-                                        class="form-control"
-                                        id="form_nick"
-                                        type="text"
-                                        name="login"
-                                        value=""
-                                        placeholder="{{ __('general.nick') }}"
-                                        autofocus>
+                        {% if oauth_enabled %}
+                            <div class="row">
+                                <div class="mb-3 btn-group">
+                                    {% for name,config in config('oauth') %}
+                                        {% if config.enabled %}
+                                        <a href="{{ url('/oauth/' ~ name) }}" class="btn btn-primary btn-lg{% if config.hidden|default(false) %} d-none{% endif %}">
+                                            {{ __(
+                                                'oauth.login-using-provider',
+                                                [__(config.name|default(name|capitalize))]
+                                            ) }}
+                                        </a>
+                                        {% endif %}
+                                    {% endfor %}
                                 </div>
                             </div>
 
-                            <div class="mb-3{% if login_hidden %} d-none{% endif %}">
-                                <div class="input-group input-group-lg">
-                                    <span class="input-group-text {{ m.type_text_class() }}">
-                                        <i class="bi bi-key"></i>
-                                    </span>
-                                    <input
-                                        class="form-control" id="form_password" type="password"
-                                        name="password" value="" placeholder="{{ __('settings.password') }}" autocomplete="current-password"
-                                    >
+                            <div class="row">
+                                <div class="col-md-12 text-center{% if login_hidden %} d-none{% endif %}">
+                                    <a class="text-muted text-tiny" data-bs-toggle="collapse" href="#user_password_login_form" role="button" aria-expanded="false" aria-controls="user_password_login_form">
+                                        {{ __('login.use_username_password') }}
+                                    </a>
                                 </div>
                             </div>
+                        {% endif %}
 
-                            <div class="mb-3 text-center{% if login_hidden %} d-none{% endif %}">
-                                <button class="btn btn-primary btn-lg btn-block" type="submit" name="submit">
-                                    {{ __('general.login') }}
-                                </button>
-                            </div>
 
-                            {%  if config('oauth') is not empty %}
-                                <div class="row">
-                                    <div class="mb-3 btn-group">
-                                        {% for name,config in config('oauth') %}
-                                            <a href="{{ url('/oauth/' ~ name) }}" class="btn btn-primary btn-lg{% if config.hidden|default(false) %} d-none{% endif %}">
-                                                {{ __(
-                                                    'oauth.login-using-provider',
-                                                    [__(config.name|default(name|capitalize))]
-                                                ) }}
+                    </div>
+                    <div {% if oauth_enabled %}class="collapse" {% endif %}id="user_password_login_form">
+                        <div class="card-body{% if login_hidden %} d-none{% endif %}">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form action="" enctype="multipart/form-data" method="post">
+                                        {{ csrf() }}
+                                        <div class="mb-3">
+                                            <div class="input-group input-group-lg">
+                                                <span class="input-group-text {{ m.type_text_class() }}">
+                                                    {{ m.angel }}
+                                                </span>
+                                                <input
+                                                    class="form-control"
+                                                    id="form_nick"
+                                                    type="text"
+                                                    name="login"
+                                                    value=""
+                                                    placeholder="{{ __('general.nick') }}"
+                                                    autofocus>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <div class="input-group input-group-lg">
+                                                <span class="input-group-text {{ m.type_text_class() }}">
+                                                    <i class="bi bi-key"></i>
+                                                </span>
+                                                <input
+                                                    class="form-control" id="form_password" type="password"
+                                                    name="password" value="" placeholder="{{ __('settings.password') }}" autocomplete="current-password"
+                                                >
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3 text-center">
+                                            <button class="btn btn-primary btn-lg btn-block" type="submit" name="submit">
+                                                {{ __('general.login') }}
+                                            </button>
+                                        </div>
+
+                                        <div class="text-center">
+                                            <a href="{{ url('/password/reset') }}" class="">
+                                                {{ __('login.password.reset') }}
                                             </a>
-                                        {% endfor %}
-                                    </div>
+                                        </div>
+                                    </form>
                                 </div>
-                            {% endif %}
-
-                            <div class="text-center{% if login_hidden %} d-none{% endif %}">
-                                <a href="{{ url('/password/reset') }}" class="">
-                                    {{ __('login.password.reset') }}
-                                </a>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -112,7 +134,7 @@
                     {% set registration_url = config('external_registration_url') ?: url('/register') %}
                     <a href="{{ registration_url }}" class="btn btn-primary">{{ __('general.register') }} &raquo;</a>
                 {% else %}
-                    {% if not config('enable_password') %}
+                    {% if not config('enable_password') and oauth_enabled %}
                         <p>{{ __('login.registration.external') }}</p>
                     {% else %}
                         {{ m.alert(__('login.registration.disabled'), 'danger') }}
@@ -123,7 +145,7 @@
             <div class="col-sm-6 text-center">
                 <h2>{{ __('login.do') }}</h2>
                 <p>{{ __('login.jobs') }}</p>
-                <a href="{{ url('/angeltypes/about') }}" class="btn btn-primary">
+                <a href="{{ url('/crittertypes/about') }}" class="btn btn-primary">
                     {{ __('angeltypes.about') }} &raquo;
                 </a>
             </div>

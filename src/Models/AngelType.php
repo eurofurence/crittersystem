@@ -22,17 +22,17 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @property string                            $contact_dect
  * @property string                            $contact_email
  * @property boolean                           $restricted # If users need an introduction
- * @property boolean                           $requires_driver_license # If users must have a driver license
- * @property boolean                           $requires_ifsg_certificate # If users must have a ifsg certificate
  * @property boolean                           $shift_self_signup # Users can sign up for shifts
  * @property boolean                           $show_on_dashboard # Show on public dashboard
  * @property boolean                           $hide_register # Hide from registration page
  * @property boolean                           $hide_on_shift_view # Hide from shift page
+ * @property boolean                           $staff_only # Visible only to staff (permission: user.type.staff)
  *
  * @property-read Collection|NeededAngelType[] $neededBy
  * @property-read UserAngelType                $pivot
  * @property-read Collection|ShiftEntry[]      $shiftEntries
  * @property-read Collection|User[]            $userAngelTypes
+ * @property-read Collection|Certification[]   $requiredCertifications
  *
  * @method static QueryBuilder|AngelType[] whereId($value)
  * @method static QueryBuilder|AngelType[] whereName($value)
@@ -41,11 +41,10 @@ use Illuminate\Database\Query\Builder as QueryBuilder;
  * @method static QueryBuilder|AngelType[] whereContactDect($value)
  * @method static QueryBuilder|AngelType[] whereContactEmail($value)
  * @method static QueryBuilder|AngelType[] whereRestricted($value)
- * @method static QueryBuilder|AngelType[] whereRequiresDriverLicense($value)
- * @method static QueryBuilder|AngelType[] whereRequiresIfsgCertificate($value)
  * @method static QueryBuilder|AngelType[] whereNoSelfSignup($value)
  * @method static QueryBuilder|AngelType[] whereShowOnDashboard($value)
  * @method static QueryBuilder|AngelType[] whereHideRegister($value)
+ * @method static QueryBuilder|AngelType[] whereStaffOnly($value)
  */
 class AngelType extends BaseModel
 {
@@ -58,12 +57,13 @@ class AngelType extends BaseModel
         'contact_dect'              => '',
         'contact_email'             => '',
         'restricted'                => false,
-        'requires_driver_license'   => false,
-        'requires_ifsg_certificate' => false,
+        // 'requires_driver_license'   => false,
+        // 'requires_ifsg_certificate' => false,
         'shift_self_signup'         => false,
         'show_on_dashboard'         => true,
         'hide_register'             => false,
         'hide_on_shift_view'        => false,
+        'staff_only'                => false,
     ];
 
     /**
@@ -80,23 +80,25 @@ class AngelType extends BaseModel
         'contact_email',
 
         'restricted',
-        'requires_driver_license',
-        'requires_ifsg_certificate',
+        // 'requires_driver_license',
+        // 'requires_ifsg_certificate',
         'shift_self_signup',
         'show_on_dashboard',
         'hide_register',
         'hide_on_shift_view',
+        'staff_only',
     ];
 
     /** @var array<string, string> */
     protected $casts = [ // phpcs:ignore
         'restricted'                => 'boolean',
-        'requires_driver_license'   => 'boolean',
-        'requires_ifsg_certificate' => 'boolean',
+        // 'requires_driver_license'   => 'boolean',
+        // 'requires_ifsg_certificate' => 'boolean',
         'shift_self_signup'         => 'boolean',
         'show_on_dashboard'         => 'boolean',
         'hide_register'             => 'boolean',
         'hide_on_shift_view'        => 'boolean',
+        'staff_only'                => 'boolean',
     ];
 
     public function neededBy(): HasMany
@@ -115,6 +117,14 @@ class AngelType extends BaseModel
             ->belongsToMany(User::class, 'user_angel_type')
             ->using(UserAngelType::class)
             ->withPivot(UserAngelType::getPivotAttributes());
+    }
+
+    public function requiredCertifications(): BelongsToMany
+    {
+        return $this
+            ->belongsToMany(Certification::class, 'certifications_angel_type')
+            ->using(CertificationAngelType::class)
+            ->withTimestamps();
     }
 
     public function hasContactInfo(): bool

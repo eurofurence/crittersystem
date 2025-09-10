@@ -1,0 +1,51 @@
+{% extends "ShiftManagerV2/_layout.twig" %}
+
+{% block smv2_content %}
+  <h1 class="h3 mb-3">{{ __('Shift Manager — Public View') }}</h1>
+
+  {# Public Top Bar with basic filters #}
+  {% include "ShiftManagerV2/partials/public_top_bar.twig" %}
+
+  {# Timeline View (default for Public on large screens) #}
+  <div id="smv2-timeline" class="smv2-timeline d-md-block d-none" role="grid" aria-label="{{ __('Shifts timeline') }}">
+    <div class="text-center text-muted p-4">
+      <div class="spinner-border" role="status" aria-hidden="true"></div>
+      <div class="mt-2">{{ __('Loading timeline...') }}</div>
+    </div>
+  </div>
+
+  {# List View (default for Public on small screens) #}
+  <div id="smv2-list" class="smv2-list d-md-none" role="list" aria-label="{{ __('Available shifts') }}">
+    <div class="text-center text-muted p-4">
+      <div class="spinner-border" role="status" aria-hidden="true"></div>
+      <div class="mt-2">{{ __('Loading available shifts...') }}</div>
+    </div>
+  </div>
+
+  {# Staff/Public Modal #}
+  <div class="modal fade" id="smv2-sp-modal" tabindex="-1" aria-labelledby="smv2SpModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content bg-dark">
+        <div class="modal-header">
+          <h5 class="modal-title" id="smv2SpModalLabel">Shift</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="smv2-sp-summary" class="mb-3 small text-muted"></div>
+          <div id="smv2-sp-actions">
+            <div id="smv2-sp-type-picker" class="mb-2 d-none">
+              <label class="form-label">Select Critter Type</label>
+              <select id="smv2-sp-type-select" class="form-select"></select>
+            </div>
+            <button id="smv2-sp-apply" class="btn btn-primary me-2" disabled>Apply</button>
+            <button id="smv2-sp-cancel" class="btn btn-danger d-none">Cancel</button>
+            <span id="smv2-sp-elig" class="small text-muted"></span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

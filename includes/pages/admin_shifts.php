@@ -406,7 +406,7 @@ function admin_shifts()
                     table([
                         'timeslot'      => __('Time and location'),
                         'title'         => __('Type and title'),
-                        'needed_angels' => __('Needed angels'),
+                        'needed_angels' => __('Needed critters'),
                     ], $shifts_table),
                     form_submit('submit', icon('save') . __('form.save')),
                 ]),
@@ -588,7 +588,7 @@ function admin_shifts()
                         ),
                     ]),
                     div('col-md-6 col-xl-7', [
-                        form_info(__('Needed angels')),
+                        form_info(__('Needed critters')),
                         form_radio(
                             'angelmode',
                             __('Copy needed critters from shift type settings'),

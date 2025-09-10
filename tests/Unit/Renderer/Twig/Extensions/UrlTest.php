@@ -19,7 +19,7 @@ class UrlTest extends ExtensionTest
         /** @var UrlGenerator|MockObject $urlGenerator */
         $urlGenerator = $this->createMock(UrlGenerator::class);
 
-        $extension = new Url($urlGenerator);
+        $extension = new Url($urlGenerator, $this->createMock(\Engelsystem\Http\Request::class));
         $functions = $extension->getFunctions();
 
         $this->assertExtensionExists('url', [$extension, 'getUrl'], $functions);
@@ -53,7 +53,7 @@ class UrlTest extends ExtensionTest
             ->with($urlTo, $parameters)
             ->willReturn($return);
 
-        $extension = new Url($urlGenerator);
+        $extension = new Url($urlGenerator, $this->createMock(\Engelsystem\Http\Request::class));
         $generatedUrl = $extension->getUrl($url, $parameters);
 
         $this->assertEquals($return, $generatedUrl);

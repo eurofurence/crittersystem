@@ -241,7 +241,7 @@ ready(() => {
       shouldSort: false,
       shouldSortItems: false,
       classNames: {
-        containerInner: 'choices__inner form-control',
+        containerInner: ['choices__inner', 'form-control'],
       },
       fuseOptions: {
         distance: 0,
@@ -301,7 +301,30 @@ ready(() => {
         return;
       }
       event.preventDefault();
-
+      const modalFooterHtml = `
+          <div class="modal-footer">
+            <button type="button" class="${element.className}"
+              autofocus
+              title="${element.title}" data-submit="">
+                ${element.dataset.confirm_button_text ?? element.innerHTML}
+            </button>
+          </div>
+        `;
+      const doubleConfirmButtonHtml = `
+          <div class="modal-footer collapse show double-confirm-modal">
+            <button type="button" type="button" class="${element.className}"
+              data-bs-toggle="collapse" data-bs-target=".double-confirm-modal"
+              aria-expanded="false" aria-controls="double-confirm-modal">
+                ${element.dataset.confirm_button_text ?? element.innerHTML}
+            </button>
+          </div>
+          <div class="collapse double-confirm-modal">
+            <div class="modal-body">
+              <p>${element.dataset.double_confirm_submit_text}</p>
+            </div>
+            ${modalFooterHtml}
+          </div>
+          `;
       document.getElementById('confirmation-modal')?.remove();
       document.body.insertAdjacentHTML(
         'beforeend',
@@ -316,13 +339,7 @@ ready(() => {
                 <div class="modal-body${element.dataset.confirm_submit_text ? '' : ' d-none'}">
                   <p>${element.dataset.confirm_submit_text ?? ''}</p>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="${element.className}"
-                    autofocus
-                    title="${element.title}" data-submit="">
-                    ${element.dataset.confirm_button_text ?? element.innerHTML}
-                  </button>
-                </div>
+                ${element.dataset.double_confirm_submit_text ? doubleConfirmButtonHtml : modalFooterHtml}
               </div>
             </div>
           </div>

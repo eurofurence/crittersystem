@@ -1,105 +1,65 @@
-[![pipeline status](https://chaos.expert/engelsystem/engelsystem/badges/main/pipeline.svg)](https://chaos.expert/engelsystem/engelsystem/commits/main)
-[![coverage report](https://chaos.expert/engelsystem/engelsystem/badges/main/coverage.svg)](https://chaos.expert/engelsystem/engelsystem/commits/main)
-[![GPL](https://img.shields.io/github/license/engelsystem/engelsystem.svg?maxAge=2592000)](LICENSE)
+[![License: GPL v2](https://img.shields.io/badge/License-GPL_v2-blue.svg)](LICENSE)
 
-# Engelsystem
-Please visit [engelsystem.de](https://engelsystem.de) for a feature list.
+[![Docker Verify, Build and Publish](https://github.com/eurofurence/crittersystem/actions/workflows/docker-build.yml/badge.svg?branch=dev)](https://github.com/eurofurence/crittersystem/actions/workflows/docker-build.yml)
 
-To report bugs use [engelsystem/issues](https://github.com/engelsystem/engelsystem/issues).
+# Critter System
 
-Since the Engelsystem is open source, you can help improving it.
+Shift planning and volunteer management system used at Eurofurence events. This repository contains the application
+code, configuration, and documentation sources.
+
+- Documentation site: https://eurofurence.github.io/crittersystem/
+- Documentation sources: docs/src
+- Original Fork: [engelsystem](https://github.com/engelsystem/engelsystem)
+
+Since the Critter System is open source, you can help improving it.
 We really love to get pull requests containing fixes or improvements.
-Please read the [CONTRIBUTING.md](CONTRIBUTING.md) and [DEVELOPMENT.md](DEVELOPMENT.md) before you start.
+Please read the [CONTRIBUTING.md](CONTRIBUTING.md) and [DEVELOPMENT.md](docs/src/DEVELOPMENT.md) before you start.
 
-## Installation
-The Engelsystem may be installed manually or by using the provided [docker setup](#docker).
+## Quick Start
 
 ### Requirements
- * PHP >= 8.1
-   * Required modules:
-     * dom
-     * json
-     * mbstring
-     * PDO
-       * mysql
-     * tokenizer
-     * xml/libxml/SimpleXML
-     * xmlwriter
- * MySQL-Server >= 5.7.8 or MariaDB-Server >= 10.2.2
- * Webserver, i.e. lighttpd, nginx, or Apache
 
-From previous experience, 2 cores and 2GB ram are roughly enough for up to 1000 Angels (~700 arrived + 500 arrived but not working) during an event.
+- PHP 8.1+ with required extensions (pdo_mysql, mbstring, intl, gd, etc.)
+- Composer
+- Node.js 18+ and Yarn
+- MariaDB/MySQL
+- A web server pointing to public/ (or PHP built‑in server for local use)
 
-### Download
- * Go to the [Releases](https://github.com/engelsystem/engelsystem/releases) page and download the latest stable release file.
- * Extract the files to your webroot and continue with the directions for configurations and setup.
+### Local (Development)
 
-### Configuration and Setup
- * The webserver must have write access to the `storage` directory and read access for all other directories
- * The webserver must point to the `public` directory.
- * The webserver must read the `.htaccess` file and `mod_rewrite` must be enabled
-
- * Recommended: Directory Listing should be disabled.
- * There must be a MySQL database set up with a user who has full rights to that database.
- * If necessary, create a `config/config.php` to override values from `config/config.default.php`.
-   * To disable/remove values from the following lists, set the value of the entry to `null`:
-     * `themes`
-     * `tshirt_sizes`
-     * `headers`
-     * `header_items`
-     * `footer_items`
-     * `locales`
-     * `contact_options`
- * To import the database, the `bin/migrate` script has to be run. If you can't execute scripts, you can use the `initial-install.sql` file from the release zip.
- * In the browser, login with credentials `admin` : `asdfasdf` and change the password.
-
-The Engelsystem can now be used.
-
-### Session Settings
- * Make sure the config allows for sessions.
- * Both Apache and Nginx allow for different VirtualHost configurations.
+1. Clone the repo and install dependencies:
+  - composer install
+  - yarn install && yarn build
+2. Configure database and app settings:
+  - Create `config\config.php` (based on `config\config.default.php`) or set environment variables.
+  - Keep only the variables you want to override in `config\config.php`.
+3. Create a database/schema in your DB server.
+   - run `bin/migrate`
+4. Serve the app locally (example):
+  - `php -S 127.0.0.1:8000 -t public`
+5. Run the installer in your browser:
+  - http://127.0.0.1:8000/admin/install
+  - Ensure these env vars are set for the installer:
+    - `APP_ENABLE_INSTALL_WORKFLOW=true`
+    - `APP_INITIAL_ADMIN_PASSWORD=your_secure_password_here`
 
 ### Docker
 
-For instructions on how to build the Docker container for development, please consult the [DEVELOPMENT.md](DEVELOPMENT.md).
+- Development (mounted sources):
+  1) `cd docker\dev`
+  2) `docker compose up -d`
+  3) Open http://127.0.0.1/admin/install
+    - Optional: edit `docker\dev\deployment.env` to set `APP_*` variables.
 
-#### Build
-To build the `es_server` container:
-```bash
-cd docker
-docker compose build
-```
+- Basic compose:
+  1) `cd docker`
+  2) `docker compose up -d`
+  3) Open http://localhost/admin/install
+    - Optional: edit `docker\deployment.env` to set `APP_*` variables.
 
-or to build the container by its own:
-```bash
-docker build -f docker/Dockerfile . -t es_server
-```
+## Notes
 
-#### Run
-Start the Engelsystem
-```bash
-cd docker
-docker compose up -d
-```
-
-#### Set Up / Migrate Database
-Create the Database Schema (on a fresh install) or import database changes to migrate it to the newest version
-```bash
-cd docker
-docker compose exec es_server bin/migrate
-```
-
-### Scripts
-#### bin/deploy.sh
-The `bin/deploy.sh` script can be used to deploy the Engelsystem. It uses rsync to deploy the application to a server over ssh.
-
-For usage see `./bin/deploy.sh -h`
-
-#### bin/migrate
-The `bin/migrate` script can be used to import and update the database of the Engelsystem.
-
-For more information on how to use it call `./bin/migrate help`
-
-### Documentation
-
-More documentation can be found at: https://engelsystem.de/doc/
+- Most project documentation is published via GitHub Pages and built with MkDocs (config: mkdocs.yml). For deeper guides
+  and module docs, see the documentation site or browse docs/src.
+- See CONTRIBUTING.md and SECURITY.md for contribution and security policies.
+- Please use Critter‑centric terminology in contributions to keep naming consistent.

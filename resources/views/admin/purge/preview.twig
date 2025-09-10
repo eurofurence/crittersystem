@@ -1,0 +1,123 @@
+{% if preview %}
+    <div class="alert alert-info">
+        <h5>{{ __('Preview Results') }}</h5>
+        <p>{{ __('Data that will be affected if purge is executed on') }} <strong>{{ summary.cutoff_date }}</strong>:</p>
+    </div>
+
+    {% if summary.total_items > 0 %}
+        <div class="table-responsive">
+            <table class="table table-sm table-striped">
+                <thead>
+                    <tr>
+                        <th>{{ __('Category') }}</th>
+                        <th>{{ __('Primary Items') }}</th>
+                        <th>{{ __('Related Data') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category, data in preview %}
+                        <tr>
+                            <td>
+                                <strong>{{ __(category|title) }}</strong>
+                            </td>
+                            <td>
+                                <span class="badge bg-danger">{{ data.count }}</span>
+                            </td>
+                            <td>
+                                {% if data.dependencies %}
+                                    <small>
+                                        {% for dep_type, count in data.dependencies %}
+                                            {% if count > 0 %}
+                                                <div>{{ __(dep_type|replace('_', ' ')|title) }}: {{ count }}</div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </small>
+                                {% else %}
+                                    <span class="text-muted">{{ __('No dependencies') }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr class="fw-bold">
+                        <td>{{ __('Total') }}</td>
+                        <td><span class="badge bg-danger">{{ summary.total_items }}</span></td>
+                        <td><span class="badge bg-warning">{{ summary.total_dependencies }}</span> {{ __('related items') }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="alert alert-warning mt-3">
+            <i class="fa fa-exclamation-triangle"></i>
+            <strong>{{ __('Warning:') }}</strong>
+            {{ __('This operation will permanently delete') }}
+            <strong>{{ summary.total_items }}</strong> {{ __('primary items') }}
+            {% if summary.total_dependencies > 0 %}
+                {{ __('and') }} <strong>{{ summary.total_dependencies }}</strong> {{ __('related items') }}.
+            {% else %}.
+            {% endif %}
+            {{ __('This action cannot be undone.') }}
+        </div>
+
+        <div class="mt-3">
+            <button type="button" class="btn btn-danger" id="proceed-to-execute" data-bs-toggle="modal" data-bs-target="#confirmationModal">
+                <i class="fa fa-trash"></i> {{ __('Proceed to Delete') }}
+            </button>
+            <button type="button" class="btn btn-secondary" id="cancel-purge">
+                <i class="fa fa-times"></i> {{ __('Cancel') }}
+            </button>
+        </div>
+
+    {% else %}
+        <div class="alert alert-success">
+            <i class="fa fa-check-circle"></i>
+            {{ __('No data found matching the selected criteria.') }}
+        </div>
+    {% endif %}
+
+{% else %}
+    <div class="alert alert-danger">
+        <i class="fa fa-exclamation-circle"></i>
+        {{ __('Unable to generate preview. Please check your selection and try again.') }}
+    </div>
+{% endif %}
+
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">{{ __('Confirm Data Purge') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger">
+                    <strong>{{ __('DANGER!') }}</strong>
+                    {{ __('You are about to permanently delete data from the system.') }}
+                </div>
+
+                <p>{{ __('To confirm this action, please type') }} <code>DELETE</code> {{ __('in the field below:') }}</p>
+
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="confirmationInput" placeholder="{{ __('Type DELETE to confirm') }}">
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="backupConfirm">
+                    <label class="form-check-label" for="backupConfirm">
+                        {{ __('I understand that a database backup will be created before deletion') }}
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ __('Cancel') }}</button>
+                <button type="button" class="btn btn-danger" id="finalConfirmButton" disabled>
+                    <i class="fa fa-trash"></i> {{ __('Delete Data') }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+

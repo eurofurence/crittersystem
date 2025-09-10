@@ -1,0 +1,288 @@
+{% extends 'layouts/app.twig' %}
+{% import 'macros/base.twig' as m %}
+{% import 'macros/form.twig' as f %}
+
+{% block title %}{{ __('backstage.distribution.title') }}{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1>
+                        {{ m.icon('gift') }}
+                        {{ block('title') }}
+                    </h1>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group" role="group">
+                            <a href="{{ url('/admin/backstage') }}" class="btn btn-secondary btn-sm">
+                                {{ m.icon('arrow-left') }}
+                                {{ __('backstage.back_to_dashboard') }}
+                            </a>
+                            {% if can_distribute %}
+                                <a href="{{ url('/admin/backstage/users/search') }}" class="btn btn-primary btn-sm">
+                                    {{ m.icon('person-search') }}
+                                    {{ __('backstage.users.search.title') }}
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {% include 'layouts/parts/messages.twig' %}
+
+                {# Quick Stats Row #}
+                <div class="row mb-4">
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <div class="card border-primary">
+                            <div class="card-body text-center">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="card-title text-muted mb-1">{{ __('backstage.distribution.stats.today') }}</h6>
+                                        <h3 class="text-primary mb-0">{{ distribution_stats.today|default(0) }}</h3>
+                                    </div>
+                                    <div class="text-primary opacity-50">
+                                        {{ m.icon('calendar-day', 24) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <div class="card border-success">
+                            <div class="card-body text-center">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="card-title text-muted mb-1">{{ __('backstage.distribution.stats.week') }}</h6>
+                                        <h3 class="text-success mb-0">{{ distribution_stats.week|default(0) }}</h3>
+                                    </div>
+                                    <div class="text-success opacity-50">
+                                        {{ m.icon('calendar-week', 24) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <div class="card border-info">
+                            <div class="card-body text-center">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="card-title text-muted mb-1">{{ __('backstage.distribution.stats.total') }}</h6>
+                                        <h3 class="text-info mb-0">{{ distribution_stats.total|default(0) }}</h3>
+                                    </div>
+                                    <div class="text-info opacity-50">
+                                        {{ m.icon('gift', 24) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <div class="card border-warning">
+                            <div class="card-body text-center">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="card-title text-muted mb-1">{{ __('backstage.distribution.stats.unique_users') }}</h6>
+                                        <h3 class="text-warning mb-0">{{ distribution_stats.unique_users|default(0) }}</h3>
+                                    </div>
+                                    <div class="text-warning opacity-50">
+                                        {{ m.icon('people', 24) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# Filter and Search #}
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    {{ m.icon('funnel') }}
+                                    {{ __('backstage.distribution.filter.title') }}
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <form method="get" action="{{ url('/admin/backstage/goodies/distributions') }}" class="row g-3">
+                                    <div class="col-md-3">
+                                        {{ f.input('user_search', __('backstage.distribution.filter.user'), {
+                                            'value': filters.user_search|default(''),
+                                            'placeholder': __('backstage.distribution.filter.user_placeholder')
+                                        }) }}
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        {{ f.input('date_from', __('backstage.distribution.filter.date_from'), {
+                                            'type': 'date',
+                                            'value': filters.date_from|default('')
+                                        }) }}
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        {{ f.input('date_to', __('backstage.distribution.filter.date_to'), {
+                                            'type': 'date',
+                                            'value': filters.date_to|default('')
+                                        }) }}
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        {{ f.select('distributor', __('backstage.distribution.filter.distributor'), {
+                                            '': __('form.select_all'),
+                                            'me': __('backstage.distribution.filter.my_distributions')
+                                        }, {
+                                            'selected': filters.distributor|default('')
+                                        }) }}
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <div class="d-grid gap-2">
+                                            {{ f.submit(__('form.filter'), {'icon_left': 'funnel', 'size': 'sm'}) }}
+                                            <a href="{{ url('/admin/backstage/goodies/distributions') }}" class="btn btn-secondary btn-sm">
+                                                {{ m.icon('x-circle') }}
+                                                {{ __('form.clear') }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# Distributions List #}
+                <div class="row">
+                    <div class="col-12">
+                        {% if distributions|length > 0 %}
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">
+                                        {{ __('backstage.distribution.history.title') }}
+                                    </h5>
+                                    <div class="btn-group" role="group">
+                                        {% if can_admin %}
+                                            <a href="{{ url('/admin/backstage/goodies/reports') }}" class="btn btn-info btn-sm">
+                                                {{ m.icon('bar-chart') }}
+                                                {{ __('backstage.distribution.reports') }}
+                                            </a>
+                                        {% endif %}
+                                        <button type="button" class="btn btn-secondary btn-sm" id="print-btn">
+                                            {{ m.icon('printer') }}
+                                            {{ __('form.print') }}
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <thead class="table-dark">
+                                                <tr>
+                                                    <th>{{ __('backstage.distribution.history.date') }}</th>
+                                                    <th>{{ __('backstage.distribution.history.user') }}</th>
+                                                    <th>{{ __('backstage.distribution.history.item') }}</th>
+                                                    <th>{{ __('backstage.distribution.history.hours') }}</th>
+                                                    <th>{{ __('backstage.distribution.history.distributor') }}</th>
+                                                    <th>{{ __('backstage.distribution.history.notes') }}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for distribution in distributions %}
+                                                    <tr>
+                                                        <td>
+                                                            <div>
+                                                                <strong>{{ distribution.distributed_at|date('M j, Y') }}</strong>
+                                                                <br>
+                                                                <small class="text-muted">{{ distribution.distributed_at|date('H:i') }}</small>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="avatar-placeholder bg-primary text-white rounded-circle me-2 d-inline-flex align-items-center justify-content-center"
+                                                                     style="width: 32px; height: 32px; font-size: 0.875rem;">
+                                                                    {{ distribution.user.name|first|upper }}
+                                                                </div>
+                                                                <div>
+                                                                    <div>{{ distribution.user.name }}</div>
+                                                                    {% if distribution.user.nick %}
+                                                                        <small class="text-muted">({{ distribution.user.nick }})</small>
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <strong>{{ distribution.item.name }}</strong>
+                                                                {% if distribution.item.category %}
+                                                                    <br>
+                                                                    <span class="badge bg-secondary">{{ distribution.item.category.name }}</span>
+                                                                {% endif %}
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge bg-info">
+                                                                {{ distribution.hours_at_distribution }}h
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                {{ distribution.distributed_by_user.name }}
+                                                                {% if distribution.distributed_by_user.id == current_user.id %}
+                                                                    <small class="text-muted">({{ __('backstage.distribution.history.you') }})</small>
+                                                                {% endif %}
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            {% if distribution.notes %}
+                                                                <span class="text-muted">
+                                                                    {{ distribution.notes|length > 50 ? distribution.notes|slice(0, 50) ~ '...' : distribution.notes }}
+                                                                </span>
+                                                            {% else %}
+                                                                <span class="text-muted fst-italic">{{ __('form.no_notes') }}</span>
+                                                            {% endif %}
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="text-center py-5">
+                                <div class="mb-3">
+                                    {{ m.icon('gift', 64) }}
+                                </div>
+                                <h4 class="text-muted">{{ __('backstage.distribution.history.empty.title') }}</h4>
+                                <p class="text-muted">
+                                    {% if filters is defined and (filters.user_search or filters.date_from or filters.distributor) %}
+                                        {{ __('backstage.distribution.history.empty.filtered') }}
+                                    {% else %}
+                                        {{ __('backstage.distribution.history.empty.message') }}
+                                    {% endif %}
+                                </p>
+                                {% if can_distribute %}
+                                    <a href="{{ url('/admin/backstage/users/search') }}" class="btn btn-primary">
+                                        {{ m.icon('person-search') }}
+                                        {{ __('backstage.distribution.start_distributing') }}
+                                    </a>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{{ parent() }}
+<script src="{{ asset('assets/backstage-distributions.js') }}"></script>
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+{{ asset('backstage-distributions.css') }}
+{% endblock %}

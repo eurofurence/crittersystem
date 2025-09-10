@@ -10,3 +10,4 @@ updates:
     target-branch: "dev" # Focus on DEV branch for updates
     schedule:
       interval: "weekly"
+    target-branch: "dev"

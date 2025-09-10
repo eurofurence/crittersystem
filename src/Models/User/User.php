@@ -7,6 +7,10 @@ namespace Engelsystem\Models\User;
 use Carbon\Carbon;
 use Engelsystem\Models\AngelType;
 use Engelsystem\Models\BaseModel;
+use Engelsystem\Models\Certification;
+use Engelsystem\Models\CertificationUser;
+use Engelsystem\Models\Department\Department;
+use Engelsystem\Models\Department\DepartmentApplicationLog;
 use Engelsystem\Models\Group;
 use Engelsystem\Models\Message;
 use Engelsystem\Models\News;
@@ -52,6 +56,7 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property-read SupportCollection|Privilege[] $privileges
  * @property-read Collection|AngelType[]        $userAngelTypes
  * @property-read UserAngelType                 $pivot
+ * @property-read Collection|Certification[]    $certifications
  * @property-read Collection|ShiftEntry[]       $shiftEntries
  * @property-read Collection|Session[]          $sessions
  * @property-read Collection|Worklog[]          $worklogs
@@ -63,6 +68,7 @@ use Illuminate\Support\Collection as SupportCollection;
  * @property-read Collection|Message[]          $messages
  * @property-read Collection|Shift[]            $shiftsCreated
  * @property-read Collection|Shift[]            $shiftsUpdated
+ * @property-read Collection                    $responsibleForDepartments
  *
  * @method static QueryBuilder|User[] whereId($value)
  * @method static QueryBuilder|User[] whereName($value)
@@ -186,6 +192,15 @@ class User extends BaseModel
             ->withPivot(UserAngelType::getPivotAttributes());
     }
 
+    public function certifications(): BelongsToMany
+    {
+        return $this
+            ->belongsToMany(Certification::class, 'certifications_user')
+            ->using(CertificationUser::class)
+            ->withPivot(CertificationUser::getPivotAttributes())
+            ->withTimestamps();
+    }
+
     public function isAngelTypeSupporter(AngelType $angelType): bool
     {
         return $this->userAngelTypes()
@@ -207,6 +222,13 @@ class User extends BaseModel
     public function oauth(): HasMany
     {
         return $this->hasMany(OAuth::class);
+    }
+
+    public function oauthActive(): HasMany
+    {
+        return $this->hasMany(OAuth::class)
+            ->where('expires_at', '>', Carbon::now())
+            ->orderBy('expires_at', 'desc');
     }
 
     public function shiftEntries(): HasMany
@@ -291,5 +313,68 @@ class User extends BaseModel
         }
 
         return $this->name;
+    }
+
+    public function departments(): BelongsToMany
+    {
+        return $this->belongsToMany(Department::class, 'department_users')
+            ->withPivot('status')
+            ->withTimestamps();
+    }
+
+    public function responsibleForDepartments(): BelongsToMany
+    {
+        return $this->belongsToMany(Department::class, 'department_responsibles')
+            ->withTimestamps();
+    }
+
+    public function departmentApplications(): HasMany
+    {
+        return $this->hasMany(DepartmentApplicationLog::class);
+    }
+
+    public function canManageDepartment(Department $department): bool
+    {
+//        return $this->hasPrivilege('admin')
+//            || $this->groups->contains('name', 'Shift Coordinator')
+//            || $this->responsibleForDepartments->contains($department);
+
+        $admin_flag = (bool) $this->privileges()
+            ->where(function ($query): void {
+                $query->where('name', 'admin');
+            })->exists();
+
+        // We need to check if the user is part of the administrative department group
+
+        return $admin_flag
+            || $this->groups->contains('name', 'Shift Coordinator')
+            || $this->responsibleForDepartments->contains($department);
+    }
+
+    public function isStaff(): bool
+    {
+        return auth()->canAny(
+            [
+                'user.type.internal_staff',
+                'user.type.staff',
+                'user.type.admin',
+            ]
+        );
+    }
+
+    /**
+     * Check if user has a specific permission.
+     */
+    public function hasPermission(string $permission): bool
+    {
+        return $this->privileges()->where('name', $permission)->exists();
+    }
+
+    /**
+     * Check if user has any of the given permissions.
+     */
+    public function hasAnyPermission(array $permissions): bool
+    {
+        return $this->privileges()->whereIn('name', $permissions)->exists();
     }
 }

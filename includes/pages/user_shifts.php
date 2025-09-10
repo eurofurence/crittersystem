@@ -181,11 +181,61 @@ function load_types()
 {
     $user = auth()->user();
     $isShico = auth()->can('admin_shifts');
+    $isStaff = auth()->can('user.type.staff');
 
     if (!AngelType::count()) {
         error(__('The administration has not configured any critter types yet - or you are not subscribed to any critter type.'));
         throw_redirect(url('/'));
     }
+
+    $QueryConstruct = '';
+    if (!$isStaff) {
+        $QueryConstruct = 'angel_types.staff_only = 0';
+    }
+
+    if ($isShico) {
+        if ($QueryConstruct != '') {
+            $QueryConstruct .= ' AND ';
+        }
+        $QueryConstruct .= 'angel_types.hide_on_shift_view = 0
+        OR (
+            user_angel_type.user_id IS NOT NULL
+            AND
+            NOT `user_angel_type`.`confirm_user_id` IS NULL
+        )';
+    }
+
+//    $types = Db::select(
+//        '
+//            SELECT
+//                `angel_types`.`id`,
+//                `angel_types`.`name`,
+//                (
+//                    `angel_types`.`restricted`=0
+//                    OR (
+//                        NOT `user_angel_type`.`confirm_user_id` IS NULL
+//                        OR `user_angel_type`.`id` IS NULL
+//                    )
+//                ) AS `enabled`
+//            FROM `angel_types`
+//            LEFT JOIN `user_angel_type`
+//                ON (
+//                    `user_angel_type`.`angel_type_id`=`angel_types`.`id`
+//                    AND `user_angel_type`.`user_id`=?
+//                )'
+//            . ($isShico ? '' :
+//            'WHERE angel_types.hide_on_shift_view = 0
+//                OR (
+//                    user_angel_type.user_id IS NOT NULL
+//                        AND
+//                    NOT `user_angel_type`.`confirm_user_id` IS NULL
+//                ) ') .
+//            'ORDER BY `angel_types`.`name`
+//        ',
+//        [
+//            $user->id,
+//        ]
+//    );
 
     $types = Db::select(
         '
@@ -204,14 +254,8 @@ function load_types()
                 ON (
                     `user_angel_type`.`angel_type_id`=`angel_types`.`id`
                     AND `user_angel_type`.`user_id`=?
-                )'
-            . ($isShico ? '' :
-            'WHERE angel_types.hide_on_shift_view = 0
-                OR (
-                    user_angel_type.user_id IS NOT NULL
-                        AND
-                    NOT `user_angel_type`.`confirm_user_id` IS NULL
-                ) ') .
+                ) '
+            . ($QueryConstruct ? 'WHERE ' . $QueryConstruct . ' ' : '') .
             'ORDER BY `angel_types`.`name`
         ',
         [
@@ -258,15 +302,22 @@ function view_user_shifts()
     foreach ($userAngelTypes as $type) {
         $ownAngelTypes[] = $type->angel_type_id;
     }
-
+    $location_ids = $locations->pluck('id')->toArray();
+    $type_ids = array_column($types, 'id');
     if (!$session->has('shifts-filter')) {
-        $location_ids = $locations->pluck('id')->toArray();
-        $shiftsFilter = new ShiftsFilter(auth()->can('user_shifts_admin'), $location_ids, $ownAngelTypes);
+        $shiftsFilter = new ShiftsFilter(
+            auth()->can('user_shifts_admin'),
+            $location_ids,
+            $type_ids,
+            $ownAngelTypes
+        );
         $session->set('shifts-filter', $shiftsFilter->sessionExport());
     }
 
     $shiftsFilter = new ShiftsFilter();
     $shiftsFilter->sessionImport($session->get('shifts-filter'));
+    $shiftsFilter->updateLocations($location_ids);
+    $shiftsFilter->updateTypes($type_ids, $ownAngelTypes);
     update_ShiftsFilter($shiftsFilter, auth()->can('user_shifts_admin'), $days);
     $session->set('shifts-filter', $shiftsFilter->sessionExport());
 
@@ -293,8 +344,25 @@ function view_user_shifts()
 
     $canSignUpForShifts = true;
     if (config('signup_requires_arrival') && !$user->state->arrived) {
-        $canSignUpForShifts = false;
-        info(render_user_arrived_hint());
+        // Allow signups for non-arrived users during buildup->event_start and event_end->teardown_end windows
+        $now = Carbon::now();
+        $buildupStart = config('buildup_start');
+        $eventStart = config('event_start');
+        $eventEnd = config('event_end');
+        $teardownEnd = config('teardown_end');
+
+        $withinPreEventWindow = !empty($buildupStart) && !empty($eventStart)
+            && $now->greaterThanOrEqualTo($buildupStart)
+            && $now->lessThan($eventStart);
+
+        $withinPostEventWindow = !empty($eventEnd) && !empty($teardownEnd)
+            && $now->greaterThan($eventEnd)
+            && $now->lessThanOrEqualTo($teardownEnd);
+
+        if (!($withinPreEventWindow || $withinPostEventWindow)) {
+            $canSignUpForShifts = false;
+            info(render_user_arrived_hint());
+        }
     }
 
     $formattedDays = collect($days)->map(function ($value) {
@@ -312,7 +380,8 @@ function view_user_shifts()
                     $locations,
                     $shiftsFilter->getLocations(),
                     'locations',
-                    icon('pin-map-fill') . __('Locations')
+                    icon('pin-map-fill') . __('Locations'),
+                    askForAttention: $shiftCalendarRenderer->hasShiftsToDisplay() == false
                 ),
                 'start_select'  => html_select_key(
                     'start_day',
@@ -336,7 +405,8 @@ function view_user_shifts()
                     . ' <small><span class="bi bi-info-circle-fill text-info" data-bs-toggle="tooltip" title="'
                     . __('The tasks shown here are influenced by the critter types you joined already!')
                     . '"></span></small>',
-                    $ownAngelTypes
+                    $ownAngelTypes,
+                    askForAttention: $shiftCalendarRenderer->hasShiftsToDisplay() == false
                 ),
                 'filled_select' => make_select(
                     $filled,
@@ -380,7 +450,8 @@ function ical_hint()
         return '';
     }
 
-    return heading(__('iCal export and API') . ' ' . button_help('user/ical'), 2)
+//    return heading(__('iCal export and API') . ' ' . button_help('user/ical'), 2)
+    return heading(__('iCal export and API'), 2)
         . '<p>' . sprintf(
             __('Export your own shifts formatted as <a href="%s" target="_blank">iCal</a> or <a href="%s" target="_blank">JSON</a> (please keep the link secret, otherwise you have to reset the api key <a href="%s">in your settings</a>).'),
             url('/ical', ['key' => $user->api_key]),
@@ -397,11 +468,15 @@ function ical_hint()
  * @param int[]  $ownSelect
  * @return string
  */
-function make_select($items, $selected, $name, $title = null, $ownSelect = [])
+function make_select($items, $selected, $name, $title = null, $ownSelect = [], $askForAttention = false)
 {
     $html = '';
+    $extraClass = '';
+    if ($askForAttention) {
+        $extraClass = 'attention-ring';
+    }
     if (isset($title)) {
-        $html .= '<h4>' . $title . '</h4>' . "\n";
+        $html .= '<h4 class="' . $extraClass . '">' . $title . '</h4>' . "\n";
     }
 
     $buttons = [

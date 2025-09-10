@@ -1,0 +1,289 @@
+{% extends 'layouts/app.twig' %}
+{% import 'macros/base.twig' as m %}
+{% import 'macros/form.twig' as f %}
+
+{% block title %}{{ __('backstage.dashboard.title') }}{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1>
+                        {{ m.icon('speedometer2') }}
+                        {{ block('title') }}
+                    </h1>
+                    <div class="btn-toolbar" role="toolbar">
+                        {% if can_admin %}
+                            <div class="btn-group me-2" role="group">
+                                <a href="{{ url('/admin/backstage/goodies/categories') }}" class="btn btn-primary btn-sm">
+                                    {{ m.icon('grid-3x3-gap') }}
+                                    {{ __('backstage.goodies.categories.title') }}
+                                </a>
+                                <a href="{{ url('/admin/backstage/goodies/items') }}" class="btn btn-primary btn-sm">
+                                    {{ m.icon('box') }}
+                                    {{ __('backstage.goodies.items.title') }}
+                                </a>
+                            </div>
+                        {% endif %}
+                        <div class="btn-group" role="group">
+                            <a href="{{ url('/admin/backstage/users/search') }}" class="btn btn-primary btn-sm">
+                                {{ m.icon('person-search') }}
+                                {{ __('backstage.users.search.title') }}
+                            </a>
+                            {% if can_distribute %}
+                                <a href="{{ url('/admin/backstage/goodies/distributions') }}" class="btn btn-success btn-sm">
+                                    {{ m.icon('arrow-right-circle') }}
+                                    {{ __('backstage.distribution.title') }}
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {% include 'layouts/parts/messages.twig' %}
+
+                {% if error is defined and error %}
+                    <div class="alert alert-danger" role="alert">
+                        <h5 class="alert-heading">
+                            {{ m.icon('exclamation-triangle') }}
+                            {{ __('backstage.dashboard.error.title') }}
+                        </h5>
+                        <p class="mb-0">{{ __('backstage.dashboard.error.message') }}</p>
+                    </div>
+                {% else %}
+                    {# KPI Cards Row #}
+                    <div class="row mb-4">
+                        <div class="col-xl-2 col-lg-4 col-md-6 mb-3">
+                            <div class="card border-primary">
+                                <div class="card-body text-center">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="card-title text-muted mb-1">{{ __('backstage.kpi.eligible_users') }}</h6>
+                                            <h3 class="text-primary mb-0" id="kpi-eligible-users">{{ kpis.eligible_users|default(0) }}</h3>
+                                        </div>
+                                        <div class="text-primary opacity-50">
+                                            {{ m.icon('people', 24) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-4 col-md-6 mb-3">
+                            <div class="card border-warning">
+                                <div class="card-body text-center">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="card-title text-muted mb-1">{{ __('backstage.kpi.qualified_users') }}</h6>
+                                            <h3 class="text-warning mb-0" id="kpi-qualified-users">{{ kpis.qualified_users|default(0) }}</h3>
+                                        </div>
+                                        <div class="text-warning opacity-50">
+                                            {{ m.icon('person-check', 24) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-4 col-md-6 mb-3">
+                            <div class="card border-success">
+                                <div class="card-body text-center">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="card-title text-muted mb-1">{{ __('backstage.kpi.distributions_today') }}</h6>
+                                            <h3 class="text-success mb-0" id="kpi-distributions-today">{{ kpis.distributions_today|default(0) }}</h3>
+                                        </div>
+                                        <div class="text-success opacity-50">
+                                            {{ m.icon('gift', 24) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-4 col-md-6 mb-3">
+                            <div class="card border-info">
+                                <div class="card-body text-center">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="card-title text-muted mb-1">{{ __('backstage.kpi.distributions_week') }}</h6>
+                                            <h3 class="text-info mb-0" id="kpi-distributions-week">{{ kpis.distributions_week|default(0) }}</h3>
+                                        </div>
+                                        <div class="text-info opacity-50">
+                                            {{ m.icon('calendar-week', 24) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-4 col-md-6 mb-3">
+                            <div class="card border-secondary">
+                                <div class="card-body text-center">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="card-title text-muted mb-1">{{ __('backstage.kpi.total_hours') }}</h6>
+                                            <h3 class="text-secondary mb-0" id="kpi-total-hours">{{ kpis.total_hours_calculated|default(0) }}h</h3>
+                                        </div>
+                                        <div class="text-secondary opacity-50">
+                                            {{ m.icon('clock', 24) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-4 col-md-6 mb-3">
+                            <div class="card border-danger">
+                                <div class="card-body text-center">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="card-title text-muted mb-1">{{ __('backstage.kpi.pending_recalc') }}</h6>
+                                            <h3 class="text-danger mb-0" id="kpi-pending-recalc">{{ kpis.pending_recalculations|default(0) }}</h3>
+                                        </div>
+                                        <div class="text-danger opacity-50">
+                                            {{ m.icon('arrow-clockwise', 24) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Main Dashboard Content #}
+                    <div class="row">
+{#                          #}{# System Status Panel #}
+{#                         <div class="col-lg-4 mb-4"> #}
+{#                             <div class="card"> #}
+{#                                 <div class="card-header d-flex justify-content-between align-items-center"> #}
+{#                                     <h5 class="mb-0"> #}
+{#                                         {{ m.icon('activity') }} #}
+{#                                         {{ __('backstage.system_status.title') }} #}
+{#                                     </h5> #}
+{#                                     <div class="badge bg-secondary" id="status-last-update"> #}
+{#                                         {{ __('backstage.system_status.loading') }} #}
+{#                                     </div> #}
+{#                                 </div> #}
+{#                                 <div class="card-body"> #}
+{#                                     <div class="list-group list-group-flush" id="system-status"> #}
+{#                                         {% for service, status in system_status %} #}
+{#                                             <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0"> #}
+{#                                                 <span class="fw-medium">{{ __('backstage.services.' ~ service) }}</span> #}
+{#                                                 {% set status_class = status == 'operational' ? 'success' : (status == 'degraded' ? 'warning' : 'danger') %} #}
+{#                                                 {% set status_icon = status == 'operational' ? 'check-circle' : (status == 'degraded' ? 'exclamation-triangle' : 'x-circle') %} #}
+{#                                                 <span class="badge bg-{{ status_class }}"> #}
+{#                                                     {{ m.icon(status_icon) }} #}
+{#                                                     {{ __('backstage.status.' ~ status) }} #}
+{#                                                 </span> #}
+{#                                             </div> #}
+{#                                         {% endfor %} #}
+{#                                     </div> #}
+{#                                 </div> #}
+{#                             </div> #}
+{#                         </div> #}
+
+                    {# Hours & Distribution Statistics #}
+                    {% if hours_stats is defined or distribution_stats is defined %}
+                        <div class="row">
+                            {% if hours_stats is defined %}
+                                <div class="col-md-6 mb-4">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">
+                                                {{ m.icon('bar-chart') }}
+                                                {{ __('backstage.hours_stats.title') }}
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+                                            {# Hours statistics content will be populated by JavaScript #}
+                                            <div id="hours-chart-placeholder" class="text-center text-muted py-4">
+                                                {{ m.icon('bar-chart', 48) }}
+                                                <p class="mt-2 mb-0">{{ __('backstage.charts.loading') }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            {% if distribution_stats is defined %}
+                                <div class="col-md-6 mb-4">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">
+                                                {{ m.icon('pie-chart') }}
+                                                {{ __('backstage.distribution_stats.title') }}
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+                                            {# Distribution statistics content will be populated by JavaScript #}
+                                            <div id="distribution-chart-placeholder" class="text-center text-muted py-4">
+                                                {{ m.icon('pie-chart', 48) }}
+                                                <p class="mt-2 mb-0">{{ __('backstage.charts.loading') }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                        {# Recent Activity Panel #}
+                        <div class="col-lg-12 mb-4">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">
+                                        {{ m.icon('clock-history') }}
+                                        {{ __('backstage.recent_activity.title') }}
+                                    </h5>
+                                    <a href="{{ url('/admin/backstage/goodies/distributions') }}" class="btn btn-primary btn-sm">
+                                        {{ __('backstage.recent_activity.view_all') }}
+                                    </a>
+                                </div>
+                                <div class="card-body">
+                                    {% if recent_activity|length > 0 %}
+                                        <div class="timeline" id="recent-activity">
+                                            {% for activity in recent_activity %}
+                                                <div class="timeline-item">
+                                                    <div class="timeline-marker bg-success">
+                                                        {{ m.icon('gift') }}
+                                                    </div>
+                                                    <div class="timeline-content">
+                                                        <h6 class="mb-1">{{ activity.item_name }}</h6>
+                                                        <p class="mb-1">
+                                                            {{ __('backstage.activity.distributed_to', [activity.user_name]) }}
+                                                        </p>
+                                                        <small class="text-muted">
+                                                            {{ activity.distributed_at|date('M j, H:i') }}
+                                                            {{ __('backstage.activity.by') }} {{ activity.distributed_by_name }}
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        <div class="text-center text-muted py-4">
+                                            {{ m.icon('inbox', 32) }}
+                                            <p class="mb-0 mt-2">{{ __('backstage.recent_activity.empty') }}</p>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{{ parent() }}
+<meta name="base-url" content="{{ url('') }}">
+<div data-refresh-interval="{{ refresh_interval|default(30000) }}" style="display:none;"></div>
+<script src="{{ asset('assets/backstage-dashboard.js') }}"></script>
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+{{ asset('backstage-dashboard.css') }}
+{% endblock %}

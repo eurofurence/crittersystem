@@ -8,7 +8,7 @@ use Engelsystem\Models\User\User;
  */
 function admin_arrive_title()
 {
-    return auth()->can('admin_arrive') ? __('Arrive critters') : __('Angels');
+    return auth()->can('admin_arrive') ? __('Arrive critters') : __('Critters');
 }
 
 /**
@@ -41,10 +41,10 @@ function admin_arrive()
                 $user_source->state->save();
 
                 engelsystem_log('User set to not arrived: ' . User_Nick_render($user_source, true));
-                success(__('Reset done. Angel has not arrived.'));
+                success(__('Reset done. Critter has not arrived.'));
                 throw_redirect(user_link($user_source->id));
             } else {
-                $msg = error(__('Angel not found.'), true);
+                $msg = error(__('Critter not found.'), true);
             }
         } elseif (
             $action == 'arrived'
@@ -59,10 +59,10 @@ function admin_arrive()
                 $user_source->state->save();
 
                 engelsystem_log('User set has arrived: ' . User_Nick_render($user_source, true));
-                success(__('Angel has been marked as arrived.'));
+                success(__('Critter has been marked as arrived.'));
                 throw_redirect(user_link($user_source->id));
             } else {
-                $msg = error(__('Angel not found.'), true);
+                $msg = error(__('Critter not found.'), true);
             }
         }
     }
@@ -104,6 +104,7 @@ function admin_arrive()
         $usr->name = User_Nick_render($usr)
             . User_Pronoun_render($usr)
             . user_info_icon($usr);
+        $usr['badge_number'] = $usr->personalData->badge_number;
         $plannedDepartureDate = $usr->personalData->planned_departure_date;
         $arrivalDate = $usr->state->arrival_date;
         $plannedArrivalDate = $usr->personalData->planned_arrival_date;
@@ -211,6 +212,7 @@ function admin_arrive()
         ], url('/admin-arrive')),
         table(array_merge(
             ['name' => __('general.name'),],
+            ['badge_number' => __('general.badge_number') ],
             ($admin_arrive ? ['rendered_planned_arrival_date' => __('Planned arrival')] : []),
             ['arrived' => __('Arrived')],
             ($admin_arrive ? [

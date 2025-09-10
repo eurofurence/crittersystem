@@ -1,0 +1,205 @@
+# Requirements:
+#
+# pip install mkdocs
+# pip install wheel
+# pip install pymdown-extensions
+# pip install mike
+#
+# Local Test: mkdocs serve
+# Build - local files: mkdocs build
+#
+# How to use/compile:
+# Use Mike to create the branch gh-pages (make sure you have the branch locally)
+# Deploy: mike deploy [version]
+# Default identifier: dev
+
+# Server configuration
+dev_addr: 127.0.0.1:8888
+
+# Project information
+site_name: Critter System
+site_description: Shift planning system for Eurofurence on-site departments forked from the Engelsystem which powers Chaos events.
+site_author: Eurofurence
+site_url: https://crittersystem.eurofurence.github.io/
+repo_url: https://github.com/eurofurence/crittersystem
+
+# Copyright
+copyright: >
+  GPL-2.0 license - <a href="#__consent">Change cookie settings</a>
+
+# The directory containing the documentation source markdown files.
+docs_dir: 'docs/src'
+# The directory where the output HTML and other files are created.
+site_dir: 'docs/public'
+# This config defines patterns of files (under docs_dir) to not be picked up into the built site.
+exclude_docs: |
+  /docs/public/
+  ./docs/public/ # it's duplicated to avoid references issues
+
+# This setting controls the directory structure of the generated documentation, and thereby the URL format used for linking to pages.
+use_directory_urls: false #false = allows to run locally
+
+theme:
+  name: material
+  highlightjs: true
+  language: en
+  palette:
+    # scheme: slate # default / slate
+    # primary: deep purple   # teal / indigo
+    # accent: lime    # indigo
+
+    # Palette toggle for automatic mode
+    - media: '(prefers-color-scheme)'
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+
+    # Palette toggle for light mode
+    - media: '(prefers-color-scheme: light)'
+      scheme: default
+      primary: indigo # teal / indigo
+      accent: pink # indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: '(prefers-color-scheme: dark)'
+      scheme: slate
+      primary: indigo # teal / indigo
+      accent: lime # indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.footer
+    - navigation.path
+    # - toc.integrate
+    - navigation.top
+    - content.code.copy
+    - content.code.select
+    - content.tabs.link
+
+  plugins:
+    - group
+    - info
+    - mike:
+      # These fields are all optional; the defaults are as below...
+      alias_type: symlink # symlink / redirect / copy
+      redirect_template: null
+      deploy_prefix: ''
+      canonical_version: null
+      version_selector: true
+      css_dir: css
+      javascript_dir: js
+
+markdown_extensions:
+  - admonition
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - codehilite:
+      guess_lang: false
+  - pymdownx.caret:
+      smart_insert: True # Use smart logic with insert characters.
+      insert: True       # Enable insert feature.
+      superscript: True  # Enable superscript feature.
+  - pymdownx.snippets
+  - toc:
+      permalink: true
+      title: Sections
+      separator: "_"
+  - pymdownx.tasklist:
+      custom_checkbox: false
+  - pymdownx.keys
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+extra_css:
+  - stylesheets/extra.css
+
+extra:
+  version:
+    provider: mike
+    default: dev
+
+  consent:
+    title: Cookie consent
+    description: >-
+      We use cookies to recognize your repeated visits and preferences, as well
+      as to measure the effectiveness of our documentation and whether users
+      find what they're searching for. With your consent, you're helping us to
+      make our documentation better.
+    actions:
+      - manage
+      - accept
+      - reject
+
+plugins:
+  - search # necessary for search to work
+  - awesome-pages
+  - privacy
+
+##################################################
+# Navigation
+##################################################
+nav:
+  - Home: index.md
+
+  - Manual:
+    - manuals/index.md
+
+    - Deploy:
+      - Docker: manuals/deploy/docker.md
+      - Web Server: manuals/deploy/webserver.md
+
+    - Development:
+      - Docs: manuals/development/docs/index.md
+
+    - Modules:
+      - News: modules/news/index.md
+      - Meetings: modules/meetings/index.md
+      - Shifts: modules/shifts/index.md
+      - Critter Types: modules/critter_types/index.md
+      - Ask the Info Desk: modules/ask_info_desk/index.md
+      - Locations: modules/locations/index.md
+      - Admin:
+        - modules/admin/index.md
+        - Arrive Critters: modules/admin/critters_arrive.md
+        - Active Critters: modules/admin/critters_active.md
+        - All Critters: modules/admin/critters_all.md
+        - Free Critters: modules/admin/critters_free.md
+        - Answer Questions: modules/admin/answer_questions.md
+        - Shift Types: modules/admin/shift_types.md
+        - Create Shifts: modules/admin/shifts_create.md
+        - Locations: modules/admin/locations.md
+        - Group Rights: modules/admin/group_rights.md
+        - Import Schedule: modules/admin/import_schedule.md
+        - Logs: modules/admin/logs.md
+        - Config: modules/admin/config.md
+        - V2-Export: modules/admin/v2_export.md
+      - Next Shift: modules/next_shift/index.md
+      - Messages: modules/messages/index.md
+      - Information: modules/information/index.md
+      - Language: modules/language/index.md
+      - Account: modules/account/index.md
+
+  - Workflow:
+    - workflows/workflow_login.md
+
