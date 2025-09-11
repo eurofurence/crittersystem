@@ -282,6 +282,9 @@ $route->addGroup(
             }
         );
 
+        // Critter Report
+        $route->get('/critter-report', 'Admin\\CritterReportController@index');
+
         // Log
         $route->addGroup(
             '/logs',
