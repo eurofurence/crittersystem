@@ -93,6 +93,7 @@ function make_navigation()
         'admin_active'           => ['Active Critters', 'admin_active'],
         'users'                  => ['All Critters', 'admin_user'],
         'admin_free'             => ['Free Critters','admin_free'],
+        'admin/critter-report'   => ['Critter Report/Export','user.type.admin'],
         'admin/questions'        => ['Answer questions', 'question.edit'],
         'admin/shifttypes'       => ['shifttype.shifttypes', 'shifttypes.view'],
         'admin/certifications'   => ['Certifications', 'certificates.manage'],
