@@ -164,6 +164,7 @@ class AuthController extends BaseController
             ->where(function ($query): void {
                 $query->where('name', 'user.type.internal_staff')
                     ->orWhere('name', 'user.type.staff')
+                    ->orWhere('name', 'user.type.admin')
                     ->orWhere('name', 'admin');
             })
             ->exists();
@@ -180,6 +181,7 @@ class AuthController extends BaseController
     {
         return $user->privileges()
             ->where('name', 'admin')
+            ->orWhere('name', 'user.type.admin')
             ->exists();
     }
 }

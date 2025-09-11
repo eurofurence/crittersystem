@@ -32,6 +32,11 @@ class Csrf extends TwigExtension
 
     public function getCsrfToken(): string
     {
-        return $this->session->get('_token');
+        // Ensure the session has a CSRF token
+        if (!$this->session->has('_token') || empty($this->session->get('_token'))) {
+            $this->session->set('_token', \Illuminate\Support\Str::random(42));
+        }
+
+        return $this->session->get('_token') ?? '';
     }
 }

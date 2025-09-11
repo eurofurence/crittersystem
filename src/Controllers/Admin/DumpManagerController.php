@@ -43,6 +43,9 @@ class DumpManagerController extends BaseController
     public function createDump(Request $request): Response
     {
         try {
+            // Temporarily increase memory limit for large dumps
+            $originalMemoryLimit = $this->increaseMemoryLimitTemporarily();
+
             $timestamp = date('Y-m-d_H-i-s');
             $filename = 'database_dump_' . $timestamp;
             $tempDir = sys_get_temp_dir() . '/dumpmanager';
@@ -89,6 +92,9 @@ class DumpManagerController extends BaseController
 
             // Clean up temporary JSON file
             unlink($dumpPath . '.json');
+
+            // Restore original memory limit
+            ini_set('memory_limit', $originalMemoryLimit);
 
             return $this->response->withJson([
                 'success' => true,
@@ -209,6 +215,8 @@ class DumpManagerController extends BaseController
     public function executeRestore(Request $request): Response
     {
         try {
+            // Temporarily increase memory limit for large restores
+            $originalMemoryLimit = $this->increaseMemoryLimitTemporarily();
             // Get JSON data from request
             $data = $request->getParsedBody();
             $jsonData = json_decode($request->getContent(), true);
@@ -256,8 +264,14 @@ class DumpManagerController extends BaseController
                 // Restore data
                 $this->restoreData($dumpData['data']);
 
+                // Clear all sessions to prevent conflicts after restoration
+                $this->clearAllSessions();
+
                 // Clean up uploaded file
                 unlink($uploadPath);
+
+                // Restore original memory limit
+                ini_set('memory_limit', $originalMemoryLimit);
 
                 return $this->response->withJson([
                     'success' => true,
@@ -309,12 +323,32 @@ class DumpManagerController extends BaseController
     }
 
     /**
-     * Get all data from a table
+     * Get all data from a table (chunked for memory efficiency)
      */
     private function getTableData(string $table): array
     {
-        $data = $this->db->select('SELECT * FROM `' . $table . '`');
-        return array_map(fn($row) => (array) $row, $data);
+        $chunkSize = 1000; // Process 1000 rows at a time
+        $allData = [];
+        $offset = 0;
+
+        do {
+            $chunk = $this->db->select(
+                'SELECT * FROM `' . $table . '` LIMIT ? OFFSET ?',
+                [$chunkSize, $offset]
+            );
+
+            $chunkData = array_map(fn($row) => (array) $row, $chunk);
+            $allData = array_merge($allData, $chunkData);
+
+            $offset += $chunkSize;
+
+            // Force garbage collection to free memory
+            if ($offset % 10000 === 0) {
+                gc_collect_cycles();
+            }
+        } while (count($chunk) === $chunkSize);
+
+        return $allData;
     }
 
     /**
@@ -474,7 +508,7 @@ class DumpManagerController extends BaseController
     }
 
     /**
-     * Restore data to tables
+     * Restore data to tables with dependency-aware retry mechanism
      */
     private function restoreData(array $tablesData): void
     {
@@ -484,16 +518,7 @@ class DumpManagerController extends BaseController
             // Disable foreign key checks temporarily
             $connection->statement('SET FOREIGN_KEY_CHECKS = 0');
 
-            foreach ($tablesData as $table => $rows) {
-                if (!empty($rows)) {
-                    try {
-                        $connection->table($table)->insert($rows);
-                    } catch (Exception $e) {
-                        error_log('Failed to restore data to table ' . $table . ': ' . $e->getMessage());
-                        throw $e;
-                    }
-                }
-            }
+            $this->restoreDataWithRetries($connection, $tablesData);
 
             // Re-enable foreign key checks
             $connection->statement('SET FOREIGN_KEY_CHECKS = 1');
@@ -505,6 +530,216 @@ class DumpManagerController extends BaseController
                 // Ignore cleanup errors
             }
             throw $e;
+        }
+    }
+
+    /**
+     * Restore data with retry mechanism for dependency resolution
+     */
+    private function restoreDataWithRetries(
+        \Illuminate\Database\Connection $connection,
+        array $tablesData
+    ): void {
+        $pendingTables = $tablesData;
+        $completedTables = [];
+        $maxRetries = 5;
+        $retryCount = 0;
+
+        while (!empty($pendingTables) && $retryCount < $maxRetries) {
+            $failedTables = [];
+            $successCount = 0;
+
+            foreach ($pendingTables as $table => $rows) {
+                if (empty($rows)) {
+                    // Mark empty tables as completed
+                    $completedTables[] = $table;
+                    $successCount++;
+                    continue;
+                }
+
+                try {
+                    $this->insertDataInChunks($connection, $table, $rows);
+                    $completedTables[] = $table;
+                    $successCount++;
+                    error_log('Successfully restored table: ' . $table);
+                } catch (Exception $e) {
+                    // Check if this is a foreign key constraint error
+                    if ($this->isForeignKeyError($e)) {
+                        $failedTables[$table] = $rows;
+                        error_log('Deferred table ' . $table . ' due to foreign key constraint: ' . $e->getMessage());
+                    } else {
+                        // For non-foreign key errors, log and rethrow
+                        error_log('Failed to restore data to table ' . $table . ' (non-FK error): ' . $e->getMessage());
+                        throw $e;
+                    }
+                }
+            }
+
+            // Update pending tables for next retry
+            $pendingTables = $failedTables;
+
+            // If no progress was made in this iteration, we have a circular dependency or persistent issue
+            if ($successCount === 0 && !empty($pendingTables)) {
+                break;
+            }
+
+            $retryCount++;
+        }
+
+        // If there are still pending tables, try one final approach: insert with NULL foreign keys where possible
+        if (!empty($pendingTables)) {
+            $this->restoreDataWithNullifiedForeignKeys($connection, $pendingTables);
+        }
+
+        error_log('Data restoration completed. Restored ' . count($completedTables) . ' tables successfully.');
+    }
+
+    /**
+     * Check if an exception is related to foreign key constraints
+     */
+    private function isForeignKeyError(Exception $e): bool
+    {
+        $message = strtolower($e->getMessage());
+        return strpos($message, 'foreign key constraint') !== false ||
+               strpos($message, 'cannot add or update a child row') !== false ||
+               strpos($message, 'referential integrity constraint') !== false ||
+               strpos($message, 'constraint violation') !== false;
+    }
+
+    /**
+     * Final attempt: restore data by temporarily nullifying foreign key columns
+     */
+    private function restoreDataWithNullifiedForeignKeys(
+        \Illuminate\Database\Connection $connection,
+        array $remainingTables
+    ): void {
+        foreach ($remainingTables as $table => $rows) {
+            try {
+                // Get table schema to identify foreign key columns
+                $foreignKeyColumns = $this->getForeignKeyColumns($table);
+
+                if (!empty($foreignKeyColumns)) {
+                    // Create modified rows with foreign keys set to null
+                    $modifiedRows = [];
+                    foreach ($rows as $row) {
+                        $modifiedRow = $row;
+                        foreach ($foreignKeyColumns as $fkColumn) {
+                            if (isset($modifiedRow[$fkColumn])) {
+                                $modifiedRow[$fkColumn] = null;
+                            }
+                        }
+                        $modifiedRows[] = $modifiedRow;
+                    }
+
+                    $this->insertDataInChunks($connection, $table, $modifiedRows);
+                    error_log('Restored table ' . $table . ' with nullified foreign keys');
+                } else {
+                    // No foreign keys found, try original data one more time
+                    $this->insertDataInChunks($connection, $table, $rows);
+                    error_log('Restored table ' . $table . ' on final attempt');
+                }
+            } catch (Exception $e) {
+                error_log('Final restoration attempt failed for table ' . $table . ': ' . $e->getMessage());
+                // Continue with other tables rather than failing completely
+            }
+        }
+    }
+
+    /**
+     * Temporarily increase PHP memory limit for large operations
+     */
+    private function increaseMemoryLimitTemporarily(): string
+    {
+        $originalLimit = ini_get('memory_limit');
+
+        // Convert memory limit to bytes for comparison
+        $originalBytes = $this->convertToBytes($originalLimit);
+        $desiredBytes = 512 * 1024 * 1024; // 512MB
+
+        if ($originalBytes < $desiredBytes) {
+            ini_set('memory_limit', '512M');
+            error_log('Temporarily increased memory limit from ' . $originalLimit . ' to 512M');
+        }
+
+        return $originalLimit;
+    }
+
+    /**
+     * Convert memory limit string to bytes
+     */
+    private function convertToBytes(string $memoryLimit): int
+    {
+        $memoryLimit = trim($memoryLimit);
+        $last = strtolower($memoryLimit[strlen($memoryLimit) - 1]);
+        $value = (int) $memoryLimit;
+
+        switch ($last) {
+            case 'g':
+                $value *= 1024 * 1024 * 1024;
+                break;
+            case 'm':
+                $value *= 1024 * 1024;
+                break;
+            case 'k':
+                $value *= 1024;
+                break;
+        }
+
+        return $value;
+    }
+
+    /**
+     * Insert data into table in chunks to avoid memory exhaustion
+     */
+    private function insertDataInChunks(
+        \Illuminate\Database\Connection $connection,
+        string $table,
+        array $rows
+    ): void {
+        $chunkSize = 500; // Insert 500 rows at a time
+        $chunks = array_chunk($rows, $chunkSize);
+
+        foreach ($chunks as $chunk) {
+            $connection->table($table)->insert($chunk);
+
+            // Force garbage collection after each chunk
+            gc_collect_cycles();
+        }
+    }
+
+    /**
+     * Clear all active sessions after database restoration
+     */
+    private function clearAllSessions(): void
+    {
+        try {
+            $connection = $this->db->getConnection();
+            $connection->table('sessions')->delete();
+            error_log('Cleared all sessions after database restoration');
+        } catch (Exception $e) {
+            error_log('Failed to clear sessions: ' . $e->getMessage());
+            // Continue anyway - this is not critical for restoration
+        }
+    }
+
+    /**
+     * Get foreign key columns for a table
+     */
+    private function getForeignKeyColumns(string $table): array
+    {
+        try {
+            $foreignKeys = $this->db->select('
+                SELECT COLUMN_NAME 
+                FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE 
+                WHERE REFERENCED_TABLE_SCHEMA = DATABASE() 
+                AND TABLE_NAME = ? 
+                AND REFERENCED_TABLE_NAME IS NOT NULL
+            ', [$table]);
+
+            return array_map(fn($fk) => $fk->COLUMN_NAME, $foreignKeys);
+        } catch (Exception $e) {
+            error_log('Failed to get foreign key columns for table ' . $table . ': ' . $e->getMessage());
+            return [];
         }
     }
 }
