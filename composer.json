@@ -58,7 +58,7 @@
         "psr/log": "^3.0",
         "ramsey/uuid": "^4.9",
         "rcrowe/twigbridge": "^0.14.5",
-        "respect/validation": "^1.1",
+        "respect/validation": "^2.4",
         "sentry/sentry": "^4.14",
         "symfony/http-foundation": "^6.4",
         "symfony/mailer": "^6.4",
