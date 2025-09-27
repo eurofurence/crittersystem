@@ -62,7 +62,7 @@
         "sentry/sentry": "^4.14",
         "symfony/http-foundation": "^6.4",
         "symfony/mailer": "^6.4",
-        "symfony/psr-http-message-bridge": "^2.3",
+        "symfony/psr-http-message-bridge": "^7.3",
         "symfony/yaml": "^7.3",
         "twig/string-extra": "^3.21",
         "twig/twig": "^3.8 <3.21.0",
