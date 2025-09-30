@@ -78,7 +78,7 @@
         "slevomat/coding-standard": "^8.14",
         "squizlabs/php_codesniffer": "^3.8",
         "symfony/var-dumper": "^6.4",
-        "symfony/console": "^6.4"
+        "symfony/console": "^7.3"
     },
     "autoload": {
         "psr-4": {
