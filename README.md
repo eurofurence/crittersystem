@@ -48,7 +48,7 @@ Please read the [CONTRIBUTING.md](CONTRIBUTING.md) and [DEVELOPMENT.md](docs/src
 - Development (mounted sources):
   1) `cd docker\dev`
   2) `docker compose up -d`
-  3) Open http://127.0.0.1/admin/install
+  3) Open http://127.0.0.1:5080/admin/install
     - Optional: edit `docker\dev\deployment.env` to set `APP_*` variables.
 
 - Basic compose:
