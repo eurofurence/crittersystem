@@ -148,7 +148,7 @@ class Migrate
         // Clean the migration flags
         $this->removeAllMigrationFlagFiles();
         // Create fail flag
-        $this->createFile(file: $this->fileMigrationFlagOk);
+        $this->createFile(file: $this->fileMigrationFlagFail);
 
         // Keep 'admin' group's privileges in sync with all privileges
         try {
