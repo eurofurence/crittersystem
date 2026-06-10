@@ -10,8 +10,11 @@ use Engelsystem\Models\Session;
 
 class DatabaseHandler extends AbstractHandler
 {
+    private Database $db;
+
     public function __construct(protected Database $database)
     {
+        $this->db = $database;
     }
 
     /**
@@ -19,9 +22,15 @@ class DatabaseHandler extends AbstractHandler
      */
     public function read(string $id): string
     {
-        $session = Session::whereId($id)->first();
-
-        return $session ? $session->payload : '';
+        if ($this->database->getConnection()->getSchemaBuilder()->hasTable('sessions'))
+        {        
+            $session = Session::whereId($id)->first();
+            return $session ? $session->payload : '';
+        }
+        else
+        {
+            return '';
+        }
     }
 
     /**
