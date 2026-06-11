@@ -356,8 +356,12 @@ class Authenticator
 
         if (empty($this->permissions)) {
             /** @var Group $group */
-            $group = Group::find($this->guestRole);
-            $this->permissions = $group->privileges->pluck('name')->toArray();
+            try {
+                $group = Group::find($this->guestRole);
+                $this->permissions = $group->privileges->pluck('name')->toArray();
+            } catch (\Illuminate\Database\QueryException $e) {
+                //If the 'groups'-table does not exist, the query fails -> no table means no permissions
+            }
         }
     }
 }
