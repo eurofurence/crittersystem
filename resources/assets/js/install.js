@@ -50,15 +50,19 @@ async function authenticate() {
       body: `password=${encodeURIComponent(password)}`,
     });
 
-    const result = await response.json();
+    if (response.ok) {
+        const result = await response.json();
 
-    if (response.ok && result.success) {
-      authenticated = true;
-      updateStepStatus('auth', 'success', 'Authenticated');
-      enableStep('status');
-      refreshStatus();
+        if (result.success) {
+          authenticated = true;
+          updateStepStatus('auth', 'success', 'Authenticated');
+          enableStep('status');
+          refreshStatus();
+        } else {
+          showError(errorDiv, result.error || 'Authentication failed');
+        }
     } else {
-      showError(errorDiv, result.error || 'Authentication failed');
+        showError(errorDiv, `Response status: ${response.status} (${response.statusText})`);
     }
   } catch (error) {
     showError(errorDiv, `Network error: ${error.message}`);
