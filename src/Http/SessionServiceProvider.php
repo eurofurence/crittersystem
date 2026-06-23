@@ -7,6 +7,7 @@ namespace Engelsystem\Http;
 use Engelsystem\Config\Config;
 use Engelsystem\Container\ServiceProvider;
 use Engelsystem\Http\SessionHandlers\DatabaseHandler;
+use Engelsystem\Http\SessionHandlers\FileHandler;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -54,6 +55,7 @@ class SessionServiceProvider extends ServiceProvider
 
         $handler = match ($sessionConfig['driver']) {
             'pdo'   => $this->app->make(DatabaseHandler::class),
+            'file'  => $this->app->make(FileHandler::class),
             default => null,
         };
 

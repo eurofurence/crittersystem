@@ -618,7 +618,7 @@ return [
 
     // Session config
     'session'                 => [
-        // Supported: pdo or native
+        // Supported: pdo, file, or native
         'driver' => env('SESSION_DRIVER', 'pdo'),
 
         // Cookie name
