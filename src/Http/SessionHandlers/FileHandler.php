@@ -19,19 +19,15 @@ class FileHandler extends AbstractHandler
      */
     public function read(string $id): string
     {
-        $file_name =  $this->getBaseDir().$id;
-        if (file_exists($file_name))
-        {
-            $session_file = fopen($file_name, "r");
+        $file_name = $this->getBaseDir() . $id;
+        if (file_exists($file_name)) {
+            $session_file = fopen($file_name, 'r');
             $res = fread($session_file, filesize($file_name));
             fclose($session_file);
-        }
-        else
-        {
+        } else {
             $res = '';
         }
         return $res;
-
     }
 
     /**
@@ -47,7 +43,7 @@ class FileHandler extends AbstractHandler
      */
     public function write(string $id, string $data): bool
     {
-        file_put_contents($this->getBaseDir().$id, $data);
+        file_put_contents($this->getBaseDir() . $id, $data);
         return true;
     }
 
@@ -56,7 +52,7 @@ class FileHandler extends AbstractHandler
      */
     public function destroy(string $id): bool
     {
-        unlink($this->getBaseDir().$id);
+        unlink($this->getBaseDir() . $id);
         return true;
     }
 

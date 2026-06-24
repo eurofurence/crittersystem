@@ -22,13 +22,10 @@ class DatabaseHandler extends AbstractHandler
      */
     public function read(string $id): string
     {
-        if ($this->database->getConnection()->getSchemaBuilder()->hasTable('sessions'))
-        {        
+        if ($this->database->getConnection()->getSchemaBuilder()->hasTable('sessions')) {
             $session = Session::whereId($id)->first();
             return $session ? $session->payload : '';
-        }
-        else
-        {
+        } else {
             return '';
         }
     }
