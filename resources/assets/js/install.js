@@ -51,18 +51,18 @@ async function authenticate() {
     });
 
     if (response.ok) {
-        const result = await response.json();
+      const result = await response.json();
 
-        if (result.success) {
-          authenticated = true;
-          updateStepStatus('auth', 'success', 'Authenticated');
-          enableStep('status');
-          refreshStatus();
-        } else {
-          showError(errorDiv, result.error || 'Authentication failed');
-        }
+      if (result.success) {
+        authenticated = true;
+        updateStepStatus('auth', 'success', 'Authenticated');
+        enableStep('status');
+        refreshStatus();
+      } else {
+        showError(errorDiv, result.error || 'Authentication failed');
+      }
     } else {
-        showError(errorDiv, `Response status: ${response.status} (${response.statusText})`);
+      showError(errorDiv, `Response status: ${response.status} (${response.statusText})`);
     }
   } catch (error) {
     showError(errorDiv, `Network error: ${error.message}`);
