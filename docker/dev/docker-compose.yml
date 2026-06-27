@@ -1,6 +1,6 @@
 services:
-  es_server:
-    image: es_dev_webserver
+  cs_server:
+    image: cs_dev_webserver
     build:
       context: ./../..
       dockerfile: docker/dev/Dockerfile
@@ -9,21 +9,21 @@ services:
       - ./../..:/var/www
     environment:
       RUN_USER: "${UID}:${GID}"
-      APP_MYSQL_HOST: es_database
-      APP_MYSQL_USER: engelsystem
-      APP_MYSQL_PASSWORD: engelsystem
-      APP_MYSQL_DATABASE: engelsystem
-      PHP_IDE_CONFIG: serverName=engelsystem
+      APP_MYSQL_HOST: cs_database
+      APP_MYSQL_USER: crittersystem
+      APP_MYSQL_PASSWORD: crittersystem
+      APP_MYSQL_DATABASE: crittersystem
+      PHP_IDE_CONFIG: serverName=crittersystem
       ENVIRONMENT: development
       MAIL_DRIVER: log
-      APP_NAME: Engelsystem DEV
+      APP_NAME: Crittersystem DEV
     env_file: deployment.env
     ports:
       - "127.0.0.1:5080:80"
     depends_on:
-      - es_database
-  es_workspace:
-    image: es_dev_workspace
+      - cs_database
+  cs_workspace:
+    image: cs_dev_workspace
     build:
       context: ./../..
       dockerfile: docker/dev/Dockerfile
@@ -33,30 +33,30 @@ services:
       - ./../..:/var/www
     environment:
       HOME: /tmp
-      MYSQL_HOST: es_database
-      MYSQL_USER: engelsystem
-      MYSQL_PASSWORD: engelsystem
-      MYSQL_DATABASE: engelsystem
+      MYSQL_HOST: cs_database
+      MYSQL_USER: crittersystem
+      MYSQL_PASSWORD: crittersystem
+      MYSQL_DATABASE: crittersystem
       ENVIRONMENT: development
       MAIL_DRIVER: log
-      APP_NAME: Engelsystem DEV
+      APP_NAME: Crittersystem DEV
     depends_on:
-      - es_database
-  es_phpmyadmin:
+      - cs_database
+  cs_phpmyadmin:
     image: phpmyadmin
     environment:
-      PMA_HOST: es_database
+      PMA_HOST: cs_database
     ports:
       - "127.0.0.1:8888:80"
     depends_on:
-      - es_database
+      - cs_database
     profiles: [ dev ]
-  es_database:
+  cs_database:
     image: mariadb:10.2
     environment:
-      MYSQL_DATABASE: engelsystem
-      MYSQL_USER: engelsystem
-      MYSQL_PASSWORD: engelsystem
+      MYSQL_DATABASE: crittersystem
+      MYSQL_USER: crittersystem
+      MYSQL_PASSWORD: crittersystem
       MYSQL_RANDOM_ROOT_PASSWORD: 1
       MYSQL_INITDB_SKIP_TZINFO: "yes"
     volumes:
