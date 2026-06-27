@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Engelsystem\Http\SessionHandlers;
 
 use Engelsystem\Database\Database;
-use Engelsystem\Helpers\Carbon;
-use Engelsystem\Models\Session;
 
 class FileHandler extends AbstractHandler
 {
@@ -54,17 +52,5 @@ class FileHandler extends AbstractHandler
     {
         unlink($this->getBaseDir() . $id);
         return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function gc(int $max_lifetime): int|false
-    {
-        $sessionDays = config('session')['lifetime'];
-        $deleteBefore = Carbon::now()->subDays($sessionDays);
-
-        return Session::where('last_activity', '<', $deleteBefore)
-            ->delete();
     }
 }
