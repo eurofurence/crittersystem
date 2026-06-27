@@ -166,7 +166,9 @@ class InstallController extends BaseController
                 'success' => $exitCode === 0,
             ];
 
-            if ($exitCode !== 0) {
+            if ($result['success']) {
+                file_put_contents($this->getBaseDir() . $this->fileOk, date('c') . "\n" . $output);
+            } else {
                 // Create failure marker
                 file_put_contents($this->getBaseDir() . $this->fileFail, date('c') . "\n" . $output);
             }
